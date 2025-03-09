@@ -1,4 +1,4 @@
-const store = {
+let store = {
     page: '',
     auth: {
         isEmployer: false,
@@ -12,8 +12,11 @@ const store = {
     },
     user: {
         authenticated: false,
+        email: '',
         firstName: '',
         lastName: '',
+        companyName: '',
+        companyAddress: '',
     },
 };
 
@@ -44,7 +47,7 @@ const defaultStore = {
  * Сбрасывает стор. Вызывается при выходе
  */
 function resetStore() {
-    Object.assign(store, defaultStore);
+    store = structuredClone(defaultStore);
 }
 
 export { store, resetStore };

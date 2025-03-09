@@ -39,6 +39,7 @@ export class Auth {
         this.#history.push(store.page);
         if (store.page === 'regEmail' || store.page === 'auth') {
             this.#regEmail.remove();
+            console.log('FETCH');
             try {
                 await this.#api.getUser(store.auth.email);
                 store.page = 'login';
@@ -88,7 +89,7 @@ export class Auth {
 
         if (store.page === 'login') {
             try {
-                await this.#api.login(store.auth.email, store.auth.password);
+                await this.#api.login({ email: store.auth.email, password: store.auth.password });
                 this.#login.remove();
                 store.page = 'catalog';
                 router('catalog');
@@ -104,7 +105,8 @@ export class Auth {
      * Логика открытия предыдущих форм
      */
     #prevCallback = () => {
-        if (store.page === 'regEmail') {
+        console.log(store.page);
+        if (store.page === 'regEmail' || store.page === 'auth' || store.page === undefined) {
             this.#regEmail.remove();
             router('catalog');
             return;

@@ -12,7 +12,6 @@ export const router = async (page = 'catalog') => {
     logger.info('Router called with route: ', page);
     const app = document.getElementById('app');
     app.innerHTML = '';
-
     const header = new Header(app);
     header.render();
     if (page === 'auth') {

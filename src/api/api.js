@@ -70,7 +70,7 @@ export class Api {
      * @returns {null}
      */
     async getUser(email) {
-        return this.request('/getUser', 'GET', { email });
+        return this.request('/check-email', 'POST', { email });
     }
 
     /**
@@ -79,8 +79,8 @@ export class Api {
      * @param {string} password
      * @returns {Object}
      */
-    async login(login, password) {
-        return this.request('/signin', 'POST', { login, password });
+    async login(body) {
+        return this.request('/signin', 'POST', body);
     }
 
     /**
