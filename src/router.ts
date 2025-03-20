@@ -1,5 +1,5 @@
-import { Auth } from './components/auth/auth';
-import { JobCatalog } from './components/jobCatalog/jobCatalog';
+import { Auth } from './components/auth/auth.js';
+import { JobCatalog } from './components/jobCatalog/jobCatalog.js';
 import { Header } from './components/header/header.js';
 import { store } from './store.js';
 import { logger } from './utils/logger.js';
@@ -10,7 +10,7 @@ import { logger } from './utils/logger.js';
  */
 export const router = async (page = 'catalog') => {
     logger.info('Router called with route: ', page);
-    const app = document.getElementById('app');
+    const app = document.getElementById('app') as HTMLElement;
     app.innerHTML = '';
     const header = new Header(app);
     header.render();

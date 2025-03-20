@@ -1,9 +1,25 @@
 import './jobCard.css';
 import { logger } from '../../utils/logger.js';
+import Handlebars from 'handlebars';
+
+interface Badge {
+    name: string;
+}
+
+interface JobCardProps {
+    id: number;
+    profession: string;
+    salary: string;
+    company: string;
+    city: string;
+    badges: Badge[];
+    day_created: number;
+    count: number;
+}
 
 export class JobCard {
-    #parent;
-    #props;
+    #parent : HTMLElement;
+    #props : JobCardProps;
 
     /**
      * Конструктор класса
@@ -18,7 +34,7 @@ export class JobCard {
      * day_created: number,
      * count: number} - данные для рендера
      */
-    constructor(parent, props) {
+    constructor(parent: HTMLElement, props : JobCardProps) {
         this.#parent = parent;
         this.#props = props;
     }
@@ -27,8 +43,8 @@ export class JobCard {
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() {
-        return document.getElementById(this.#props.id);
+    get self() : HTMLElement {
+        return document.getElementById(this.#props.id.toString()) as HTMLElement;
     }
 
     /**
@@ -44,7 +60,7 @@ export class JobCard {
      */
     render = () => {
         logger.info('JobCard render method called');
-        // eslint-disable-next-line no-undef
+         
         const template = Handlebars.templates['jobCard/jobCard'];
         this.#parent.insertAdjacentHTML(
             'beforeend',

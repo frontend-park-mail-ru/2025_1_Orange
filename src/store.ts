@@ -24,7 +24,7 @@ let store = {
 const defaultStore = {
     page: 'regEmail',
     auth: {
-        type: '',
+        isEmployer: false,
         email: '',
         password: '',
         repeatPassword: '',

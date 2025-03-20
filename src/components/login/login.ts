@@ -1,16 +1,18 @@
 import { store } from '../../store';
 import { logger } from '../../utils/logger.js';
+import Handlebars from 'handlebars';
+
 
 /**
  * @class
  * @classdesc Форма авторизации. Возникает если при регистрации указать
  */
 export class Login {
-    #parent;
-    #submitBtn;
-    #nextCallback;
-    #prevCallback;
-    #password;
+    #parent: HTMLElement;
+    #submitBtn: HTMLButtonElement | null = null;
+    #nextCallback: () => void;
+    #prevCallback: () => void;
+    #password: HTMLInputElement | null = null;
 
     /**
      * Конструктор класса
@@ -19,7 +21,7 @@ export class Login {
      * @param nextCallback {function} - калбек на следующую форму
      * @param prevCallback {function} - калбек на предыдущую форму
      */
-    constructor(parent, nextCallback, prevCallback) {
+    constructor(parent: HTMLElement, nextCallback: () => void, prevCallback: () => void) {
         this.#parent = parent;
         this.#nextCallback = nextCallback;
         this.#prevCallback = prevCallback;
@@ -29,15 +31,15 @@ export class Login {
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() {
-        return document.forms['login'];
+    get self() : HTMLFormElement {
+        return document.forms.namedItem('login') as HTMLFormElement;
     }
 
     /**
      * Рендер поля почты. Рендерится при переходе из формы ввода почты
      */
-    #formEmailRender = () => {
-        const email = this.self.querySelector('.form__email');
+    #formEmailRender = () : void => {
+        const email = this.self.querySelector('.form__email') as HTMLElement;
         email.textContent = store.auth.email;
     };
 
@@ -46,7 +48,7 @@ export class Login {
      * @param {string} str - пароль для валидации
      * @returns {boolean}
      */
-    #checkPassword(str) {
+    #checkPassword(str: string): boolean {
         for (let i = 0; i < str.length; i++) {
             const char = str.charCodeAt(i);
             if (
@@ -66,8 +68,11 @@ export class Login {
      * Валидация введенных данных
      * @returns {boolean}
      */
-    #passwordValidate = () => {
-        const error = this.self.querySelector('.form__error');
+    #passwordValidate = (): boolean => {
+        const error = this.self.querySelector('.form__error') as HTMLElement;
+        if (!this.#password) {
+            return false
+        }
         if (this.#password.validity.valid === false) {
             this.#password.classList.remove('form__valid');
             this.#password.classList.add('form__input_error');
@@ -93,9 +98,9 @@ export class Login {
      * Кнопка глазика в поле ввода пароля
      */
     #togglePasswordVisibility = () => {
-        const showPasswordIcon = this.self.querySelector('.form__toggle-password--show');
-        const hidePasswordIcon = this.self.querySelector('.form__toggle-password--hide');
-        const password = this.self.elements['password'];
+        const showPasswordIcon = this.self.querySelector('.form__toggle-password--show') as HTMLElement;
+        const hidePasswordIcon = this.self.querySelector('.form__toggle-password--hide') as HTMLElement;
+        const password = this.self.elements.namedItem('password') as HTMLInputElement
 
         if (showPasswordIcon.classList.contains('active')) {
             password.type = 'text';
@@ -121,20 +126,20 @@ export class Login {
      */
     #addEventListeners = () => {
         const form = this.self;
-        this.#password = form.elements['password'];
-        this.#submitBtn = form.elements['submit'];
+        this.#password = form.elements.namedItem('password') as HTMLInputElement
+        this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
 
-        form.querySelector('.form__back').addEventListener('click', this.#prevCallback);
+        form.querySelector('.form__back')?.addEventListener('click', this.#prevCallback);
 
         this.#password.addEventListener('input', this.#passwordValidate);
 
         const togglePasswordIcons = this.self.querySelector('.form__toggle-password');
-        togglePasswordIcons.addEventListener('click', this.#togglePasswordVisibility);
+        togglePasswordIcons?.addEventListener('click', this.#togglePasswordVisibility);
 
         this.#submitBtn.addEventListener('click', (e) => {
             e.preventDefault();
             if (this.#passwordValidate() === true) {
-                store.auth.password = this.#password.value;
+                store.auth.password = this.#password?.value || '';
                 this.#nextCallback();
             }
         });
@@ -153,7 +158,7 @@ export class Login {
      */
     render = () => {
         logger.info('Login render method called');
-        // eslint-disable-next-line no-undef
+         
         const template = Handlebars.templates['login/login'];
         this.#parent.insertAdjacentHTML(
             'beforeend',
@@ -164,6 +169,6 @@ export class Login {
         this.#formEmailRender();
         this.#addEventListeners();
 
-        this.#password.focus();
+        this.#password?.focus();
     };
 }
