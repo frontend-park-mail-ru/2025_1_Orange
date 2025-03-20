@@ -2,7 +2,6 @@ import { store } from '../../store';
 import { logger } from '../../utils/logger.js';
 import Handlebars from 'handlebars';
 
-
 /**
  * @class
  * @classdesc Форма авторизации. Возникает если при регистрации указать
@@ -158,7 +157,7 @@ export class Login {
      */
     render = () => {
         logger.info('Login render method called');
-         
+        // eslint-disable-next-line no-undef
         const template = Handlebars.templates['login/login'];
         this.#parent.insertAdjacentHTML(
             'beforeend',

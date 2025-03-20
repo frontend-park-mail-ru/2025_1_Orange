@@ -6,11 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "compile": "handlebars src/components/ -f src/compiled.js -m",
+    "compile": "handlebars src/components/ -f src/compiled.js",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prettier": "prettier --write \"**/*.+(js|css)\"",
+    "prettier": "prettier --write \"**/*.+(js|css|ts)\"",
     "start": "node ./server/server.js"
   },
   "devDependencies": {
