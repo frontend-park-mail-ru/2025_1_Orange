@@ -3,7 +3,7 @@ import './header.css';
 import { router } from '../../router.js';
 import { Api } from '../../api/api.js';
 import { logger } from '../../utils/logger.js';
-import Handlebars from 'handlebars';
+import template from './header.handlebars'
 
 export class Header {
     #parent: HTMLElement;
@@ -133,7 +133,6 @@ export class Header {
     render = () => {
         logger.info('Header render method called');
          
-        const template = Handlebars.templates['header/header'];
         this.#parent.insertAdjacentHTML('beforeend', template(store));
         this.addEventListeners();
     };

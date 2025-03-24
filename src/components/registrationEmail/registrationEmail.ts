@@ -1,6 +1,6 @@
 import { store } from '../../store.js';
 import { logger } from '../../utils/logger.js';
-import Handlebars from 'handlebars';
+import template from './registrationEmail.handlebars'
 
 export class RegistrationEmail {
     readonly #parent: HTMLElement;
@@ -127,7 +127,6 @@ export class RegistrationEmail {
     render = () => {
         logger.info('RegistrationEmail render method called');
          
-        const template = Handlebars.templates['registrationEmail/registrationEmail'];
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({

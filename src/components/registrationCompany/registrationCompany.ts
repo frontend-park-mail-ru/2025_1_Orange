@@ -1,6 +1,6 @@
 import { store } from '../../store.js';
 import { logger } from '../../utils/logger.js';
-import Handlebars from 'handlebars';
+import template from './registrationCompany.handlebars'
 
 export class RegistrationCompany {
     #parent: HTMLElement;
@@ -117,8 +117,6 @@ export class RegistrationCompany {
      */
     render = () => {
         logger.info('RegistrationCompany render method called');
-        // eslint-disable-next-line no-undef
-        const template = Handlebars.templates['registrationCompany/registrationCompany'];
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({

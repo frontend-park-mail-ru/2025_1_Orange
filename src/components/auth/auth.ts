@@ -7,7 +7,7 @@ import { Login } from '../login/login.js';
 import { router } from '../../router.js';
 import { Api } from '../../api/api.js';
 import { logger } from '../../utils/logger.js';
-import Handlebars from 'handlebars';
+import template from './auth.handlebars'
 
 export class Auth {
     readonly #parent: HTMLElement;
@@ -154,8 +154,6 @@ export class Auth {
     render() {
         logger.info('Auth render method called');
         if (this.self === null) {
-             
-            const template = Handlebars.templates['auth/auth'];
             this.#parent.insertAdjacentHTML('beforeend', template({}));
         }
         if (store.page === 'regEmail' || store.page === 'auth') {

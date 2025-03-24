@@ -1,7 +1,7 @@
 import './registrationPassword.css';
 import { store } from '../../store.js';
 import { logger } from '../../utils/logger.js';
-import Handlebars from 'handlebars';
+import template from './registrationPassword.handlebars'
 
 export class RegistrationPassword {
     readonly #parent;
@@ -176,7 +176,6 @@ export class RegistrationPassword {
     render = () => {
         logger.info('RegistrationPassword render method called');
          
-        const template = Handlebars.templates['registrationPassword/registrationPassword'];
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
