@@ -1,6 +1,6 @@
 import './jobCard.css';
 import { logger } from '../../utils/logger.js';
-import Handlebars from 'handlebars';
+import template from './jobCard.handlebars';
 
 interface Badge {
     name: string;
@@ -61,7 +61,6 @@ export class JobCard {
     render = () => {
         logger.info('JobCard render method called');
          
-        const template = Handlebars.templates['jobCard/jobCard'];
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({

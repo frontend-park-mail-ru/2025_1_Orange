@@ -1,0 +1,214 @@
+// info.scss
+
+.info
+    border-radius: 0 0 50px 50px
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
+    padding: 25px
+    text-align: center
+    background-color: #f1f4f9
+
+    &__welcome
+        font-size: 32px
+        padding: 10px
+
+    &__search
+        margin: 25px auto auto
+        max-width: 1000px
+
+        &__container
+            display: flex
+            align-items: center
+            position: relative
+            width: 100%
+            height: 55px
+            border: 1px solid #cfcfcf
+            border-radius: 15px
+            background-color: #fff
+            overflow: hidden
+            transition: all 0.2s ease
+
+            &:hover
+                border-color: #aaaab3
+
+            &:focus-within
+                border-color: #0071fe
+
+            input
+                flex-grow: 1
+                height: 100%
+                padding: 0 16px 0 52px
+                border: none
+                font-size: 20px
+                background: transparent
+
+                &::placeholder
+                    color: #cfcfcf
+                    font-size: 20px
+
+                &:focus
+                    outline: none
+
+        &__icon
+            position: absolute
+            left: 16px
+            pointer-events: none
+
+        &__button
+            height: 43px
+            margin-right: 6px
+            padding: 0 20px
+            border: none
+            border-radius: 10px
+            background-color: #000
+            color: #fff
+            font-size: 20px
+            font-weight: 500
+            cursor: pointer
+            white-space: nowrap
+            transition: background-color 0.3s ease
+
+            &:hover
+                background-color: #262626
+
+    &__footer
+        padding: 10px 0 0
+        margin-top: 10px
+        font-size: 20px
+
+    &__link
+        color: #0071fe
+        cursor: pointer
+        text-decoration: none
+
+
+// job_category.scss
+
+.job_category
+    display: flex
+    flex-direction: row
+    justify-content: center
+    align-items: center
+    gap: 15px
+    padding: 0 50px
+    margin-bottom: 60px
+    margin-top: 30px
+
+    &__name
+        padding: 10px
+        font-weight: 600
+        font-size: 20px
+
+    &__slider
+        display: flex
+        flex-direction: row
+        align-items: center
+        gap: 10px
+
+    &__badge
+        padding: 10px 25px
+        border: 2px solid #cfcfcf
+        border-radius: 15px
+        color: #000
+        font-size: 16px
+        cursor: pointer
+        transition: all 0.2s ease
+
+        &:hover
+            border-color: #0071fe
+            color: #0071fe
+
+    &__nav
+        width: 40px
+        height: 40px
+        display: flex
+        align-items: center
+        justify-content: center
+        border: 2px solid #cfcfcf
+        border-radius: 50%
+        background: none
+        color: #000
+        cursor: pointer
+        padding: 0
+        transition: all 0.2s ease
+
+        &:hover
+            border-color: #0071fe
+            color: #0071fe
+
+
+// page.scss
+
+.page
+    padding: 0px 100px
+    display: flex
+    flex-direction: row
+    justify-content: center
+    gap: 70px
+
+
+// filter.scss
+
+.filter
+    padding: 0px 10px
+    gap: 0px
+
+    &__name
+        font-size: 20px
+        padding: 10px 0px
+        font-weight: bold
+        width: 100%
+
+    &__group
+        border: none
+        padding: 0
+        margin: 0 0 15px 0
+
+    &__options
+        display: flex
+        flex-direction: column
+        gap: 5px
+
+    &__checkbox
+        grid-template-columns: 1em auto
+        color: #464652
+        display: flex
+        flex-direction: row
+        align-items: center
+        gap: 10px
+        font-size: 16px
+
+        input
+            margin: 0px
+            width: 20px
+            height: 20px
+
+        span
+            padding: 10px
+
+    &__radio
+        @extend .filter__checkbox
+
+    &__input
+        padding: 10px
+        border: 1px solid #cfcfcf
+        border-radius: 10px
+        font-size: 16px
+
+        &::placeholder
+            font-size: 16px
+            color: #cfcfcf
+
+        &:focus
+            outline: 0
+            border: 1px solid #0071fe
+
+
+// jobs_list.scss
+
+.jobs_list
+    display: flex
+    flex-direction: column
+    gap: 20px

@@ -87,12 +87,12 @@ form {
     border: 1px solid #0071fe;
 }
 
-.form__input_error {
-    border: 1px solid #fb0102 !important;
+input.form__input_error {
+    border: 1px solid #fb0102;
 }
 
-.form__input_error:focus {
-    border: 1px solid #fb0102 !important;
+input.form__input_error:focus {
+    border: 1px solid #fb0102;
 }
 
 .form__error {
