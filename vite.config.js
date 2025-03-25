@@ -5,7 +5,6 @@ import { resolve } from 'path';
 import babel from 'vite-plugin-babel';
 
 export default defineConfig({
-    esbuild: false,
     plugins: [
         babel(),
         handlebarsPlugin({
