@@ -1,53 +1,38 @@
-let store = {
-    page: '',
-    auth: {
-        isEmployer: false,
-        email: '',
-        password: '',
-        repeatPassword: '',
-        firstName: '',
-        lastName: '',
-        companyName: '',
-        companyAddress: '',
-    },
-    user: {
-        authenticated: false,
-        email: '',
-        firstName: '',
-        lastName: '',
-        companyName: '',
-        companyAddress: '',
-    },
-};
+import { emptyResumeCreate, emptySignupRequest, emptyUser, emptyVacancyCreate } from "./api/empty";
+import { VacancyCreate, ResumeCreate, SignupRequest, User } from "./api/interfaces";
 
-// Начальное состояние store
-const defaultStore = {
-    page: 'regEmail',
-    auth: {
-        isEmployer: false,
-        email: '',
-        password: '',
-        repeatPassword: '',
-        firstName: '',
-        lastName: '',
-        companyName: '',
-        companyAddress: '',
-    },
-    user: {
-        authenticated: false,
-        email: '',
-        firstName: '',
-        lastName: '',
-        companyName: '',
-        companyAddress: '',
-    },
-};
-
-/**
- * Сбрасывает стор. Вызывается при выходе
- */
-function resetStore() {
-    store = structuredClone(defaultStore);
+interface StoreData {
+    authorized: boolean;
+    page: string;
+    auth : {
+        type: 'applicant' | 'employer';
+        request: SignupRequest
+    }
+    user: User
+    vacancy: VacancyCreate;
+    resume: ResumeCreate;
 }
 
-export { store, resetStore };
+const emptyData : StoreData = {
+    authorized: false,
+    page: '',
+    auth: {
+        type: 'applicant',
+        request: emptySignupRequest,
+    },
+    user: emptyUser,
+    vacancy: emptyVacancyCreate,
+    resume: emptyResumeCreate,
+}
+
+class Store {
+    data : StoreData;
+    constructor () {
+        this.data = structuredClone(emptyData)
+    }
+    reset = () => {
+        this.data = structuredClone(emptyData)
+    }
+}
+
+export const store = new Store()
