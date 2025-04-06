@@ -1,51 +1,56 @@
-import { logger } from '../utils/logger.js';
-
-interface Register {
-    isEmployer: boolean;
-    email: string;
-    password: string;
-    repeatPassword: string;
-    firstName: string;
-    lastName: string;
-    companyName: string;
-    companyAddress: string;
-}
+import { logger } from '../utils/logger';
+import { ApplicantService } from './applicant';
+import { AuthService } from './auth';
+import { EmployerService } from './employer';
+import { ResumeService } from './resumes';
+import { VacancyService } from './vacansies';
 
 export class Api {
     readonly #baseUrl;
+    readonly auth: AuthService;
+    readonly vacancy: VacancyService
+    readonly applicant: ApplicantService;
+    readonly employer: EmployerService;
+    readonly resume: ResumeService;
 
     /**
      * Конструктор класса api - взаимодействие с бекендом
      * @param {string} baseUrl - url бекенда
      */
-    constructor(baseUrl = 'http://localhost:8000') {
+    constructor(baseUrl: string = 'http://localhost:8000') {
         this.#baseUrl = baseUrl;
+        this.auth = new AuthService(this)
+        this.vacancy = new VacancyService(this)
+        this.applicant = new ApplicantService(this)
+        this.employer = new EmployerService(this)
+        this.resume = new ResumeService(this)
     }
 
     /**
      * Базовый метод отправки запроса
      * @param {string} endpoint
      * @param {string} method
-     * @param {string|null} body
-     * @returns
+     * @param {string | FormDate | null} body
+     * @returns {Promise<Object>}
      */
-    async request(endpoint: string, method : string = 'GET', body: unknown = null) {
+    async request(endpoint: string, method: string = 'GET', body: string | FormData | null = null, content_type : string = 'application/json') {
         const url = this.#baseUrl + endpoint;
         const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
+        headers.append('Content-Type', content_type);
 
         const init: RequestInit = {
             method,
             headers,
             mode: 'cors',
             credentials: 'include',
-            body: body !== null ? JSON.stringify(body) : null,
+            body: body,
         };
+
         logger.info(url, init);
+
         try {
             const response = await fetch(url, init);
             if (!response.ok) {
-                //Получаем json ошибки, если есть. Если тела нет, то пишем заглушку
                 const error = await response.json();
                 logger.error(`error: ${error.message}`);
                 throw new Error(error.message || 'Ошибка при выполнении запроса');
@@ -53,60 +58,10 @@ export class Api {
 
             return response.json();
         } catch {
-            logger.error('Network Error while trying to send request');
+            logger.error('Network Error');
             throw new Error('Ошибка при выполнении запроса');
         }
     }
-
-    /**
-     * Возвращает список вакансий
-     * @returns {Object}
-     */
-    async getVacancies() {
-        return this.request('/vacancies', 'GET');
-    }
-
-    /**
-     * Регистрация аккаунта
-     * @param {Object} body
-     * @returns {Object}
-     */
-    async register(body : Register) {
-        return this.request('/signup', 'POST', body);
-    }
-
-    /**
-     * Проверка использования почты. Если почта занята, то возвращается 200, иначе 400
-     * @param {string} email
-     * @returns {null}
-     */
-    async getUser(email: string) {
-        return this.request('/check-email', 'POST', { email });
-    }
-
-    /**
-     * Авторзация аккаунта
-     * @param {string} email
-     * @param {string} password
-     * @returns {Object}
-     */
-    async login(body: { email: string; password: string; }) {
-        return this.request('/signin', 'POST', body);
-    }
-
-    /**
-     * Проверка на авторизацию. Вызывается при загрузки страницы
-     * @return {Object}
-     */
-    async auth() {
-        return this.request('/auth', 'GET');
-    }
-
-    /**
-     * Выход из аккаунта. Если нет ошибки значит успешно
-     * @returns {null}
-     */
-    async logout() {
-        return this.request('/logout', 'POST');
-    }
 }
+
+export const api = new Api()

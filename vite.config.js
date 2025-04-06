@@ -1,4 +1,3 @@
-// vite.config.js
 import { defineConfig } from 'vite';
 import handlebarsPlugin from '@yoichiro/vite-plugin-handlebars';
 import { resolve } from 'path';
@@ -17,10 +16,9 @@ export default defineConfig({
     },
     css: {
         preprocessorOptions: {
-            scss: {
+            sass: {
                 // eslint-disable-next-line no-undef
                 includePaths: [resolve(__dirname, 'src')],
-                additionalData: `@import "./src/variables.sass";`
             }
         }
     },

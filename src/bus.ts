@@ -35,7 +35,7 @@ class EventBus {
     /**
      * Вываем всех слушателей события
      * 
-     * @param {string} - событие которые вызываем
+     * @param {string} event - событие которые вызываем
      */
     emit = (event: string) => {
       if (this.#listeners[event]) {
