@@ -1,12 +1,12 @@
-import { store, resetStore } from '../../store';
-import './header.css';
-import { router } from '../../router.js';
-import { Api } from '../../api/api.js';
-import { logger } from '../../utils/logger.js';
-import template from './header.handlebars'
+import { store } from '../../store';
+import './header.sass';
+import { router } from '../../router';
+import { logger } from '../../utils/logger';
+import template from './header.handlebars';
+import { api } from '../../api/api';
 
 export class Header {
-    #parent: HTMLElement;
+    readonly #parent: HTMLElement;
     #dropdownVisible: boolean = false;
     #loginButton: HTMLElement | null = null;
     #logoutButton: HTMLElement | null = null;
@@ -78,15 +78,15 @@ export class Header {
         this.#logoLink = this.self.querySelector('.header__name');
 
         this.#logoLink?.addEventListener('click', () => {
-            router('catalog');
+            router.go('/catalog');
         });
 
         this.#loginButton?.addEventListener('click', () => {
-            router('auth');
+            router.go('/auth');
         });
 
         this.#logoutButton?.addEventListener('click', () => {
-            router('catalog');
+            router.go('/catalog');
         });
 
         this.#profileIcon?.addEventListener('click', (e) => {
@@ -95,8 +95,12 @@ export class Header {
         });
 
         this.#createButton?.addEventListener('click', () => {
-            if (store.user.authenticated === false) {
-                router('auth');
+            if (store.data.authorized === false) {
+                router.go('/auth');
+            } else if (store.data.user.type === 'applicant') {
+                router.go('/createResume');
+            } else {
+                router.go('/createVacancy');
             }
         });
 
@@ -104,11 +108,11 @@ export class Header {
             if (item.classList.contains('header__dropdown__item--logout')) {
                 item.addEventListener('click', () => {
                     this.toggleDropdown(false);
-                    const api = new Api();
-                    api.logout()
+                    api.auth
+                        .logout()
                         .then(() => {
-                            resetStore();
-                            router('catalog');
+                            store.reset();
+                            router.go('/catalog');
                         })
                         .catch(() => {
                             logger.error('Error occured while logging out');
@@ -122,7 +126,7 @@ export class Header {
                 });
             }
         });
-        if (store.page === '') {
+        if (store.data.page === '') {
             document.addEventListener('click', this.handleDocumentClick);
         }
     };
@@ -132,8 +136,14 @@ export class Header {
      */
     render = () => {
         logger.info('Header render method called');
-         
-        this.#parent.insertAdjacentHTML('beforeend', template(store));
+
+        this.#parent.insertAdjacentHTML(
+            'beforeend',
+            template({
+                ...store.data,
+                isEmployer: store.data.user.type === 'employer',
+            }),
+        );
         this.addEventListeners();
     };
 }

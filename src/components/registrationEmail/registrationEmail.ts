@@ -1,30 +1,28 @@
-import { store } from '../../store.js';
-import { logger } from '../../utils/logger.js';
-import template from './registrationEmail.handlebars'
+import { api } from '../../api/api';
+import { router } from '../../router';
+import { store } from '../../store';
+import { logger } from '../../utils/logger';
+import template from './registrationEmail.handlebars';
 
 export class RegistrationEmail {
     readonly #parent: HTMLElement;
     #email: HTMLInputElement | null = null;
     #submitBtn: HTMLButtonElement | null = null;
-    readonly #nextCallback: () => void;
-    readonly #prevCallback: () => void;
     /**
      * Конструктор класса
      * @param parent {HTMLElement} - родительский элемент
      * @param nextCallback {function} - Вызов следующей формы
      * @param prevCallback {function} - Вызов предыдущей формы
      */
-    constructor(parent : HTMLElement, nextCallback : () => void, prevCallback: () => void) {
+    constructor(parent: HTMLElement) {
         this.#parent = parent;
-        this.#nextCallback = nextCallback;
-        this.#prevCallback = prevCallback;
     }
 
     /**
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() : HTMLFormElement {
+    get self(): HTMLFormElement {
         return document.forms.namedItem('registration_email') as HTMLFormElement;
     }
 
@@ -32,7 +30,7 @@ export class RegistrationEmail {
      * Смена типа формы с поиска работы на поиск работника и наоборот
      */
     readonly #switch = () => {
-        store.auth.isEmployer = !store.auth.isEmployer;
+        store.data.auth.type = store.data.auth.type === 'applicant' ? 'employer' : 'applicant';
         this.#under_link();
         this.#formNameRender();
     };
@@ -44,8 +42,9 @@ export class RegistrationEmail {
         const companyLink = document.getElementById('i_need_users');
         const userLink = document.getElementById('i_need_job');
         if (companyLink && userLink) {
-            companyLink.hidden = store.auth.isEmployer;
-            userLink.hidden = !store.auth.isEmployer;
+            console.log(store.data.auth);
+            companyLink.hidden = store.data.auth.type === 'employer';
+            userLink.hidden = store.data.auth.type === 'applicant';
         }
     };
 
@@ -55,7 +54,8 @@ export class RegistrationEmail {
     readonly #formNameRender = () => {
         const formName = this.self.querySelector('.form__name');
         if (formName) {
-            formName.textContent = store.auth.isEmployer ? 'Поиск сотрудников' : 'Поиск работы';
+            formName.textContent =
+                store.data.auth.type === 'applicant' ? 'Поиск работы' : 'Поиск сотрудников';
         }
     };
 
@@ -66,7 +66,7 @@ export class RegistrationEmail {
     readonly #emailValidate = (): boolean => {
         const error = this.self.querySelector('.form__error') as HTMLElement;
         if (!this.#email || !error) {
-            return false
+            return false;
         }
         if (this.#email.validity.valid === false) {
             error.hidden = false;
@@ -93,7 +93,7 @@ export class RegistrationEmail {
         this.#email = form.elements.namedItem('email') as HTMLInputElement;
         this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
 
-        form.querySelector('.form__back')?.addEventListener('click', this.#prevCallback);
+        form.querySelector('.form__back')?.addEventListener('click', router.back);
 
         document.querySelectorAll('.under_link').forEach((element) => {
             element.addEventListener('click', this.#switch);
@@ -101,11 +101,18 @@ export class RegistrationEmail {
         this.#email.addEventListener('input', () => {
             this.#emailValidate();
         });
-        this.#submitBtn.addEventListener('click', (e) => {
+        this.#submitBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             if (this.#emailValidate() === true) {
-                store.auth.email = this.#email?.value ?? '';
-                this.#nextCallback();
+                store.data.auth.request.email = this.#email?.value ?? '';
+                try {
+                    const request = await api.auth.checkEmail(store.data.auth.request.email);
+                    logger.info(request);
+                    router.go('/login');
+                } catch {
+                    logger.info('check email ERROR');
+                    router.go('/registrationPassword');
+                }
             }
         });
     };
@@ -126,11 +133,11 @@ export class RegistrationEmail {
      */
     render = () => {
         logger.info('RegistrationEmail render method called');
-         
+
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
-                email: store.auth.email,
+                email: store.data.auth.request.email,
             }),
         );
         this.#formNameRender();

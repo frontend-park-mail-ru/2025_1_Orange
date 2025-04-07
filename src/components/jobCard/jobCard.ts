@@ -1,40 +1,20 @@
-import './jobCard.css';
-import { logger } from '../../utils/logger.js';
+import './jobCard.sass';
+import { logger } from '../../utils/logger';
 import template from './jobCard.handlebars';
-
-interface Badge {
-    name: string;
-}
-
-interface JobCardProps {
-    id: number;
-    profession: string;
-    salary: string;
-    company: string;
-    city: string;
-    badges: Badge[];
-    day_created: number;
-    count: number;
-}
+import { VacancyShort } from '../../api/interfaces';
+import { router } from '../../router';
+import { employmentTranslations, workFormatTranslations } from '../../api/translations';
 
 export class JobCard {
-    #parent : HTMLElement;
-    #props : JobCardProps;
+    readonly #parent: HTMLElement;
+    readonly #props: VacancyShort;
 
     /**
      * Конструктор класса
-     * @param parent {HTMLElement} - родительский элемент
-     * @param props
-     * {id: number,
-     * profession: string,
-     * salary: string,
-     * company: string,
-     * city: string,
-     * badges: [{name: string}],
-     * day_created: number,
-     * count: number} - данные для рендера
+     * @param {HTMLElement} parent  - родительский элемент
+     * @param {VacancyShort} props - данные для рендера
      */
-    constructor(parent: HTMLElement, props : JobCardProps) {
+    constructor(parent: HTMLElement, props: VacancyShort) {
         this.#parent = parent;
         this.#props = props;
     }
@@ -43,9 +23,16 @@ export class JobCard {
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() : HTMLElement {
-        return document.getElementById(this.#props.id.toString()) as HTMLElement;
+    get self(): HTMLElement {
+        return document.getElementById(`jobCard-${this.#props.id.toString()}`) as HTMLElement;
     }
+
+    /**
+     * Навешивание обработчиков
+     */
+    readonly #addEventListeners = () => {
+        this.self.addEventListener('click', () => router.go(`/vacancy/${this.#props.id}`));
+    };
 
     /**
      * Очистка
@@ -56,16 +43,34 @@ export class JobCard {
     };
 
     /**
+     *
+     * @returns {number} - количество дней с момента создания вакансии
+     */
+    readonly #days_created = (): number => {
+        const created_date = new Date(this.#props.created_at);
+        const now = new Date();
+        return Math.floor((now.getTime() - created_date.getTime()) / (1000 * 60 * 60 * 24));
+    };
+
+    /**
      * Рендеринг компонента
      */
     render = () => {
         logger.info('JobCard render method called');
-         
+        console.log({
+            ...this.#props,
+            workFormatTranslations,
+            employmentTranslations,
+        });
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
-                p: this.#props,
+                ...this.#props,
+                workFormatTranslations,
+                employmentTranslations,
+                days_created: this.#days_created,
             }),
         );
+        this.#addEventListeners();
     };
 }
