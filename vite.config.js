@@ -19,7 +19,7 @@ export default defineConfig({
             sass: {
                 // eslint-disable-next-line no-undef
                 includePaths: [resolve(__dirname, 'src')],
-            }
-        }
+            },
+        },
     },
 });

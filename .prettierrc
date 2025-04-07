@@ -22,6 +22,12 @@
       "options": {
         "parser": "css"
       }
+    },
+    {
+      "files": "*.ts",
+      "options": {
+        "parser": "typescript"
+      }
     }
   ]
 }

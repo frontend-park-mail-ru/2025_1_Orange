@@ -14,7 +14,7 @@ class Logger {
      * Приватное поле для хранения уровней логирования.
      * @type {Object}
      */
-    #levels: Record<string, number>;;
+    #levels: Record<string, number>;
 
     /**
      * Приватное поле для текущего уровня логирования.
@@ -41,7 +41,6 @@ class Logger {
      * @returns {boolean} - true, если режим разработки, иначе false.
      */
     #inDevelopment(): boolean {
-         
         return process.env.NODE_ENV === 'development';
     }
 
