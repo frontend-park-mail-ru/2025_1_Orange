@@ -1,0 +1,66 @@
+<div class="profile" id="profile_company_page">
+    <div class="profile__header" style="margin-bottom: 55px">
+        <div class="profile__back">
+            <div class="profile__back-icon">
+                <img src="arrow-left.svg" />
+            </div>
+            <div class="profile__back-text">
+                Вернуться к списку вакансий
+            </div>
+        </div>
+        <div class="profile__actions">
+            <div class="job__button">Создать вакансию</div>
+            <div class="job__button_second">Настройки</div>
+        </div>
+    </div>
+
+    <div class="employer-profile__wrapper">
+        <div class="profile__body">
+            <div class="employer-profile__info">
+                <div class="employer-profile__info__header">
+                    <div class="employer-profile__info__header__wrapper">
+                        <img src="{{logo}}" />
+                        <div class="profile__details">
+                            <div class="profile__name">{{company_name}}</div>
+                            <div class="job__city">
+                                <img src="geo-alt.svg" />
+                                <div class="job__city__name">{{address}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile__quote">{{slogan}}</div>
+                </div>
+                <div class="employer-profile__divider"></div>
+                <div class="employer-profile__info__body">
+                    <div class="employer-profile__title">
+                        О компании
+                    </div>
+                    <div class="employer-profile__info__body-about">
+                        {{description}}
+                    </div>
+                </div>
+            </div>
+            <div class="employer-profile__title">
+                Активные вакансии ({{active_vacancy}})
+            </div>
+            <div class="jobs_list" id="responses-content">
+            </div>
+        </div>
+        <div class="profile__meta">
+            {{!-- <div class="profile__item">
+                <div class="profile__property">Специализация</div>
+                {{#each skills}}
+                <div class="job__badge">{{name}}</div>
+                {{/each}}
+            </div> --}}
+            <div class=" profile__item">
+                <div class="profile__property">Веб сайт</div>
+                <div class="profile__social-icons">
+                    <div class="profile__soc-icon">
+                        <a href="{{website}}"><img src="globe.svg" /></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
