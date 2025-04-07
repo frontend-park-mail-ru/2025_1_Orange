@@ -1,13 +1,13 @@
-import { RegistrationEmail } from '../registrationEmail/registrationEmail.js';
-import { store } from '../../store.js';
-import { RegistrationPassword } from '../registrationPassword/registrationPassword.js';
-import { RegistrationCompany } from '../registrationCompany/registrationCompany.js';
-import { RegistrationUser } from '../registrationUser/registrationUser.js';
-import { Login } from '../login/login.js';
-import { router } from '../../router.js';
-import { Api } from '../../api/api.js';
-import { logger } from '../../utils/logger.js';
-import template from './auth.handlebars'
+import { RegistrationEmail } from '../registrationEmail/registrationEmail';
+import { store } from '../../store';
+import { RegistrationPassword } from '../registrationPassword/registrationPassword';
+import { RegistrationCompany } from '../registrationCompany/registrationCompany';
+import { RegistrationUser } from '../registrationUser/registrationUser';
+import { Login } from '../login/login';
+import { router } from '../../router';
+import { Api } from '../../api/api';
+import { logger } from '../../utils/logger';
+import template from './auth.handlebars';
 
 export class Auth {
     readonly #parent: HTMLElement;
@@ -29,7 +29,7 @@ export class Auth {
         this.#api = new Api();
     }
 
-    get self() : HTMLElement {
+    get self(): HTMLElement {
         return document.getElementById('auth') as HTMLElement;
     }
 
@@ -38,76 +38,42 @@ export class Auth {
      */
     readonly #nextCallback = async () => {
         this.#history.push(store.page);
-        if (store.page === 'regEmail' || store.page === 'auth') {
-            this.#regEmail?.remove();
-            logger.info('FETCH');
-            try {
-                const request = await this.#api.getUser(store.auth.email);
-                logger.info(request)
-                store.page = 'login';
-                this.render();
-            } catch {
-                logger.info("check email ERROR")
-                store.page = 'regPassword';
-                this.render();
-            }
-            return;
-        }
-        if (store.page === 'regPassword') {
-            this.#regPassword?.remove();
-            if (store.auth.isEmployer) {
-                store.page = 'regCompany';
-            } else {
-                store.page = 'regUser';
-            }
-            this.render();
-            return;
-        }
-        if (store.page === 'regCompany') {
-            try {
-                await this.#api.register(store.auth);
-                this.#regCompany?.remove();
-                store.page = 'login';
-                this.render();
-            } catch {
-                const error = document.querySelector('.form__error') as HTMLElement;
-                if (error) {
-                    error.hidden = false;
-                    error.textContent = 'Ошибка при регистрации';
+        switch (store.page) {
+            case 'regEmail':
+            case 'auth':
+                logger.info('FETCH');
+                try {
+                    const request = await this.#api.auth.checkEmail(store.auth.email);
+                    logger.info(request);
+                    store.page = 'login';
+                    this.render();
+                } catch {
+                    logger.info('check email ERROR');
+                    store.page = 'regPassword';
+                    this.render();
                 }
-            }
-            return;
-        }
-        if (store.page === 'regUser') {
-            try {
-                await this.#api.register(store.auth);
-                this.#regUser?.remove();
+                break;
+            case 'regPassword':
+                if (store.auth.isEmployer) {
+                    store.page = 'regCompany';
+                } else {
+                    store.page = 'regUser';
+                }
+                this.render();
+                break;
+            case 'regCompany':
                 store.page = 'login';
                 this.render();
-            } catch {
-                const error = document.querySelector('.form__error') as HTMLElement;
-                if (error) {
-                    error.hidden = false;
-                    error.textContent = 'Ошибка при регистрации';
-                }
-            }
-            return;
-        }
-
-        if (store.page === 'login') {
-            try {
-                await this.#api.login({ email: store.auth.email, password: store.auth.password });
-                this.#login?.remove();
+                break;
+            case 'regUser':
+                store.page = 'login';
+                this.render();
+                break;
+            case 'login':
                 store.user.authenticated = true;
                 store.page = 'catalog';
-                router('catalog');
-            } catch {
-                const error = document.querySelector('.form__error') as HTMLElement;
-                if (error) {
-                    error.hidden = false;
-                    error.textContent = 'Ошибка при авторизации';
-                }
-            }
+                router.go('/catalog');
+                break;
         }
     };
 
@@ -115,27 +81,27 @@ export class Auth {
      * Логика открытия предыдущих форм
      */
     readonly #prevCallback = () => {
-        logger.info(store.page);
-        if (store.page === 'regEmail' || store.page === 'auth' || store.page === undefined) {
-            this.#regEmail?.remove();
-            router('catalog');
-            return;
-        }
-        if (store.page === 'regPassword') {
-            this.#regPassword?.remove();
-        }
-        if (store.page === 'regCompany') {
-            this.#regCompany?.remove();
-        }
-        if (store.page === 'regUser') {
-            this.#regUser?.remove();
-        }
-        if (store.page === 'login') {
-            this.#login?.remove();
-        }
-        const currentPage = this.#history.pop()
+        // logger.info(store.page);
+        // if (store.page === 'regEmail' || store.page === 'auth' || store.page === undefined) {
+        //     this.#regEmail?.remove();
+        //     router.go('catalog');
+        //     return;
+        // }
+        // if (store.page === 'regPassword') {
+        //     this.#regPassword?.remove();
+        // }
+        // if (store.page === 'regCompany') {
+        //     this.#regCompany?.remove();
+        // }
+        // if (store.page === 'regUser') {
+        //     this.#regUser?.remove();
+        // }
+        // if (store.page === 'login') {
+        //     this.#login?.remove();
+        // }
+        const currentPage = this.#history.pop();
         if (currentPage) {
-            store.page = currentPage
+            store.page = currentPage;
         }
         this.render();
     };
@@ -153,9 +119,10 @@ export class Auth {
      */
     render() {
         logger.info('Auth render method called');
-        if (this.self === null) {
-            this.#parent.insertAdjacentHTML('beforeend', template({}));
+        if (this.self) {
+            this.remove();
         }
+        this.#parent.insertAdjacentHTML('beforeend', template({}));
         if (store.page === 'regEmail' || store.page === 'auth') {
             this.#regEmail = new RegistrationEmail(
                 this.self,

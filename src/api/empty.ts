@@ -16,8 +16,8 @@ import {
     EmployerEdit,
     ResumeCreate,
     VacancyCreate,
-    WorkExperienceCreate
-} from "./interfaces"
+    WorkExperienceCreate,
+} from './interfaces';
 
 export const emptySignupRequest: SignupRequest = {
     email: '',
@@ -26,21 +26,20 @@ export const emptySignupRequest: SignupRequest = {
     firstName: '',
     lastName: '',
     companyName: '',
-    companyAddress: ''
-}
-
+    companyAddress: '',
+};
 
 export const emptySigninRequest: SigninRequest = {
     email: '',
     password: '',
-}
+};
 
 export const emptyStatic: Static = {
     id: 0,
     path: '',
     created_at: '',
     updated_at: '',
-}
+};
 
 export const emptyApplicant: Applicant = {
     id: 0,
@@ -58,7 +57,7 @@ export const emptyApplicant: Applicant = {
     created_at: '',
     updated_at: '',
     status: 'actively_searching',
-}
+};
 
 export const emptyApplicantShort: ApplicantShort = {
     id: 0,
@@ -70,7 +69,7 @@ export const emptyApplicantShort: ApplicantShort = {
     avatar: '',
     created_at: '',
     updated_at: '',
-}
+};
 
 export const emptyEmployer: Employer = {
     id: 0,
@@ -82,13 +81,13 @@ export const emptyEmployer: Employer = {
     logo: '',
     created_at: '',
     updated_at: '',
-}
+};
 
 export const emptyEmployerShort: EmployerShort = {
     id: 0,
     company_name: '',
     logo: '',
-}
+};
 
 export const emptyVacancy: Vacancy = {
     id: 0,
@@ -112,7 +111,7 @@ export const emptyVacancy: Vacancy = {
     optional_requirements: '',
     created_at: '',
     updated_at: '',
-}
+};
 
 export const emptyVacancyShort: VacancyShort = {
     id: 0,
@@ -128,8 +127,7 @@ export const emptyVacancyShort: VacancyShort = {
     taxes_included: false,
     created_at: '',
     updated_at: '',
-}
-
+};
 
 export const emptyWorkExperience: WorkExperience = {
     id: 0,
@@ -140,7 +138,7 @@ export const emptyWorkExperience: WorkExperience = {
     start_date: '',
     end_date: '',
     until_now: false,
-}
+};
 
 export const emptyResume: Resume = {
     id: 0,
@@ -155,7 +153,7 @@ export const emptyResume: Resume = {
     worked_experience: 0,
     created_at: '',
     updated_at: '',
-}
+};
 
 export const emptyResumeShort: ResumeShort = {
     id: 0,
@@ -165,15 +163,15 @@ export const emptyResumeShort: ResumeShort = {
     worked_experience: 0,
     created_at: '',
     updated_at: '',
-}
+};
 
 export const emptyUser: User = {
     type: 'applicant',
     employer: emptyEmployer,
     applicant: emptyApplicant,
-}
+};
 
-export const emptyWorkExperienceCreate : WorkExperienceCreate = {
+export const emptyWorkExperienceCreate: WorkExperienceCreate = {
     employer_name: '',
     position: '',
     duties: '',
@@ -181,9 +179,9 @@ export const emptyWorkExperienceCreate : WorkExperienceCreate = {
     start_date: '',
     end_date: '',
     until_now: false,
-}
+};
 
-export const emptyResumeCreate : ResumeCreate = {
+export const emptyResumeCreate: ResumeCreate = {
     about_me: '',
     specialization: '',
     education: 'secondary_school',
@@ -191,15 +189,14 @@ export const emptyResumeCreate : ResumeCreate = {
     graduation_year: '',
     skills: [],
     work_experience: [],
-}
+};
 
-
-export const emptyVacancyCreate : VacancyCreate = {
+export const emptyVacancyCreate: VacancyCreate = {
     title: '',
     specialization: '',
     city: '',
     work_format: 'office',
-    employment: 'full_time',  
+    employment: 'full_time',
     schedule: '5/2',
     working_hours: 0,
     salary_from: 0,
@@ -211,17 +208,17 @@ export const emptyVacancyCreate : VacancyCreate = {
     tasks: '',
     requirements: '',
     optional_requirements: '',
-}
+};
 
-export const emptyEmployerEdit : EmployerEdit = {
+export const emptyEmployerEdit: EmployerEdit = {
     company_name: '',
     slogan: '',
     website: '',
     description: '',
     address: '',
-}
+};
 
-export const emptyApplicantEdit : ApplicantEdit = {
+export const emptyApplicantEdit: ApplicantEdit = {
     first_name: '',
     last_name: '',
     middle_name: '',
@@ -233,4 +230,4 @@ export const emptyApplicantEdit : ApplicantEdit = {
     telegram: '',
     vk: '',
     web: '',
-}
+};

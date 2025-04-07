@@ -8,7 +8,7 @@ import { VacancyService } from './vacansies';
 export class Api {
     readonly #baseUrl;
     readonly auth: AuthService;
-    readonly vacancy: VacancyService
+    readonly vacancy: VacancyService;
     readonly applicant: ApplicantService;
     readonly employer: EmployerService;
     readonly resume: ResumeService;
@@ -19,11 +19,11 @@ export class Api {
      */
     constructor(baseUrl: string = 'http://localhost:8000') {
         this.#baseUrl = baseUrl;
-        this.auth = new AuthService(this)
-        this.vacancy = new VacancyService(this)
-        this.applicant = new ApplicantService(this)
-        this.employer = new EmployerService(this)
-        this.resume = new ResumeService(this)
+        this.auth = new AuthService(this);
+        this.vacancy = new VacancyService(this);
+        this.applicant = new ApplicantService(this);
+        this.employer = new EmployerService(this);
+        this.resume = new ResumeService(this);
     }
 
     /**
@@ -33,7 +33,12 @@ export class Api {
      * @param {string | FormDate | null} body
      * @returns {Promise<Object>}
      */
-    async request(endpoint: string, method: string = 'GET', body: string | FormData | null = null, content_type : string = 'application/json') {
+    async request(
+        endpoint: string,
+        method: string = 'GET',
+        body: string | FormData | null = null,
+        content_type: string = 'application/json',
+    ) {
         const url = this.#baseUrl + endpoint;
         const headers = new Headers();
         headers.append('Content-Type', content_type);
@@ -64,4 +69,4 @@ export class Api {
     }
 }
 
-export const api = new Api()
+export const api = new Api();

@@ -35,7 +35,12 @@ export interface Applicant {
     web: string;
     created_at: string;
     updated_at: string;
-    status: 'actively_searching' | 'open_to_offer' | 'considering_offer' | 'starting_soon' | 'not_searching'
+    status:
+        | 'actively_searching'
+        | 'open_to_offer'
+        | 'considering_offer'
+        | 'starting_soon'
+        | 'not_searching';
 }
 
 export interface ApplicantShort {
@@ -98,8 +103,8 @@ export interface VacancyShort {
     employer: EmployerShort;
     specialization: string;
     city: string;
-    work_format: 'office' | 'remote' | 'hybrid' | 'traveling';    
-    employment: 'full_time' | 'part_time' | 'contract' | 'internship' | 'freelance' | 'watch';   
+    work_format: 'office' | 'remote' | 'hybrid' | 'traveling';
+    employment: 'full_time' | 'part_time' | 'contract' | 'internship' | 'freelance' | 'watch';
     working_hours: number;
     salary_from: number;
     salary_to: number;
@@ -169,13 +174,12 @@ export interface ResumeCreate {
     work_experience: WorkExperienceCreate[];
 }
 
-
 export interface VacancyCreate {
     title: string;
     specialization: string;
     city: string;
     work_format: 'office' | 'remote' | 'hybrid' | 'traveling';
-    employment: 'full_time' | 'part_time' | 'contract' | 'internship' | 'freelance' | 'watch';  
+    employment: 'full_time' | 'part_time' | 'contract' | 'internship' | 'freelance' | 'watch';
     schedule: '5/2' | '2/2' | '6/1' | '3/3' | 'on_weekend' | 'by_agreement';
     working_hours: number;
     salary_from: number;

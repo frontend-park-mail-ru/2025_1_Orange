@@ -1,19 +1,19 @@
-import { emptyResumeCreate, emptySignupRequest, emptyUser, emptyVacancyCreate } from "./api/empty";
-import { VacancyCreate, ResumeCreate, SignupRequest, User } from "./api/interfaces";
+import { emptyResumeCreate, emptySignupRequest, emptyUser, emptyVacancyCreate } from './api/empty';
+import { VacancyCreate, ResumeCreate, SignupRequest, User } from './api/interfaces';
 
 interface StoreData {
     authorized: boolean;
     page: string;
-    auth : {
+    auth: {
         type: 'applicant' | 'employer';
-        request: SignupRequest
-    }
-    user: User
+        request: SignupRequest;
+    };
+    user: User;
     vacancy: VacancyCreate;
     resume: ResumeCreate;
 }
 
-const emptyData : StoreData = {
+const emptyData: StoreData = {
     authorized: false,
     page: '',
     auth: {
@@ -23,16 +23,16 @@ const emptyData : StoreData = {
     user: emptyUser,
     vacancy: emptyVacancyCreate,
     resume: emptyResumeCreate,
-}
+};
 
 class Store {
-    data : StoreData;
-    constructor () {
-        this.data = structuredClone(emptyData)
+    data: StoreData;
+    constructor() {
+        this.data = structuredClone(emptyData);
     }
     reset = () => {
-        this.data = structuredClone(emptyData)
-    }
+        this.data = structuredClone(emptyData);
+    };
 }
 
-export const store = new Store()
+export const store = new Store();
