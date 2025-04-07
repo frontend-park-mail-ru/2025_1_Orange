@@ -6,16 +6,19 @@
         <div class="header__link">Компании</div>
     </div>
     <div class="header__auth">
-        {{#if user.authenticated}}
-            {{#if auth.isEmployer}}
+        {{#if authorized}}
+            {{#if isEmployer}}
                 <div class="header__button">Создать вакансию</div>
             {{else}}
                 <div class="header__button">Создать резюме</div>
             {{/if}}
             <div class="header__profile">
-                <svg class="header__profile-icon"  width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17 29.75C24.0416 29.75 29.75 24.0416 29.75 17C29.75 9.95837 24.0416 4.25 17 4.25C9.95837 4.25 4.25 9.95837 4.25 17C4.25 24.0416 9.95837 29.75 17 29.75ZM17 29.75C19.4945 29.7527 21.9343 29.0195 24.0139 27.642C23.8496 26.2722 23.1895 25.0099 22.1584 24.0934C21.1272 23.1768 19.7963 22.6693 18.4167 22.6667H15.5833C14.2037 22.6693 12.8728 23.1768 11.8416 24.0934C10.8105 25.0099 10.1504 26.2722 9.98608 27.642C12.0657 29.0195 14.5055 29.7527 17 29.75ZM21.25 14.1667C21.25 16.5139 19.3472 18.4167 17 18.4167C14.6528 18.4167 12.75 16.5139 12.75 14.1667C12.75 11.8195 14.6528 9.91667 17 9.91667C19.3472 9.91667 21.25 11.8195 21.25 14.1667Z" stroke="#A6A6B0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                {{#if isEmployer}}
+                <img src="{{user.employer.logo}}" class="header__profile-icon">
+                {{else}}
+                <img src="{{user.applicant.avatar}}" class="header__profile-icon">
+                {{/if}}
+                
 
                 <div class="header__dropdown">
                     <div class="header__dropdown__item">Настройки</div>

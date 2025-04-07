@@ -1,23 +1,30 @@
-<div class="job" id="{{p.id}}">
+<div class="job" id="jobCard-{{id}}">
     <div class="job__favorite">
-        <img src="icons-like.svg" alt="Избранное">
+        <img src="heart.svg" alt="Избранное">
     </div>
     <div class="job__avatar">
-        <img src="https://placehold.co/100x100/EEE/31343C" alt="Логотип компании">
+        <img src="{{employer.logo}}" alt="Логотип компании">
     </div>
     <div class="job__info">
-        <p class="job__name">{{p.profession}}</p>
-        <p class="job__salary">{{p.salary}}</p>
-        <p class="job__company">{{p.company}}</p>
+        <p class="job__name">{{title}}</p>
+        <p class="job__salary">
+            {{salary_from}} - {{salary_to}}
+            {{#if taxes_included}}
+            На руки
+            {{else}}
+            До вычета налогов
+            {{/if}}
+        </p>
+        <p class="job__company">{{employer.company_name}}</p>
         <div class="job__advantages">
             <div class="job__city">
-                <img class="job__city__image" src="icons-place-marker.png" alt="address--v1" />
-                <p class="job__city__name">{{p.city}}</p>
+                <img src="geo-alt.svg" alt="address--v1" />
+                <p class="job__city__name">{{city}}</p>
             </div>
             <div class="job__badges">
-                {{#each p.badges}}
-                 <div class="job__badge">{{name}}</div>
-                 {{/each}}
+                <div class="job__badge">{{lookup workFormatTranslations work_format}}</div>
+                <div class="job__badge">{{lookup employmentTranslations employment}}</div>
+                <div class="job__badge">{{working_hours}}ч в неделю</div>
             </div>
         </div>
         <div class="job__footer">
@@ -25,7 +32,7 @@
                 <div class="job__button">Откликнуться</div>
             </div>
             <div class="job__statistics">
-                {{p.day_created}} дня назад • {{p.count}} уже откликнулись
+                {{days_created}} дня назад • {{p.count}} уже откликнулись
             </div>
         </div>
     </div>

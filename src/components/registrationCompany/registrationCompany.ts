@@ -1,14 +1,14 @@
-import { store } from '../../store.js';
-import { logger } from '../../utils/logger.js';
-import template from './registrationCompany.handlebars'
+import { api } from '../../api/api';
+import { router } from '../../router';
+import { store } from '../../store';
+import { logger } from '../../utils/logger';
+import template from './registrationCompany.handlebars';
 
 export class RegistrationCompany {
-    #parent: HTMLElement;
+    readonly #parent: HTMLElement;
     #companyName: HTMLInputElement | null = null;
     #companyAddress: HTMLInputElement | null = null;
     #submitBtn: HTMLButtonElement | null = null;
-    #nextCallback: () => void;
-    #prevCallback: () => void;
 
     /**
      * Конструктор класса
@@ -16,17 +16,15 @@ export class RegistrationCompany {
      * @param nextCallback {function} - Вызов следующей формы
      * @param prevCallback {function} - Вызов предыдущей формы
      */
-    constructor(parent: HTMLElement, nextCallback: () => void, prevCallback: () => void) {
+    constructor(parent: HTMLElement) {
         this.#parent = parent;
-        this.#nextCallback = nextCallback;
-        this.#prevCallback = prevCallback;
     }
 
     /**
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() : HTMLFormElement {
+    get self(): HTMLFormElement {
         return document.forms.namedItem('registration_company') as HTMLFormElement;
     }
 
@@ -34,7 +32,7 @@ export class RegistrationCompany {
      * Валидация введенных данных
      * @returns {boolean}
      */
-    #companyValidate = (): boolean => {
+    readonly #companyValidate = (): boolean => {
         return this.#companyNameValidate() && this.#companyAddressValidate();
     };
 
@@ -42,7 +40,7 @@ export class RegistrationCompany {
      * Валидация имени компании
      * @returns {boolean}
      */
-    #companyNameValidate = (): boolean => {
+    readonly #companyNameValidate = (): boolean => {
         const error = this.self.querySelector('.form__error') as HTMLElement;
         if (!this.#companyName || !error) {
             return false;
@@ -54,7 +52,7 @@ export class RegistrationCompany {
             return false;
         } else {
             this.#companyName.classList.remove('form__input_error');
-            this.#companyName.classList.add('form__valid');
+            this.#companyName.classList.add('form__input_valid');
             error.hidden = true;
         }
         return true;
@@ -64,7 +62,7 @@ export class RegistrationCompany {
      * Валидация адреса компании
      * @returns {boolean}
      */
-    #companyAddressValidate = () => {
+    readonly #companyAddressValidate = () => {
         const error = this.self.querySelector('.form__error') as HTMLElement;
         if (!this.#companyAddress || !error) {
             return false;
@@ -76,7 +74,7 @@ export class RegistrationCompany {
             return false;
         } else {
             this.#companyAddress.classList.remove('form__input_error');
-            this.#companyAddress.classList.add('form__valid');
+            this.#companyAddress.classList.add('form__input_valid');
             error.hidden = true;
         }
         return true;
@@ -85,21 +83,31 @@ export class RegistrationCompany {
     /**
      * Навешивание обработчиков событий
      */
-    #addEventListeners = () => {
+    readonly #addEventListeners = () => {
         const form = this.self;
         this.#companyAddress = form.elements.namedItem('company_address') as HTMLInputElement;
         this.#companyName = form.elements.namedItem('company_name') as HTMLInputElement;
         this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
 
-        form.querySelector('.form__back')?.addEventListener('click', this.#prevCallback);
+        form.querySelector('.form__back')?.addEventListener('click', router.back);
         this.#companyName.addEventListener('input', this.#companyNameValidate);
         this.#companyAddress.addEventListener('input', this.#companyAddressValidate);
-        this.#submitBtn.addEventListener('click', (e) => {
+        this.#submitBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             if (this.#companyValidate() === true) {
-                store.auth.companyName = this.#companyName?.value || '';
-                store.auth.companyAddress = this.#companyAddress?.value || '';
-                this.#nextCallback();
+                store.data.auth.request.companyName = this.#companyName?.value ?? '';
+                store.data.auth.request.companyAddress = this.#companyAddress?.value ?? '';
+                try {
+                    const user = await api.auth.register(store.data.auth.request);
+                    store.data.authorized = true;
+                    store.data.user = user;
+                } catch {
+                    const error = document.querySelector('.form__error') as HTMLElement;
+                    if (error) {
+                        error.hidden = false;
+                        error.textContent = 'Ошибка при регистрации';
+                    }
+                }
             }
         });
     };
@@ -120,8 +128,8 @@ export class RegistrationCompany {
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
-                companyName: store.auth.companyName,
-                companyAddress: store.auth.companyAddress,
+                companyName: store.data.auth.request.companyName,
+                companyAddress: store.data.auth.request.companyAddress,
             }),
         );
         this.#addEventListeners();
