@@ -1,0 +1,161 @@
+import { Resume } from '../../api/interfaces';
+
+export const resumesMock: Resume[] = [
+    {
+        id: 2,
+        profile: {
+            id: 2,
+            avatar: 'https://placehold.co/150x150/EEE/31343C',
+            firstName: 'Иван',
+            lastName: 'Иванов',
+            quote: 'Фронтенд-разработчик с опытом более 3 лет',
+            city: 'г. Санкт-Петербург',
+            birthday: '12 мая 1990г',
+        },
+        name: 'Frontend Developer',
+        about: 'Специализируюсь на React и Vue.js. Создаю интерактивные пользовательские интерфейсы.',
+        education: {
+            name: 'Санкт-Петербургский политехнический университет',
+            faculty: 'Информатика и программирование',
+            type: 'Бакалавриат',
+            date: '2018-2022',
+        },
+        skills: [
+            { name: 'HTML' },
+            { name: 'CSS' },
+            { name: 'JavaScript' },
+            { name: 'React' },
+            { name: 'Vue.js' },
+        ],
+        experience: [
+            {
+                start_date: 'Апрель 2022',
+                end_date: 'Октябрь 2023',
+                duration: '1 год 7 месяцев',
+                name: 'Frontend Developer',
+                company_name: 'WebDev Co.',
+                description: 'Разработка пользовательских интерфейсов на React.',
+            },
+            {
+                start_date: 'Май 2020',
+                end_date: 'Март 2022',
+                duration: '1 год 11 месяцев',
+                name: 'Junior Frontend Developer',
+                company_name: 'UI/UX Studio',
+                description: 'Обучение и поддержка проектов на Vue.js.',
+            },
+        ],
+        created_date: '15 февраля 2022 года в 10:30',
+        updated_date: '10 декабря 2023 года в 14:45',
+        contacts: [
+            {
+                name: 'github',
+                logo: 'https://placehold.co/150x150/EEE/31343C',
+                data: 'github.com/ivan',
+            },
+            {
+                name: 'telegram',
+                logo: 'https://placehold.co/150x150/EEE/31343C',
+                data: '@ivanivanov',
+            },
+        ],
+        status: 'Открыт к предложениям',
+    },
+    {
+        id: 3,
+        profile: {
+            id: 3,
+            avatar: 'https://placehold.co/150x150/EEE/31343C',
+            firstName: 'Мария',
+            lastName: 'Сидорова',
+            quote: 'Дизайнер с опытом работы над UI/UX для веб-приложений',
+            city: 'г. Екатеринбург',
+            birthday: '23 марта 1987г',
+        },
+        name: 'UI/UX Designer',
+        about: 'Создаю интуитивные и красивые интерфейсы для веб-приложений.',
+        education: {
+            name: 'Уральский государственный университет',
+            faculty: 'Дизайн',
+            type: 'Магистратура',
+            date: '2015-2017',
+        },
+        skills: [
+            { name: 'Figma' },
+            { name: 'Adobe XD' },
+            { name: 'Sketch' },
+            { name: 'Prototyping' },
+        ],
+        experience: [
+            {
+                start_date: 'Январь 2020',
+                end_date: 'Декабрь 2022',
+                duration: '3 года',
+                name: 'UI/UX Designer',
+                company_name: 'Design Lab',
+                description: 'Проектирование интерфейсов для мобильных приложений.',
+            },
+        ],
+        created_date: '10 мая 2021 года в 16:20',
+        updated_date: '5 ноября 2023 года в 09:10',
+        contacts: [
+            {
+                name: 'linkedin',
+                logo: 'https://placehold.co/150x150/EEE/31343C',
+                data: 'linkedin.com/maria',
+            },
+            {
+                name: 'email',
+                logo: 'https://placehold.co/150x150/EEE/31343C',
+                data: 'maria@example.com',
+            },
+        ],
+        status: 'Не ищу работу',
+    },
+    {
+        id: 4,
+        profile: {
+            id: 4,
+            avatar: 'https://placehold.co/150x150/EEE/31343C',
+            firstName: 'Петр',
+            lastName: 'Васечкин',
+            quote: 'Fullstack разработчик с опытом работы в разных стеках технологий',
+            city: 'г. Казань',
+            birthday: '1 января 1995г',
+        },
+        name: 'Fullstack Developer',
+        about: 'Работаю с Node.js, Python, и базами данных. Создаю масштабируемые веб-приложения.',
+        education: {
+            name: 'Казанский федеральный университет',
+            faculty: 'Компьютерные науки',
+            type: 'Бакалавриат',
+            date: '2017-2021',
+        },
+        skills: [{ name: 'Node.js' }, { name: 'Express' }, { name: 'Python' }, { name: 'Django' }],
+        experience: [
+            {
+                start_date: 'Ноябрь 2021',
+                end_date: 'Июнь 2023',
+                duration: '1 год 8 месяцев',
+                name: 'Fullstack Developer',
+                company_name: 'TechBridge',
+                description: 'Разработка backend и frontend частей веб-приложений.',
+            },
+        ],
+        created_date: '20 октября 2021 года в 12:00',
+        updated_date: '1 февраля 2024 года в 15:30',
+        contacts: [
+            {
+                name: 'github',
+                logo: 'https://placehold.co/150x150/EEE/31343C',
+                data: 'github.com/petr',
+            },
+            {
+                name: 'phone',
+                logo: 'https://placehold.co/150x150/EEE/31343C',
+                data: '+7 999 123-45-67',
+            },
+        ],
+        status: 'Активно ищу работу',
+    },
+];
