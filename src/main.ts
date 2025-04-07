@@ -1,21 +1,27 @@
 import { router } from './router';
-import { Api } from './api/api';
+import { api } from './api/api';
 import { store } from './store';
-import './style.css';
+import './form.sass';
+import './variables.sass';
 import { logger } from './utils/logger';
+import { routerInit } from './routeInit';
+import { applicantMock, userApplicantMock, userEmployerMock } from './api/mocks';
+import { emptyUser } from './api/empty';
 
-const api = new Api();
-api.auth()
+routerInit();
+
+api.auth
+    .auth()
     .then((user) => {
         logger.info(user);
-        if (user.email !== undefined) {
-            store.user = user;
-            store.user.authenticated = true;
-        }
+        store.data.authorized = true;
+        store.data.user = user;
     })
     .catch(() => {
-        store.user.authenticated = false;
+        //store.user.authenticated = false;
+        store.data.authorized = true;
+        store.data.user = userApplicantMock;
     })
     .finally(() => {
-        router();
+        router.go(window.location.pathname);
     });
