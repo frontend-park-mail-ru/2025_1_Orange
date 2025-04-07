@@ -1,0 +1,117 @@
+form
+    position: relative
+    flex-direction: column
+
+.form
+    width: 370px
+    padding: 20px
+    border: 1px solid #cfcfcf
+    border-radius: 30px
+    margin: 150px auto auto
+    transition: box-shadow 0.3s ease, border-color 0.3s ease
+
+    &:hover
+        box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.1)
+        border-color: #aaaab3
+
+    &__back
+        position: absolute
+        top: 20px
+        left: 20px
+        padding: 10px
+        font-size: 14px
+        cursor: pointer
+
+    &__name
+        font-weight: bold
+        font-size: 20px
+        padding: 10px
+        text-align: center
+        margin-top: 30px
+
+    &__description
+        font-size: 14px
+        font-weight: 500
+        color: #a1a1a1
+        margin-top: 5px
+        text-align: center
+
+    &__email
+        font-weight: bold
+        color: #000000
+        font-size: 16px
+        padding: 5px
+
+    &__input
+        margin-top: 20px
+        display: flex
+        flex-direction: column
+        gap: 20px
+
+        input
+            padding: 15px 10px
+            border: 1px solid #cfcfcf
+            font-size: 14px
+            border-radius: 10px
+
+            &::placeholder
+                font-size: 14px
+                color: #cfcfcf
+
+            &:hover
+                border-color: #aaaab3
+
+            &:focus
+                outline: 0
+                border: 1px solid #0071fe
+    
+        &_error
+            border: 1px solid #fb0102
+
+        &_valid
+            border: 1px solid #48f86e
+            
+
+    &__error
+        color: #fb0102
+
+    &__link
+        display: inline-block
+        text-decoration: none
+        padding: 10px 0px
+        font-size: 14px
+        color: #0071fe
+
+    &__checkbox
+        display: grid
+        grid-template-columns: 1em auto
+        gap: 0.5em
+        padding: 10px 0px
+        margin-top: 5px
+
+        input
+            margin: 0px
+
+    &__button
+        cursor: pointer
+        padding: 15px 10px
+        border: none
+        border-radius: 10px
+        background-color: #0071fe
+        color: #fff
+        font-size: 18px
+        width: 100%
+        margin-top: 10px
+        transition: background-color 0.3s ease
+
+        &:hover
+            background: #338efe
+
+.under_link
+    cursor: pointer
+    text-align: center
+    color: #0071fe
+    font-weight: 600
+    text-decoration: none
+    margin-top: 12px
+    padding: 10px
