@@ -1,0 +1,101 @@
+.header
+    box-sizing: border-box
+    height: 54px
+    display: flex
+    flex-direction: row
+    align-items: center
+    padding: 0 20px
+    background: #000000
+    color: #ffffff
+    position: fixed
+    top: 0
+    width: 100%
+    z-index: 1000
+
+    &__name
+        font-size: 28px
+        cursor: pointer
+        user-select: none
+
+    &__links
+        display: flex
+        justify-content: center
+        align-items: center
+        gap: 100px
+        position: absolute
+        left: 0
+        right: 0
+        margin: 0 auto
+        width: fit-content
+        pointer-events: auto
+
+    &__link
+        font-size: 16px
+        cursor: pointer
+        white-space: nowrap
+        user-select: none
+
+    &__auth
+        display: flex
+        justify-content: flex-end
+        align-items: center
+        gap: 50px
+        margin-left: auto
+
+    &__button
+        cursor: pointer
+        padding: 10px
+        border: none
+        border-radius: 10px
+        background-color: #333c43
+        color: #fff
+        font-size: 16px
+        user-select: none
+        transition: background-color 0.3s ease
+
+        &:hover
+            background-color: #4a555f
+
+    &__profile
+        height: 34px
+        position: relative
+        cursor: pointer
+
+        img
+            object-fit: contain
+            width: 34px
+            height: 34px
+
+    &__dropdown
+        display: none
+        position: absolute
+        top: calc(100% + 10px)
+        right: 0
+        min-width: 280px
+        background: white
+        border-radius: 8px
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15)
+        padding: 8px 0
+        z-index: 100
+
+        &__item
+            padding: 12px 16px
+            color: #000000
+            font-size: 16px
+            font-weight: 600
+            display: flex
+            align-items: center
+            justify-content: space-between
+            transition: background-color 0.2s
+            cursor: pointer
+
+            &:hover
+                background-color: #f5f5f5
+
+            &--logout
+                color: #f32526
+
+        &__divider
+            height: 1px
+            background-color: #e8e8e8
+            margin: 8px 0

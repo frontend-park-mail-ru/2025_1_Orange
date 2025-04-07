@@ -1,5 +1,7 @@
+import { api } from '../../api/api';
+import { router } from '../../router';
 import { store } from '../../store';
-import { logger } from '../../utils/logger.js';
+import { logger } from '../../utils/logger';
 import template from './login.handlebars';
 
 /**
@@ -7,10 +9,8 @@ import template from './login.handlebars';
  * @classdesc Форма авторизации. Возникает если при регистрации указать
  */
 export class Login {
-    #parent: HTMLElement;
+    readonly #parent: HTMLElement;
     #submitBtn: HTMLButtonElement | null = null;
-    #nextCallback: () => void;
-    #prevCallback: () => void;
     #password: HTMLInputElement | null = null;
 
     /**
@@ -20,27 +20,17 @@ export class Login {
      * @param nextCallback {function} - калбек на следующую форму
      * @param prevCallback {function} - калбек на предыдущую форму
      */
-    constructor(parent: HTMLElement, nextCallback: () => void, prevCallback: () => void) {
+    constructor(parent: HTMLElement) {
         this.#parent = parent;
-        this.#nextCallback = nextCallback;
-        this.#prevCallback = prevCallback;
     }
 
     /**
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() : HTMLFormElement {
+    get self(): HTMLFormElement {
         return document.forms.namedItem('login') as HTMLFormElement;
     }
-
-    /**
-     * Рендер поля почты. Рендерится при переходе из формы ввода почты
-     */
-    #formEmailRender = () : void => {
-        const email = this.self.querySelector('.form__email') as HTMLElement;
-        email.textContent = store.auth.email;
-    };
 
     /**
      * Валидация введенного пароля на принадлежность к английским буквам и цифрам
@@ -67,20 +57,20 @@ export class Login {
      * Валидация введенных данных
      * @returns {boolean}
      */
-    #passwordValidate = (): boolean => {
+    readonly #passwordValidate = (): boolean => {
         const error = this.self.querySelector('.form__error') as HTMLElement;
         if (!this.#password) {
-            return false
+            return false;
         }
         if (this.#password.validity.valid === false) {
-            this.#password.classList.remove('form__valid');
+            this.#password.classList.remove('form__input_valid');
             this.#password.classList.add('form__input_error');
             error.hidden = false;
             error.textContent = 'Пароль должен содержать минимум 10 символов';
             return false;
         }
         if (this.#checkPassword(this.#password.value) === false) {
-            this.#password.classList.remove('form__valid');
+            this.#password.classList.remove('form__input_valid');
             this.#password.classList.add('form__input_error');
             error.hidden = false;
             error.textContent = 'Пароль может содержать только латинские буквы и цифры';
@@ -88,7 +78,7 @@ export class Login {
         } else {
             error.hidden = true;
             this.#password.classList.remove('form__input_error');
-            this.#password.classList.add('form__valid');
+            this.#password.classList.add('form__input_valid');
             return true;
         }
     };
@@ -96,10 +86,14 @@ export class Login {
     /**
      * Кнопка глазика в поле ввода пароля
      */
-    #togglePasswordVisibility = () => {
-        const showPasswordIcon = this.self.querySelector('.form__toggle-password--show') as HTMLElement;
-        const hidePasswordIcon = this.self.querySelector('.form__toggle-password--hide') as HTMLElement;
-        const password = this.self.elements.namedItem('password') as HTMLInputElement
+    readonly #togglePasswordVisibility = () => {
+        const showPasswordIcon = this.self.querySelector(
+            '.form__toggle-password--show',
+        ) as HTMLElement;
+        const hidePasswordIcon = this.self.querySelector(
+            '.form__toggle-password--hide',
+        ) as HTMLElement;
+        const password = this.self.elements.namedItem('password') as HTMLInputElement;
 
         if (showPasswordIcon.classList.contains('active')) {
             password.type = 'text';
@@ -123,23 +117,36 @@ export class Login {
     /**
      * Навешивание обработчиков событий
      */
-    #addEventListeners = () => {
+    readonly #addEventListeners = () => {
         const form = this.self;
-        this.#password = form.elements.namedItem('password') as HTMLInputElement
+        this.#password = form.elements.namedItem('password') as HTMLInputElement;
         this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
 
-        form.querySelector('.form__back')?.addEventListener('click', this.#prevCallback);
+        form.querySelector('.form__back')?.addEventListener('click', router.back);
 
         this.#password.addEventListener('input', this.#passwordValidate);
 
         const togglePasswordIcons = this.self.querySelector('.form__toggle-password');
         togglePasswordIcons?.addEventListener('click', this.#togglePasswordVisibility);
 
-        this.#submitBtn.addEventListener('click', (e) => {
+        this.#submitBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             if (this.#passwordValidate() === true) {
-                store.auth.password = this.#password?.value || '';
-                this.#nextCallback();
+                store.data.auth.request.password = this.#password?.value ?? '';
+                try {
+                    const user = await api.auth.login({
+                        email: store.data.auth.request.email,
+                        password: store.data.auth.request.password,
+                    });
+                    store.data.authorized = true;
+                    store.data.user = user;
+                } catch {
+                    const error = document.querySelector('.form__error') as HTMLElement;
+                    if (error) {
+                        error.hidden = false;
+                        error.textContent = 'Ошибка при авторизации';
+                    }
+                }
             }
         });
     };
@@ -160,10 +167,9 @@ export class Login {
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
-                email: store.auth.email,
+                email: store.data.auth.request.email,
             }),
         );
-        this.#formEmailRender();
         this.#addEventListeners();
 
         this.#password?.focus();

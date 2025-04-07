@@ -1,27 +1,70 @@
-import { Auth } from './components/auth/auth.js';
-import { JobCatalog } from './components/jobCatalog/jobCatalog.js';
-import { Header } from './components/header/header.js';
-import { store } from './store.js';
-import { logger } from './utils/logger.js';
+import { logger } from './utils/logger';
 
 /**
- * Удаляет текущую страницу и рендерит указанную страницу.
- * @param {string} page - какую страницу рендерить
+ * Класс роутинга страничек. Может работать только с 1 уровнем ссылки
+ * /catalog/1234 - поддерживается (обработка числа в компоненте)
+ * /auth/email/ - уже не поддерживается
  */
-export const router = async (page = 'catalog') => {
-    logger.info('Router called with route: ', page);
-    const app = document.getElementById('app') as HTMLElement;
-    app.innerHTML = '';
-    const header = new Header(app);
-    header.render();
-    if (page === 'auth') {
-        store.page = 'auth';
-        const authPage = new Auth(app);
-        authPage.render();
+class Router {
+    #routes: Record<string, () => void> = {};
+    /**
+     * @constructor
+     * Конструктор роутера. Накладывает обработчик на переход по страницам
+     * Переход не обычный а от пользователя или history.back()
+     */
+    constructor() {
+        window.addEventListener('popstate', () => {
+            this.#navigate();
+        });
     }
-    if (page === 'catalog') {
-        store.page = 'catalog';
-        const catalogPage = new JobCatalog(app);
-        await catalogPage.render();
-    }
-};
+
+    /**
+     * Метод добавления пути в роутер
+     * @param {stirng} route - путь до странички
+     * @param {Function} callback - функция рендеринга
+     */
+    add = (route: string, callback: () => void) => {
+        this.#routes[route] = callback;
+    };
+
+    /**
+     * Обёртка для перехода на страничку. Используется в компонентах
+     * @param {string} url - путь до странички
+     */
+    go = (url: string) => {
+        // По MDN 2 параметр отвечает за заголовок страницы,
+        // но его никто кроме safari не поддерживает :)
+        // и в документации сказано использовать ''
+        history.pushState(null, '', url);
+        this.#navigate();
+    };
+
+    /**
+     * Реальный метод перехода на страничку. Парсит путь и
+     * вызывает функцию рендеринга
+     */
+    readonly #navigate = () => {
+        const url = window.location.pathname;
+        console.log(url);
+        // /catalog -> '', 'catalog'
+        console.log(url.split('/'));
+        const parsed = url.split('/')[1];
+
+        if (this.#routes[parsed]) {
+            logger.info(`Маршрут ${parsed} найден`);
+            this.#routes[parsed]();
+        } else {
+            logger.warn(`Маршрут ${parsed} не найден`);
+        }
+    };
+
+    /**
+     * Функция для кнопок назад на сайте.
+     * Сами берём и кликаем за пользователя.
+     * Вызовет eventListner('popstate')
+     */
+    readonly back = () => window.history.back();
+}
+
+// Синглтончик :)
+export const router = new Router();
