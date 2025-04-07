@@ -1,0 +1,163 @@
+<div class="page">
+    <form class="filter" aria-label="Создание новой вакансии">
+        <div class="filter__header">Создание новой вакансии</div>
+        <!-- Общая информация -->
+        <fieldset class="filter__group">
+            <legend class="filter__name">Общая информация</legend>
+            <div class="filter__options">
+                <input type="text" name="name" placeholder="Название" class="filter__input">
+                <input type="text" name="specialization" placeholder="Специализация" class="filter__input">
+                <input type="text" name="city" placeholder="Город" class="filter__input">
+                <input type="text" name="address" placeholder="Место работы" class="filter__input">
+            </div>
+        </fieldset>
+
+        <!-- Тип занятости -->
+        <fieldset class="filter__group">
+            <legend class="filter__name">Тип занятости</legend>
+            <div class="filter__options">
+                <label class="filter__checkbox">
+                    <input type="radio" name="work_type" value="full-time">
+                    <span>Полная занятость</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="radio" name="work_type" value="part-time">
+                    <span>Частичная занятость</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="radio" name="work_type" value="project">
+                    <span>Проектная работа</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="radio" name="work_type" value="shift">
+                    <span>Вахтовый метод</span>
+                </label>
+            </div>
+        </fieldset>
+
+        <!-- Режим работы -->
+        <fieldset class="filter__group">
+            <legend class="filter__name">Условия работы работы</legend>
+            <div class="filter__options">
+                <select name="work_timetable" class="filter__input">
+                    <option value="" disabled selected>График работы</option>
+                    <option value="remote">5/2</option>
+                    <option value="office">2/2</option>
+                    <option value="hybrid">30/0</option>
+                </select>
+                <input type="text" name="work_time" placeholder="Количество часов в неделю" class="filter__input">
+                <label class="filter__checkbox">
+                    <input type="checkbox" name="work_mode" value="office">
+                    <span>На месте работадателя</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="checkbox" name="work_mode" value="flexible">
+                    <span>Гибрид</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="checkbox" name="work_mode" value="remote">
+                    <span>Удалённо</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="checkbox" name="work-mode" value="shift">
+                    <span>Разъездной</span>
+                </label>
+            </div>
+        </fieldset>
+
+        <!-- Зарплата -->
+        <fieldset class="filter__group">
+            <legend class="filter__name">Зарплата</legend>
+            <div class="filter__options">
+                <div class="filter__split">
+                    <input type="text" name="price_min" placeholder="От" class="filter__input">
+                    <input type="text" name="price_max" placeholder="До" class="filter__input">
+                </div>
+                <select name="sallary_frequency" class="filter__input">
+                    <option value="" disabled selected>Выберите частоту оплаты</option>
+                    <option value="remote">Раз в неделю</option>
+                    <option value="office">2 раза в месяц</option>
+                    <option value="hybrid">Раз в месяц</option>
+                </select>
+                <div class="filter__split">
+                    <label class="filter__checkbox">
+                        <input type="radio" name="tax" value="without_tax">
+                        <span>До вычета налогов</span>
+                    </label>
+                    <label class="filter__checkbox">
+                        <input type="radio" name="tax" value="with_tax">
+                        <span>На руки</span>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Опыт работы -->
+        <fieldset class="filter__group">
+            <legend class="filter__name">Опыт работы</legend>
+            <div class="filter__options">
+                <label class="filter__checkbox">
+                    <input type="radio" name="experience" value="no-experience">
+                    <span>Нет опыта</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="radio" name="experience" value="1-2-years">
+                    <span>1-2 года</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="radio" name="experience" value="3-plus-years">
+                    <span>3-6 года</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="radio" name="experience" value="8-plus-years">
+                    <span>6+ лет</span>
+                </label>
+            </div>
+        </fieldset>
+
+        <!-- Описание вакансии -->
+        <fieldset class="filter__group">
+            <legend class="filter__name">Описание вакансии</legend>
+            <div class="filter__options">
+                <textarea name="description" placeholder="Введите описание вакансии" class="filter__input"></textarea>
+            </div>
+        </fieldset>
+
+        <fieldset class="filter__group">
+            <legend class="filter__name">Навыки</legend>
+            <div class="filter__options">
+                <input type="text" name="skills" placeholder="Вводите навыки через запятую" class="filter__input">
+            </div>
+        </fieldset>
+
+        <!-- Дополнительно -->
+        <fieldset class="filter__group">
+            <legend class="filter__name">Дополнительно</legend>
+            <div class="filter__options">
+                <label class="filter__checkbox">
+                    <input type="checkbox" name="additional-options" value="skills-match">
+                    <span>Стажировка</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="checkbox" name="additional-options" value="background-match">
+                    <span>Возможно временное оформление</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="checkbox" name="additional-options" value="soft-skills">
+                    <span>С инвалидностью</span>
+                </label>
+                <label class="filter__checkbox">
+                    <input type="checkbox" name="additional-options" value="other">
+                    <span>С 14 лет</span>
+                </label>
+            </div>
+        </fieldset>
+            <div>
+            <button class="job__button">Создать вакансию</button>
+            </div>
+        <!-- Кнопка отправки -->
+    </form>
+</div>
+<div class="progress-container">
+    <div class="progress-bar" style="width: 50%;"></div> <!-- Заполнение на 50% -->
+</div>
