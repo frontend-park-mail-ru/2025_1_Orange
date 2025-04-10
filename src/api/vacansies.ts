@@ -1,5 +1,5 @@
 import { Api } from './api';
-import { Vacancy } from './interfaces';
+import { Vacancy, VacancyCreate } from './interfaces';
 
 export class VacancyService {
     readonly #api: Api;
@@ -18,10 +18,10 @@ export class VacancyService {
 
     /**
      * Создание новой вакансии
-     * @param {VacancyEdit} body - значения новой вакансии
+     * @param {VacancyCreate} body - значения новой вакансии
      * @returns {Promise<Vacancy>}
      */
-    async create(body: Vacancy): Promise<Vacancy> {
+    async create(body: VacancyCreate): Promise<Vacancy> {
         return this.#api.request('/vacancies', 'POST', JSON.stringify(body));
     }
 
@@ -37,10 +37,10 @@ export class VacancyService {
     /**
      * Обновление вакансии
      * @param {number} id - идентификатор вакансии
-     * @param {VacancyEdit} body - новые значения
+     * @param {VacancyCreate} body - новые значения
      * @returns {Promise<Vacancy>}
      */
-    async update(id: number, body: Vacancy): Promise<Vacancy> {
+    async update(id: number, body: VacancyCreate): Promise<Vacancy> {
         return this.#api.request(`/vacancy/${id}`, 'PUT', JSON.stringify(body));
     }
 
@@ -51,5 +51,9 @@ export class VacancyService {
      */
     async delete(id: number): Promise<void> {
         await this.#api.request(`/vacancy/${id}`, 'DELETE');
+    }
+
+    async resume(id: number): Promise<void> {
+        await this.#api.request(`/vacancy/${id}/resume`, 'POST');
     }
 }

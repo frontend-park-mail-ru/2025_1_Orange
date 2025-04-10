@@ -70,13 +70,14 @@ export const employerShortMock: EmployerShort = {
 };
 
 export const vacancyMock: Vacancy = {
+    resume: false,
     id: 3,
     title: 'Фулстек веб разработчик',
     is_active: true,
     employer: employerMock,
     specialization: 'Фулстек веб разработчик',
     city: 'Санкт-Петербург',
-    work_format: 'office',
+    work_format: 'hybrid',
     employment: 'full_time',
     schedule: '5/2',
     working_hours: 8,
@@ -97,17 +98,18 @@ export const vacancyMock: Vacancy = {
 };
 
 export const vacancyShortMock: VacancyShort = {
+    resume: false,
     id: 22,
     title: 'Фулстек веб разработчик',
     employer: employerShortMock,
     specialization: 'Фулстек веб разработчик',
     city: 'Москва',
-    work_format: 'office',
-    employment: 'full_time',
+    work_format: 'hybrid',
+    employment: 'contract',
     working_hours: 8,
     salary_from: 30000,
     salary_to: 50000,
-    taxes_included: true,
+    taxes_included: false,
     created_at: '2025-03-02T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
 };

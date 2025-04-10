@@ -74,6 +74,7 @@ export interface EmployerShort {
 }
 
 export interface Vacancy {
+    resume: boolean
     id: number;
     title: string;
     is_active: boolean;
@@ -98,6 +99,7 @@ export interface Vacancy {
 }
 
 export interface VacancyShort {
+    resume: boolean;
     id: number;
     title: string;
     employer: EmployerShort;

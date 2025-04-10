@@ -10,11 +10,18 @@ import {
     experienceTranslations,
     workFormatTranslations,
 } from '../../api/translations';
+import { store } from '../../store';
+import { emptyVacancy } from '../../api/empty';
+import { api } from '../../api/api';
+import { router } from '../../router';
 
 export class JobPage {
     readonly #parent: HTMLElement;
-    #props: Vacancy | null = null;
+    #props: Vacancy = emptyVacancy;
     #similarJob: VacancyShort[] | null = null;
+    #editButton: HTMLElement | null = null;
+    #resumeButton: HTMLElement | null = null;
+    #id: number = 0;
 
     constructor(parent: HTMLElement) {
         this.#parent = parent;
@@ -22,6 +29,42 @@ export class JobPage {
 
     get self(): HTMLElement {
         return document.getElementById('job_page') as HTMLElement;
+    }
+
+    init = async () => {
+        logger.info('ResumePage init method called');
+        const url = window.location.href.split('/');
+        this.#id = Number.parseInt(url[url.length - 1]);
+        console.log('resumePage');
+        try {
+            const data = await api.vacancy.get(this.#id);
+            this.#props = data;
+        } catch {
+            console.log('Не удалось загрузить страницу');
+            //router.back()
+        }
+        this.#props = vacancyMock;
+        this.#similarJob = [vacancyShortMock];
+    };
+
+    readonly #addEventListeners = () => {
+        if (this.#resumeButton) {
+            this.#resumeButton.addEventListener('click', async () => {
+                try {
+                await api.vacancy.resume(this.#props.id);
+                await this.init()
+                this.render()
+                } catch {
+                    console.log('Ошибка при отправки отклика')
+                }
+            })
+        }
+
+        if (this.#editButton) {
+            this.#editButton.addEventListener('click', () => {
+                router.go(`/vacancyEdit/${this.#props.id}`)
+            })
+        }
     }
 
     remove = () => {
@@ -43,6 +86,8 @@ export class JobPage {
                 experienceTranslations,
                 workFormatTranslations,
                 employmentTranslations,
+                'isApplicant': store.data.authorized && store.data.user.type === 'applicant',
+                'isOwner': store.data.authorized && store.data.user.type === 'employer' && store.data.user.employer?.id === this.#props.employer.id
             }),
         );
         const companyCard = new JobCompanyCard(
@@ -51,13 +96,30 @@ export class JobPage {
         );
         companyCard.render();
 
-        this.#similarJob = [vacancyShortMock];
         const similarJobsContainer = this.self.querySelector('.similar_jobs') as HTMLElement;
-        if (similarJobsContainer) {
+        if (similarJobsContainer && this.#similarJob) {
             this.#similarJob.forEach((job) => {
                 const similarJobCard = new SimilarJobCard(similarJobsContainer, job);
                 similarJobCard.render();
             });
         }
+
+        this.#resumeButton = document.getElementById('vacancy_resume_button')
+        this.#editButton = document.getElementById('vacancy_edit_button')
+
+        console.log(store.data)
+
+        if (this.#resumeButton) {
+            this.#resumeButton.hidden = true
+            if (store.data.user.type === 'applicant' && store.data.authorized) this.#resumeButton.hidden = false
+        }
+
+        if (this.#editButton) {
+            this.#editButton.hidden = true
+            if (store.data.user.type === 'employer' && store.data.authorized && store.data.user.employer?.id === this.#props.employer.id) this.#editButton.hidden = false
+        }
+
+        this.#addEventListeners()
+
     };
 }

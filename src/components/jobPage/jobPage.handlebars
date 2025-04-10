@@ -4,28 +4,42 @@
     <div class="vacancy">
         <div class="vacancy__name">{{title}}</div>
         <div class="job__favorite">
-            <img src="heart.svg" alt="Избранное" />
+            <img src="/heart.svg" alt="Избранное" />
         </div>
         <div class="vacancy__actions">
             <div class="vacancy__buttons">
-                <div class="job__button">
+                {{#if resume}}
+                <div class="job__button_second">
+                    <span>Вы откликнулись</span>
+                </div>
+                {{else}}
+                <div class="job__button" id="vacancy_resume_button">
                     <span>Откликнуться</span>
+                </div>
+                {{/if}}
+                <div class="job__button_second" id="vacancy_edit_button">
+                    <img src="/gear.svg" alt="Настройки"/>
+                    <span>Настройки</span>
                 </div>
             </div>
             <div class="job__statistics">{{days_created}} дня назад • {{count}} уже откликнулись</div>
         </div>
         <div class="vacancy__description">
+            <div class="vacancy__header">Описание</div>
             <p>{{description}}</p>
+            <div class="vacancy__header">Задачи</div>
             <ul>
             {{#each tasks}}
             <li>{{this}}</li>
             {{/each}}
             </ul>
+            <div class="vacancy__header">Требования</div>
             <ul>
             {{#each requirements}}
             <li>{{this}}</li>
             {{/each}}
             </ul>
+            <div class="vacancy__header">Будет плюсом</div>
             <ul>
             {{#each optional_requirements}}
             <li>{{this}}</li>
@@ -51,19 +65,19 @@
             <div class="vacancy_info__item">
                 <span class="vacancy_info__label">Дополнительно</span>
                 <div class="vacancy_info__card">
-                    <img src="geo-alt.svg" />
+                    <img src="/geo-alt.svg" />
                     <div>{{city}}</div>
                 </div>
                 <div class="vacancy_info__card">
-                    <img src="clock.svg" />
+                    <img src="/clock.svg" />
                     <div>{{working_hours}}ч в неделю</div>
                 </div>
                 <div class="vacancy_info__card">
-                    <img src="building.svg" />
+                    <img src="/building.svg" />
                     <div>{{lookup workFormatTranslations work_format}}</div>
                 </div>
                 <div class="vacancy_info__card">
-                    <img src="calendar.svg" />
+                    <img src="/calendar.svg" />
                     <div>{{lookup employmentTranslations employment}}</div>
                 </div>
             </div>
