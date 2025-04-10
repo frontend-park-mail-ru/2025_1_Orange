@@ -21,7 +21,7 @@ api.auth
         //store.data.authorized = false;
         //store.data.user = emptyUser;
         store.data.authorized = true;
-        store.data.user = userApplicantMock;
+        store.data.user = userEmployerMock;
     })
     .finally(() => {
         router.go(window.location.pathname);
