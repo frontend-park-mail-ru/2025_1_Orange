@@ -90,6 +90,7 @@ export const emptyEmployerShort: EmployerShort = {
 };
 
 export const emptyVacancy: Vacancy = {
+    resume: false,
     id: 0,
     title: '',
     is_active: false,
@@ -114,6 +115,7 @@ export const emptyVacancy: Vacancy = {
 };
 
 export const emptyVacancyShort: VacancyShort = {
+    resume: false,
     id: 0,
     title: '',
     employer: emptyEmployerShort,

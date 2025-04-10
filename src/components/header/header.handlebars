@@ -13,12 +13,7 @@
                 <div class="header__button">Создать резюме</div>
             {{/if}}
             <div class="header__profile">
-                {{#if isEmployer}}
-                <img src="{{user.employer.logo}}" class="header__profile-icon">
-                {{else}}
-                <img src="{{user.applicant.avatar}}" class="header__profile-icon">
-                {{/if}}
-                
+                <img src="/icons-user-profile.svg" class="header__profile-icon" alt="Профиль"/>          
 
                 <div class="header__dropdown">
                     <div class="header__dropdown__item">Настройки</div>

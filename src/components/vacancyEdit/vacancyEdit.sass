@@ -1,0 +1,82 @@
+#vacancy_edit_page
+    min-width: 550px
+
+
+.vacancyEdit
+    padding: 0px 10px
+    gap: 15px
+    display: flex;
+
+    &__header
+        padding: 10px 0px
+        font-size: 32px
+        font-weight: bold
+
+    &__name
+        font-size: 20px
+        padding: 10px 0px
+        font-weight: bold
+        width: 100%
+
+    &__group
+        border: none
+        padding: 0
+
+    &__options
+        display: flex
+        flex-direction: column
+        gap: 10px
+
+    &__checkbox
+        grid-template-columns: 1em auto
+        color: #464652
+        display: flex
+        flex-direction: row
+        align-items: center
+        gap: 10px
+        font-size: 16px
+        width: 100%
+
+        input
+            margin: 0px
+            width: 20px
+            height: 20px
+
+        span
+            padding: 10px
+
+    &__radio
+        @extend .vacancyEdit__checkbox
+
+    &__input
+        padding: 10px
+        border: 1px solid #cfcfcf
+        border-radius: 10px
+        font-size: 16px
+        display: flex
+        flex-grow: 1
+
+        &::placeholder
+            font-size: 16px
+            color: #cfcfcf
+
+        &:focus
+            outline: 0
+            border: 1px solid #0071fe
+        
+        &.valid
+            border-color: #1cfc66
+        
+        &.error
+            border-color: #FB0102
+        
+        &:optional:placeholder-shown
+            border: 1px solid #cfcfcf
+    
+    &__split
+        display: flex
+        flex-direction: row
+        gap: 10px
+    
+    &__error
+        color: #FB0102
