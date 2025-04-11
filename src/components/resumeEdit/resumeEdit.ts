@@ -15,12 +15,8 @@ export class ResumeEdit {
     #data: ResumeCreate = emptyResumeCreate;
     #defaultData: Resume = emptyResume;
     #form: HTMLFormElement | null = null;
-    #about_me: HTMLTextAreaElement | null = null;
-    #specialization: HTMLInputElement | null = null;
+
     #education: HTMLSelectElement | null = null;
-    #educational_institution: HTMLInputElement | null = null;
-    #graduation_year: HTMLInputElement | null = null;
-    #skills: HTMLInputElement | null = null;
 
     #basicFieldset: HTMLElement | null = null;
     #skillsFieldset: HTMLElement | null = null;
@@ -267,24 +263,13 @@ export class ResumeEdit {
         work.render()
         this.#form = document.forms.namedItem('resume_edit') as HTMLFormElement;
         if (this.#form) {
-            this.#about_me = this.#form.elements.namedItem('about_me') as HTMLTextAreaElement;
-            this.#specialization = this.#form.elements.namedItem(
-                'specialization',
-            ) as HTMLInputElement;
             this.#education = this.#form.elements.namedItem('education') as HTMLSelectElement;
-            this.#educational_institution = this.#form.elements.namedItem(
-                'educational_institution',
-            ) as HTMLInputElement;
-            this.#graduation_year = this.#form.elements.namedItem(
-                'graduation_year',
-            ) as HTMLInputElement;
-            this.#skills = this.#form.elements.namedItem('skills') as HTMLInputElement;
+            this.#education.value = this.#defaultData.education
+
             this.#submit = this.self.querySelector('#resume_submit') as HTMLElement;
             if (this.#id !== 0) {
                 this.#submit.textContent = 'Изменить вакансию';
             }
-
-            this.#education.value = this.#defaultData.education
 
             this.#basicFieldset = this.#form.elements.namedItem('fieldset_basic') as HTMLElement;
             this.#skillsFieldset = this.#form.elements.namedItem('fieldset_skills') as HTMLElement;
