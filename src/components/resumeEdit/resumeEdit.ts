@@ -295,8 +295,6 @@ export class ResumeEdit {
                 this.#submit.textContent = 'Изменить вакансию';
             }
 
-            this.#education.value = this.#defaultData.education
-
             this.#basicFieldset = this.#form.elements.namedItem('fieldset_basic') as HTMLElement;
             this.#skillsFieldset = this.#form.elements.namedItem('fieldset_skills') as HTMLElement;
             this.#educationFieldset = this.#form.elements.namedItem(
