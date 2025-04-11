@@ -10,6 +10,8 @@ import { Login } from './components/login/login';
 import { RegistrationUser } from './components/registrationUser/registrationUser';
 import { RegistrationCompany } from './components/registrationCompany/registrationCompany';
 import { VacancyEdit } from './components/vacancyEdit/vacancyEdit';
+import { ResumePage } from './components/resumePage/resumePage';
+import { ResumeEdit } from './components/resumeEdit/resumeEdit';
 
 /**
  *
@@ -56,7 +58,8 @@ export const routerInit = () => {
     router.add('', async () => renderPage('catalog', JobCatalog));
     router.add('vacancy', async () => renderPage('job', JobPage));
     router.add('createVacancy', async () => renderPage('createVacancy', VacancyEdit));
-    // router.add('user_profile', async () => renderPage('user_profile', ProfileUser));
-    // router.add('resume_edit', async () => renderPage('resume_edit', ResumeEdit));
     router.add('vacancyEdit', async () => renderPage('vacancy_edit', VacancyEdit));
+    router.add('resume', async () => renderPage('resume', ResumePage));
+    router.add('resumeEdit', async () => renderPage('resumeEdit', ResumeEdit));
+
 };

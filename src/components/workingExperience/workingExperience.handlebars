@@ -1,0 +1,32 @@
+<form class="resumeEdit__experience" name="experience_{{id}}">
+    <legend class="resumeEdit__name">Опыт работы</legend>
+    <div class="resumeEdit__options">
+        <input type="text" name="employer_name" placeholder="Компания" class="resumeEdit__input"
+            value="{{employer_name}}">
+        <input type="text" name="position" placeholder="Должность" class="resumeEdit__input"
+            value="{{position}}">
+        <textarea name="duties" placeholder="Ваши обязанности и достижения" class="resumeEdit__input"
+            >{{duties}}</textarea>
+
+        <div class="resumeEdit__split">
+            <input type="date" name="start_date" placeholder="Начало работы" class="resumeEdit__input"
+                value="{{start_date}}" min="2000-01-01" max="2025-11-31" required>
+            <input type="date" name="end_date" placeholder="Окончание работы" class="resumeEdit__input"
+                value="{{end_date}}" min="2000-01-01" max="2025-11-31">
+        </div>
+
+        <label class="resumeEdit__checkbox">
+            <input type="checkbox" name="until_now">
+            <span>По настоящее время</span>
+        </label>
+    </div>
+    <div class="resumeEdit__error"></div>
+    {{#if isNew}}
+    <div>
+    <button class="job__button_second" name="new_experience">
+        <img src="/plus-circle.svg" />
+        Добавить ещё опыт работы
+    </button>
+    </div>
+    {{/if}}
+</form>

@@ -1,11 +1,13 @@
 import template from './resumeEdit.handlebars'; // Шаблон Handlebars
 import { logger } from '../../utils/logger';
-import { Resume, ResumeCreate } from '../../api/interfaces';
+import { Resume, ResumeCreate, WorkExperienceCreate } from '../../api/interfaces';
 import './resumeEdit.sass';
 import { emptyApplicant, emptyResume, emptyResumeCreate } from '../../api/empty';
 import { api } from '../../api/api';
 import { store } from '../../store';
 import { router } from '../../router';
+import { resumeMock } from '../../api/mocks';
+import { WorkingExperience } from '../workingExperience/workingExperience';
 
 export class ResumeEdit {
     readonly #parent: HTMLElement;
@@ -37,14 +39,25 @@ export class ResumeEdit {
     }
 
     readonly #inputTranslation: Record<string, string> = {
+        last_name: 'Фамилия',
+        first_name: 'Имя',
+        middle_name: 'Отчество',
+        sex: 'Пол',
+        birth_date: 'День рождения',
+        phone: 'Телефон',
         skills: 'Навыки',
         specialization: 'Специализация',
+        education: 'Образование',
+        educational_institution: 'Учебное заведение',
+        graduation_year: 'Год выпуска',
+        about_me: 'Обо мне',
     };
 
     #customMessage(field: HTMLInputElement | HTMLSelectElement): string {
+        console.log("MESSAGE", field)
         const validity = field.validity;
         if (validity.valueMissing) {
-            return `${this.#inputTranslation[field.name]}: Заполните поле`;
+            return `${this.#inputTranslation[field.name] || field.name}: Заполните поле`;
         }
         if (validity.patternMismatch) {
             return field.title;
@@ -56,7 +69,7 @@ export class ResumeEdit {
         if (validity.tooShort) {
             return `Мало введённых данных`;
         }
-        return `${this.#inputTranslation[field.name]}: ${field.validationMessage}`;
+        return `${this.#inputTranslation[field.name] || field.name}: ${field.validationMessage}`;
     }
 
     #formValidate(element: HTMLElement): boolean {
@@ -75,8 +88,6 @@ export class ResumeEdit {
                 let valid = true;
 
                 fields.forEach((field) => {
-                    // Уродство !
-                    // Не могу задать что эти поля изначально HTMLInputElement | HTMLSelectElement
                     if (!field.validity.valid) {
                         field.classList.add('form__input_error');
                         errorElement.textContent = this.#customMessage(field);
@@ -99,7 +110,8 @@ export class ResumeEdit {
         if (!isNaN(Number.parseInt(last)) && last !== '') {
             this.#id = Number.parseInt(last);
             try {
-                const data = await api.resume.get(this.#id);
+                //const data = await api.resume.get(this.#id);
+                const data = resumeMock
                 this.#defaultData = data;
             } catch {
                 console.log('Не удалось загрузить резюме');
@@ -130,45 +142,28 @@ export class ResumeEdit {
         this.self.innerHTML = '';
     };
 
+    #get(form: HTMLFormElement): unknown {
+        const formData = new FormData(form)
+        const json: Record<string, unknown> = {};
+
+        formData.forEach((value, key) => {
+            switch (key) {
+                case 'skills':
+                    json[key] = (value as string).split(',').map(skill => skill.trim()).filter(skill => skill !== '');
+                    break
+                default:
+                    json[key] = value
+            }
+        });
+        return json;
+    }
+
     readonly #addEventListeners = () => {
         if (this.#form) {
             this.#form.addEventListener('input', (e: Event) => {
                 this.#formValidate(e.target as HTMLElement);
-            });
-        }
-
-        if (this.#about_me) {
-            this.#about_me.addEventListener('input', () => {
-                this.#data.about_me = this.#about_me?.value ?? '';
-            });
-        }
-
-        if (this.#specialization) {
-            this.#specialization.addEventListener('input', () => {
-                this.#data.specialization = this.#specialization?.value ?? '';
-            });
-        }
-
-        if (this.#education) {
-            this.#education.addEventListener('change', () => {});
-        }
-
-        if (this.#educational_institution) {
-            this.#educational_institution.addEventListener('input', () => {
-                this.#data.educational_institution = this.#educational_institution?.value ?? '';
-            });
-        }
-
-        if (this.#graduation_year) {
-            this.#graduation_year.addEventListener('input', () => {
-                this.#data.graduation_year = this.#graduation_year?.value ?? '';
-            });
-        }
-
-        if (this.#skills) {
-            this.#skills.addEventListener('input', () => {
-                this.#data.skills = (this.#skills?.value ?? '').split(',');
-            });
+                if (this.#form) this.#data = this.#get(this.#form) as ResumeCreate
+            })
         }
 
         if (this.#nextBasicButton) {
@@ -223,6 +218,18 @@ export class ResumeEdit {
         if (this.#submit) {
             this.#submit.addEventListener('click', async (e: Event) => {
                 e.preventDefault();
+                if (this.#form) this.#data = this.#get(this.#form) as ResumeCreate
+                const experience = this.self.querySelectorAll('.resumeEdit__experience')
+                this.#data.work_experience = []
+                experience.forEach((element) => {
+                    if (element.tagName === 'FORM') {
+                        const form = element as HTMLFormElement
+                        if (form.checkValidity()) {
+                            this.#data.work_experience.push(this.#get(form) as WorkExperienceCreate)
+                        }
+                    }
+                })
+                console.log(this.#data)
                 try {
                     if (this.#id !== 0) {
                         await api.resume.update(this.#id, this.#data);
@@ -241,7 +248,23 @@ export class ResumeEdit {
      */
     render = () => {
         logger.info('ResumeEdit render method called');
-        this.#parent.insertAdjacentHTML('beforeend', template(this.#defaultData));
+        this.#parent.insertAdjacentHTML('beforeend', template({
+            ...this.#defaultData,
+            isNew: this.#id === 0,
+            isMale: this.#defaultData.applicant.sex === 'male',
+            skillsString: this.#defaultData.skills.join(', ')
+        }));
+
+        const experiencesContainer = document.getElementById('resume_edit_working_experiences') as HTMLElement
+        let max_experience_id = 0
+        this.#defaultData.work_experience.forEach((experience) => {
+            const work = new WorkingExperience(experiencesContainer, experience.id, experience)
+            work.render()
+            if (experience.id > max_experience_id)
+                max_experience_id = experience.id
+        })
+        const work = new WorkingExperience(experiencesContainer, max_experience_id + 1)
+        work.render()
         this.#form = document.forms.namedItem('resume_edit') as HTMLFormElement;
         if (this.#form) {
             this.#about_me = this.#form.elements.namedItem('about_me') as HTMLTextAreaElement;
@@ -260,6 +283,8 @@ export class ResumeEdit {
             if (this.#id !== 0) {
                 this.#submit.textContent = 'Изменить вакансию';
             }
+
+            this.#education.value = this.#defaultData.education
 
             this.#basicFieldset = this.#form.elements.namedItem('fieldset_basic') as HTMLElement;
             this.#skillsFieldset = this.#form.elements.namedItem('fieldset_skills') as HTMLElement;
@@ -301,6 +326,13 @@ export class ResumeEdit {
                 this.#aboutmeFieldset.hidden = true;
                 this.#experienceFieldset.hidden = true;
                 this.#submit.hidden = true;
+            }
+
+            if (this.#id !== 0 && this.#nextBasicButton && this.#nextSkillsButton && this.#nextEducationButton && this.#nextAboutMeButton) {
+                this.#nextBasicButton.hidden = true
+                this.#nextSkillsButton.hidden = true
+                this.#nextEducationButton.hidden = true
+                this.#nextAboutMeButton.hidden = true
             }
         }
     };

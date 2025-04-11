@@ -71,7 +71,7 @@ export class ResumePage {
             ?.querySelector('.job__button_second') as HTMLElement;
         if (this.#data?.applicant.id === store.data.user.applicant?.id) {
             editButton.addEventListener('click', () => {
-                router.go(`/resume-edit/${this.#id}`);
+                router.go(`/resumeEdit/${this.#id}`);
             });
         } else {
             editButton.hidden = true;
