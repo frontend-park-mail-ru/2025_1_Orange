@@ -50,6 +50,7 @@ export class ResumeEdit {
     };
 
     #customMessage(field: HTMLInputElement | HTMLSelectElement): string {
+        console.log("MESSAGE", field)
         const validity = field.validity;
         if (validity.valueMissing) {
             return `Заполните поле ${this.#inputTranslation[field.name]}`;
@@ -64,7 +65,7 @@ export class ResumeEdit {
         if (validity.tooShort) {
             return `${this.#inputTranslation[field.name]}: Мало введённых данных`;
         }
-        return `${this.#inputTranslation[field.name]}: ${field.validationMessage}`;
+        return `${this.#inputTranslation[field.name] || field.name}: ${field.validationMessage}`;
     }
 
     #fieldValidate(field: HTMLInputElement | HTMLSelectElement, errorElement: HTMLElement): boolean {
@@ -293,6 +294,8 @@ export class ResumeEdit {
             if (this.#id !== 0) {
                 this.#submit.textContent = 'Изменить вакансию';
             }
+
+            this.#education.value = this.#defaultData.education
 
             this.#basicFieldset = this.#form.elements.namedItem('fieldset_basic') as HTMLElement;
             this.#skillsFieldset = this.#form.elements.namedItem('fieldset_skills') as HTMLElement;
