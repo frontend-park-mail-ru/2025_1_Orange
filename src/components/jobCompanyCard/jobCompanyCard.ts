@@ -25,7 +25,7 @@ export class JobCompanyCard {
      * Навешивание обработчиков
      */
     readonly #addEventListeners = () => {
-        this.self.addEventListener('click', () => router.go('/company'));
+        this.self.addEventListener('click', () => router.go(`/profileCompany/${this.#props.id}`));
     };
 
     render = () => {
