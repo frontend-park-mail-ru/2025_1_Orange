@@ -1,3 +1,4 @@
+import { store } from '../store';
 import { logger } from '../utils/logger';
 import { ApplicantService } from './applicant';
 import { AuthService } from './auth';
@@ -42,6 +43,7 @@ export class Api {
         const url = this.#baseUrl + endpoint;
         const headers = new Headers();
         headers.append('Content-Type', content_type);
+        if (store.data.csrf !== '') headers.append('X-CSRF-Token', store.data.csrf)
 
         const init: RequestInit = {
             method,
@@ -60,6 +62,8 @@ export class Api {
                 logger.error(`error: ${error.message}`);
                 throw new Error(error.message || 'Ошибка при выполнении запроса');
             }
+
+            if ('X-CSRF-Token' in response.headers) store.data.csrf = response.headers['X-CSRF-Token'] as string
 
             return response.json();
         } catch {

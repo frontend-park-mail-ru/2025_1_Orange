@@ -1,23 +1,24 @@
 import template from './profileUser.handlebars'; // Шаблон Handlebars
 import { logger } from '../../utils/logger';
-import { Profile, Resume, Vacancy } from '../../api/interfaces';
-import { resumePageMock } from '../resumePage/resumePageMock';
 import './profileUser.sass';
-import { resumesMock } from './resumesMock';
 import { ResumeRow } from '../resumeRow/resumeRow';
-import { vacancyListMock } from '../jobCatalog/jobsMock';
-import { JobCard } from '../jobCard/jobCard';
+import { Resume } from '../../api/interfaces';
+import { store } from '../../store';
+import { api } from '../../api/api';
+import { router } from '../../router';
 
 export class ProfileUser {
     readonly #parent: HTMLElement;
-    #data: Profile | null = null;
     #resumes: Resume[] | null = null;
-    #vacancies: Vacancy[] | null = null;
+    //#vacancies: Vacancy[] | null = null;
     #resumeContainer: HTMLElement | null = null;
     #vacancyContainer: HTMLElement | null = null;
     #favoriteButton: HTMLElement | null = null;
     #resumesButton: HTMLElement | null = null;
     #responsesButton: HTMLElement | null = null;
+    #addResume: HTMLElement | null = null;
+    #editButton: HTMLElement | null = null;
+    #backArrow: HTMLElement | null = null;
 
     constructor(parent: HTMLElement) {
         this.#parent = parent;
@@ -35,24 +36,40 @@ export class ProfileUser {
      * Добавление обработчиков событий
      */
     addEventListeners = () => {
-        this.#resumeContainer = document.getElementById('resume-content') as HTMLElement;
-        this.#vacancyContainer = document.getElementById('vacancy-content') as HTMLElement;
-        this.#resumesButton = document.getElementById('profile-resumes') as HTMLElement;
-        this.#responsesButton = document.getElementById('profile-responses') as HTMLElement;
-        this.#favoriteButton = document.getElementById('profile-favorites') as HTMLElement;
-        this.#resumesButton.addEventListener('click', () =>
+        const profileActions = this.self.querySelector('.profile__actions') as HTMLElement
+        if (profileActions) {
+            this.#addResume = profileActions.querySelector('.job__button') as HTMLElement
+            this.#editButton = profileActions.querySelector('.job__button_second') as HTMLElement
+        }
+        this.#backArrow = this.self.querySelector('.profile__back') as HTMLElement;
+        if (this.#backArrow) {
+            this.#backArrow.addEventListener('click', () => {router.back()});
+        }
+        if (this.#editButton) {
+            this.#editButton.addEventListener('click', () => {router.go('/profileUserEdit')} )
+        }
+        if (this.#addResume) {
+            this.#addResume.addEventListener('click', () => {router.go('/createResume')})
+        }
+
+        this.#resumeContainer = document.getElementById('resume-content');
+        this.#vacancyContainer = document.getElementById('vacancy-content');
+        this.#resumesButton = document.getElementById('profile-resumes');
+        this.#responsesButton = document.getElementById('profile-responses');
+        this.#favoriteButton = document.getElementById('profile-favorites');
+        this.#resumesButton?.addEventListener('click', () =>
             this.#handleButton(this.#resumesButton as HTMLElement, this.#renderResumes),
         );
-        this.#responsesButton.addEventListener('click', () =>
-            this.#handleButton(this.#responsesButton as HTMLElement, this.#renderResponses),
-        );
-        this.#favoriteButton.addEventListener('click', () =>
-            this.#handleButton(this.#favoriteButton as HTMLElement, this.#renderFavorites),
-        );
+        // this.#responsesButton.addEventListener('click', () =>
+        //     this.#handleButton(this.#responsesButton as HTMLElement, this.#renderResponses),
+        // );
+        // this.#favoriteButton.addEventListener('click', () =>
+        //     this.#handleButton(this.#favoriteButton as HTMLElement, this.#renderFavorites),
+        // );
     };
 
-    #handleButton = (button: HTMLElement, callback: () => void) => {
-        if (button.className === 'job__button_second') {
+    readonly #handleButton = (button: HTMLElement, callback: () => void) => {
+        if (button && button.className === 'job__button_second') {
             if (this.#responsesButton) {
                 this.#responsesButton.className = 'job__button_second';
             }
@@ -70,7 +87,7 @@ export class ProfileUser {
     /**
      * Рендеринг списка резюме
      */
-    #renderResumes = (): void => {
+    readonly #renderResumes = async (): Promise<void> => {
         if (this.#resumeContainer) {
             this.#resumeContainer.hidden = false;
         }
@@ -82,8 +99,12 @@ export class ProfileUser {
             return;
         }
         this.#resumeContainer.innerHTML = ''; // Очищаем контейнер перед рендерингом
-
-        this.#resumes = resumesMock;
+        try {
+            this.#resumes = await api.resume.all();
+        } catch {
+            console.log('Не удалось загрузить')
+            return
+        }
 
         // Используем данные из resumesMock
         this.#resumes.forEach((resume) => {
@@ -95,50 +116,50 @@ export class ProfileUser {
     /**
      * Рендеринг списка откликов
      */
-    #renderResponses = (): void => {
-        logger.info('Rendering Responses...');
-        if (!this.#vacancyContainer) {
-            return;
-        }
-        if (this.#resumeContainer) {
-            this.#resumeContainer.hidden = true;
-        }
-        if (this.#vacancyContainer) {
-            this.#vacancyContainer.hidden = false;
-        }
-        this.#vacancyContainer.innerHTML = ''; // Очищаем контейнер перед рендерингом
+    // #renderResponses = (): void => {
+    //     logger.info('Rendering Responses...');
+    //     if (!this.#vacancyContainer) {
+    //         return;
+    //     }
+    //     if (this.#resumeContainer) {
+    //         this.#resumeContainer.hidden = true;
+    //     }
+    //     if (this.#vacancyContainer) {
+    //         this.#vacancyContainer.hidden = false;
+    //     }
+    //     this.#vacancyContainer.innerHTML = ''; // Очищаем контейнер перед рендерингом
 
-        this.#vacancies = vacancyListMock;
+    //     this.#vacancies = vacancyListMock;
 
-        this.#vacancies.forEach((vacancy) => {
-            const resumeRow = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
-            resumeRow.render();
-        });
-    };
+    //     this.#vacancies.forEach((vacancy) => {
+    //         const resumeRow = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
+    //         resumeRow.render();
+    //     });
+    // };
 
     /**
      * Рендеринг списка любимых вакансий
      */
-    #renderFavorites = (): void => {
-        logger.info('Rendering Favorites...');
-        if (!this.#vacancyContainer) {
-            return;
-        }
-        if (this.#resumeContainer) {
-            this.#resumeContainer.hidden = true;
-        }
-        if (this.#vacancyContainer) {
-            this.#vacancyContainer.hidden = false;
-        }
-        this.#vacancyContainer.innerHTML = ''; // Очищаем контейнер перед рендерингом
+    // #renderFavorites = (): void => {
+    //     logger.info('Rendering Favorites...');
+    //     if (!this.#vacancyContainer) {
+    //         return;
+    //     }
+    //     if (this.#resumeContainer) {
+    //         this.#resumeContainer.hidden = true;
+    //     }
+    //     if (this.#vacancyContainer) {
+    //         this.#vacancyContainer.hidden = false;
+    //     }
+    //     this.#vacancyContainer.innerHTML = ''; // Очищаем контейнер перед рендерингом
 
-        this.#vacancies = vacancyListMock;
+    //     this.#vacancies = vacancyListMock;
 
-        this.#vacancies.forEach((vacancy) => {
-            const resumeRow = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
-            resumeRow.render();
-        });
-    };
+    //     this.#vacancies.forEach((vacancy) => {
+    //         const resumeRow = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
+    //         resumeRow.render();
+    //     });
+    // };
 
     /**
      * Очистка
@@ -153,8 +174,9 @@ export class ProfileUser {
      */
     render = () => {
         logger.info('ProfileUser render method called');
-        this.#data = resumePageMock.profile;
-        this.#parent.insertAdjacentHTML('beforeend', template(this.#data));
+        if (!store.data.authorized || store.data.user.type !== 'applicant') router.back()
+        this.#parent.insertAdjacentHTML('beforeend', template(store.data.user.applicant));
         this.addEventListeners();
+        this.#handleButton(this.#resumesButton as HTMLElement, this.#renderResumes)
     };
 }

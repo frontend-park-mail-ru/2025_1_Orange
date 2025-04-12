@@ -2,6 +2,7 @@ import { emptyResumeCreate, emptySignupRequest, emptyUser, emptyVacancyCreate } 
 import { VacancyCreate, ResumeCreate, SignupRequest, User } from './api/interfaces';
 
 interface StoreData {
+    csrf: string;
     authorized: boolean;
     page: string;
     auth: {
@@ -14,6 +15,7 @@ interface StoreData {
 }
 
 const emptyData: StoreData = {
+    csrf: '',
     authorized: false,
     page: '',
     auth: {
