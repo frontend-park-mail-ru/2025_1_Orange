@@ -2,7 +2,7 @@
     <div class="profile__header">
         <div class="profile__back">
             <div class="profile__back-icon">
-                <img src="https://placehold.co/100x100/EEE/31343C"/>
+                <img src="{{avatar}}" />
             </div>
             <div class="profile__back-text">
                 Вернуться к списку вакансий
@@ -18,38 +18,38 @@
         <div class="profile__body">
             <div class="profile__info">
                 <div class="profile__avatar">
-                    <img src="https://placehold.co/100x100/EEE/31343C"/>
+                    <img src="https://placehold.co/100x100/EEE/31343C" />
                 </div>
                 <div class="profile__details">
-                    <div class="profile__name">{{name}}</div>
+                    <div class="profile__name">{{last_name}} {{first_name}} {{middle_name}}</div>
                     <div class="profile__quote">{{quote}}</div>
                 </div>
             </div>
             <div class="profile__divider"></div>
             <!-- Добавляем вкладки -->
-            <div class="profile__info-main">
+            {{!-- <div class="profile__info-main">
                 <div class="profile__tabs">
                     <div class="job__button_second" id="profile-resumes">
-                            <img src="https://placehold.co/100x100/EEE/31343C"/>
+                        <img src="https://placehold.co/100x100/EEE/31343C" />
                         Мои резюме
                     </div>
                     <div class="job__button_second" id="profile-responses">
-                            <img src="https://placehold.co/100x100/EEE/31343C"/>
+                        <img src="https://placehold.co/100x100/EEE/31343C" />
                         Отклики
                     </div>
                     <div class="job__button_second" id="profile-favorites">
-                            <img src="https://placehold.co/100x100/EEE/31343C"/>
+                        <img src="https://placehold.co/100x100/EEE/31343C" />
                         Избранное
                     </div>
                 </div>
                 <div class="resume-table" id="resume-content" hidden>
-                    
+
                 </div>
 
                 <div class="jobs_list" id="vacancy-content" hidden>
-                    
+
                 </div>
-            </div>
+            </div> --}}
         </div>
         <div class="profile__meta">
             <div class="profile__item">
@@ -58,19 +58,25 @@
             </div>
             <div class="profile__item">
                 <div class="profile__property">Дата рождения</div>
-                <div class="profile__value">{{birthday}}</div>
+                <div class="profile__value">{{birth_date}}</div>
             </div>
             <div class=" profile__item">
                 <div class="profile__property">Социальные сети</div>
                 <div class="profile__social-icons">
                     <div class="profile__soc-icon">
-                        <img src="https://placehold.co/100x100/EEE/31343C"/>
+                        <a href="{{vk}}">
+                            <img src="https://placehold.co/100x100/EEE/31343C" />
+                        </a>
                     </div>
                     <div class="profile__soc-icon">
-                        <img src="https://placehold.co/100x100/EEE/31343C"/>
+                        <a href="{{telegram}}">
+                            <img src="https://placehold.co/100x100/EEE/31343C" />
+                        </a>
                     </div>
                     <div class="profile__soc-icon">
-                        <img src="https://placehold.co/100x100/EEE/31343C"/>
+                        <a href="{{web}}">
+                            <img src="https://placehold.co/100x100/EEE/31343C" />
+                        </a>
                     </div>
                 </div>
             </div>
