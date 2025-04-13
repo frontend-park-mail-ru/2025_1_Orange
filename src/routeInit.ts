@@ -40,7 +40,6 @@ const renderPage = async (name: string, Page: any) => {
   await page.render()
 }
 
-
 /**
  * Функция для подключения всех страниц
  */
