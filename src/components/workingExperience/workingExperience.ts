@@ -9,6 +9,9 @@ export class WorkingExperience {
     #form: HTMLFormElement | null = null;
 
     #newExperience: HTMLButtonElement | null = null;
+    #untilNow: HTMLInputElement | null = null;
+    #end_date: HTMLInputElement | null = null;
+    #start_date: HTMLInputElement | null = null;
 
     constructor(parent: HTMLElement, id: number, default_data: WorkExperience = emptyWorkExperience) {
         this.#parent = parent;
@@ -39,10 +42,10 @@ export class WorkingExperience {
     #customMessage(field: HTMLInputElement | HTMLSelectElement): string {
         const validity = field.validity;
         if (validity.valueMissing) {
-            return `${this.#inputTranslation[field.name]}: Заполните поле`;
+            return `Заполните поле ${this.#inputTranslation[field.name]}`;
         }
         if (validity.patternMismatch) {
-            return `${this.#inputTranslation[field.name]}: ${field.title}`;
+            return field.title;
         }
         if (validity.tooLong) {
             return `${this.#inputTranslation[field.name]}: Много введённых данных`;
@@ -58,7 +61,7 @@ export class WorkingExperience {
         field.classList.remove('error');
         field.classList.remove('valid');
         if (!field.validity.valid) {
-            if (document.activeElement !== field && (field.value === '' || field.value === '0'))
+            if (document.activeElement === field && field.value !== '' && field.value !== '0')
                 field.classList.add('error');
             errorElement.textContent = this.#customMessage(field);
             errorElement.style.display = 'block';
@@ -70,8 +73,9 @@ export class WorkingExperience {
 
 
     #formValidate(element: HTMLElement): boolean {
-        if (this.#form) {
-            const errorElement = this.#form.querySelector('.resumeEdit__error') as HTMLElement;
+        const fieldset = element.closest('form') as HTMLFormElement;
+        if (fieldset) {
+            const errorElement = fieldset.querySelector('.resumeEdit__error') as HTMLElement;
 
             if (errorElement) {
                 errorElement.textContent = '';
@@ -83,7 +87,7 @@ export class WorkingExperience {
                     }
                 }
 
-                const fields = this.#form.querySelectorAll(
+                const fields = fieldset.querySelectorAll(
                     'input, select, textarea',
                 ) as unknown as Array<HTMLInputElement | HTMLSelectElement>;
 
@@ -133,6 +137,37 @@ export class WorkingExperience {
                 }
             })
         }
+
+        if (this.#untilNow) {
+            this.#untilNow.addEventListener('click', () => {
+                if (this.#untilNow && this.#untilNow.checked && this.#form && this.#end_date) {
+                    this.#end_date.required = false
+                } else if (this.#untilNow && this.#form && this.#end_date) {
+                    this.#end_date.required = true
+                }
+            })
+        }
+
+        if (this.#end_date && this.#start_date) {
+            this.#end_date.addEventListener('input', () => {
+                if (this.#start_date?.value === '' || this.#end_date?.value === '') return
+                if (!this.#start_date || !this.#end_date) return
+                const end = new Date(this.#end_date.value)
+                const start = new Date(this.#start_date.value)
+                if ((end.getTime() - start.getTime()) < 0) {
+                    this.#end_date.setCustomValidity('Конец работы раньше начала работы')
+                }
+            })
+            this.#start_date.addEventListener('input', () => {
+                if (this.#start_date?.value === '' || this.#end_date?.value === '') return
+                if (!this.#start_date || !this.#end_date) return
+                const end = new Date(this.#end_date.value)
+                const start = new Date(this.#start_date.value)
+                if ((end.getTime() - start.getTime()) < 0) {
+                    this.#end_date.setCustomValidity('Конец работы раньше начала работы')
+                }
+            })
+        }
     };
 
     /**
@@ -144,8 +179,17 @@ export class WorkingExperience {
             ...this.#defaultData,
             'isNew': this.#defaultData === emptyWorkExperience,
         }));
-        this.#form = document.forms.namedItem('resume_edit') as HTMLFormElement;
+        this.#form = this.self as HTMLFormElement;
+        if (this.#form) {
+            this.#untilNow = this.#form.elements.namedItem('until_now') as HTMLInputElement
+            this.#end_date = this.#form.elements.namedItem('end_date') as HTMLInputElement
+            this.#start_date = this.#form.elements.namedItem('start_date') as HTMLInputElement
+            this.#newExperience = this.#form.elements.namedItem('new_experience') as HTMLButtonElement
+        }
 
         this.#addEventListeners()
+
+        if (this.#defaultData.until_now && this.#untilNow)
+            this.#untilNow.checked = true
     };
 }

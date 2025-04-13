@@ -50,32 +50,54 @@ export class ResumeEdit {
     };
 
     #customMessage(field: HTMLInputElement | HTMLSelectElement): string {
-        console.log("MESSAGE", field)
         const validity = field.validity;
         if (validity.valueMissing) {
-            return `${this.#inputTranslation[field.name] || field.name}: Заполните поле`;
+            return `Заполните поле ${this.#inputTranslation[field.name]}`;
         }
         if (validity.patternMismatch) {
             return field.title;
         }
         if (validity.tooLong) {
-            return `Много введённых`;
+            return `${this.#inputTranslation[field.name]}: Много введённых данных`;
         }
 
         if (validity.tooShort) {
-            return `Мало введённых данных`;
+            return `${this.#inputTranslation[field.name]}: Мало введённых данных`;
         }
-        return `${this.#inputTranslation[field.name] || field.name}: ${field.validationMessage}`;
+        return `${this.#inputTranslation[field.name]}: ${field.validationMessage}`;
+    }
+
+    #fieldValidate(field: HTMLInputElement | HTMLSelectElement, errorElement: HTMLElement): boolean {
+        field.classList.remove('error');
+        field.classList.remove('valid');
+        if (!field.validity.valid) {
+            console.log(field)
+            if (document.activeElement === field && field.value !== '' && field.value !== '0')
+                field.classList.add('error');
+            errorElement.textContent = this.#customMessage(field);
+            errorElement.style.display = 'block';
+            return false
+        }
+        if (field.validity.valid) field.classList.add('valid');
+        return true
     }
 
     #formValidate(element: HTMLElement): boolean {
         const fieldset = element.closest('fieldset') as HTMLFieldSetElement;
         if (fieldset) {
+            console.log(element)
+            console.log(fieldset)
             const errorElement = fieldset.querySelector('.resumeEdit__error') as HTMLElement;
-
+            console.log(errorElement)
             if (errorElement) {
                 errorElement.textContent = '';
                 errorElement.style.display = 'none';
+
+                if (['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName)) {
+                    if (!this.#fieldValidate(element as HTMLInputElement, errorElement)) {
+                        return false
+                    }
+                }
 
                 const fields = fieldset.querySelectorAll(
                     'input, select, textarea',
@@ -84,13 +106,8 @@ export class ResumeEdit {
                 let valid = true;
 
                 fields.forEach((field) => {
-                    if (!field.validity.valid) {
-                        field.classList.add('form__input_error');
-                        errorElement.textContent = this.#customMessage(field);
-                        errorElement.style.display = 'block';
-                        valid = false;
-                    } else {
-                        field.classList.remove('form__input_error');
+                    if (valid && !this.#fieldValidate(field, errorElement)) {
+                        valid = false
                     }
                 });
                 return valid;
@@ -166,7 +183,7 @@ export class ResumeEdit {
             this.#nextBasicButton.addEventListener('click', (e: Event) => {
                 e.preventDefault();
                 if (!this.#nextBasicButton) return;
-                if (this.#formValidate(this.#nextBasicButton) && this.#skillsFieldset) {
+                if (this.#skillsFieldset) {
                     this.#nextBasicButton.hidden = true;
                     this.#skillsFieldset.hidden = false;
                 }
@@ -188,6 +205,7 @@ export class ResumeEdit {
             this.#nextEducationButton.addEventListener('click', (e: Event) => {
                 e.preventDefault();
                 if (!this.#nextEducationButton) return;
+                if (!this.#nextSkillsButton || !this.#formValidate(this.#nextSkillsButton)) return;
                 if (this.#formValidate(this.#nextEducationButton) && this.#aboutmeFieldset) {
                     this.#nextEducationButton.hidden = true;
                     this.#aboutmeFieldset.hidden = false;
@@ -199,6 +217,8 @@ export class ResumeEdit {
             this.#nextAboutMeButton.addEventListener('click', (e: Event) => {
                 e.preventDefault();
                 if (!this.#nextAboutMeButton) return;
+                if (!this.#nextSkillsButton || !this.#formValidate(this.#nextSkillsButton)) return;
+                if (!this.#nextEducationButton || !this.#formValidate(this.#nextEducationButton)) return;
                 if (
                     this.#formValidate(this.#nextAboutMeButton) &&
                     this.#experienceFieldset &&
@@ -214,6 +234,9 @@ export class ResumeEdit {
         if (this.#submit) {
             this.#submit.addEventListener('click', async (e: Event) => {
                 e.preventDefault();
+                if (!this.#nextSkillsButton || !this.#formValidate(this.#nextSkillsButton)) return;
+                if (!this.#nextEducationButton || !this.#formValidate(this.#nextEducationButton)) return;
+                if (!this.#aboutmeFieldset || !this.#formValidate(this.#aboutmeFieldset)) return
                 if (this.#form) this.#data = this.#get(this.#form) as ResumeCreate
                 const experience = this.self.querySelectorAll('.resumeEdit__experience')
                 this.#data.work_experience = []
@@ -279,22 +302,12 @@ export class ResumeEdit {
             this.#aboutmeFieldset = this.#form.elements.namedItem(
                 'fieldset_aboutme',
             ) as HTMLElement;
-            this.#experienceFieldset = this.#form.elements.namedItem(
-                'fieldset_experience',
-            ) as HTMLElement;
+            this.#experienceFieldset = document.getElementById('resume_edit_working_experiences') as HTMLElement;
 
-            this.#nextBasicButton = (
-                this.#form.elements.namedItem('fieldset_basic') as HTMLElement
-            ).querySelector('.job__button') as HTMLButtonElement;
-            this.#nextSkillsButton = (
-                this.#form.elements.namedItem('fieldset_skills') as HTMLElement
-            ).querySelector('.job__button') as HTMLButtonElement;
-            this.#nextEducationButton = (
-                this.#form.elements.namedItem('fieldset_education') as HTMLElement
-            ).querySelector('.job__button') as HTMLButtonElement;
-            this.#nextAboutMeButton = (
-                this.#form.elements.namedItem('fieldset_aboutme') as HTMLElement
-            ).querySelector('.job__button') as HTMLButtonElement;
+            this.#nextBasicButton = document.getElementById('basic_next') as HTMLButtonElement;
+            this.#nextSkillsButton = document.getElementById('skills_next') as HTMLButtonElement;
+            this.#nextEducationButton = document.getElementById('education_next') as HTMLButtonElement;
+            this.#nextAboutMeButton = document.getElementById('aboutme_next') as HTMLButtonElement;
             // Добавление обработчиков изменений
             this.#addEventListeners();
 
