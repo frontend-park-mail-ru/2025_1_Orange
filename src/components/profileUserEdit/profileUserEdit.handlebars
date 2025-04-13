@@ -2,7 +2,7 @@
     <div class="profile__header">
         <div class="profile__info">
             <div class="profile__avatar">
-                <img src="{{avatar}}" alt="Фото профиля" class="profile__avatar-img">
+                <img src="http://localhost:8000/api/v1/static/{{avatar_path}}" alt="Фото профиля" class="profile__avatar-img">
             </div>
             <div class="profile__details">
                 <h1 class="profile__name">{{last_name}} {{first_name}} {{middle_name}}</h1>
@@ -22,7 +22,7 @@
             <h3 class="profile__section-title">Фотография для резюме</h3>
             <div class="profile__photo-upload">
                 <div class="profile__avatar">
-                    <img src="{{avatar}}" alt="Фото для резюме" class="profile__avatar-img">
+                    <img src="http://localhost:8000/api/v1/static/{{avatar_path}}" alt="Фото для резюме" class="profile__avatar-img">
                 </div>
                 <div class="profile__photo-dropzone">
                     <input type="file" id="file-input" class="profile__photo-input" accept=".jpg, .png"

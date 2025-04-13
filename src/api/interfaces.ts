@@ -34,7 +34,7 @@ export interface Applicant {
     birth_date: string;
     sex: 'M' | 'F';
     quote: string;
-    avatar: string;
+    avatar_path: string;
     telegram: string;
     vk: string;
     facebook: string;
@@ -55,7 +55,7 @@ export interface ApplicantShort {
     middle_name: string;
     birth_date: string;
     sex: 'M' | 'F';
-    avatar: string;
+    avatar_path: string;
     created_at: string;
     updated_at: string;
 }
@@ -216,7 +216,7 @@ export interface ApplicantEdit {
     birth_date: string;
     sex: 'M' | 'F';
     quote: string;
-    avatar: string;
+    avatar_path: string;
     telegram: string;
     vk: string;
     facebook: string;
