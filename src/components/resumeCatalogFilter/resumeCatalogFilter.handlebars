@@ -1,0 +1,116 @@
+<form name="resume_catalog_filter" class="filter" aria-label="Фильтры резюме">
+    <fieldset class="filter__group">
+        <legend class="filter__name">Город</legend>
+        <input type="text"
+               id="city"
+               placeholder="Введите город"
+               class="filter__input">
+    </fieldset>
+
+    <fieldset class="filter__group">
+        <legend class="filter__name">Зарплата</legend>
+        <div class="filter__range">
+            <input type="number"
+                   id="salary_from"
+                   name="salary_from"
+                   min="0"
+                   step="1000"
+                   placeholder="От, руб"
+                   class="filter__input">
+            <input type="number"
+                   id="salary_to"
+                   min="0"
+                   step="1000"
+                   placeholder="До, руб"
+                   class="filter__input">
+        </div>
+    </fieldset>
+
+    <fieldset class="filter__group">
+        <legend class="filter__name">Возраст</legend>
+        <div class="filter__range">
+            <input type="number"
+                   id="age_from"
+                   name="age_from"
+                   min="0"
+                   placeholder="От"
+                   class="filter__input">
+            <input type="number"
+                   id="age_to"
+                   name="age_to"
+                   min="0"
+                   placeholder="До"
+                   class="filter__input">
+        </div>
+    </fieldset>
+
+    <fieldset class="filter__group">
+        <legend class="filter__name">Опыт работы</legend>
+        <div class="filter__options">
+            <label class="filter__checkbox">
+                <input type="checkbox" name="experience" value="no_matter">
+                <span>Не имеет значения</span>
+            </label>
+            <label class="filter__checkbox">
+                <input type="checkbox" name="experience" value="no_experience">
+                <span>Нет опыта</span>
+            </label>
+            <label class="filter__checkbox">
+                <input type="checkbox" name="experience" value="1_3_years">
+                <span>От 1 года до 3 лет</span>
+            </label>
+            <label class="filter__checkbox">
+                <input type="checkbox" name="experience" value="3_6_years">
+                <span>От 3 до 6 лет</span>
+            </label>
+            <label class="filter__checkbox">
+                <input type="checkbox" name="experience" value="6_plus_years">
+                <span>Более 6 лет</span>
+            </label>
+        </div>
+    </fieldset>
+
+    <fieldset class="filter__group">
+        <legend class="filter__name">Статус поиска</legend>
+        <div class="filter__options">
+            <label class="filter__checkbox">
+                <input type="checkbox" name="status" value="actively_searching">
+                <span>Активно ищу работу</span>
+            </label>
+            <label class="filter__checkbox">
+                <input type="checkbox" name="status" value="open_to_offer">
+                <span>Рассматриваю предложения</span>
+            </label>
+            <label class="filter__checkbox">
+                <input type="checkbox" name="status" value="considering_offer">
+                <span>Предложили работу, пока думаю</span>
+            </label>
+            <label class="filter__checkbox">
+                <input type="checkbox" name="status" value="starting_soon">
+                <span>Уже выхожу на новое место</span>
+            </label>
+            <label class="filter__checkbox">
+                <input type="checkbox" name="status" value="not_searching">
+                <span>Не ищу работу</span>
+            </label>
+        </div>
+    </fieldset>
+
+    <fieldset class="filter__group">
+        <legend class="filter__name">Показывать на странице</legend>
+        <div class="filter__options">
+            <label class="filter__radio">
+                <input type="radio" name="pagination" value="10" checked>
+                <span>10 резюме</span>
+            </label>
+            <label class="filter__radio">
+                <input type="radio" name="pagination" value="20">
+                <span>20 резюме</span>
+            </label>
+            <label class="filter__radio">
+                <input type="radio" name="pagination" value="30">
+                <span>30 резюме</span>
+            </label>
+        </div>
+    </fieldset>
+</form>
