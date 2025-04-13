@@ -6,6 +6,11 @@
     margin: 0 auto
     padding: 32px
 
+    &__fieldset
+        border: 0
+        padding: 0
+        margin: 0
+
     &__back-icon
         width: 20px
         height: 20px
@@ -191,6 +196,9 @@
         &:focus
             outline: none
             border-color: #0d6efd
+        
+        &.error
+            border-color: #FB0102
 
     &__select-wrapper
         position: relative
@@ -417,3 +425,6 @@
         img
             width: 100%
             height: 100%
+    
+    &__error
+        color: #FB0102

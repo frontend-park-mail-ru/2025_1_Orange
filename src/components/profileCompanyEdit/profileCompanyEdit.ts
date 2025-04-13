@@ -1,18 +1,24 @@
 import template from './profileCompanyEdit.handlebars'; // Шаблон Handlebars
 import { logger } from '../../utils/logger';
-import { Employer } from '../../api/interfaces';
+import { Employer, EmployerEdit } from '../../api/interfaces';
 import { store } from '../../store';
 import { api } from '../../api/api';
 import { router } from '../../router';
+import { formValidate } from '../../forms';
 
 export class ProfileCompanyEdit {
     readonly #parent: HTMLElement;
 
     #form: HTMLFormElement | null = null;
-    #data: Employer | null = null;
+    #data: EmployerEdit | null = null;
+    #defaultData : Employer | null = null;
+    #id: number = 0;
 
     #confirm: NodeListOf<HTMLButtonElement> | null = null;
     #back: NodeListOf<HTMLButtonElement> | null = null;
+
+    #avatar: NodeListOf<HTMLImageElement> | null = null;
+    #uploadInput: HTMLInputElement | null = null;
 
     constructor(parent: HTMLElement) {
         this.#parent = parent;
@@ -26,77 +32,27 @@ export class ProfileCompanyEdit {
         return document.getElementById('profile_company_edit') as HTMLElement
     }
 
+    init = async () => {
+        logger.info('profileCompany init method called');
+        const url = window.location.href.split('/');
+        this.#id = Number.parseInt(url[url.length - 1]);
+        if (!store.data.authorized || store.data.user.role !== 'employer' || store.data.user.user_id !== this.#id) router.back()
+        try {
+            const data = await api.employer.get(this.#id);
+            this.#defaultData = data;
+        } catch {
+            console.log('Не удалось загрузить страницу');
+            router.back()
+        }
+    };
+
     readonly #inputTranslation: Record<string, string> = {
         company_name: 'Название компании',
         slogan: 'Слоган',
         website: 'Веб-сайт',
         description: 'Описание',
-        address: 'Адрес'
+        legal_address: 'Адрес'
     };
-
-    #customMessage(field: HTMLInputElement | HTMLSelectElement): string {
-        const validity = field.validity;
-        if (validity.valueMissing) {
-            return `Заполните поле ${this.#inputTranslation[field.name]}`;
-        }
-        if (validity.patternMismatch) {
-            return field.title;
-        }
-        if (validity.tooLong) {
-            return `${this.#inputTranslation[field.name]}: Много введённых данных`;
-        }
-
-        if (validity.tooShort) {
-            return `${this.#inputTranslation[field.name]}: Мало введённых данных`;
-        }
-        return `${this.#inputTranslation[field.name]}: ${field.validationMessage}`;
-    }
-
-    #fieldValidate(field: HTMLInputElement | HTMLSelectElement, errorElement: HTMLElement): boolean {
-        field.classList.remove('error');
-        field.classList.remove('valid');
-        if (!field.validity.valid) {
-            if (document.activeElement !== field && (field.value === '' || field.value === '0'))
-                field.classList.add('error');
-            errorElement.textContent = this.#customMessage(field);
-            errorElement.style.display = 'block';
-            return false
-        }
-        if (field.validity.valid) field.classList.add('valid');
-        return true
-    }
-
-
-    #formValidate(element: HTMLElement = this.#form as HTMLElement): boolean {
-        if (this.#form) {
-            const errorElement = this.#form.querySelector('.vacancyEdit__error') as HTMLElement;
-
-            if (errorElement) {
-                errorElement.textContent = '';
-                errorElement.style.display = 'none';
-
-                if (['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName)) {
-                    if (!this.#fieldValidate(element as HTMLInputElement, errorElement)) {
-                        return false
-                    }
-                }
-
-                const fields = this.#form.querySelectorAll(
-                    'input, select, textarea',
-                ) as unknown as Array<HTMLInputElement | HTMLSelectElement>;
-
-                let valid = true;
-
-                fields.forEach((field) => {
-                    if (valid && !this.#fieldValidate(field, errorElement)) {
-                        valid = false
-                    }
-                });
-                return valid;
-            }
-        }
-        return false;
-    }
 
     #formGet(form: HTMLFormElement): unknown {
         const formData = new FormData(form)
@@ -132,8 +88,10 @@ export class ProfileCompanyEdit {
     readonly #addEventListeners = () => {
         if (this.#form) {
             this.#form.addEventListener('input', (e: Event) => {
-                this.#formValidate(e.target as HTMLElement);
-                if (this.#form) this.#data = this.#formGet(this.#form) as Employer
+                if (this.#form) {
+                    formValidate(this.#form, e.target as HTMLElement, '.profile__error', this.#inputTranslation);
+                    this.#data = this.#formGet(this.#form) as EmployerEdit
+                }
             });
         }
 
@@ -141,12 +99,26 @@ export class ProfileCompanyEdit {
             this.#confirm.forEach((element) => {
                 element.addEventListener('click', async (e: Event) => {
                     e.preventDefault();
-                    if (!this.#formValidate()) return
+                    if (this.#form && formValidate(this.#form, this.#form as HTMLElement, '.profile__error', this.#inputTranslation)) return
                     try {
                         console.log(store.data.vacancy)
                         if (this.#data) await api.employer.update(this.#data);
                     } catch {
                         console.log('Ошибка при обновлении');
+                    }
+                    if (this.#uploadInput) {
+                        const files = this.#uploadInput.files
+                        if (!files || files.length === 0) return
+                        const image = files[0]
+                        if (!image.type.startsWith('image/')) return
+                        const formData = new FormData()
+                        formData.append('logo', image)
+                        try {
+                            await api.employer.logo(formData)
+                            router.go(`/profileCompany/${store.data.user.user_id}`)
+                        } catch {
+                            console.log('Загрузка картинки не удалась')
+                        }
                     }
                 });
             })
@@ -160,6 +132,21 @@ export class ProfileCompanyEdit {
                 });
             })
         }
+
+        if (this.#uploadInput) {
+            this.#uploadInput.addEventListener('change', () => {
+                if (!this.#uploadInput) return
+                const files = this.#uploadInput.files
+                if (!files || files.length === 0) return
+                const image = files[0]
+                if (!image.type.startsWith('image/')) return
+                if (this.#avatar) {
+                    this.#avatar.forEach((element) => {
+                        element.src = URL.createObjectURL(image);
+                    })
+                }
+            })
+        }
     }
 
     /**
@@ -167,21 +154,18 @@ export class ProfileCompanyEdit {
      */
     render = () => {
         logger.info('VacancyEdit render method called');
-        if (store.data.authorized && store.data.user.type === 'employer' && store.data.user.employer) {
-            this.#data = store.data.user.employer
-        } else {
-            router.back()
-            return
-        }
         this.#parent.insertAdjacentHTML('beforeend', template({
-            ...this.#data
+            ...this.#defaultData
         }));
 
-        this.#form = document.forms.namedItem('profile_user_edit') as HTMLFormElement
+        this.#form = document.forms.namedItem('profile_company_edit') as HTMLFormElement
         if (this.#form) {
             this.#back = document.querySelectorAll('.job__button_second')
             this.#confirm = document.querySelectorAll('.job__button')
+            this.#uploadInput = this.#form.elements.namedItem('file_input') as HTMLInputElement
         }
+
+        this.#avatar = document.querySelectorAll('.profile__avatar-img')
 
         this.#addEventListeners()
     };

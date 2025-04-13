@@ -14,6 +14,8 @@ export class Header {
     #dropdownItems: NodeListOf<HTMLElement> | null = null;
     #logoLink: HTMLElement | null = null;
     #createButton: HTMLElement | null = null;
+    #editProfileLink: HTMLElement | null = null;
+    #profileLink: HTMLElement | null = null;
 
     /**
      * Конструктор класса
@@ -72,10 +74,12 @@ export class Header {
     addEventListeners = () => {
         this.#createButton = this.self.querySelector('.header__button');
         this.#loginButton = this.self.querySelector('.header__login');
-        this.#logoutButton = this.self.querySelector('.header__logout');
+        this.#logoutButton = document.getElementById('logout_profile_link');
         this.#profileIcon = this.self.querySelector('.header__profile-icon');
         this.#dropdownItems = this.self.querySelectorAll('.header__dropdown__item');
         this.#logoLink = this.self.querySelector('.header__name');
+        this.#profileLink = document.getElementById('profile_page_link')
+        this.#editProfileLink = document.getElementById('edit_profile_page_link')
 
         this.#logoLink?.addEventListener('click', () => {
             router.go('/catalog');
@@ -85,8 +89,16 @@ export class Header {
             router.go('/auth');
         });
 
-        this.#logoutButton?.addEventListener('click', () => {
-            router.go('/catalog');
+        this.#logoutButton?.addEventListener('click', async () => {
+            try {
+                await api.auth.logout();
+                console.log("LOGOUT SUCCESFULLY")
+                store.reset()
+                router.go('/catalog');
+            } catch {
+                console.log("ERROR LOGOUT")
+                router.go('/catalog')
+            }
         });
 
         this.#profileIcon?.addEventListener('click', (e) => {
@@ -97,7 +109,7 @@ export class Header {
         this.#createButton?.addEventListener('click', () => {
             if (store.data.authorized === false) {
                 router.go('/auth');
-            } else if (store.data.user.type === 'applicant') {
+            } else if (store.data.user.role === 'applicant') {
                 router.go('/createResume');
             } else {
                 router.go('/createVacancy');
@@ -105,29 +117,31 @@ export class Header {
         });
 
         this.#dropdownItems?.forEach((item) => {
-            if (item.classList.contains('header__dropdown__item--logout')) {
-                item.addEventListener('click', () => {
-                    this.toggleDropdown(false);
-                    api.auth
-                        .logout()
-                        .then(() => {
-                            store.reset();
-                            router.go('/catalog');
-                        })
-                        .catch(() => {
-                            logger.error('Error occured while logging out');
-                        });
-                });
-            } else {
-                item.addEventListener('click', () => {
-                    // тут пока заглушка
-                    logger.info(`Clicked profile dropdown item: ${item.textContent}`);
-                    this.toggleDropdown(false);
-                });
-            }
+            item.addEventListener('click', () => {
+                logger.info(`Clicked profile dropdown item: ${item.textContent}`);
+                this.toggleDropdown(false);
+            });
         });
         if (store.data.page === '') {
             document.addEventListener('click', this.handleDocumentClick);
+        }
+
+        if (this.#profileLink) {
+            this.#profileLink.addEventListener('click', () => {
+                if (store.data.user.role === 'applicant')
+                    router.go(`/profileUser/${store.data.user.user_id}`)
+                else
+                    router.go(`/profileCompany/${store.data.user.user_id}`)
+            })
+        }
+
+        if (this.#editProfileLink) {
+            this.#editProfileLink.addEventListener('click', () => {
+                if (store.data.user.role === 'applicant')
+                    router.go(`/profileUserEdit/${store.data.user.user_id}`)
+                else
+                    router.go(`/profileCompanyEdit/${store.data.user.user_id}`)
+            })
         }
     };
 
@@ -141,7 +155,7 @@ export class Header {
             'beforeend',
             template({
                 ...store.data,
-                isEmployer: store.data.user.type === 'employer',
+                isEmployer: store.data.user.role === 'employer',
             }),
         );
         this.addEventListeners();

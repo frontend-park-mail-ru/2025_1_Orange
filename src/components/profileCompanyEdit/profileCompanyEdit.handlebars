@@ -18,18 +18,18 @@
 
     <h2 class="profile__title">Настройки профиля</h2>
 
-    <form class="profile__form">
+    <form class="profile__form" name="profile_company_edit">
         <div class="profile__section">
             <h3 class="profile__section-title">Логотип компании</h3>
             <div class="profile__photo-upload">
-                <div class="profile__photo-preview">
-                    <img src="{{logo}}" alt="Логотип для компании" class="profile__photo-img">
+                <div class="profile__avatar">
+                    <img src="{{logo}}" alt="Логотип для компании" class="profile__avatar-img">
                 </div>
                 <div class="profile__photo-dropzone">
-                    <input type="file" id="file-input" class="profile__photo-input" accept=".jpg, .png, .webp" />
+                    <input type="file" id="file-input" class="profile__photo-input" accept=".jpg, .png" name="file_input" />
                     <div class="profile__photo-content">
                         <p class="profile__photo-text">Выбрать изображение</p>
-                        <p class="profile__photo-hint">jpg, png, webp, до 6 МБ, не более 10 000 x 10 000 пикселей</p>
+                        <p class="profile__photo-hint">jpg, png, до 6 МБ, не более 10 000 x 10 000 пикселей</p>
                     </div>
                 </div>
             </div>
@@ -38,28 +38,42 @@
         <div class="profile__section">
             <h3 class="profile__section-title">О компании</h3>
             <div class="profile__fields">
-                <div class="profile__field">
-                    <label class="profile__label">Название</label>
-                    <input type="text" class="profile__input" value="{{company_name}}" name="company_name">
-                </div>
-                <div class="profile__field">
-                    <label class="profile__label">Сайт компании</label>
-                    <input type="text" class="profile__input" value="{{website}}" name="website">
-                </div>
-                <div class="profile__field">
-                    <label class="profile__label">Местоположение компании</label>
-                    <input type="text" class="profile__input" value="{{address}}" name="address">
-                </div>
-                <div class="profile__field profile__field--full-width">
-                    <label class="profile__label">Слоган</label>
-                    <input type="text" class="profile__input"
-                        value="{{slogan}}" name="slogan">
-                </div>
-                <div class="profile__field profile__field--full-width">
-                    <label class="profile__label">О компании</label>
-                    <textarea
-                        class="profile__textarea" name="description">{{description}}</textarea>
-                </div>
+                <fieldset class="profile__fieldset profile__field--full-width">
+                    <div class="profile__fields">
+                        <div class="profile__field">
+                            <label class="profile__label">Название</label>
+                            <input type="text" class="profile__input" value="{{company_name}}" name="company_name" minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
+                        title="Можно вводить только буквы, знаки препинания и пробел" required>
+                        </div>
+                        <div class="profile__field">
+                            <label class="profile__label">Сайт компании</label>
+                            <input type="url" class="profile__input" value="{{website}}" name="website" minlength="5" maxlength="100">
+                        </div>
+                        <div class="profile__field">
+                            <label class="profile__label">Местоположение компании</label>
+                            <input type="text" class="profile__input" value="{{legal_address}}" name="legal_address" minlength="5" maxlength="100" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
+                        title="Можно вводить только буквы, знаки препинания и пробел">
+                        </div>
+                    </div>
+                    <div class="profile__error">
+                    </div>
+                </fieldset>
+                <fieldset class="profile__fieldset profile__field--full-width">
+                    <div class="profile__fields">
+                        <div class="profile__field profile__field--full-width">
+                            <label class="profile__label">Слоган</label>
+                            <input type="text" class="profile__input" value="{{slogan}}" name="slogan" maxlength="150" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
+                        title="Можно вводить только буквы, знаки препинания и пробел">
+                        </div>
+                        <div class="profile__field profile__field--full-width">
+                            <label class="profile__label">О компании</label>
+                            <textarea class="profile__textarea" name="description" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
+                        title="Можно вводить только буквы, знаки препинания и пробел">{{description}}</textarea>
+                        </div>
+                    </div>
+                    <div class="profile__error">
+                    </div>
+                </fieldset>
             </div>
         </div>
 

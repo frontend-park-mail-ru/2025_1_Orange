@@ -95,10 +95,10 @@ export class RegistrationUser {
         this.#submitBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             if (this.#companyValidate() === true) {
-                store.data.auth.request.firstName = this.#firstName?.value ?? '';
-                store.data.auth.request.lastName = this.#lastName?.value ?? '';
+                store.data.auth.request.first_name = this.#firstName?.value ?? '';
+                store.data.auth.request.last_name = this.#lastName?.value ?? '';
                 try {
-                    const user = await api.auth.register(store.data.auth.request);
+                    const user = await api.applicant.register(store.data.auth.request);
                     store.data.authorized = true;
                     store.data.user = user;
                     router.go('/catalog');

@@ -1,4 +1,4 @@
-<main class="profile" id="profile_company_edit">
+<main class="profile" id="profile_user_edit">
     <div class="profile__header">
         <div class="profile__info">
             <div class="profile__avatar">
@@ -21,11 +21,12 @@
         <div class="profile__section">
             <h3 class="profile__section-title">Фотография для резюме</h3>
             <div class="profile__photo-upload">
-                <div class="profile__photo-preview">
-                    <img src="{{avatar}}" alt="Фото для резюме" class="profile__photo-img">
+                <div class="profile__avatar">
+                    <img src="{{avatar}}" alt="Фото для резюме" class="profile__avatar-img">
                 </div>
                 <div class="profile__photo-dropzone">
-                    <input type="file" id="file-input" class="profile__photo-input" accept=".jpg, .png, .webp" name="file-input" />
+                    <input type="file" id="file-input" class="profile__photo-input" accept=".jpg, .png"
+                        name="file_input" />
                     <div class="profile__photo-content">
                         <p class="profile__photo-text">Выбрать изображение</p>
                         <p class="profile__photo-hint">jpg, png, webp, до 6 МБ, не более 10 000 x 10 000 пикселей</p>
@@ -37,70 +38,91 @@
         <div class="profile__section">
             <h3 class="profile__section-title">О себе</h3>
             <div class="profile__fields">
-                <div class="profile__field">
-                    <label class="profile__label">Фамилия</label>
-                    <input type="text" class="profile__input" value="{{last_name}}" name="last_name">
-                </div>
-                <div class="profile__field">
-                    <label class="profile__label">Имя</label>
-                    <input type="text" class="profile__input" value="{{first_name}}" name="first_name">
-                </div>
-                <div class="profile__field">
-                    <label class="profile__label">Отчество</label>
-                    <input type="text" class="profile__input" value="{{middle_name}}" name="middle_name">
-                </div>
-                <div class="profile__field">
-                    <label class="profile__label">Дата рождения</label>
-                    <input type="text" class="profile__input" value="{{birth_date}}" name="birth_date">
-                </div>
-                <div class="profile__field">
-                    <label class="profile__label">Пол</label>
-                    <div class="profile__select-wrapper">
-                        <select class="profile__select" name="sex">
-                            <option value="male">Мужской</option>
-                            <option value="female">Женский</option>
-                        </select>
+                <fieldset class="profile__fieldset profile__field--full-width">
+                    <div class="profile__fields">
+                    <div class="profile__field">
+                        <label class="profile__label">Фамилия</label>
+                        <input type="text" class="profile__input" value="{{last_name}}" name="last_name"  minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s]+$" required>
                     </div>
-                </div>
-                <div class="profile__field">
-                    <label class="profile__label">Город проживания</label>
-                    <input type="text" class="profile__input" value="{{city}}" name="city">
-                </div>
+                    <div class="profile__field">
+                        <label class="profile__label">Имя</label>
+                        <input type="text" class="profile__input" value="{{first_name}}" name="first_name"  minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s]+$" required>
+                    </div>
+                    <div class="profile__field">
+                        <label class="profile__label">Отчество</label>
+                        <input type="text" class="profile__input" value="{{middle_name}}" name="middle_name"  minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s]+$">
+                    </div>
+                    </div>
+                    <div class="profile__error">
+                    </div>
+                </fieldset>
+                <fieldset class="profile__fieldset profile__field--full-width">
+                    <div class="profile__fields">
+                    <div class="profile__field">
+                        <label class="profile__label">Дата рождения</label>
+                        <input type="date" class="profile__input" value="{{birth_date}}" name="birth_date" min="1900-01-01" max="2025-01-01" required>
+                    </div>
+                    <div class="profile__field">
+                        <label class="profile__label">Пол</label>
+                        <div class="profile__select-wrapper">
+                            <select class="profile__select" name="sex">
+                                <option value="M">Мужской</option>
+                                <option value="F">Женский</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="profile__field">
+                        <label class="profile__label">Город проживания</label>
+                        <input type="text" class="profile__input" value="{{city}}" name="city"  minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$">
+                    </div>
+                    </div>
+                    <div class="profile__error">
+                    </div>
+                </fieldset>
             </div>
         </div>
 
         <div class="profile__section">
-            <h3 class="profile__section-title">Социальные сети</h3>
-            <div class="profile__social-links">
-                <div class="profile__social-field">
-                    <div class="profile__social-icon">
-                        <img src="/vk.svg" alt="vk"/>
+            <fieldset class="profile__fieldset profile__field--full-width">
+                <h3 class="profile__section-title">Социальные сети</h3>
+                <div class="profile__fields">
+                    <div class="profile__social-field">
+                        <div class="profile__social-icon">
+                            <img src="/vk.svg" alt="vk" />
+                        </div>
+                        <input type="url" class="profile__social-input" value="{{vk}}" name="vk"
+                            placeholder="Ссылка на вконтакте">
                     </div>
-                    <input type="text" class="profile__social-input" value="{{vk}}" name="vk"
-                        placeholder="Ссылка на вконтакте">
-                </div>
-                <div class="profile__social-field">
-                    <div class="profile__social-icon">
-                        <img src="/tg.svg" alt="tg"/>
+                    <div class="profile__social-field">
+                        <div class="profile__social-icon">
+                            <img src="/tg.svg" alt="tg" />
+                        </div>
+                        <input type="url" class="profile__social-input" value="{{telegram}}" name="telegram"
+                            placeholder="Ссылка на телеграмм">
                     </div>
-                    <input type="text" class="profile__social-input" value="{{telegram}}" name="telegram"
-                        placeholder="Ссылка на телеграмм">
-                </div>
-                <div class="profile__social-field">
-                    <div class="profile__social-icon">
-                        <img src="globe.svg" alt="web" />
+                    <div class="profile__social-field">
+                        <div class="profile__social-icon">
+                            <img src="/globe.svg" alt="web" />
+                        </div>
+                        <input type="url" class="profile__social-input" placeholder="Ссылка на веб сайт"
+                            value="{{facebook}}" name="facebook">
                     </div>
-                    <input type="text" class="profile__social-input" placeholder="Ссылка на веб сайт" value="{{web}}" name="web">
                 </div>
-            </div>
+                <div class="profile__error">
+                    </div>
+            </fieldset>
         </div>
 
         <div class="profile__section">
-            <h3 class="profile__section-title">Дополнительно</h3>
-            <div class="profile__field">
-                <label class="profile__label">Статус</label>
-                <input type="text" class="profile__input" value="{{quote}}" name="quote">
-            </div>
+            <fieldset class="profile__fieldset profile__field--full-width">
+                <h3 class="profile__section-title">Дополнительно</h3>
+                <div class="profile__field">
+                    <label class="profile__label">Статус</label>
+                    <input type="text" class="profile__input" value="{{quote}}" name="quote"  minlength="2" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$">
+                </div>
+                <div class="profile__error">
+                </div>
+            </fieldset>
         </div>
 
         <div class="profile__actions">
