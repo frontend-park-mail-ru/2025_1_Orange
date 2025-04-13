@@ -33,7 +33,7 @@ export class RegistrationPassword {
      */
     #checkPassword(str: string): boolean {
         // Регулярное выражение для проверки, содержит ли строка только латинские буквы и цифры
-        const passwordRegex = /^[a-zA-Z0-9]+$/;
+        const passwordRegex = /^[a-zA-Z0-9_!@#$%^&*]+$/;
         return passwordRegex.test(str);
     }
 
@@ -48,21 +48,21 @@ export class RegistrationPassword {
             return false;
         }
 
-        const minLength = 10;
+        const minLength = 8;
 
         this.#password.classList.remove('form__input_error', 'form__input_valid');
         this.#repeatPassword.classList.remove('form__input_error', 'form__input_valid');
 
         if (this.#password.value.length < minLength) {
             errorElement.hidden = false;
-            errorElement.textContent = 'Пароль должен содержать минимум 10 символов';
+            errorElement.textContent = 'Пароль должен содержать минимум 8 символов';
             this.#password.classList.add('form__input_error');
             return false;
         }
 
         if (!this.#checkPassword(this.#password.value)) {
             errorElement.hidden = false;
-            errorElement.textContent = 'Пароль может содержать только латинские буквы и цифры';
+            errorElement.textContent = 'Пароль может содержать только латинские буквы, цифры и спецсимволы';
             this.#password.classList.add('form__input_error');
             return false;
         }

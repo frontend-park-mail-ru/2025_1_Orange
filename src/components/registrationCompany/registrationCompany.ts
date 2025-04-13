@@ -95,12 +95,13 @@ export class RegistrationCompany {
         this.#submitBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             if (this.#companyValidate() === true) {
-                store.data.auth.request.companyName = this.#companyName?.value ?? '';
-                store.data.auth.request.companyAddress = this.#companyAddress?.value ?? '';
+                store.data.auth.request.company_name = this.#companyName?.value ?? '';
+                store.data.auth.request.legal_address = this.#companyAddress?.value ?? '';
                 try {
-                    const user = await api.auth.register(store.data.auth.request);
+                    const user = await api.employer.register(store.data.auth.request);
                     store.data.authorized = true;
                     store.data.user = user;
+                    router.go('/catalog')
                 } catch {
                     const error = document.querySelector('.form__error') as HTMLElement;
                     if (error) {

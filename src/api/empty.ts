@@ -17,16 +17,17 @@ import {
     ResumeCreate,
     VacancyCreate,
     WorkExperienceCreate,
+    AuthResponse,
 } from './interfaces';
 
 export const emptySignupRequest: SignupRequest = {
     email: '',
     password: '',
     repeatPassword: '',
-    firstName: '',
-    lastName: '',
-    companyName: '',
-    companyAddress: '',
+    first_name: '',
+    last_name: '',
+    company_name: '',
+    legal_address: '',
 };
 
 export const emptySigninRequest: SigninRequest = {
@@ -48,12 +49,12 @@ export const emptyApplicant: Applicant = {
     middle_name: '',
     city: '',
     birth_date: '',
-    sex: 'male',
+    sex: 'M',
     quote: '',
     avatar: '',
     telegram: '',
     vk: '',
-    web: '',
+    facebook: '',
     created_at: '',
     updated_at: '',
     status: 'actively_searching',
@@ -65,7 +66,7 @@ export const emptyApplicantShort: ApplicantShort = {
     last_name: '',
     middle_name: '',
     birth_date: '',
-    sex: 'male',
+    sex: 'M',
     avatar: '',
     created_at: '',
     updated_at: '',
@@ -77,7 +78,7 @@ export const emptyEmployer: Employer = {
     slogan: '',
     website: '',
     description: '',
-    address: '',
+    legal_address: '',
     logo: '',
     created_at: '',
     updated_at: '',
@@ -217,7 +218,7 @@ export const emptyEmployerEdit: EmployerEdit = {
     slogan: '',
     website: '',
     description: '',
-    address: '',
+    legal_address: '',
 };
 
 export const emptyApplicantEdit: ApplicantEdit = {
@@ -226,10 +227,15 @@ export const emptyApplicantEdit: ApplicantEdit = {
     middle_name: '',
     city: '',
     birth_date: '',
-    sex: 'male',
+    sex: 'M',
     quote: '',
     avatar: '',
     telegram: '',
     vk: '',
-    web: '',
+    facebook: '',
 };
+
+export const emptyAuthResponse : AuthResponse = {
+    role: 'applicant',
+    user_id: 0
+}

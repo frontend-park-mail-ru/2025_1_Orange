@@ -97,8 +97,8 @@ export class JobPage {
                 experienceTranslations,
                 workFormatTranslations,
                 employmentTranslations,
-                'isApplicant': store.data.authorized && store.data.user.type === 'applicant',
-                'isOwner': store.data.authorized && store.data.user.type === 'employer' && store.data.user.employer?.id === this.#props.employer.id
+                'isApplicant': store.data.authorized && store.data.user.role === 'applicant',
+                'isOwner': store.data.authorized && store.data.user.role === 'employer' && store.data.user.employer?.id === this.#props.employer.id
             }),
         );
         const companyCard = new JobCompanyCard(
@@ -122,12 +122,12 @@ export class JobPage {
 
         if (this.#resumeButton) {
             this.#resumeButton.hidden = true
-            if (store.data.user.type === 'applicant' && store.data.authorized) this.#resumeButton.hidden = false
+            if (store.data.user.role === 'applicant' && store.data.authorized) this.#resumeButton.hidden = false
         }
 
         if (this.#editButton) {
             this.#editButton.hidden = true
-            if (store.data.user.type === 'employer' && store.data.authorized && store.data.user.employer?.id === this.#props.employer.id) this.#editButton.hidden = false
+            if (store.data.user.role === 'employer' && store.data.authorized && store.data.user.employer?.id === this.#props.employer.id) this.#editButton.hidden = false
         }
 
         this.#addEventListeners()

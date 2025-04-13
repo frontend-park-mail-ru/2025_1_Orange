@@ -18,7 +18,7 @@ export class Api {
      * Конструктор класса api - взаимодействие с бекендом
      * @param {string} baseUrl - url бекенда
      */
-    constructor(baseUrl: string = 'http://localhost:8000') {
+    constructor(baseUrl: string = 'http://localhost:8000/api/v1') {
         this.#baseUrl = baseUrl;
         this.auth = new AuthService(this);
         this.vacancy = new VacancyService(this);
@@ -42,7 +42,7 @@ export class Api {
     ) {
         const url = this.#baseUrl + endpoint;
         const headers = new Headers();
-        headers.append('Content-Type', content_type);
+        if (content_type !== 'multipart/form-data') headers.append('Content-Type', content_type);
         if (store.data.csrf !== '') headers.append('X-CSRF-Token', store.data.csrf)
 
         const init: RequestInit = {
@@ -55,17 +55,25 @@ export class Api {
 
         logger.info(url, init);
 
+        console.log('STORE', store.data.csrf)
+
         try {
             const response = await fetch(url, init);
+            const csrfToken = response.headers.get('x-csrf-token');
+            if (csrfToken) {
+                store.data.csrf = csrfToken;
+            }
+            console.log("REQUEST STATUS", response.status, response.ok)
             if (!response.ok) {
                 const error = await response.json();
                 logger.error(`error: ${error.message}`);
                 throw new Error(error.message || 'Ошибка при выполнении запроса');
             }
-
-            if ('X-CSRF-Token' in response.headers) store.data.csrf = response.headers['X-CSRF-Token'] as string
-
-            return response.json();
+            try {
+                return await response.json();
+            } catch {
+                return ''
+            }
         } catch {
             logger.error('Network Error');
             throw new Error('Ошибка при выполнении запроса');

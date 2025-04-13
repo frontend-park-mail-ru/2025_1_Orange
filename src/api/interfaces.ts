@@ -2,15 +2,20 @@ export interface SignupRequest {
     email: string;
     password: string;
     repeatPassword: string;
-    firstName?: string;
-    lastName?: string;
-    companyName?: string;
-    companyAddress?: string;
+    first_name?: string;
+    last_name?: string;
+    company_name?: string;
+    legal_address?: string;
 }
 
 export interface SigninRequest {
     email: string;
     password: string;
+}
+
+export interface AuthResponse {
+    role: 'applicant' | 'employer';
+    user_id: number;
 }
 
 export interface Static {
@@ -27,12 +32,12 @@ export interface Applicant {
     middle_name: string;
     city: string;
     birth_date: string;
-    sex: 'male' | 'female';
+    sex: 'M' | 'F';
     quote: string;
     avatar: string;
     telegram: string;
     vk: string;
-    web: string;
+    facebook: string;
     created_at: string;
     updated_at: string;
     status:
@@ -49,7 +54,7 @@ export interface ApplicantShort {
     last_name: string;
     middle_name: string;
     birth_date: string;
-    sex: 'male' | 'female';
+    sex: 'M' | 'F';
     avatar: string;
     created_at: string;
     updated_at: string;
@@ -61,7 +66,7 @@ export interface Employer {
     slogan: string;
     website: string;
     description: string;
-    address: string;
+    legal_address: string;
     logo: string;
     created_at: string;
     updated_at: string;
@@ -200,7 +205,7 @@ export interface EmployerEdit {
     slogan: string;
     website: string;
     description: string;
-    address: string;
+    legal_address: string;
 }
 
 export interface ApplicantEdit {
@@ -209,10 +214,10 @@ export interface ApplicantEdit {
     middle_name: string;
     city: string;
     birth_date: string;
-    sex: 'male' | 'female';
+    sex: 'M' | 'F';
     quote: string;
     avatar: string;
     telegram: string;
     vk: string;
-    web: string;
+    facebook: string;
 }

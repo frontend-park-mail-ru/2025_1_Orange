@@ -2,7 +2,7 @@ import template from './profileUser.handlebars'; // Шаблон Handlebars
 import { logger } from '../../utils/logger';
 import './profileUser.sass';
 import { ResumeRow } from '../resumeRow/resumeRow';
-import { Resume } from '../../api/interfaces';
+import { Applicant, Resume } from '../../api/interfaces';
 import { store } from '../../store';
 import { api } from '../../api/api';
 import { router } from '../../router';
@@ -10,6 +10,8 @@ import { router } from '../../router';
 export class ProfileUser {
     readonly #parent: HTMLElement;
     #resumes: Resume[] | null = null;
+    #id : number = 0;
+    #data : Applicant | null = null
     //#vacancies: Vacancy[] | null = null;
     #resumeContainer: HTMLElement | null = null;
     #vacancyContainer: HTMLElement | null = null;
@@ -23,6 +25,20 @@ export class ProfileUser {
     constructor(parent: HTMLElement) {
         this.#parent = parent;
     }
+
+    init = async () => {
+        logger.info('profileUser init method called');
+        const url = window.location.href.split('/');
+        this.#id = Number.parseInt(url[url.length - 1]);
+        if (!store.data.authorized || store.data.user.role !== 'applicant' || store.data.user.user_id !== this.#id) router.back()
+        try {
+            const data = await api.applicant.get(this.#id);
+            this.#data = data;
+        } catch {
+            console.log('Не удалось загрузить страницу');
+            router.back()
+        }
+    };
 
     /**
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
@@ -43,13 +59,13 @@ export class ProfileUser {
         }
         this.#backArrow = this.self.querySelector('.profile__back') as HTMLElement;
         if (this.#backArrow) {
-            this.#backArrow.addEventListener('click', () => {router.back()});
+            this.#backArrow.addEventListener('click', () => { router.back() });
         }
         if (this.#editButton) {
-            this.#editButton.addEventListener('click', () => {router.go('/profileUserEdit')} )
+            this.#editButton.addEventListener('click', () => { router.go(`/profileUserEdit/${this.#id}`) })
         }
         if (this.#addResume) {
-            this.#addResume.addEventListener('click', () => {router.go('/createResume')})
+            this.#addResume.addEventListener('click', () => { router.go('/createResume') })
         }
 
         this.#resumeContainer = document.getElementById('resume-content');
@@ -174,8 +190,18 @@ export class ProfileUser {
      */
     render = () => {
         logger.info('ProfileUser render method called');
-        if (!store.data.authorized || store.data.user.type !== 'applicant') router.back()
-        this.#parent.insertAdjacentHTML('beforeend', template(store.data.user.applicant));
+        if (!store.data.authorized || store.data.user.role !== 'applicant') router.back()
+        if (!this.#data) router.back()
+        if (this.#data && this.#data.birth_date === '0001-01-01T00:00:00Z') {
+            this.#data.birth_date = ''
+        } else if (this.#data) {
+                const birth_date = new Date(this.#data.birth_date)
+                console.log(birth_date)
+                this.#data.birth_date = `${birth_date.getDay()}.${birth_date.getMonth()}.${birth_date.getFullYear()}`
+            }
+        this.#parent.insertAdjacentHTML('beforeend', template({
+    ...this.#data,
+    }));
         this.addEventListeners();
         this.#handleButton(this.#resumesButton as HTMLElement, this.#renderResumes)
     };

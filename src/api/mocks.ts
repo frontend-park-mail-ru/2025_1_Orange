@@ -11,6 +11,7 @@ import {
     ResumeShort,
     WorkExperience,
     User,
+    AuthResponse,
 } from './interfaces';
 
 export const staticMock: Static = {
@@ -27,12 +28,12 @@ export const applicantMock: Applicant = {
     middle_name: 'Андреевич',
     city: 'Москва',
     birth_date: '12.01.2004',
-    sex: 'male',
+    sex: 'M',
     quote: 'hello55 one love',
     avatar: 'https://placehold.co/100x100/EEE/31343C',
     telegram: 't.me/iu5la',
     vk: 'vk.com/iu5la',
-    web: 'mario.ru',
+    facebook: 'mario.ru',
     created_at: '2025-01-12T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
     status: 'actively_searching',
@@ -44,7 +45,7 @@ export const applicantShortMock: ApplicantShort = {
     last_name: 'Ларин',
     middle_name: 'Андреевич',
     birth_date: '12.01.04',
-    sex: 'male',
+    sex: 'M',
     avatar: 'https://placehold.co/100x100/EEE/31343C',
     created_at: '2025-01-12T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
@@ -57,7 +58,7 @@ export const employerMock: Employer = {
     website: 'vk.com',
     description:
         'VK — крупнейшая российская технологическая компания. Мы помогаем миллионам людей решать повседневные задачи в онлайне. Нашими продуктами и сервисами пользуется больше 95% аудитории рунета.',
-    address: 'Москва',
+    legal_address: 'Москва',
     logo: 'https://placehold.co/100x100/EEE/31343C',
     created_at: '2024-08-22T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
@@ -161,3 +162,13 @@ export const userEmployerMock: User = {
     employer: employerMock,
     applicant: emptyApplicant,
 };
+
+export const AuthResponseApplicantMock: AuthResponse = {
+    role: 'applicant',
+    user_id: 1
+}
+
+export const AuthResponseEmployerMock: AuthResponse = {
+    role: 'employer',
+    user_id: 1
+}

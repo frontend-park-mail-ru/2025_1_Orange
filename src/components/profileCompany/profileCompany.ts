@@ -6,10 +6,12 @@ import { JobCard } from '../jobCard/jobCard';
 import { employerMock, vacancyMock } from '../../api/mocks';
 import { router } from '../../router';
 import { store } from '../../store';
+import { api } from '../../api/api';
 
 export class ProfileCompany {
     readonly #parent: HTMLElement;
     #data: Employer | null = null;
+    #id: number = 0;
     #vacancies: Vacancy[] | null = null;
     #vacancyContainer: HTMLElement | null = null;
     #backArrow: HTMLElement | null = null;
@@ -32,8 +34,22 @@ export class ProfileCompany {
      * Очистка
      */
     remove = () => {
-        logger.info('ProfileUser remove method called');
+        logger.info('ProfileCompany remove method called');
         this.self.remove();
+    };
+
+    init = async () => {
+        logger.info('profileCompany init method called');
+        const url = window.location.href.split('/');
+        this.#id = Number.parseInt(url[url.length - 1]);
+        if (!store.data.authorized || store.data.user.role !== 'employer' || store.data.user.user_id !== this.#id) router.back()
+        try {
+            const data = await api.employer.get(this.#id);
+            this.#data = data;
+        } catch {
+            console.log('Не удалось загрузить страницу');
+            router.back()
+        }
     };
 
     /**
@@ -47,13 +63,13 @@ export class ProfileCompany {
         }
         this.#backArrow = this.self.querySelector('.profile__back') as HTMLElement;
         if (this.#backArrow) {
-            this.#backArrow.addEventListener('click', () => {router.back()});
+            this.#backArrow.addEventListener('click', () => { router.back() });
         }
         if (this.#editButton) {
-            this.#editButton.addEventListener('click', () => {router.go('/profileCompanyEdit')} )
+            this.#editButton.addEventListener('click', () => { router.go(`/profileCompanyEdit/${this.#id}`) })
         }
         if (this.#addVacancy) {
-            this.#addVacancy.addEventListener('click', () => {router.go('/createVacancy')})
+            this.#addVacancy.addEventListener('click', () => { router.go('/createVacancy') })
         }
     };
 
@@ -62,10 +78,10 @@ export class ProfileCompany {
      */
     render = () => {
         logger.info('ProfileUser render method called');
-        this.#data = employerMock;
+        if (!this.#data) router.back()
         this.#parent.insertAdjacentHTML('beforeend', template({
             ...this.#data,
-            'isOwner': store.data.user.type === 'employer' && store.data.user.employer?.id === this.#data.id
+            'isOwner': store.data.user.role === 'employer' && store.data.user.user_id === this.#data?.id
         }));
         this.#vacancyContainer = document.getElementById('responses-content') as HTMLElement;
         this.#vacancies = [vacancyMock];

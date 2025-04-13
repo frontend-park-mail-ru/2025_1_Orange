@@ -5,8 +5,7 @@ import './form.sass';
 import './variables.sass';
 import { logger } from './utils/logger';
 import { routerInit } from './routeInit';
-import { applicantMock, userApplicantMock, userEmployerMock } from './api/mocks';
-import { emptyUser } from './api/empty';
+import { emptyAuthResponse } from './api/empty';
 
 routerInit();
 
@@ -16,12 +15,11 @@ api.auth
         logger.info(user);
         store.data.authorized = true;
         store.data.user = user;
+        console.log(store.data.user)
     })
     .catch(() => {
-        //store.data.authorized = false;
-        //store.data.user = emptyUser;
-        store.data.authorized = true;
-        store.data.user = userEmployerMock;
+        store.data.authorized = false;
+        store.data.user = emptyAuthResponse;
     })
     .finally(() => {
         router.go(window.location.pathname);
