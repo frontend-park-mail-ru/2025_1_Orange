@@ -1,0 +1,158 @@
+.resume-card
+  display: flex
+  flex-direction: column
+  gap: 20px
+  position: relative
+  overflow: hidden
+  border: 1px solid #cfcfcf
+  background-color: #fff
+  border-radius: 16px
+  padding: 24px
+  transition: box-shadow 0.3s ease, border-color 0.3s ease
+  cursor: pointer
+
+  &:hover
+    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.1)
+
+.resume-card__header
+  display: flex
+  align-items: flex-start
+  gap: 20px
+
+.resume-card__avatar
+  width: 150px
+
+  img
+    width: 100px
+    height: 100px
+    border-radius: 20px
+    object-fit: contain
+
+.resume-card__main-info
+  flex-grow: 1
+
+.resume-card__title
+  font-size: 24px
+  font-weight: 600
+  color: #0071FE
+  margin: 0 0 10px
+
+.resume-card__personal-info
+  font-size: 16px
+  font-weight: 500
+  margin-bottom: 8px
+
+.resume-card__age
+  color: #000000
+
+.resume-card__updated
+  color: #0dc267
+
+.resume-card__separator
+  margin: 0 8px
+  color: #6f7885
+
+.resume-card__status-badge__wrapper
+  display: flex
+  align-items: center
+
+.resume-card__status-badge
+  background-color: #f1f4f9
+  color: #768695
+  padding: 6px 12px
+  border-radius: 10px
+  font-size: 14px
+  font-weight: 600
+
+.resume-card__content
+  display: flex
+  flex-direction: column
+  gap: 12px
+
+.resume-card__row
+  display: flex
+  gap: 20px
+
+.resume-card__label
+  width: 150px
+  flex-shrink: 0
+  color: #6f7885
+  font-weight: 500
+
+.resume-card__value
+  flex-grow: 1
+  font-weight: 500
+
+.resume-card__row__divider
+  border-bottom: 1px solid #CFCFCF
+
+.resume-card__company
+  font-weight: bold
+  margin-bottom: 4px
+
+.resume-card__position
+  margin-bottom: 8px
+  font-weight: 500
+  color: #000
+
+.resume-card__details-wrapper
+  margin-top: 8px
+  position: relative
+
+.resume-card__details-content
+  display: none
+  margin-bottom: 8px
+  line-height: 1.4
+
+.resume-card__details-toggle
+  background: none
+  border: none
+  color: #0071fe
+  cursor: pointer
+  font-size: 14px
+  padding: 0
+  display: flex
+  align-items: center
+  gap: 5px
+
+.resume-card__details-arrow
+  display: inline-block
+  width: 10px
+  height: 10px
+  margin-left: 5px
+  position: relative
+
+.resume-card__details-toggle--more .resume-card__details-arrow::before
+  content: ""
+  position: absolute
+  width: 6px
+  height: 6px
+  border-right: 2px solid #0071fe
+  border-bottom: 2px solid #0071fe
+  transform: rotate(45deg)
+  top: 0
+  left: 0
+
+.resume-card__details-toggle--less .resume-card__details-arrow::before
+  content: ""
+  position: absolute
+  width: 6px
+  height: 6px
+  border-right: 2px solid #0071fe
+  border-bottom: 2px solid #0071fe
+  transform: rotate(-135deg)
+  top: 4px
+  left: 0
+
+.resume-card__details-toggle--less
+  display: none
+
+.resume-card__details-wrapper--expanded
+  .resume-card__details-content
+    display: block
+
+  .resume-card__details-toggle--more
+    display: none
+
+  .resume-card__details-toggle--less
+    display: flex
