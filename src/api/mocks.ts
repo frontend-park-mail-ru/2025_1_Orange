@@ -30,7 +30,7 @@ export const applicantMock: Applicant = {
     birth_date: '12.01.2004',
     sex: 'M',
     quote: 'hello55 one love',
-    avatar: 'https://placehold.co/100x100/EEE/31343C',
+    avatar_path: 'https://placehold.co/100x100/EEE/31343C',
     telegram: 't.me/iu5la',
     vk: 'vk.com/iu5la',
     facebook: 'mario.ru',
@@ -46,7 +46,7 @@ export const applicantShortMock: ApplicantShort = {
     middle_name: 'Андреевич',
     birth_date: '12.01.04',
     sex: 'M',
-    avatar: 'https://placehold.co/100x100/EEE/31343C',
+    avatar_path: 'https://placehold.co/100x100/EEE/31343C',
     created_at: '2025-01-12T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
 };

@@ -110,9 +110,27 @@ export class ProfileUserEdit {
                         if (this.#data) {
                             await api.applicant.update(this.#data);
                             router.go(`/profileUser/${store.data.user.user_id}`)
+                            if (this.#uploadInput) {
+                                const files = this.#uploadInput.files
+                                if (!files || files.length === 0) router.go(`/profileUser/${store.data.user.user_id}`)
+                                }
                         }
                     } catch {
                         console.log('Ошибка при обновлении');
+                    }
+                    if (this.#uploadInput) {
+                        const files = this.#uploadInput.files
+                        if (!files || files.length === 0) return
+                        const image = files[0]
+                        if (!image.type.startsWith('image/')) return
+                        const formData = new FormData()
+                        formData.append('avatar', image)
+                        try {
+                            await api.applicant.avatar(formData)
+                            router.go(`/profileUser/${store.data.user.user_id}`)
+                        } catch {
+                            console.log('Загрузка картинки не удалась')
+                        }
                     }
                 });
             })
@@ -122,7 +140,7 @@ export class ProfileUserEdit {
             this.#back.forEach((element) => {
                 element.addEventListener('click', async (e: Event) => {
                     e.preventDefault();
-                    router.back()
+                    router.go(`/profileUser/${this.#id}`)
                 });
             })
         }
@@ -152,7 +170,10 @@ export class ProfileUserEdit {
             this.#defaultData.birth_date = ''
         } else if (this.#defaultData) {
             const birth_date = new Date(this.#defaultData.birth_date)
-            this.#defaultData.birth_date = birth_date.toDateString()
+            const year = birth_date.getFullYear();
+            const month = String(birth_date.getMonth() + 1).padStart(2, '0'); // Месяцы нумеруются с 0
+            const day = String(birth_date.getDate()).padStart(2, '0');
+            this.#defaultData.birth_date = `${year}-${month}-${day}`;
         }
         this.#parent.insertAdjacentHTML('beforeend', template({
             ...this.#defaultData
