@@ -61,15 +61,5 @@ export class JobCatalog {
             const card = new JobCard(this.self.querySelector('.jobs_list') as HTMLElement, element);
             card.render();
         });
-        // this.init().then(() => {
-        //     if (!this.#jobs) {
-        //         const jobsList = this.self.querySelector('.jobs_list') as HTMLElement
-        //         jobsList.textContent = "Вакансий не найдено"
-        //     }
-        //     this.#jobs?.forEach(element => {
-        //         const card = new JobCard(this.self.querySelector('.jobs_list') as HTMLElement, element);
-        //         card.render();
-        //     });
-        // })
     };
 }
