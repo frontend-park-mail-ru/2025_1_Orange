@@ -25,11 +25,8 @@ import { ProfileCompanyEdit } from './components/profileCompanyEdit/profileCompa
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderPage = async (name: string, Page: any) => {
-    const app = document.getElementById('app') as HTMLElement;
-    app.innerHTML = '';
 
-    const header = new Header(app);
-    header.render();
+    const app = document.getElementById('app') as HTMLElement;
 
     store.data.page = name;
 
@@ -41,6 +38,12 @@ const renderPage = async (name: string, Page: any) => {
             logger.error('Не смог взять данные');
         }
     }
+
+    app.innerHTML = '';
+
+    const header = new Header(app);
+    header.render();
+
     await page.render();
     document.title = store.data.page;
 };

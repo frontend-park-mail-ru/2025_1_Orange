@@ -2,7 +2,8 @@
     <div class="profile__header">
         <div class="profile__info">
             <div class="profile__avatar">
-                <img src="{{logo}}" alt="Фото профиля" class="profile__avatar-img">
+                <img src="http://localhost:8000/api/v1/static/{{logo}}" alt="Фото профиля" class="profile__avatar-img"
+                onerror="this.src = '/icons-user-profile.svg';">
             </div>
             <div class="profile__details">
                 <h1 class="profile__name">{{company_name}}</h1>
@@ -23,7 +24,7 @@
             <h3 class="profile__section-title">Логотип компании</h3>
             <div class="profile__photo-upload">
                 <div class="profile__avatar">
-                    <img src="{{logo}}" alt="Логотип для компании" class="profile__avatar-img">
+                    <img src="http://localhost:8000/api/v1/static/{{logo}}" alt="Логотип для компании" class="profile__avatar-img">
                 </div>
                 <div class="profile__photo-dropzone">
                     <input type="file" id="file-input" class="profile__photo-input" accept=".jpg, .png" name="file_input" />

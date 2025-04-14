@@ -6,6 +6,7 @@ import { JobCatalogFilter } from '../jobCatalogFilter/jobCatalogFilter';
 import { VacancyShort } from '../../api/interfaces';
 import { api } from '../../api/api';
 import { router } from '../../router';
+import { store } from '../../store';
 
 export class JobCatalog {
     readonly #parent: HTMLElement;
@@ -53,7 +54,8 @@ export class JobCatalog {
         if (this.#createResumeLink) {
             this.#createResumeLink.addEventListener('click', (e: Event) => {
                 e.preventDefault();
-                router.go('/createResume');
+                if (store.data.authorized && store.data.user.role === 'applicant') router.go('/createResume');
+                else if (!store.data.authorized) router.go('/auth')
             });
         }
     };
