@@ -3,22 +3,23 @@ import './header.css';
 import { router } from '../../router.js';
 import { Api } from '../../api/api.js';
 import { logger } from '../../utils/logger.js';
+import template from './header.handlebars'
 
 export class Header {
-    #parent;
-    #dropdownVisible = false;
-    #loginButton;
-    #logoutButton;
-    #profileIcon;
-    #dropdownItems;
-    #logoLink;
-    #createButton;
+    #parent: HTMLElement;
+    #dropdownVisible: boolean = false;
+    #loginButton: HTMLElement | null = null;
+    #logoutButton: HTMLElement | null = null;
+    #profileIcon: HTMLElement | null = null;
+    #dropdownItems: NodeListOf<HTMLElement> | null = null;
+    #logoLink: HTMLElement | null = null;
+    #createButton: HTMLElement | null = null;
 
     /**
      * Конструктор класса
      * @param parent {HTMLElement} - родительский элемент
      */
-    constructor(parent) {
+    constructor(parent: HTMLElement) {
         this.#parent = parent;
     }
 
@@ -26,8 +27,8 @@ export class Header {
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() {
-        return document.querySelector('.header');
+    get self(): HTMLElement {
+        return document.querySelector('.header') as HTMLElement;
     }
 
     /**
@@ -41,9 +42,9 @@ export class Header {
     /**
      * Обработчик клика на документе для закрытия дропдауна
      */
-    handleDocumentClick = (e) => {
+    handleDocumentClick = (e: Event) => {
         const profileElement = this.self.querySelector('.header__profile');
-        if (profileElement && !profileElement.contains(e.target) && this.#dropdownVisible) {
+        if (profileElement && !profileElement.contains(e.target as Node) && this.#dropdownVisible) {
             this.toggleDropdown(false);
         }
     };
@@ -52,8 +53,8 @@ export class Header {
      * Переключение видимости дропдауна
      * @param {boolean|undefined} state - принудительное состояние (true - показать, false - скрыть)
      */
-    toggleDropdown = (state) => {
-        const dropdown = this.self.querySelector('.header__dropdown');
+    toggleDropdown = (state: boolean | undefined) => {
+        const dropdown = this.self.querySelector('.header__dropdown') as HTMLElement;
         if (!dropdown) return;
 
         if (state !== undefined) {
@@ -76,38 +77,30 @@ export class Header {
         this.#dropdownItems = this.self.querySelectorAll('.header__dropdown__item');
         this.#logoLink = this.self.querySelector('.header__name');
 
-        this.#logoLink.addEventListener('click', () => {
+        this.#logoLink?.addEventListener('click', () => {
             router('catalog');
         });
 
-        if (this.#loginButton) {
-            this.#loginButton.addEventListener('click', () => {
+        this.#loginButton?.addEventListener('click', () => {
+            router('auth');
+        });
+
+        this.#logoutButton?.addEventListener('click', () => {
+            router('catalog');
+        });
+
+        this.#profileIcon?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleDropdown(undefined);
+        });
+
+        this.#createButton?.addEventListener('click', () => {
+            if (store.user.authenticated === false) {
                 router('auth');
-            });
-        }
+            }
+        });
 
-        if (this.#logoutButton) {
-            this.#logoutButton.addEventListener('click', () => {
-                router('catalog');
-            });
-        }
-
-        if (this.#profileIcon) {
-            this.#profileIcon.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.toggleDropdown();
-            });
-        }
-
-        if (this.#createButton) {
-            this.#createButton.addEventListener('click', () => {
-                if (store.user.authenticated === false) {
-                    router('auth');
-                }
-            });
-        }
-
-        this.#dropdownItems.forEach((item) => {
+        this.#dropdownItems?.forEach((item) => {
             if (item.classList.contains('header__dropdown__item--logout')) {
                 item.addEventListener('click', () => {
                     this.toggleDropdown(false);
@@ -139,8 +132,7 @@ export class Header {
      */
     render = () => {
         logger.info('Header render method called');
-        // eslint-disable-next-line no-undef
-        const template = Handlebars.templates['header/header'];
+         
         this.#parent.insertAdjacentHTML('beforeend', template(store));
         this.addEventListeners();
     };

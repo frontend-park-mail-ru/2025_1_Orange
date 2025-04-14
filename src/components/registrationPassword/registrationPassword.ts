@@ -1,20 +1,21 @@
 import './registrationPassword.css';
-import { store } from '../../store';
+import { store } from '../../store.js';
 import { logger } from '../../utils/logger.js';
+import template from './registrationPassword.handlebars'
 
 export class RegistrationPassword {
-    #parent;
-    #submitBtn;
-    #nextCallback;
-    #prevCallback;
-    #password;
-    #repeatPassword;
+    readonly #parent;
+    #submitBtn: HTMLButtonElement | null = null;
+    readonly #nextCallback;
+    readonly #prevCallback;
+    #password: HTMLInputElement | null = null;
+    #repeatPassword: HTMLInputElement |null = null;
 
     /**
      * Конструктор класса
      * @param parent {HTMLElement} - родительский элемент
      */
-    constructor(parent, nextCallback, prevCallback) {
+    constructor(parent: HTMLElement, nextCallback: () => void, prevCallback: () => void) {
         this.#parent = parent;
         this.#nextCallback = nextCallback;
         this.#prevCallback = prevCallback;
@@ -24,16 +25,18 @@ export class RegistrationPassword {
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() {
-        return document.forms['registration_password'];
+    get self() : HTMLFormElement{
+        return document.forms.namedItem('registration_password') as HTMLFormElement;
     }
 
     /**
      * Рендер почты. Вызывается при переходе из формы ввода почты
      */
-    #formEmailRender = () => {
+    readonly #formEmailRender = () => {
         const email = this.self.querySelector('.form__email');
-        email.textContent = store.auth.email;
+        if (email) {
+            email.textContent = store.auth.email;
+        }
     };
 
     /**
@@ -41,7 +44,7 @@ export class RegistrationPassword {
      * @param {string} str - пароль для валидации
      * @returns {boolean}
      */
-    #checkPassword(str) {
+    #checkPassword(str: string): boolean {
         for (let i = 0; i < str.length; i++) {
             const char = str.charCodeAt(i);
             if (
@@ -61,8 +64,11 @@ export class RegistrationPassword {
      * Валидация введенных данных
      * @returns {boolean}
      */
-    #passwordValidate = () => {
-        const error = this.self.querySelector('.form__error');
+    readonly #passwordValidate = (): boolean => {
+        const error = this.self.querySelector('.form__error') as HTMLElement;
+        if (!this.#password || !this.#repeatPassword || !error) {
+            return false;
+        }
         if (this.#password.validity.valid === false) {
             this.#password.classList.add('form__input_error');
             error.hidden = false;
@@ -93,18 +99,19 @@ export class RegistrationPassword {
     /**
      * Кнопка глазика в поле ввода пароля
      */
-    #togglePasswordVisibility = () => {
+    readonly #togglePasswordVisibility = () => {
         const showPasswordIcons = this.self.querySelectorAll('.form__toggle-password--show');
         const hidePasswordIcons = this.self.querySelectorAll('.form__toggle-password--hide');
-        const password = this.self.elements['password'];
-        const repeatPassword = this.self.elements['repeat_password'];
 
         showPasswordIcons.forEach((showPasswordIcon, i) => {
             const hidePasswordIcon = hidePasswordIcons[i];
 
             if (showPasswordIcon.classList.contains('active')) {
-                password.type = 'text';
-                repeatPassword.type = 'text';
+                if (!this.#password || !this.#repeatPassword) {
+                    return;
+                }
+                this.#password.type = 'text';
+                this.#repeatPassword.type = 'text';
 
                 showPasswordIcon.classList.remove('active');
                 hidePasswordIcon.classList.add('active');
@@ -112,8 +119,11 @@ export class RegistrationPassword {
                 showPasswordIcon.classList.add('hidden');
                 hidePasswordIcon.classList.remove('hidden');
             } else if (hidePasswordIcon.classList.contains('active')) {
-                password.type = 'password';
-                repeatPassword.type = 'password';
+                if (!this.#password || !this.#repeatPassword) {
+                    return;
+                }
+                this.#password.type = 'password';
+                this.#repeatPassword.type = 'password';
 
                 hidePasswordIcon.classList.remove('active');
                 showPasswordIcon.classList.add('active');
@@ -129,11 +139,11 @@ export class RegistrationPassword {
      */
     #addEventListeners = () => {
         const form = this.self;
-        this.#password = form.elements['password'];
-        this.#repeatPassword = form.elements['repeat_password'];
-        this.#submitBtn = form.elements['submit'];
+        this.#password = form.elements.namedItem('password') as HTMLInputElement;
+        this.#repeatPassword = form.elements.namedItem('repeat_password') as HTMLInputElement;
+        this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
 
-        form.querySelector('.form__back').addEventListener('click', this.#prevCallback);
+        form.querySelector('.form__back')?.addEventListener('click', this.#prevCallback);
 
         this.#password.addEventListener('input', this.#passwordValidate);
         this.#repeatPassword.addEventListener('input', this.#passwordValidate);
@@ -145,8 +155,8 @@ export class RegistrationPassword {
         this.#submitBtn.addEventListener('click', (e) => {
             e.preventDefault();
             if (this.#passwordValidate() === true) {
-                store.auth.password = this.#password.value;
-                store.auth.repeatPassword = this.#repeatPassword.value;
+                store.auth.password = this.#password?.value ?? '';
+                store.auth.repeatPassword = this.#repeatPassword?.value ?? '';
                 this.#nextCallback();
             }
         });
@@ -165,8 +175,7 @@ export class RegistrationPassword {
      */
     render = () => {
         logger.info('RegistrationPassword render method called');
-        // eslint-disable-next-line no-undef
-        const template = Handlebars.templates['registrationPassword/registrationPassword'];
+         
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
@@ -176,6 +185,6 @@ export class RegistrationPassword {
         this.#formEmailRender();
         this.#addEventListeners();
 
-        this.#password.focus();
+        this.#password?.focus();
     };
 }

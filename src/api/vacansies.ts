@@ -1,0 +1,55 @@
+import { Api } from './api';
+import { Vacancy } from './interfaces';
+
+export class VacancyService {
+    readonly #api: Api;
+
+    constructor(api: Api) {
+        this.#api = api;
+    }
+
+    /**
+     * Получение списка всех вакансий
+     * @returns {Promise<Vacancy[]>}
+     */
+    async all(): Promise<Vacancy[]> {
+        return this.#api.request('/vacancies', 'GET');
+    }
+
+    /**
+     * Создание новой вакансии
+     * @param {VacancyEdit} body - значения новой вакансии
+     * @returns {Promise<Vacancy>}
+     */
+    async create(body: Vacancy): Promise<Vacancy> {
+        return this.#api.request('/vacancies', 'POST', JSON.stringify(body));
+    }
+
+    /**
+     * Получение вакансии по ID
+     * @param {number} id - идентификатор вакансии
+     * @returns {Promise<Vacancy>}
+     */
+    async get(id: number): Promise<Vacancy> {
+        return this.#api.request(`/vacancy/${id}`, 'GET');
+    }
+
+    /**
+     * Обновление вакансии
+     * @param {number} id - идентификатор вакансии
+     * @param {VacancyEdit} body - новые значения
+     * @returns {Promise<Vacancy>}
+     */
+    async update(id: number, body: Vacancy): Promise<Vacancy> {
+        return this.#api.request(`/vacancy/${id}`, 'PUT', JSON.stringify(body));
+    }
+
+    /**
+     * Удаление вакансии
+     * @param {number} id - идентификатор вакансии
+     * @returns {Promise<void>}
+     */
+    async delete(id: number): Promise<void> {
+        await this.#api.request(`/vacancy/${id}`, 'DELETE');
+    }
+}

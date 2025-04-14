@@ -1,19 +1,20 @@
-import { store } from '../../store';
+import { store } from '../../store.js';
 import { logger } from '../../utils/logger.js';
+import template from './registrationEmail.handlebars'
 
 export class RegistrationEmail {
-    #parent;
-    #email;
-    #submitBtn;
-    #nextCallback;
-    #prevCallback;
+    readonly #parent: HTMLElement;
+    #email: HTMLInputElement | null = null;
+    #submitBtn: HTMLButtonElement | null = null;
+    readonly #nextCallback: () => void;
+    readonly #prevCallback: () => void;
     /**
      * Конструктор класса
      * @param parent {HTMLElement} - родительский элемент
      * @param nextCallback {function} - Вызов следующей формы
      * @param prevCallback {function} - Вызов предыдущей формы
      */
-    constructor(parent, nextCallback, prevCallback) {
+    constructor(parent : HTMLElement, nextCallback : () => void, prevCallback: () => void) {
         this.#parent = parent;
         this.#nextCallback = nextCallback;
         this.#prevCallback = prevCallback;
@@ -23,14 +24,14 @@ export class RegistrationEmail {
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() {
-        return document.forms['registration_email'];
+    get self() : HTMLFormElement {
+        return document.forms.namedItem('registration_email') as HTMLFormElement;
     }
 
     /**
      * Смена типа формы с поиска работы на поиск работника и наоборот
      */
-    #switch = () => {
+    readonly #switch = () => {
         store.auth.isEmployer = !store.auth.isEmployer;
         this.#under_link();
         this.#formNameRender();
@@ -39,27 +40,22 @@ export class RegistrationEmail {
     /**
      * Рендер ссылки. Вызывается при смене типа формы
      */
-    #under_link = () => {
+    readonly #under_link = () => {
         const companyLink = document.getElementById('i_need_users');
         const userLink = document.getElementById('i_need_job');
-        if (store.auth.isEmployer) {
-            companyLink.hidden = true;
-            userLink.hidden = false;
-        } else {
-            companyLink.hidden = false;
-            userLink.hidden = true;
+        if (companyLink && userLink) {
+            companyLink.hidden = store.auth.isEmployer;
+            userLink.hidden = !store.auth.isEmployer;
         }
     };
 
     /**
      * Рендер имени формы. Вызывается при смене типа формы
      */
-    #formNameRender = () => {
+    readonly #formNameRender = () => {
         const formName = this.self.querySelector('.form__name');
-        if (store.auth.isEmployer) {
-            formName.textContent = 'Поиск сотрудников';
-        } else {
-            formName.textContent = 'Поиск работы';
+        if (formName) {
+            formName.textContent = store.auth.isEmployer ? 'Поиск сотрудников' : 'Поиск работы';
         }
     };
 
@@ -67,8 +63,11 @@ export class RegistrationEmail {
      * Валидация введенных данных
      * @returns {boolean}
      */
-    #emailValidate = () => {
-        const error = this.self.querySelector('.form__error');
+    readonly #emailValidate = (): boolean => {
+        const error = this.self.querySelector('.form__error') as HTMLElement;
+        if (!this.#email || !error) {
+            return false
+        }
         if (this.#email.validity.valid === false) {
             error.hidden = false;
             error.textContent = 'Напишите валидный адрес почты';
@@ -89,12 +88,12 @@ export class RegistrationEmail {
     /**
      * Навешивание обработчиков событий
      */
-    #addEventListeners = () => {
+    readonly #addEventListeners = () => {
         const form = this.self;
-        this.#email = form.elements['email'];
-        this.#submitBtn = form.elements['submit'];
+        this.#email = form.elements.namedItem('email') as HTMLInputElement;
+        this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
 
-        form.querySelector('.form__back').addEventListener('click', this.#prevCallback);
+        form.querySelector('.form__back')?.addEventListener('click', this.#prevCallback);
 
         document.querySelectorAll('.under_link').forEach((element) => {
             element.addEventListener('click', this.#switch);
@@ -105,7 +104,7 @@ export class RegistrationEmail {
         this.#submitBtn.addEventListener('click', (e) => {
             e.preventDefault();
             if (this.#emailValidate() === true) {
-                store.auth.email = this.#email.value;
+                store.auth.email = this.#email?.value ?? '';
                 this.#nextCallback();
             }
         });
@@ -127,8 +126,7 @@ export class RegistrationEmail {
      */
     render = () => {
         logger.info('RegistrationEmail render method called');
-        // eslint-disable-next-line no-undef
-        const template = Handlebars.templates['registrationEmail/registrationEmail'];
+         
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
@@ -139,6 +137,6 @@ export class RegistrationEmail {
         this.#under_link();
         this.#addEventListeners();
 
-        this.#email.focus();
+        this.#email?.focus();
     };
 }

@@ -1,17 +1,18 @@
 import { JobCard } from '../jobCard/jobCard';
-import './jobCatalog.css';
+import './jobCatalog.sass';
 import { Api } from '../../api/api.js';
 import { logger } from '../../utils/logger.js';
+import template from './jobCatalog.handlebars';
 
 export class JobCatalog {
-    #parent;
-    #api;
+    #parent : HTMLElement;
+    #api : Api;
 
     /**
      * Конструктор класса
      * @param parent {HTMLElement} - родительский элемент
      */
-    constructor(parent) {
+    constructor(parent : HTMLElement) {
         this.#parent = parent;
         this.#api = new Api();
     }
@@ -20,8 +21,8 @@ export class JobCatalog {
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() {
-        return document.querySelector('.jobs_list');
+    get self() : HTMLElement{
+        return document.querySelector('.jobs_list') as HTMLElement;
     }
 
     /**
@@ -37,9 +38,8 @@ export class JobCatalog {
      */
     render = async () => {
         logger.info('JobCatalog render method called');
-        // eslint-disable-next-line no-undef
-        const template = Handlebars.templates['jobCatalog/jobCatalog'];
-        this.#parent.insertAdjacentHTML('beforeend', template());
+         
+        this.#parent.insertAdjacentHTML('beforeend', template({}));
         try {
             const jobs = await this.#api.getVacancies();
             for (const element of jobs) {

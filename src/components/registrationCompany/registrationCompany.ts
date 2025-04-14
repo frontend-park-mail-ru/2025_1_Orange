@@ -1,13 +1,14 @@
-import { store } from '../../store';
+import { store } from '../../store.js';
 import { logger } from '../../utils/logger.js';
+import template from './registrationCompany.handlebars'
 
 export class RegistrationCompany {
-    #parent;
-    #companyName;
-    #companyAddress;
-    #submitBtn;
-    #nextCallback;
-    #prevCallback;
+    #parent: HTMLElement;
+    #companyName: HTMLInputElement | null = null;
+    #companyAddress: HTMLInputElement | null = null;
+    #submitBtn: HTMLButtonElement | null = null;
+    #nextCallback: () => void;
+    #prevCallback: () => void;
 
     /**
      * Конструктор класса
@@ -15,7 +16,7 @@ export class RegistrationCompany {
      * @param nextCallback {function} - Вызов следующей формы
      * @param prevCallback {function} - Вызов предыдущей формы
      */
-    constructor(parent, nextCallback, prevCallback) {
+    constructor(parent: HTMLElement, nextCallback: () => void, prevCallback: () => void) {
         this.#parent = parent;
         this.#nextCallback = nextCallback;
         this.#prevCallback = prevCallback;
@@ -25,15 +26,15 @@ export class RegistrationCompany {
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() {
-        return document.forms['registration_company'];
+    get self() : HTMLFormElement {
+        return document.forms.namedItem('registration_company') as HTMLFormElement;
     }
 
     /**
      * Валидация введенных данных
      * @returns {boolean}
      */
-    #companyValidate = () => {
+    #companyValidate = (): boolean => {
         return this.#companyNameValidate() && this.#companyAddressValidate();
     };
 
@@ -41,8 +42,11 @@ export class RegistrationCompany {
      * Валидация имени компании
      * @returns {boolean}
      */
-    #companyNameValidate = () => {
-        const error = this.self.querySelector('.form__error');
+    #companyNameValidate = (): boolean => {
+        const error = this.self.querySelector('.form__error') as HTMLElement;
+        if (!this.#companyName || !error) {
+            return false;
+        }
         if (this.#companyName.validity.valid === false) {
             error.hidden = false;
             error.textContent = 'Минимальная длина названия компании 2 символа';
@@ -61,7 +65,10 @@ export class RegistrationCompany {
      * @returns {boolean}
      */
     #companyAddressValidate = () => {
-        const error = this.self.querySelector('.form__error');
+        const error = this.self.querySelector('.form__error') as HTMLElement;
+        if (!this.#companyAddress || !error) {
+            return false;
+        }
         if (this.#companyAddress.validity.valid === false) {
             error.hidden = false;
             error.textContent = 'Минимальная длина адреса компании 10 символов';
@@ -80,18 +87,18 @@ export class RegistrationCompany {
      */
     #addEventListeners = () => {
         const form = this.self;
-        this.#companyAddress = form.elements['company_address'];
-        this.#companyName = form.elements['company_name'];
-        this.#submitBtn = form.elements['submit'];
+        this.#companyAddress = form.elements.namedItem('company_address') as HTMLInputElement;
+        this.#companyName = form.elements.namedItem('company_name') as HTMLInputElement;
+        this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
 
-        form.querySelector('.form__back').addEventListener('click', this.#prevCallback);
+        form.querySelector('.form__back')?.addEventListener('click', this.#prevCallback);
         this.#companyName.addEventListener('input', this.#companyNameValidate);
         this.#companyAddress.addEventListener('input', this.#companyAddressValidate);
         this.#submitBtn.addEventListener('click', (e) => {
             e.preventDefault();
             if (this.#companyValidate() === true) {
-                store.auth.companyName = this.#companyName.value;
-                store.auth.companyAddress = this.#companyAddress.value;
+                store.auth.companyName = this.#companyName?.value || '';
+                store.auth.companyAddress = this.#companyAddress?.value || '';
                 this.#nextCallback();
             }
         });
@@ -110,8 +117,6 @@ export class RegistrationCompany {
      */
     render = () => {
         logger.info('RegistrationCompany render method called');
-        // eslint-disable-next-line no-undef
-        const template = Handlebars.templates['registrationCompany/registrationCompany'];
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
@@ -121,6 +126,6 @@ export class RegistrationCompany {
         );
         this.#addEventListeners();
 
-        this.#companyName.focus();
+        this.#companyName?.focus();
     };
 }

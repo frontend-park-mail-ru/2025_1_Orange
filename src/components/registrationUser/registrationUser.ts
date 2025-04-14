@@ -1,13 +1,14 @@
-import { store } from '../../store';
+import { store } from '../../store.js';
 import { logger } from '../../utils/logger.js';
+import template from './registrationUser.handlebars';
 
 export class RegistrationUser {
-    #parent;
-    #firstName;
-    #lastName;
-    #submitBtn;
-    #nextCallback;
-    #prevCallback;
+    #parent: HTMLElement;
+    #firstName: HTMLInputElement | null = null;
+    #lastName: HTMLInputElement | null = null;
+    #submitBtn: HTMLButtonElement | null = null;
+    #nextCallback: () => void;
+    #prevCallback: () => void;
 
     /**
      * Конструктор класса
@@ -15,7 +16,7 @@ export class RegistrationUser {
      * @param nextCallback {function} - Вызов следующей формы
      * @param prevCallback {function} - Вызов предыдущей формы
      */
-    constructor(parent, nextCallback, prevCallback) {
+    constructor(parent: HTMLElement, nextCallback : () => void, prevCallback: () => void) {
         this.#parent = parent;
         this.#nextCallback = nextCallback;
         this.#prevCallback = prevCallback;
@@ -25,15 +26,15 @@ export class RegistrationUser {
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() {
-        return document.forms['registration_user'];
+    get self() : HTMLFormElement{
+        return document.forms.namedItem('registration_user') as HTMLFormElement;
     }
 
     /**
      * Валидация введенных данных
      * @returns {boolean}
      */
-    #companyValidate = () => {
+    readonly #companyValidate = (): boolean => {
         return this.#firstNameValidate() && this.#lastNameValidate();
     };
 
@@ -41,8 +42,11 @@ export class RegistrationUser {
      * Валидация имени
      * @returns {boolean}
      */
-    #firstNameValidate = () => {
-        const error = this.self.querySelector('.form__error');
+    readonly #firstNameValidate = (): boolean => {
+        const error = this.self.querySelector('.form__error') as HTMLElement;
+        if (!error || !this.#firstName) {
+            return false
+        }
         if (this.#firstName.validity.valid === false) {
             error.hidden = false;
             error.textContent = 'Введите имя';
@@ -60,8 +64,11 @@ export class RegistrationUser {
      * Валидация фамилии
      * @returns {boolean}
      */
-    #lastNameValidate = () => {
-        const error = this.self.querySelector('.form__error');
+    readonly #lastNameValidate = (): boolean => {
+        const error = this.self.querySelector('.form__error') as HTMLElement;
+        if (!error || !this.#lastName) {
+            return false
+        }
         if (this.#lastName.validity.valid === false) {
             error.hidden = false;
             error.textContent = 'Введите фамилию';
@@ -78,20 +85,20 @@ export class RegistrationUser {
     /**
      * Навешивание обработчиков событий
      */
-    #addEventListeners = () => {
+    readonly #addEventListeners = () => {
         const form = this.self;
-        this.#firstName = form.elements['first_name'];
-        this.#lastName = form.elements['last_name'];
-        this.#submitBtn = form.elements['submit'];
+        this.#firstName = form.elements.namedItem('first_name') as HTMLInputElement;
+        this.#lastName = form.elements.namedItem('last_name') as HTMLInputElement;
+        this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
 
-        form.querySelector('.form__back').addEventListener('click', this.#prevCallback);
+        form.querySelector('.form__back')?.addEventListener('click', this.#prevCallback);
         this.#firstName.addEventListener('input', this.#firstNameValidate);
         this.#lastName.addEventListener('input', this.#lastNameValidate);
         this.#submitBtn.addEventListener('click', (e) => {
             e.preventDefault();
             if (this.#companyValidate() === true) {
-                store.auth.firstName = this.#firstName.value;
-                store.auth.lastName = this.#lastName.value;
+                store.auth.firstName = this.#firstName?.value ?? '';
+                store.auth.lastName = this.#lastName?.value ?? '';
                 this.#nextCallback();
             }
         });
@@ -110,8 +117,7 @@ export class RegistrationUser {
      */
     render = () => {
         logger.info('RegistrationUser render method caller');
-        // eslint-disable-next-line no-undef
-        const template = Handlebars.templates['registrationUser/registrationUser'];
+         
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
@@ -121,6 +127,6 @@ export class RegistrationUser {
         );
         this.#addEventListeners();
 
-        this.#firstName.focus();
+        this.#firstName?.focus();
     };
 }
