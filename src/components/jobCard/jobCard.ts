@@ -4,10 +4,12 @@ import template from './jobCard.handlebars';
 import { VacancyShort } from '../../api/interfaces';
 import { router } from '../../router';
 import { employmentTranslations, workFormatTranslations } from '../../api/translations';
+import { api } from '../../api/api';
 
 export class JobCard {
     readonly #parent: HTMLElement;
     readonly #props: VacancyShort;
+    #resumeButton: HTMLElement | null = null;
 
     /**
      * Конструктор класса
@@ -31,8 +33,34 @@ export class JobCard {
      * Навешивание обработчиков
      */
     readonly #addEventListeners = () => {
-        this.self.addEventListener('click', () => router.go(`/vacancy/${this.#props.id}`));
-    };
+        this.self.addEventListener('click', (e: Event) => {
+            const target = e.target as HTMLElement;
+            // Если клик не на кнопке
+            if (target.className !== 'job__button' && target.className !== 'job__button_second') {
+                router.go(`/vacancy/${this.#props.id}`);
+            }
+        });
+
+        if (this.#resumeButton) {
+            const handleResumeClick = async () => { 
+                console.log('resume')   
+                try {
+                    //await api.vacancy.resume(this.#props.id);    
+                    if (this.#resumeButton) {
+                        this.#resumeButton.removeAttribute('id');
+                        this.#resumeButton.className = 'job__button_second';
+                        this.#resumeButton.textContent = 'Вы откликнулись';
+    
+                        // Убираем обработчик события после успешного действия
+                        this.#resumeButton.removeEventListener('click', handleResumeClick);
+                    }
+                } catch {
+                    console.log('Ошибка при отправки отклика');
+                }
+            };
+            this.#resumeButton.addEventListener('click', handleResumeClick);
+        }
+    }
 
     /**
      * Очистка
@@ -71,6 +99,9 @@ export class JobCard {
                 days_created: this.#days_created,
             }),
         );
+
+        this.#resumeButton = document.getElementById(`vacancy_${this.#props.id}_resume`) as HTMLElement
+
         this.#addEventListeners();
     };
 }

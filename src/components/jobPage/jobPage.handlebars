@@ -1,0 +1,99 @@
+<div class="page"id="job_page">
+    {{log this}}
+    <!-- Левая колонка -->
+    <div class="vacancy">
+        <div class="vacancy__name">{{title}}</div>
+        <div class="job__favorite">
+            <img src="/heart.svg" alt="Избранное" />
+        </div>
+        <div class="vacancy__actions">
+            <div class="vacancy__buttons">
+                {{#if resume}}
+                <div class="job__button_second">
+                    <span>Вы откликнулись</span>
+                </div>
+                {{else}}
+                <div class="job__button" id="vacancy_resume_button">
+                    <span>Откликнуться</span>
+                </div>
+                {{/if}}
+                <div class="job__button_second" id="vacancy_edit_button">
+                    <img src="/gear.svg" alt="Настройки"/>
+                    <span>Настройки</span>
+                </div>
+            </div>
+            <div class="job__statistics">{{days_created}} дня назад • {{count}} уже откликнулись</div>
+        </div>
+        <div class="vacancy__description">
+            <div class="vacancy__header">Описание</div>
+            <p>{{description}}</p>
+            <div class="vacancy__header">Задачи</div>
+            <ul>
+            {{#each tasks}}
+            <li>{{this}}</li>
+            {{/each}}
+            </ul>
+            <div class="vacancy__header">Требования</div>
+            <ul>
+            {{#each requirements}}
+            <li>{{this}}</li>
+            {{/each}}
+            </ul>
+            <div class="vacancy__header">Будет плюсом</div>
+            <ul>
+            {{#each optional_requirements}}
+            <li>{{this}}</li>
+            {{/each}}
+            </ul>
+        </div>
+        <div id="delete_button">
+            
+        </div>
+    </div>
+
+    <!-- Правая колонка -->
+    <div class="vacancy__sidebar">
+        <div class="vacancy_company_card">
+
+        </div>
+        <div class="vacancy_info">
+            <div class="vacancy_info__item">
+                <span class="vacancy_info__label">Заработная плата</span>
+                <span class="vacancy_info__value">{{salary_from}} - {{salary_to}}</span>
+            </div>
+            <div class="vacancy_info__item">
+                <span class="vacancy_info__label">Требуемый опыт работы</span>
+                <span class="vacancy_info__value">{{lookup experienceTranslations experience}}</span>
+            </div>
+            <div class="vacancy_info__item">
+                <span class="vacancy_info__label">Дополнительно</span>
+                <div class="vacancy_info__card">
+                    <img src="/geo-alt.svg" />
+                    <div>{{city}}</div>
+                </div>
+                <div class="vacancy_info__card">
+                    <img src="/clock.svg" />
+                    <div>{{working_hours}}ч в неделю</div>
+                </div>
+                <div class="vacancy_info__card">
+                    <img src="/building.svg" />
+                    <div>{{lookup workFormatTranslations work_format}}</div>
+                </div>
+                <div class="vacancy_info__card">
+                    <img src="/calendar.svg" />
+                    <div>{{lookup employmentTranslations employment}}</div>
+                </div>
+            </div>
+            <div class="vacancy_info__item">
+                <span class="vacancy_info__label">Требуемые навыки</span>
+                <div class="job__badges">
+                    {{#each skills}}
+                    <span class="job__badge">{{this}}</span>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        <div class="similar_jobs">
+        </div>
+    </div>
+</div>

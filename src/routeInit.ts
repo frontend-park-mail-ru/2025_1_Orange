@@ -4,15 +4,12 @@ import { store } from './store';
 import { JobPage } from './components/jobPage/jobPage';
 import { router } from './router';
 import { logger } from './utils/logger';
-import { ProfileCompany } from './components/profileCompany/profileCompany';
 import { RegistrationEmail } from './components/registrationEmail/registrationEmail';
 import { RegistrationPassword } from './components/registrationPassword/registrationPassword';
 import { Login } from './components/login/login';
 import { RegistrationUser } from './components/registrationUser/registrationUser';
 import { RegistrationCompany } from './components/registrationCompany/registrationCompany';
-import { ResumeEdit } from './components/resumeEdit/resumeEdit';
 import { VacancyEdit } from './components/vacancyEdit/vacancyEdit';
-import { ResumePage } from './components/resumePage/resumePage';
 
 /**
  *
@@ -58,11 +55,8 @@ export const routerInit = () => {
     router.add('catalog', async () => renderPage('catalog', JobCatalog));
     router.add('', async () => renderPage('catalog', JobCatalog));
     router.add('vacancy', async () => renderPage('job', JobPage));
-    router.add('createResume', async () => renderPage('createResume', ResumeEdit));
     router.add('createVacancy', async () => renderPage('createVacancy', VacancyEdit));
-    router.add('resume', async () => renderPage('resume', ResumePage));
     // router.add('user_profile', async () => renderPage('user_profile', ProfileUser));
-    router.add('company', async () => renderPage('company_profile', ProfileCompany));
     // router.add('resume_edit', async () => renderPage('resume_edit', ResumeEdit));
-    // router.add('vacancy_edit', async () => renderPage('vacancy_edit', VacancyEdit));
+    router.add('vacancyEdit', async () => renderPage('vacancy_edit', VacancyEdit));
 };
