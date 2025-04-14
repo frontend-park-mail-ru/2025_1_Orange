@@ -1,4 +1,4 @@
-import template from './ResumeExperience.handlebars';
+import template from './resumeExperience.handlebars';
 import { WorkExperience } from '../../api/interfaces';
 import { logger } from '../../utils/logger';
 import './resumeExperience.sass';
