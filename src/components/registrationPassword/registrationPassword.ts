@@ -1,63 +1,40 @@
-import './registrationPassword.css';
-import { store } from '../../store.js';
-import { logger } from '../../utils/logger.js';
-import template from './registrationPassword.handlebars'
+import { store } from '../../store';
+import { logger } from '../../utils/logger';
+import template from './registrationPassword.handlebars';
+import { router } from '../../router';
+import './registrationPassword.sass';
 
 export class RegistrationPassword {
     readonly #parent;
     #submitBtn: HTMLButtonElement | null = null;
-    readonly #nextCallback;
-    readonly #prevCallback;
     #password: HTMLInputElement | null = null;
-    #repeatPassword: HTMLInputElement |null = null;
+    #repeatPassword: HTMLInputElement | null = null;
 
     /**
      * Конструктор класса
      * @param parent {HTMLElement} - родительский элемент
      */
-    constructor(parent: HTMLElement, nextCallback: () => void, prevCallback: () => void) {
+    constructor(parent: HTMLElement) {
         this.#parent = parent;
-        this.#nextCallback = nextCallback;
-        this.#prevCallback = prevCallback;
     }
 
     /**
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() : HTMLFormElement{
+    get self(): HTMLFormElement {
         return document.forms.namedItem('registration_password') as HTMLFormElement;
     }
 
     /**
-     * Рендер почты. Вызывается при переходе из формы ввода почты
-     */
-    readonly #formEmailRender = () => {
-        const email = this.self.querySelector('.form__email');
-        if (email) {
-            email.textContent = store.auth.email;
-        }
-    };
-
-    /**
-     * Проверяет пароль на соответсвие английским символам и цифрам
+     * Проверяет пароль на соответствие английским символам и цифрам
      * @param {string} str - пароль для валидации
      * @returns {boolean}
      */
     #checkPassword(str: string): boolean {
-        for (let i = 0; i < str.length; i++) {
-            const char = str.charCodeAt(i);
-            if (
-                !(
-                    (48 <= char && char <= 57) ||
-                    (65 <= char && char <= 90) ||
-                    (97 <= char && char <= 122)
-                )
-            ) {
-                return false;
-            }
-        }
-        return true;
+        // Регулярное выражение для проверки, содержит ли строка только латинские буквы и цифры
+        const passwordRegex = /^[a-zA-Z0-9]+$/;
+        return passwordRegex.test(str);
     }
 
     /**
@@ -65,35 +42,43 @@ export class RegistrationPassword {
      * @returns {boolean}
      */
     readonly #passwordValidate = (): boolean => {
-        const error = this.self.querySelector('.form__error') as HTMLElement;
-        if (!this.#password || !this.#repeatPassword || !error) {
+        const errorElement = this.self.querySelector('.form__error') as HTMLElement;
+
+        if (!this.#password || !this.#repeatPassword || !errorElement) {
             return false;
         }
-        if (this.#password.validity.valid === false) {
+
+        const minLength = 10;
+
+        this.#password.classList.remove('form__input_error', 'form__input_valid');
+        this.#repeatPassword.classList.remove('form__input_error', 'form__input_valid');
+
+        if (this.#password.value.length < minLength) {
+            errorElement.hidden = false;
+            errorElement.textContent = 'Пароль должен содержать минимум 10 символов';
             this.#password.classList.add('form__input_error');
-            error.hidden = false;
-            error.textContent = 'Пароль должен содержать минимум 10 символов';
             return false;
         }
-        if (this.#checkPassword(this.#password.value) === false) {
+
+        if (!this.#checkPassword(this.#password.value)) {
+            errorElement.hidden = false;
+            errorElement.textContent = 'Пароль может содержать только латинские буквы и цифры';
             this.#password.classList.add('form__input_error');
-            error.hidden = false;
-            error.textContent = 'Пароль может содержать только латинские буквы и цифры';
             return false;
         }
-        if (this.#repeatPassword.value !== this.#password.value) {
+
+        if (this.#password.value !== this.#repeatPassword.value) {
+            errorElement.hidden = false;
+            errorElement.textContent = 'Пароли не совпадают';
             this.#repeatPassword.classList.add('form__input_error');
-            error.hidden = false;
-            error.textContent = 'Пароли не совпадают';
             return false;
-        } else {
-            error.hidden = true;
-            this.#password.classList.remove('form__input_error');
-            this.#repeatPassword.classList.remove('form__input_error');
-            this.#password.classList.add('form__valid');
-            this.#repeatPassword.classList.add('form__valid');
-            return true;
         }
+
+        // Если все проверки пройдены успешно
+        errorElement.hidden = true;
+        this.#password.classList.add('form__input_valid');
+        this.#repeatPassword.classList.add('form__input_valid');
+        return true;
     };
 
     /**
@@ -137,13 +122,13 @@ export class RegistrationPassword {
     /**
      * Навешивание обработчиков событий формы
      */
-    #addEventListeners = () => {
+    readonly #addEventListeners = () => {
         const form = this.self;
         this.#password = form.elements.namedItem('password') as HTMLInputElement;
         this.#repeatPassword = form.elements.namedItem('repeat_password') as HTMLInputElement;
         this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
 
-        form.querySelector('.form__back')?.addEventListener('click', this.#prevCallback);
+        form.querySelector('.form__back')?.addEventListener('click', router.back);
 
         this.#password.addEventListener('input', this.#passwordValidate);
         this.#repeatPassword.addEventListener('input', this.#passwordValidate);
@@ -155,9 +140,13 @@ export class RegistrationPassword {
         this.#submitBtn.addEventListener('click', (e) => {
             e.preventDefault();
             if (this.#passwordValidate() === true) {
-                store.auth.password = this.#password?.value ?? '';
-                store.auth.repeatPassword = this.#repeatPassword?.value ?? '';
-                this.#nextCallback();
+                store.data.auth.request.password = this.#password?.value ?? '';
+                store.data.auth.request.repeatPassword = this.#repeatPassword?.value ?? '';
+                if (store.data.auth.type === 'applicant') {
+                    router.go('/registrationApplicant');
+                } else {
+                    router.go('/registrationEmployer');
+                }
             }
         });
     };
@@ -175,14 +164,13 @@ export class RegistrationPassword {
      */
     render = () => {
         logger.info('RegistrationPassword render method called');
-         
+
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
-                email: store.auth.email,
+                email: store.data.auth.request.email,
             }),
         );
-        this.#formEmailRender();
         this.#addEventListeners();
 
         this.#password?.focus();

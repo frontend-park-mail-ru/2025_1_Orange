@@ -1,14 +1,14 @@
-import { store } from '../../store.js';
-import { logger } from '../../utils/logger.js';
+import { api } from '../../api/api';
+import { router } from '../../router';
+import { store } from '../../store';
+import { logger } from '../../utils/logger';
 import template from './registrationUser.handlebars';
 
 export class RegistrationUser {
-    #parent: HTMLElement;
+    readonly #parent: HTMLElement;
     #firstName: HTMLInputElement | null = null;
     #lastName: HTMLInputElement | null = null;
     #submitBtn: HTMLButtonElement | null = null;
-    #nextCallback: () => void;
-    #prevCallback: () => void;
 
     /**
      * Конструктор класса
@@ -16,17 +16,15 @@ export class RegistrationUser {
      * @param nextCallback {function} - Вызов следующей формы
      * @param prevCallback {function} - Вызов предыдущей формы
      */
-    constructor(parent: HTMLElement, nextCallback : () => void, prevCallback: () => void) {
+    constructor(parent: HTMLElement) {
         this.#parent = parent;
-        this.#nextCallback = nextCallback;
-        this.#prevCallback = prevCallback;
     }
 
     /**
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() : HTMLFormElement{
+    get self(): HTMLFormElement {
         return document.forms.namedItem('registration_user') as HTMLFormElement;
     }
 
@@ -45,7 +43,7 @@ export class RegistrationUser {
     readonly #firstNameValidate = (): boolean => {
         const error = this.self.querySelector('.form__error') as HTMLElement;
         if (!error || !this.#firstName) {
-            return false
+            return false;
         }
         if (this.#firstName.validity.valid === false) {
             error.hidden = false;
@@ -54,7 +52,7 @@ export class RegistrationUser {
             return false;
         } else {
             this.#firstName.classList.remove('form__input_error');
-            this.#firstName.classList.add('form__valid');
+            this.#firstName.classList.add('form__input_valid');
             error.hidden = true;
         }
         return true;
@@ -67,7 +65,7 @@ export class RegistrationUser {
     readonly #lastNameValidate = (): boolean => {
         const error = this.self.querySelector('.form__error') as HTMLElement;
         if (!error || !this.#lastName) {
-            return false
+            return false;
         }
         if (this.#lastName.validity.valid === false) {
             error.hidden = false;
@@ -76,7 +74,7 @@ export class RegistrationUser {
             return false;
         } else {
             this.#lastName.classList.remove('form__input_error');
-            this.#lastName.classList.add('form__valid');
+            this.#lastName.classList.add('form__input_valid');
             error.hidden = true;
         }
         return true;
@@ -91,15 +89,26 @@ export class RegistrationUser {
         this.#lastName = form.elements.namedItem('last_name') as HTMLInputElement;
         this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
 
-        form.querySelector('.form__back')?.addEventListener('click', this.#prevCallback);
+        form.querySelector('.form__back')?.addEventListener('click', router.back);
         this.#firstName.addEventListener('input', this.#firstNameValidate);
         this.#lastName.addEventListener('input', this.#lastNameValidate);
-        this.#submitBtn.addEventListener('click', (e) => {
+        this.#submitBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             if (this.#companyValidate() === true) {
-                store.auth.firstName = this.#firstName?.value ?? '';
-                store.auth.lastName = this.#lastName?.value ?? '';
-                this.#nextCallback();
+                store.data.auth.request.firstName = this.#firstName?.value ?? '';
+                store.data.auth.request.lastName = this.#lastName?.value ?? '';
+                try {
+                    const user = await api.auth.register(store.data.auth.request);
+                    store.data.authorized = true;
+                    store.data.user = user;
+                    router.go('/catalog');
+                } catch {
+                    const error = document.querySelector('.form__error') as HTMLElement;
+                    if (error) {
+                        error.hidden = false;
+                        error.textContent = 'Ошибка при регистрации';
+                    }
+                }
             }
         });
     };
@@ -117,12 +126,12 @@ export class RegistrationUser {
      */
     render = () => {
         logger.info('RegistrationUser render method caller');
-         
+
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
-                firstName: store.auth.firstName,
-                lastName: store.auth.lastName,
+                firstName: store.data.auth.request.firstName,
+                lastName: store.data.auth.request.lastName,
             }),
         );
         this.#addEventListeners();

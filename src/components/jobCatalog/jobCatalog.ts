@@ -1,28 +1,43 @@
 import { JobCard } from '../jobCard/jobCard';
 import './jobCatalog.sass';
-import { Api } from '../../api/api.js';
-import { logger } from '../../utils/logger.js';
+import { logger } from '../../utils/logger';
 import template from './jobCatalog.handlebars';
+import { JobCatalogFilter } from '../jobCatalogFilter/jobCatalogFilter';
+import { VacancyShort } from '../../api/interfaces';
+import { vacancyShortMock } from '../../api/mocks';
+import { api } from '../../api/api';
 
 export class JobCatalog {
-    #parent : HTMLElement;
-    #api : Api;
+    readonly #parent: HTMLElement;
+    #jobs: VacancyShort[] | null = null;
 
     /**
      * Конструктор класса
      * @param parent {HTMLElement} - родительский элемент
      */
-    constructor(parent : HTMLElement) {
+    constructor(parent: HTMLElement) {
         this.#parent = parent;
-        this.#api = new Api();
     }
+
+    /**
+     * Получение вакансий
+     * @return {Vacancy}
+     */
+    init = async () => {
+        try {
+            this.#jobs = await api.vacancy.all();
+        } catch (error) {
+            logger.error('Ошибка при загрузке вакансий:', error);
+            this.#jobs = null;
+        }
+    };
 
     /**
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
      * @returns {HTMLElement}
      */
-    get self() : HTMLElement{
-        return document.querySelector('.jobs_list') as HTMLElement;
+    get self(): HTMLElement {
+        return document.getElementById('job_catalog_page') as HTMLElement;
     }
 
     /**
@@ -38,16 +53,13 @@ export class JobCatalog {
      */
     render = async () => {
         logger.info('JobCatalog render method called');
-         
         this.#parent.insertAdjacentHTML('beforeend', template({}));
-        try {
-            const jobs = await this.#api.getVacancies();
-            for (const element of jobs) {
-                const card = new JobCard(this.self, element);
-                card.render();
-            }
-        } catch {
-            this.self.textContent = 'Ничего не найдено';
-        }
+        const filter = new JobCatalogFilter(this.self.querySelector('.jobs_filter') as HTMLElement);
+        filter.render();
+        this.#jobs = [vacancyShortMock];
+        this.#jobs?.forEach((element) => {
+            const card = new JobCard(this.self.querySelector('.jobs_list') as HTMLElement, element);
+            card.render();
+        });
     };
 }
