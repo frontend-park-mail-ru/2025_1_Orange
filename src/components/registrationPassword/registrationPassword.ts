@@ -62,7 +62,8 @@ export class RegistrationPassword {
 
         if (!this.#checkPassword(this.#password.value)) {
             errorElement.hidden = false;
-            errorElement.textContent = 'Пароль может содержать только латинские буквы, цифры и спецсимволы';
+            errorElement.textContent =
+                'Пароль может содержать только латинские буквы, цифры и спецсимволы';
             this.#password.classList.add('form__input_error');
             return false;
         }

@@ -1,5 +1,12 @@
 import { Api } from './api';
-import { AuthResponse, Employer, EmployerEdit, SigninRequest, SignupRequest, Static } from './interfaces';
+import {
+    AuthResponse,
+    Employer,
+    EmployerEdit,
+    SigninRequest,
+    SignupRequest,
+    Static,
+} from './interfaces';
 
 export class EmployerService {
     readonly #api: Api;

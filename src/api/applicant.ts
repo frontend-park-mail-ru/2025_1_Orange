@@ -1,5 +1,12 @@
 import { Api } from './api';
-import { Applicant, ApplicantEdit, AuthResponse, SigninRequest, SignupRequest, Static } from './interfaces';
+import {
+    Applicant,
+    ApplicantEdit,
+    AuthResponse,
+    SigninRequest,
+    SignupRequest,
+    Static,
+} from './interfaces';
 
 export class ApplicantService {
     readonly #api: Api;
@@ -12,7 +19,7 @@ export class ApplicantService {
      * Получение информации о профиле соискателя
      * @returns {Promise<Applicant>}
      */
-    async get(id : number): Promise<Applicant> {
+    async get(id: number): Promise<Applicant> {
         return this.#api.request(`/applicant/profile/${id}`, 'GET');
     }
 

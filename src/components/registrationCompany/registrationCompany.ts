@@ -101,7 +101,7 @@ export class RegistrationCompany {
                     const user = await api.employer.register(store.data.auth.request);
                     store.data.authorized = true;
                     store.data.user = user;
-                    router.go('/catalog')
+                    router.go('/catalog');
                 } catch {
                     const error = document.querySelector('.form__error') as HTMLElement;
                     if (error) {

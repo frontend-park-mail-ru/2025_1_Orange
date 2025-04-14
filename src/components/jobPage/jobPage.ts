@@ -1,10 +1,8 @@
 import { logger } from '../../utils/logger';
 import template from './jobPage.handlebars';
-import { Vacancy, VacancyShort } from '../../api/interfaces';
-import { SimilarJobCard } from '../similarJobCard/similarJobCard';
+import { Vacancy } from '../../api/interfaces';
 import { JobCompanyCard } from '../jobCompanyCard/jobCompanyCard';
 import './jobPage.sass';
-import { vacancyMock, vacancyShortMock } from '../../api/mocks';
 import {
     employmentTranslations,
     experienceTranslations,
@@ -19,7 +17,6 @@ import { DeleteButton } from '../deleteButton/deleteButton';
 export class JobPage {
     readonly #parent: HTMLElement;
     #props: Vacancy = emptyVacancy;
-    #similarJob: VacancyShort[] | null = null;
     #editButton: HTMLElement | null = null;
     #resumeButton: HTMLElement | null = null;
     #id: number = 0;
@@ -42,31 +39,29 @@ export class JobPage {
             this.#props = data;
         } catch {
             console.log('Не удалось загрузить страницу');
-            //router.back()
+            router.back();
         }
-        this.#props = vacancyMock;
-        this.#similarJob = [vacancyShortMock];
     };
 
     readonly #addEventListeners = () => {
         if (this.#resumeButton) {
             this.#resumeButton.addEventListener('click', async () => {
                 try {
-                await api.vacancy.resume(this.#props.id);
-                await this.init()
-                this.render()
+                    await api.vacancy.resume(this.#props.id);
+                    await this.init();
+                    this.render();
                 } catch {
-                    console.log('Ошибка при отправки отклика')
+                    console.log('Ошибка при отправки отклика');
                 }
-            })
+            });
         }
 
         if (this.#editButton) {
             this.#editButton.addEventListener('click', () => {
-                router.go(`/vacancyEdit/${this.#props.id}`)
-            })
+                router.go(`/vacancyEdit/${this.#props.id}`);
+            });
         }
-    }
+    };
 
     /**
      * Обработчик удаления вакансии
@@ -97,8 +92,11 @@ export class JobPage {
                 experienceTranslations,
                 workFormatTranslations,
                 employmentTranslations,
-                'isApplicant': store.data.authorized && store.data.user.role === 'applicant',
-                'isOwner': store.data.authorized && store.data.user.role === 'employer' && store.data.user.employer?.id === this.#props.employer.id
+                isApplicant: store.data.authorized && store.data.user.role === 'applicant',
+                isOwner:
+                    store.data.authorized &&
+                    store.data.user.role === 'employer' &&
+                    store.data.user.user_id === this.#props.employer.id,
             }),
         );
         const companyCard = new JobCompanyCard(
@@ -107,38 +105,39 @@ export class JobPage {
         );
         companyCard.render();
 
-        const similarJobsContainer = this.self.querySelector('.similar_jobs') as HTMLElement;
-        if (similarJobsContainer && this.#similarJob) {
-            this.#similarJob.forEach((job) => {
-                const similarJobCard = new SimilarJobCard(similarJobsContainer, job);
-                similarJobCard.render();
-            });
-        }
+        this.#resumeButton = document.getElementById('vacancy_resume_button');
+        this.#editButton = document.getElementById('vacancy_edit_button');
 
-        this.#resumeButton = document.getElementById('vacancy_resume_button')
-        this.#editButton = document.getElementById('vacancy_edit_button')
-
-        console.log(store.data)
+        console.log(store.data);
 
         if (this.#resumeButton) {
-            this.#resumeButton.hidden = true
-            if (store.data.user.role === 'applicant' && store.data.authorized) this.#resumeButton.hidden = false
+            this.#resumeButton.hidden = true;
+            if (store.data.user.role === 'applicant' && store.data.authorized)
+                this.#resumeButton.hidden = false;
         }
 
         if (this.#editButton) {
-            this.#editButton.hidden = true
-            if (store.data.user.role === 'employer' && store.data.authorized && store.data.user.employer?.id === this.#props.employer.id) this.#editButton.hidden = false
+            this.#editButton.hidden = true;
+            if (
+                store.data.user.role === 'employer' &&
+                store.data.authorized &&
+                store.data.user.user_id === this.#props.employer.id
+            )
+                this.#editButton.hidden = false;
         }
 
-        this.#addEventListeners()
+        this.#addEventListeners();
 
-        if (store.data.user.type === 'employer' && store.data.authorized && store.data.user.employer?.id === this.#props.employer.id) {
+        if (
+            store.data.user.role === 'employer' &&
+            store.data.authorized &&
+            store.data.user.user_id === this.#props.employer.id
+        ) {
             const deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
             if (deleteContainer) {
                 const deleteButton = new DeleteButton(deleteContainer, this.#delete);
                 deleteButton.render();
             }
         }
-
     };
 }

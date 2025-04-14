@@ -1,4 +1,9 @@
-import { emptyAuthResponse, emptyResumeCreate, emptySignupRequest, emptyVacancyCreate } from './api/empty';
+import {
+    emptyAuthResponse,
+    emptyResumeCreate,
+    emptySignupRequest,
+    emptyVacancyCreate,
+} from './api/empty';
 import { VacancyCreate, ResumeCreate, SignupRequest, AuthResponse } from './api/interfaces';
 
 interface StoreData {
@@ -33,9 +38,9 @@ class Store {
         this.data = structuredClone(emptyData);
     }
     reset = () => {
-        const csrfToken = this.data.csrf
+        const csrfToken = this.data.csrf;
         this.data = structuredClone(emptyData);
-        this.data.csrf = csrfToken
+        this.data.csrf = csrfToken;
     };
 }
 

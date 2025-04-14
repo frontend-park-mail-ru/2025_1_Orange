@@ -15,7 +15,7 @@ api.auth
         logger.info(user);
         store.data.authorized = true;
         store.data.user = user;
-        console.log(store.data.user)
+        console.log(store.data.user);
     })
     .catch(() => {
         store.data.authorized = false;

@@ -145,7 +145,7 @@ export class Login {
                             password: store.data.auth.request.password,
                         });
                     store.data.authorized = true;
-                    router.go('/catalog')
+                    router.go('/catalog');
                 } catch {
                     const error = document.querySelector('.form__error') as HTMLElement;
                     if (error) {

@@ -29,21 +29,26 @@ export class ProfileUserEdit {
      * @returns {HTMLElement}
      */
     get self(): HTMLElement {
-        return document.getElementById('profile_user_edit') as HTMLElement
+        return document.getElementById('profile_user_edit') as HTMLElement;
     }
 
     init = async () => {
         logger.info('profileUser init method called');
         const url = window.location.href.split('/');
         this.#id = Number.parseInt(url[url.length - 1]);
-        if (!store.data.authorized || store.data.user.role !== 'applicant' || store.data.user.user_id !== this.#id) router.back()
+        if (
+            !store.data.authorized ||
+            store.data.user.role !== 'applicant' ||
+            store.data.user.user_id !== this.#id
+        )
+            router.back();
         try {
-            console.log('INIT FETCH')
+            console.log('INIT FETCH');
             const data = await api.applicant.get(this.#id);
             this.#defaultData = data;
         } catch {
             console.log('Не удалось загрузить страницу');
-            router.back()
+            router.back();
         }
     };
 
@@ -62,21 +67,20 @@ export class ProfileUserEdit {
     };
 
     #formGet(form: HTMLFormElement): unknown {
-        const formData = new FormData(form)
+        const formData = new FormData(form);
         const json: Record<string, unknown> = {};
 
         formData.forEach((value, key) => {
             switch (key) {
-                case 'birth_date':
-                    {
-                        const date = new Date(value as string)
-                        json[key] = date.toISOString()
-                        break
-                    }
+                case 'birth_date': {
+                    const date = new Date(value as string);
+                    json[key] = date.toISOString();
+                    break;
+                }
                 case 'file_input':
-                    break
+                    break;
                 default:
-                    json[key] = value
+                    json[key] = value;
             }
         });
         return json;
@@ -94,8 +98,13 @@ export class ProfileUserEdit {
         if (this.#form) {
             this.#form.addEventListener('input', (e: Event) => {
                 if (this.#form) {
-                    formValidate(this.#form, e.target as HTMLElement, '.profile__error', this.#inputTranslation);
-                    this.#data = this.#formGet(this.#form) as Applicant
+                    formValidate(
+                        this.#form,
+                        e.target as HTMLElement,
+                        '.profile__error',
+                        this.#inputTranslation,
+                    );
+                    this.#data = this.#formGet(this.#form) as Applicant;
                 }
             });
         }
@@ -104,62 +113,72 @@ export class ProfileUserEdit {
             this.#confirm.forEach((element) => {
                 element.addEventListener('click', async (e: Event) => {
                     e.preventDefault();
-                    if (!this.#form || !formValidate(this.#form, this.#form as HTMLElement, '.profile__error', this.#inputTranslation)) return
+                    if (
+                        !this.#form ||
+                        !formValidate(
+                            this.#form,
+                            this.#form as HTMLElement,
+                            '.profile__error',
+                            this.#inputTranslation,
+                        )
+                    )
+                        return;
                     try {
-                        console.log(this.#data)
+                        console.log(this.#data);
                         if (this.#data) {
                             await api.applicant.update(this.#data);
-                            router.go(`/profileUser/${store.data.user.user_id}`)
+                            router.go(`/profileUser/${store.data.user.user_id}`);
                             if (this.#uploadInput) {
-                                const files = this.#uploadInput.files
-                                if (!files || files.length === 0) router.go(`/profileUser/${store.data.user.user_id}`)
-                                }
+                                const files = this.#uploadInput.files;
+                                if (!files || files.length === 0)
+                                    router.go(`/profileUser/${store.data.user.user_id}`);
+                            }
                         }
                     } catch {
                         console.log('Ошибка при обновлении');
                     }
                     if (this.#uploadInput) {
-                        const files = this.#uploadInput.files
-                        if (!files || files.length === 0) return
-                        const image = files[0]
-                        if (!image.type.startsWith('image/')) return
-                        const formData = new FormData()
-                        formData.append('avatar', image)
+                        const files = this.#uploadInput.files;
+                        if (!files || files.length === 0) return;
+                        const image = files[0];
+                        if (!image.type.startsWith('image/')) return;
+                        const formData = new FormData();
+                        formData.append('avatar', image);
                         try {
-                            await api.applicant.avatar(formData)
-                            router.go(`/profileUser/${store.data.user.user_id}`)
+                            await api.applicant.avatar(formData);
+                            router.go(`/profileUser/${store.data.user.user_id}`);
                         } catch {
-                            console.log('Загрузка картинки не удалась')
+                            console.log('Загрузка картинки не удалась');
                         }
                     }
                 });
-            })
+            });
         }
 
         if (this.#back) {
             this.#back.forEach((element) => {
                 element.addEventListener('click', async (e: Event) => {
                     e.preventDefault();
-                    router.go(`/profileUser/${this.#id}`)
+                    router.go(`/profileUser/${this.#id}`);
                 });
-            })
+            });
         }
 
         if (this.#uploadInput) {
             this.#uploadInput.addEventListener('change', () => {
-                if (!this.#uploadInput) return
-                const files = this.#uploadInput.files
-                if (!files || files.length === 0) return
-                const image = files[0]
-                if (!image.type.startsWith('image/')) return
+                if (!this.#uploadInput) return;
+                const files = this.#uploadInput.files;
+                if (!files || files.length === 0) return;
+                const image = files[0];
+                if (!image.type.startsWith('image/')) return;
                 if (this.#avatar) {
                     this.#avatar.forEach((element) => {
                         element.src = URL.createObjectURL(image);
-                    })
+                    });
                 }
-            })
+            });
         }
-    }
+    };
 
     /**
      * Рендеринг страницы
@@ -167,34 +186,37 @@ export class ProfileUserEdit {
     render = () => {
         logger.info('ProfileUserEdit render method called');
         if (this.#defaultData && this.#defaultData.birth_date === '0001-01-01T00:00:00Z') {
-            this.#defaultData.birth_date = ''
+            this.#defaultData.birth_date = '';
         } else if (this.#defaultData) {
-            const birth_date = new Date(this.#defaultData.birth_date)
+            const birth_date = new Date(this.#defaultData.birth_date);
             const year = birth_date.getFullYear();
             const month = String(birth_date.getMonth() + 1).padStart(2, '0'); // Месяцы нумеруются с 0
             const day = String(birth_date.getDate()).padStart(2, '0');
             this.#defaultData.birth_date = `${year}-${month}-${day}`;
         }
-        this.#parent.insertAdjacentHTML('beforeend', template({
-            ...this.#defaultData
-        }));
+        this.#parent.insertAdjacentHTML(
+            'beforeend',
+            template({
+                ...this.#defaultData,
+            }),
+        );
 
-        this.#form = document.forms.namedItem('profile_user_edit') as HTMLFormElement
+        this.#form = document.forms.namedItem('profile_user_edit') as HTMLFormElement;
         if (this.#form) {
-            this.#sex = this.#form.elements.namedItem('sex') as HTMLSelectElement
-            this.#back = document.querySelectorAll('.job__button_second')
-            this.#confirm = document.querySelectorAll('.job__button')
-            this.#uploadInput = this.#form.elements.namedItem('file_input') as HTMLInputElement
+            this.#sex = this.#form.elements.namedItem('sex') as HTMLSelectElement;
+            this.#back = document.querySelectorAll('.job__button_second');
+            this.#confirm = document.querySelectorAll('.job__button');
+            this.#uploadInput = this.#form.elements.namedItem('file_input') as HTMLInputElement;
         }
 
         if (this.#sex) {
-            this.#sex.value = this.#data?.sex ?? 'M'
+            this.#sex.value = this.#data?.sex ?? 'M';
         }
 
-        this.#avatar = document.querySelectorAll('.profile__avatar-img')
+        this.#avatar = document.querySelectorAll('.profile__avatar-img');
 
-        this.#addEventListeners()
+        this.#addEventListeners();
 
-        this.#data = this.#formGet(this.#form) as Applicant
+        this.#data = this.#formGet(this.#form) as Applicant;
     };
 }
