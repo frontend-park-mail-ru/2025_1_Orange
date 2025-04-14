@@ -10,7 +10,7 @@ import { emptyApplicant } from '../../api/empty';
 
 export class ResumeCatalog {
     readonly #parent: HTMLElement;
-    #resumes: Resume[] | null = null;
+    #resumes: Resume[] = [];
 
     /**
      * Конструктор класса
@@ -29,7 +29,7 @@ export class ResumeCatalog {
             this.#resumes = await api.resume.all();
         } catch (error) {
             logger.error('Ошибка при загрузке резюме:', error);
-            this.#resumes = null;
+            this.#resumes = [];
         }
     };
 
@@ -59,16 +59,16 @@ export class ResumeCatalog {
             this.self.querySelector('.resume_filter') as HTMLElement,
         );
         filter.render();
-        if (!this.#resumes) {
-            router.back()
-            return
+        if (this.#resumes.length === 0) {
+            const jobContainer = this.self.querySelector('.resume_list') as HTMLElement;
+            jobContainer.textContent = 'Нету резюме';
         }
-        for (let i = 0; i < this.#resumes?.length; i++) {
+        for (const element of this.#resumes) {
             try {
-                const data = await api.applicant.get(this.#resumes[i].applicant_id);
-                this.#resumes[i].applicant = data;
+                const data = await api.applicant.get(element.applicant_id);
+                element.applicant = data;
             } catch {
-                this.#resumes[i].applicant = emptyApplicant
+                element.applicant = emptyApplicant
             }
         }
 

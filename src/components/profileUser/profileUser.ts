@@ -159,7 +159,7 @@ export class ProfileUser {
         } else if (this.#data) {
             const birth_date = new Date(this.#data.birth_date);
             console.log(birth_date);
-            this.#data.birth_date = `${birth_date.getDay()}.${birth_date.getMonth()}.${birth_date.getFullYear()}`;
+            this.#data.birth_date = `${birth_date.getUTCDate()}.${birth_date.getUTCMonth()}.${birth_date.getFullYear()}`;
         }
         this.#parent.insertAdjacentHTML(
             'beforeend',

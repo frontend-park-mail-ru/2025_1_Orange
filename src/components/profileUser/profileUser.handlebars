@@ -18,7 +18,8 @@
         <div class="profile__body">
             <div class="profile__info">
                 <div class="profile__avatar">
-                    <img src="http://localhost:8000/api/v1/static/{{avatar_path}}" />
+                    <img src="http://localhost:8000/api/v1/static/{{avatar_path}}"
+                    onerror="this.src = '/icons-user-profile.svg';" />
                 </div>
                 <div class="profile__details">
                     <div class="profile__name">{{last_name}} {{first_name}} {{middle_name}}</div>
@@ -52,32 +53,42 @@
             </div> --}}
         </div>
         <div class="profile__meta">
+            {{#if city}}
             <div class="profile__item">
                 <div class="profile__property">Город проживания</div>
                 <div class="profile__value">{{city}}</div>
             </div>
+            {{/if}}
+            {{#if birth_date}}
             <div class="profile__item">
                 <div class="profile__property">Дата рождения</div>
                 <div class="profile__value">{{birth_date}}</div>
             </div>
+            {{/if}}
             <div class=" profile__item">
                 <div class="profile__property">Социальные сети</div>
                 <div class="profile__social-icons">
+                    {{#if vk}}
                     <div class="profile__soc-icon">
                         <a href="{{vk}}">
                             <img src="/vk.svg" />
                         </a>
                     </div>
+                    {{/if}}
+                    {{#if telegram}}
                     <div class="profile__soc-icon">
                         <a href="{{telegram}}">
                             <img src="/tg.svg" />
                         </a>
                     </div>
+                    {{/if}}
+                    {{#if facebook}}
                     <div class="profile__soc-icon">
                         <a href="{{facebook}}">
                             <img src="/globe.svg" />
                         </a>
                     </div>
+                    {{/if}}
                 </div>
             </div>
         </div>

@@ -88,6 +88,13 @@ export class ResumePage {
      * Рендеринг страницы
      */
     render = () => {
+        if (this.#data) {
+            const birth_date = new Date(this.#data.applicant.birth_date);
+            this.#data.applicant.birth_date = `${birth_date.getUTCDate()}.${birth_date.getUTCMonth()}.${birth_date.getFullYear()}`;
+            const graudation_year = new Date(this.#data.applicant.birth_date);
+            this.#data.graduation_year = `${graudation_year.getFullYear()}`;
+        }
+
         logger.info('ResumePage render method called');
         this.#parent.insertAdjacentHTML(
             'beforeend',

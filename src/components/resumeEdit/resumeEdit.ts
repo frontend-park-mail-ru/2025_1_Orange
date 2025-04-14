@@ -15,6 +15,7 @@ export class ResumeEdit {
     #data: ResumeCreate = emptyResumeCreate;
     #defaultData: Resume = emptyResume;
     #form: HTMLFormElement | null = null;
+    #profileEdit: HTMLButtonElement | null = null;
 
     #education: HTMLSelectElement | null = null;
 
@@ -219,6 +220,13 @@ export class ResumeEdit {
     }
 
     readonly #addEventListeners = () => {
+        this.#profileEdit = document.getElementById('profile_change') as HTMLButtonElement
+        if (this.#profileEdit) {
+            this.#profileEdit.addEventListener('click', (e: Event) => {
+                e.preventDefault()
+                router.go(`/profileUserEdit/${store.data.user.user_id}`)
+            })
+        }
         if (this.#form) {
             this.#form.addEventListener('input', (e: Event) => {
                 this.#formValidate(e.target as HTMLElement);
@@ -322,6 +330,14 @@ export class ResumeEdit {
      */
     render = () => {
         logger.info('ResumeEdit render method called');
+
+        const birth_date = new Date(this.#defaultData.applicant.birth_date);
+        const year = birth_date.getFullYear();
+        const month = String(birth_date.getUTCMonth() + 1).padStart(2, '0'); // Месяцы нумеруются с 0
+        const day = String(birth_date.getUTCDate()).padStart(2, '0');
+        this.#defaultData.applicant.birth_date = `${year}-${month}-${day}`;
+
+
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
@@ -329,7 +345,8 @@ export class ResumeEdit {
                 isNew: this.#id === 0,
                 isMale: this.#defaultData.applicant.sex === 'M',
                 skillsString: this.#defaultData.skills.join(', '),
-                graduation_year: this.#defaultData.graduation_year.split('-')[0]
+                graduation_year: this.#defaultData.graduation_year.split('-')[0],
+                birth_date: `${birth_date.getFullYear()}-${birth_date.getMonth()}-${birth_date.getDay()}`,
             }),
         );
 
