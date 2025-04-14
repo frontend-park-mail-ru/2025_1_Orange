@@ -34,16 +34,16 @@ export class DeleteButton {
         this.#cancelButton = this.#parent.querySelector('.job__button_second');
         if (this.#cancelButton) {
             this.#cancelButton.addEventListener('click', (e: Event) => {
-                e.preventDefault()
-                this.render()
-        }); // Возвращаемся к начальному шаблону
+                e.preventDefault();
+                this.render();
+            }); // Возвращаемся к начальному шаблону
         }
 
         this.#deleteButton = this.#parent.querySelector('.button__delete');
         if (this.#deleteButton) {
             this.#deleteButton.addEventListener('click', (e: Event) => {
-                e.preventDefault()
-                this.#handleDelete()
+                e.preventDefault();
+                this.#handleDelete();
             });
         }
     }
@@ -74,8 +74,8 @@ export class DeleteButton {
         this.#deleteButton = this.#parent.querySelector('.button__delete');
         if (this.#deleteButton) {
             this.#deleteButton.addEventListener('click', (e: Event) => {
-                e.preventDefault()
-                this.#confirm()
+                e.preventDefault();
+                this.#confirm();
             });
         }
     };

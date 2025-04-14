@@ -128,6 +128,7 @@ export const workExperienceMock: WorkExperience = {
 
 export const resumeMock: Resume = {
     id: 12,
+    applicant_id: 1,
     applicant: applicantMock,
     about_me: 'Full-Stack Web Developer...',
     specialization: 'Фулстек веб разработчик',
@@ -143,6 +144,7 @@ export const resumeMock: Resume = {
 
 export const resumeShortMock: ResumeShort = {
     id: 12,
+    applicant_id: 1,
     applicant: applicantShortMock,
     specialization: 'Фулстек веб разработчик',
     work_experience: workExperienceMock,
@@ -165,10 +167,10 @@ export const userEmployerMock: User = {
 
 export const AuthResponseApplicantMock: AuthResponse = {
     role: 'applicant',
-    user_id: 1
-}
+    user_id: 1,
+};
 
 export const AuthResponseEmployerMock: AuthResponse = {
     role: 'employer',
-    user_id: 1
-}
+    user_id: 1,
+};

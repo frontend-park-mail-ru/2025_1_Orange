@@ -4,7 +4,6 @@ import { ResumeExperience } from '../resumeExperience/resumeExperience';
 import { Resume } from '../../api/interfaces';
 import './resumePage.sass';
 import { api } from '../../api/api';
-import { resumeMock } from '../../api/mocks';
 import { educationTranslations, statusTranslations } from '../../api/translations';
 import { DeleteButton } from '../deleteButton/deleteButton';
 import { router } from '../../router';
@@ -35,11 +34,15 @@ export class ResumePage {
         try {
             const data = await api.resume.get(this.#id);
             this.#data = data;
+            try {
+                this.#data.applicant = await api.applicant.get(store.data.user.user_id);
+            } catch {
+                router.back();
+            }
         } catch {
             console.log('Не удалось загрузить страницу');
-            //router.back()
+            router.back();
         }
-        this.#data = resumeMock;
     };
 
     /**
@@ -66,10 +69,13 @@ export class ResumePage {
      * Навешивание событий на кнопки
      */
     readonly #addEventListeners = () => {
-        const editButton = this.self
-            .querySelector('.resume_sidebar__actions')
-            ?.querySelector('.job__button_second') as HTMLElement;
-        if (this.#data?.applicant.id === store.data.user.applicant?.id) {
+        const editButton = this.self.querySelector('.job__button_second') as HTMLElement;
+        console.log(this.#data)
+        console.log(store.data.user)
+        if (
+            store.data.user.role === 'applicant' &&
+            this.#data?.applicant.id === store.data.user.user_id
+        ) {
             editButton.addEventListener('click', () => {
                 router.go(`/resumeEdit/${this.#id}`);
             });
@@ -92,7 +98,10 @@ export class ResumePage {
             }),
         );
 
-        if (this.#data?.applicant.id === store.data.user.applicant?.id) {
+        if (
+            store.data.user.role === 'applicant' &&
+            this.#data?.applicant.id === store.data.user.user_id
+        ) {
             const deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
             if (deleteContainer) {
                 const deleteButton = new DeleteButton(deleteContainer, this.#delete);
@@ -104,7 +113,7 @@ export class ResumePage {
             '.resume_info__experience',
         ) as HTMLElement;
         if (experienceContainer && this.#data) {
-            this.#data.work_experience.forEach((experienceItem) => {
+            this.#data.work_experience?.forEach((experienceItem) => {
                 const experienceCard = new ResumeExperience(experienceContainer, experienceItem);
                 experienceCard.render();
             });

@@ -17,6 +17,9 @@ export class Header {
     #editProfileLink: HTMLElement | null = null;
     #profileLink: HTMLElement | null = null;
 
+    #vacancyCatalogLink: HTMLElement | null = null;
+    #resumeCatalogLink: HTMLElement | null = null;
+
     /**
      * Конструктор класса
      * @param parent {HTMLElement} - родительский элемент
@@ -78,8 +81,11 @@ export class Header {
         this.#profileIcon = this.self.querySelector('.header__profile-icon');
         this.#dropdownItems = this.self.querySelectorAll('.header__dropdown__item');
         this.#logoLink = this.self.querySelector('.header__name');
-        this.#profileLink = document.getElementById('profile_page_link')
-        this.#editProfileLink = document.getElementById('edit_profile_page_link')
+        this.#profileLink = document.getElementById('profile_page_link');
+        this.#editProfileLink = document.getElementById('edit_profile_page_link');
+
+        this.#vacancyCatalogLink = document.getElementById('vacancy_catalog_link');
+        this.#resumeCatalogLink = document.getElementById('resume_catalog_link');
 
         this.#logoLink?.addEventListener('click', () => {
             router.go('/catalog');
@@ -92,12 +98,12 @@ export class Header {
         this.#logoutButton?.addEventListener('click', async () => {
             try {
                 await api.auth.logout();
-                console.log("LOGOUT SUCCESFULLY")
-                store.reset()
+                console.log('LOGOUT SUCCESFULLY');
+                store.reset();
                 router.go('/catalog');
             } catch {
-                console.log("ERROR LOGOUT")
-                router.go('/catalog')
+                console.log('ERROR LOGOUT');
+                router.go('/catalog');
             }
         });
 
@@ -129,19 +135,28 @@ export class Header {
         if (this.#profileLink) {
             this.#profileLink.addEventListener('click', () => {
                 if (store.data.user.role === 'applicant')
-                    router.go(`/profileUser/${store.data.user.user_id}`)
-                else
-                    router.go(`/profileCompany/${store.data.user.user_id}`)
-            })
+                    router.go(`/profileUser/${store.data.user.user_id}`);
+                else router.go(`/profileCompany/${store.data.user.user_id}`);
+            });
         }
 
         if (this.#editProfileLink) {
             this.#editProfileLink.addEventListener('click', () => {
                 if (store.data.user.role === 'applicant')
-                    router.go(`/profileUserEdit/${store.data.user.user_id}`)
-                else
-                    router.go(`/profileCompanyEdit/${store.data.user.user_id}`)
-            })
+                    router.go(`/profileUserEdit/${store.data.user.user_id}`);
+                else router.go(`/profileCompanyEdit/${store.data.user.user_id}`);
+            });
+        }
+
+        if (this.#resumeCatalogLink) {
+            this.#resumeCatalogLink.addEventListener('click', () => {
+                router.go('/resumeCatalog');
+            });
+        }
+        if (this.#vacancyCatalogLink) {
+            this.#vacancyCatalogLink.addEventListener('click', () => {
+                router.go('/catalog');
+            });
         }
     };
 

@@ -4,12 +4,13 @@ import { logger } from '../../utils/logger';
 import template from './jobCatalog.handlebars';
 import { JobCatalogFilter } from '../jobCatalogFilter/jobCatalogFilter';
 import { VacancyShort } from '../../api/interfaces';
-import { vacancyShortMock } from '../../api/mocks';
 import { api } from '../../api/api';
+import { router } from '../../router';
 
 export class JobCatalog {
     readonly #parent: HTMLElement;
     #jobs: VacancyShort[] | null = null;
+    #createResumeLink: HTMLLinkElement | null = null;
 
     /**
      * Конструктор класса
@@ -48,6 +49,15 @@ export class JobCatalog {
         this.self.remove();
     };
 
+    #addEventListeners = () => {
+        if (this.#createResumeLink) {
+            this.#createResumeLink.addEventListener('click', (e: Event) => {
+                e.preventDefault();
+                router.go('/createResume');
+            });
+        }
+    };
+
     /**
      * Рендеринг страницы
      */
@@ -56,10 +66,16 @@ export class JobCatalog {
         this.#parent.insertAdjacentHTML('beforeend', template({}));
         const filter = new JobCatalogFilter(this.self.querySelector('.jobs_filter') as HTMLElement);
         filter.render();
-        this.#jobs = [vacancyShortMock];
         this.#jobs?.forEach((element) => {
             const card = new JobCard(this.self.querySelector('.jobs_list') as HTMLElement, element);
             card.render();
         });
+        if (!this.#jobs) {
+            const jobContainer = this.self.querySelector('.jobs_list') as HTMLElement;
+            jobContainer.textContent = 'Нету вакансий';
+        }
+        this.#createResumeLink = this.self.querySelector('.info__link') as HTMLLinkElement;
+
+        this.#addEventListeners();
     };
 }

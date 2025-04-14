@@ -43,7 +43,7 @@ export class Api {
         const url = this.#baseUrl + endpoint;
         const headers = new Headers();
         if (content_type !== 'multipart/form-data') headers.append('Content-Type', content_type);
-        if (store.data.csrf !== '') headers.append('X-CSRF-Token', store.data.csrf)
+        if (store.data.csrf !== '') headers.append('X-CSRF-Token', store.data.csrf);
 
         const init: RequestInit = {
             method,
@@ -55,7 +55,7 @@ export class Api {
 
         logger.info(url, init);
 
-        console.log('STORE', store.data.csrf)
+        console.log('STORE', store.data.csrf);
 
         try {
             const response = await fetch(url, init);
@@ -63,7 +63,7 @@ export class Api {
             if (csrfToken) {
                 store.data.csrf = csrfToken;
             }
-            console.log("REQUEST STATUS", response.status, response.ok)
+            console.log('REQUEST STATUS', response.status, response.ok);
             if (!response.ok) {
                 const error = await response.json();
                 logger.error(`error: ${error.message}`);
@@ -72,7 +72,7 @@ export class Api {
             try {
                 return await response.json();
             } catch {
-                return ''
+                return '';
             }
         } catch {
             logger.error('Network Error');

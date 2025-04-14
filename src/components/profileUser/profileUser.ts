@@ -10,17 +10,17 @@ import { router } from '../../router';
 export class ProfileUser {
     readonly #parent: HTMLElement;
     #resumes: Resume[] | null = null;
-    #id : number = 0;
-    #data : Applicant | null = null
+    #id: number = 0;
+    #data: Applicant | null = null;
     //#vacancies: Vacancy[] | null = null;
     #resumeContainer: HTMLElement | null = null;
     #vacancyContainer: HTMLElement | null = null;
     #favoriteButton: HTMLElement | null = null;
     #resumesButton: HTMLElement | null = null;
     #responsesButton: HTMLElement | null = null;
-    #addResume: HTMLElement | null = null;
-    #editButton: HTMLElement | null = null;
-    #backArrow: HTMLElement | null = null;
+    #addResume: HTMLButtonElement | null = null;
+    #editButton: HTMLButtonElement | null = null;
+    #backArrow: HTMLButtonElement | null = null;
 
     constructor(parent: HTMLElement) {
         this.#parent = parent;
@@ -30,13 +30,18 @@ export class ProfileUser {
         logger.info('profileUser init method called');
         const url = window.location.href.split('/');
         this.#id = Number.parseInt(url[url.length - 1]);
-        if (!store.data.authorized || store.data.user.role !== 'applicant' || store.data.user.user_id !== this.#id) router.back()
+        if (
+            !store.data.authorized ||
+            store.data.user.role !== 'applicant' ||
+            store.data.user.user_id !== this.#id
+        )
+            router.back();
         try {
             const data = await api.applicant.get(this.#id);
             this.#data = data;
         } catch {
             console.log('Не удалось загрузить страницу');
-            router.back()
+            router.back();
         }
     };
 
@@ -52,20 +57,31 @@ export class ProfileUser {
      * Добавление обработчиков событий
      */
     addEventListeners = () => {
-        const profileActions = this.self.querySelector('.profile__actions') as HTMLElement
+        const profileActions = this.self.querySelector('.profile__actions') as HTMLElement;
         if (profileActions) {
-            this.#addResume = profileActions.querySelector('.job__button') as HTMLElement
-            this.#editButton = profileActions.querySelector('.job__button_second') as HTMLElement
+            this.#addResume = profileActions.querySelector('.job__button') as HTMLButtonElement;
+            this.#editButton = profileActions.querySelector(
+                '.job__button_second',
+            ) as HTMLButtonElement;
         }
-        this.#backArrow = this.self.querySelector('.profile__back') as HTMLElement;
+        this.#backArrow = this.self.querySelector('.profile__back') as HTMLButtonElement;
         if (this.#backArrow) {
-            this.#backArrow.addEventListener('click', () => { router.back() });
+            this.#backArrow.addEventListener('click', (e: Event) => {
+                e.preventDefault();
+                router.back();
+            });
         }
         if (this.#editButton) {
-            this.#editButton.addEventListener('click', () => { router.go(`/profileUserEdit/${this.#id}`) })
+            this.#editButton.addEventListener('click', (e: Event) => {
+                e.preventDefault();
+                router.go(`/profileUserEdit/${this.#id}`);
+            });
         }
         if (this.#addResume) {
-            this.#addResume.addEventListener('click', () => { router.go('/createResume') })
+            this.#addResume.addEventListener('click', (e: Event) => {
+                e.preventDefault();
+                router.go('/createResume');
+            });
         }
 
         this.#resumeContainer = document.getElementById('resume-content');
@@ -76,12 +92,6 @@ export class ProfileUser {
         this.#resumesButton?.addEventListener('click', () =>
             this.#handleButton(this.#resumesButton as HTMLElement, this.#renderResumes),
         );
-        // this.#responsesButton.addEventListener('click', () =>
-        //     this.#handleButton(this.#responsesButton as HTMLElement, this.#renderResponses),
-        // );
-        // this.#favoriteButton.addEventListener('click', () =>
-        //     this.#handleButton(this.#favoriteButton as HTMLElement, this.#renderFavorites),
-        // );
     };
 
     readonly #handleButton = (button: HTMLElement, callback: () => void) => {
@@ -118,8 +128,8 @@ export class ProfileUser {
         try {
             this.#resumes = await api.resume.all();
         } catch {
-            console.log('Не удалось загрузить')
-            return
+            console.log('Не удалось загрузить');
+            return;
         }
 
         // Используем данные из resumesMock
@@ -128,54 +138,6 @@ export class ProfileUser {
             resumeRow.render();
         });
     };
-
-    /**
-     * Рендеринг списка откликов
-     */
-    // #renderResponses = (): void => {
-    //     logger.info('Rendering Responses...');
-    //     if (!this.#vacancyContainer) {
-    //         return;
-    //     }
-    //     if (this.#resumeContainer) {
-    //         this.#resumeContainer.hidden = true;
-    //     }
-    //     if (this.#vacancyContainer) {
-    //         this.#vacancyContainer.hidden = false;
-    //     }
-    //     this.#vacancyContainer.innerHTML = ''; // Очищаем контейнер перед рендерингом
-
-    //     this.#vacancies = vacancyListMock;
-
-    //     this.#vacancies.forEach((vacancy) => {
-    //         const resumeRow = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
-    //         resumeRow.render();
-    //     });
-    // };
-
-    /**
-     * Рендеринг списка любимых вакансий
-     */
-    // #renderFavorites = (): void => {
-    //     logger.info('Rendering Favorites...');
-    //     if (!this.#vacancyContainer) {
-    //         return;
-    //     }
-    //     if (this.#resumeContainer) {
-    //         this.#resumeContainer.hidden = true;
-    //     }
-    //     if (this.#vacancyContainer) {
-    //         this.#vacancyContainer.hidden = false;
-    //     }
-    //     this.#vacancyContainer.innerHTML = ''; // Очищаем контейнер перед рендерингом
-
-    //     this.#vacancies = vacancyListMock;
-
-    //     this.#vacancies.forEach((vacancy) => {
-    //         const resumeRow = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
-    //         resumeRow.render();
-    //     });
-    // };
 
     /**
      * Очистка
@@ -190,19 +152,22 @@ export class ProfileUser {
      */
     render = () => {
         logger.info('ProfileUser render method called');
-        if (!store.data.authorized || store.data.user.role !== 'applicant') router.back()
-        if (!this.#data) router.back()
+        if (!store.data.authorized || store.data.user.role !== 'applicant') router.back();
+        if (!this.#data) router.back();
         if (this.#data && this.#data.birth_date === '0001-01-01T00:00:00Z') {
-            this.#data.birth_date = ''
+            this.#data.birth_date = '';
         } else if (this.#data) {
-                const birth_date = new Date(this.#data.birth_date)
-                console.log(birth_date)
-                this.#data.birth_date = `${birth_date.getDay()}.${birth_date.getMonth()}.${birth_date.getFullYear()}`
-            }
-        this.#parent.insertAdjacentHTML('beforeend', template({
-    ...this.#data,
-    }));
+            const birth_date = new Date(this.#data.birth_date);
+            console.log(birth_date);
+            this.#data.birth_date = `${birth_date.getDay()}.${birth_date.getMonth()}.${birth_date.getFullYear()}`;
+        }
+        this.#parent.insertAdjacentHTML(
+            'beforeend',
+            template({
+                ...this.#data,
+            }),
+        );
         this.addEventListeners();
-        this.#handleButton(this.#resumesButton as HTMLElement, this.#renderResumes)
+        this.#handleButton(this.#resumesButton as HTMLElement, this.#renderResumes);
     };
 }

@@ -1,4 +1,7 @@
-export function customMessage(field: HTMLInputElement | HTMLSelectElement, inputTranslation: Record<string, string>): string {
+export function customMessage(
+    field: HTMLInputElement | HTMLSelectElement,
+    inputTranslation: Record<string, string>,
+): string {
     const validity = field.validity;
     if (validity.valueMissing) {
         return `Заполните поле ${inputTranslation[field.name]}`;
@@ -25,24 +28,33 @@ export function customMessage(field: HTMLInputElement | HTMLSelectElement, input
     return `${inputTranslation[field.name]}: ${field.validationMessage}`;
 }
 
-export function fieldValidate(field: HTMLInputElement | HTMLSelectElement, errorElement: HTMLElement, inputTranslation: Record<string, string>): boolean {
+export function fieldValidate(
+    field: HTMLInputElement | HTMLSelectElement,
+    errorElement: HTMLElement,
+    inputTranslation: Record<string, string>,
+): boolean {
     field.classList.remove('error');
     field.classList.remove('valid');
     if (!field.validity.valid) {
-        console.log(field)
+        console.log(field);
         if (document.activeElement === field && field.value !== '' && field.value !== '0')
             field.classList.add('error');
         errorElement.textContent = customMessage(field, inputTranslation);
         errorElement.style.display = 'block';
-        return false
+        return false;
     }
     if (field.validity.valid) field.classList.add('valid');
-    return true
+    return true;
 }
 
-export function formValidate(form: HTMLFormElement, element: HTMLElement, errorClass: string, inputTranslation: Record<string, string>): boolean {
+export function formValidate(
+    form: HTMLFormElement,
+    element: HTMLElement,
+    errorClass: string,
+    inputTranslation: Record<string, string>,
+): boolean {
     let fieldset = element.closest('fieldset') as HTMLFieldSetElement;
-    if (element.tagName === 'FORM') fieldset = element as HTMLFieldSetElement
+    if (element.tagName === 'FORM') fieldset = element as HTMLFieldSetElement;
     if (fieldset) {
         const errorElement = fieldset.querySelector(errorClass) as HTMLElement;
 
@@ -52,19 +64,19 @@ export function formValidate(form: HTMLFormElement, element: HTMLElement, errorC
 
             if (['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName)) {
                 if (!fieldValidate(element as HTMLInputElement, errorElement, inputTranslation)) {
-                    return false
+                    return false;
                 }
             }
 
-            const fields = fieldset.querySelectorAll(
-                'input, select, textarea',
-            ) as unknown as Array<HTMLInputElement | HTMLSelectElement>;
+            const fields = fieldset.querySelectorAll('input, select, textarea') as unknown as Array<
+                HTMLInputElement | HTMLSelectElement
+            >;
 
             let valid = true;
 
             fields.forEach((field) => {
                 if (valid && !fieldValidate(field, errorElement, inputTranslation)) {
-                    valid = false
+                    valid = false;
                 }
             });
             return valid;

@@ -235,7 +235,7 @@ export const emptyApplicantEdit: ApplicantEdit = {
     facebook: '',
 };
 
-export const emptyAuthResponse : AuthResponse = {
+export const emptyAuthResponse: AuthResponse = {
     role: 'applicant',
-    user_id: 0
-}
+    user_id: 0,
+};

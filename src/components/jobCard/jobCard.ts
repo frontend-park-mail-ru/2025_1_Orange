@@ -42,15 +42,15 @@ export class JobCard {
         });
 
         if (this.#resumeButton) {
-            const handleResumeClick = async () => { 
-                console.log('resume')   
+            const handleResumeClick = async () => {
+                console.log('resume');
                 try {
-                    //await api.vacancy.resume(this.#props.id);    
+                    await api.vacancy.resume(this.#props.id);
                     if (this.#resumeButton) {
                         this.#resumeButton.removeAttribute('id');
                         this.#resumeButton.className = 'job__button_second';
                         this.#resumeButton.textContent = 'Вы откликнулись';
-    
+
                         // Убираем обработчик события после успешного действия
                         this.#resumeButton.removeEventListener('click', handleResumeClick);
                     }
@@ -60,7 +60,7 @@ export class JobCard {
             };
             this.#resumeButton.addEventListener('click', handleResumeClick);
         }
-    }
+    };
 
     /**
      * Очистка
@@ -100,7 +100,9 @@ export class JobCard {
             }),
         );
 
-        this.#resumeButton = document.getElementById(`vacancy_${this.#props.id}_resume`) as HTMLElement
+        this.#resumeButton = document.getElementById(
+            `vacancy_${this.#props.id}_resume`,
+        ) as HTMLElement;
 
         this.#addEventListeners();
     };
