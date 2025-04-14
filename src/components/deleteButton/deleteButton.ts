@@ -33,12 +33,18 @@ export class DeleteButton {
         // Навешиваем обработчики на кнопки "Отмена" и "Удалить"
         this.#cancelButton = this.#parent.querySelector('.job__button_second');
         if (this.#cancelButton) {
-            this.#cancelButton.addEventListener('click', () => this.render()); // Возвращаемся к начальному шаблону
+            this.#cancelButton.addEventListener('click', (e: Event) => {
+                e.preventDefault()
+                this.render()
+        }); // Возвращаемся к начальному шаблону
         }
 
         this.#deleteButton = this.#parent.querySelector('.button__delete');
         if (this.#deleteButton) {
-            this.#deleteButton.addEventListener('click', () => this.#handleDelete());
+            this.#deleteButton.addEventListener('click', (e: Event) => {
+                e.preventDefault()
+                this.#handleDelete()
+            });
         }
     }
 
@@ -67,7 +73,10 @@ export class DeleteButton {
 
         this.#deleteButton = this.#parent.querySelector('.button__delete');
         if (this.#deleteButton) {
-            this.#deleteButton.addEventListener('click', () => this.#confirm());
+            this.#deleteButton.addEventListener('click', (e: Event) => {
+                e.preventDefault()
+                this.#confirm()
+            });
         }
     };
 }
