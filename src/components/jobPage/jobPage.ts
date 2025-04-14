@@ -14,6 +14,7 @@ import { store } from '../../store';
 import { emptyVacancy } from '../../api/empty';
 import { api } from '../../api/api';
 import { router } from '../../router';
+import { DeleteButton } from '../deleteButton/deleteButton';
 
 export class JobPage {
     readonly #parent: HTMLElement;
@@ -67,6 +68,18 @@ export class JobPage {
         }
     }
 
+    /**
+     * Обработчик удаления вакансии
+     */
+    readonly #delete = async () => {
+        try {
+            await api.vacancy.delete(this.#id);
+            router.back();
+        } catch {
+            console.log('Что-то пошло не так');
+        }
+    };
+
     remove = () => {
         logger.info('JobPage remove method called');
         this.self.remove();
@@ -74,8 +87,6 @@ export class JobPage {
 
     render = () => {
         logger.info('JobPage render method called');
-        this.#props = vacancyMock;
-        //this.#props.company.star_rating = '★'.repeat(Math.round(this.#props.company.rating ?? 0))
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
@@ -120,6 +131,14 @@ export class JobPage {
         }
 
         this.#addEventListeners()
+
+        if (store.data.user.type === 'employer' && store.data.authorized && store.data.user.employer?.id === this.#props.employer.id) {
+            const deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
+            if (deleteContainer) {
+                const deleteButton = new DeleteButton(deleteContainer, this.#delete);
+                deleteButton.render();
+            }
+        }
 
     };
 }
