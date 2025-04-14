@@ -38,6 +38,8 @@ export class VacancyEdit {
     #taxesIncludedInput: RadioNodeList | null = null;
     #experienceInput: RadioNodeList | null = null;
     #skillsInput: HTMLInputElement | null = null;
+    #salaryFrom: HTMLInputElement | null = null;
+    #salaryTo: HTMLInputElement| null = null;
 
     constructor(parent: HTMLElement) {
         this.#parent = parent;
@@ -113,8 +115,8 @@ export class VacancyEdit {
         field.classList.remove('error');
         field.classList.remove('valid');
         if (!field.validity.valid) {
-            if (document.activeElement !== field && (field.value === '' || field.value === '0'))
-            field.classList.add('error');
+            if (document.activeElement === field && field.value !== '' && field.value !== '0')
+                field.classList.add('error');
             errorElement.textContent = this.#customMessage(field);
             errorElement.style.display = 'block';
             return false
@@ -292,6 +294,27 @@ export class VacancyEdit {
                 }
             });
         }
+
+        if (this.#salaryFrom && this.#salaryTo) {
+            this.#salaryFrom.addEventListener('input', () => {
+                if (!this.#salaryFrom || !this.#salaryTo) return
+                if ((Number.parseInt(this.#salaryTo.value) - Number.parseInt(this.#salaryFrom.value)) < 0) {
+                    console.log((Number.parseInt(this.#salaryTo.value) - Number.parseInt(this.#salaryFrom.value)))
+                    this.#salaryFrom.setCustomValidity('Неправильно задан диапазон зарплаты')
+                } else {
+                    this.#salaryFrom.setCustomValidity('')
+                }
+            })
+            this.#salaryTo.addEventListener('input', () => {
+                if (!this.#salaryFrom || !this.#salaryTo) return
+                if ((Number.parseInt(this.#salaryTo.value) - Number.parseInt(this.#salaryFrom.value)) < 0) {
+                    console.log((Number.parseInt(this.#salaryTo.value) - Number.parseInt(this.#salaryFrom.value)))
+                    this.#salaryTo.setCustomValidity('Неправильно задан диапазон зарплаты')
+                } else {
+                    this.#salaryFrom.setCustomValidity('')
+                }
+            })
+        }
     }
 
     /**
@@ -331,6 +354,8 @@ export class VacancyEdit {
             this.#taxesIncludedInput = this.#form.elements.namedItem('taxes_included') as RadioNodeList
             this.#experienceInput = this.#form.elements.namedItem('experience') as RadioNodeList
             this.#skillsInput = this.#form.elements.namedItem('skills') as HTMLInputElement
+            this.#salaryFrom = this.#form.elements.namedItem('salary_from') as HTMLInputElement
+            this.#salaryTo = this.#form.elements.namedItem('salary_to') as HTMLInputElement
         }
 
         this.#addEventListeners()
