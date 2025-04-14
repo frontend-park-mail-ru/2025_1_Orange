@@ -106,8 +106,8 @@ export class ProfileUser {
                 this.#favoriteButton.className = 'job__button_second';
             }
             button.className = 'job__button';
-            callback();
         }
+        callback();
     };
 
     /**

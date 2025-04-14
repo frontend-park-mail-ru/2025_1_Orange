@@ -1,21 +1,23 @@
 <div class="resume-table__row">
     <div class="resume-table__cell resume-table__cell--profession">
         <div class="resume-table__avatar">
-            <img src="{{logo}}" onerror="this.src = './icons-user-profile.svg';"/>
+            <img src="http://localhost:8000/api/v1/static/{{avatar}}" onerror="this.src = '/icons-user-profile.svg';"/>
         </div>
         <div class="resume-table__profession-info">
-            <div class="resume-table__profession-title">{{name}}</div>
-            <div class="resume-table__updated">Обновлено {{update_date}} в {{update_time}}</div>
+            <div class="resume-table__profession-title">{{specialization}}</div>
+            <div class="resume-table__updated">Обновлено {{updated_at}}</div>
         </div>
     </div>
     <div class="resume-table__cell resume-table__cell--skills">
         <div class="job__badges">
             {{#each skills}}
-                <div class="job__badge">{{name}}</div>
+                <div class="job__badge">{{this}}</div>
             {{/each}}
         </div>
     </div>
     <div class="resume-table__action">
-            <img src="https://placehold.co/100x100/EEE/31343C"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+</svg>
     </div>
 </div>
