@@ -13,8 +13,8 @@ export class AuthService {
      * @param {string} email
      * @returns {Promise<void>}
      */
-    async checkEmail(email: string): Promise<void> {
-        await this.#api.request('/auth/emailExists', 'POST', JSON.stringify({ email }));
+    async checkEmail(email: string): Promise<{role: string}> {
+        return await this.#api.request('/auth/emailExists', 'POST', JSON.stringify({ email }));
     }
 
     /**

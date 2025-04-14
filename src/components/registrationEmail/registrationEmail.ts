@@ -107,7 +107,7 @@ export class RegistrationEmail {
                 store.data.auth.request.email = this.#email?.value ?? '';
                 try {
                     const request = await api.auth.checkEmail(store.data.auth.request.email);
-                    logger.info(request);
+                    store.data.auth.type = request.role as 'applicant' | 'employer'
                     router.go('/login');
                 } catch {
                     logger.info('check email ERROR');

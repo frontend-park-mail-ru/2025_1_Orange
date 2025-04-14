@@ -130,6 +130,7 @@ export class ResumeCard {
                 ...this.#props,
                 id: this.#props.id,
                 fullName: `${this.#props.applicant.first_name} ${this.#props.applicant.last_name}`,
+                hasAge: this.#calculateAge() < 200,
                 age: this.#calculateAge(),
                 updatedDate: this.#formatUpdatedDate(),
                 statusText: statusTranslations[this.#props.applicant.status],
