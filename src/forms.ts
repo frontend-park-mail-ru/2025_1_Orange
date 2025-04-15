@@ -30,17 +30,20 @@ export function customMessage(
 
 export function fieldValidate(
     field: HTMLInputElement | HTMLSelectElement,
-    errorElement: HTMLElement,
     inputTranslation: Record<string, string>,
 ): boolean {
+    const error = field.closest('fieldset')?.querySelector('[class$="__error"]') as HTMLElement;
+    console.log(error)
     field.classList.remove('error');
     field.classList.remove('valid');
     if (!field.validity.valid) {
         console.log(field);
         if (document.activeElement === field && field.value !== '' && field.value !== '0')
             field.classList.add('error');
-        errorElement.textContent = customMessage(field, inputTranslation);
-        errorElement.style.display = 'block';
+        if (error) {
+            error.textContent = customMessage(field, inputTranslation);
+            error.style.display = 'block';
+        }
         return false;
     }
     if (field.validity.valid) field.classList.add('valid');
@@ -63,7 +66,7 @@ export function formValidate(
             errorElement.style.display = 'none';
 
             if (['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName)) {
-                if (!fieldValidate(element as HTMLInputElement, errorElement, inputTranslation)) {
+                if (!fieldValidate(element as HTMLInputElement, inputTranslation)) {
                     return false;
                 }
             }
@@ -75,7 +78,7 @@ export function formValidate(
             let valid = true;
 
             fields.forEach((field) => {
-                if (valid && !fieldValidate(field, errorElement, inputTranslation)) {
+                if (valid && !fieldValidate(field, inputTranslation)) {
                     valid = false;
                 }
             });

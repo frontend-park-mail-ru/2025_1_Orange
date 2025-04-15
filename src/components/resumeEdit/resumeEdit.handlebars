@@ -75,6 +75,7 @@
             <fieldset class="resumeEdit__group" name="fieldset_education">
                 <legend class="resumeEdit__name">Образование</legend>
                 <div class="resumeEdit__options">
+                    <div class="resumeEdit__select">
                     <select name="education" class="resumeEdit__input" required>
                         <option value="" disabled selected>Тип образования</option>
                         <option value="secondary_school">среднее образование</option>
@@ -84,6 +85,7 @@
                         <option value="master">магистр</option>
                         <option value="phd">кандидат наук</option>
                     </select>
+                    </div>
                     <input type="text" name="educational_institution" placeholder="Название учебного заведения"
                         minlength="3" maxlength="50" class="resumeEdit__input" value="{{educational_institution}}"
                         pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
@@ -117,6 +119,7 @@
 
         <!-- Кнопка отправки -->
         <div class="resumeEdit__confirm">
+            <div class="resumeEdit__error"></div>
             <button class="job__button" id="resume_submit">Создать вакансию</button>
         </div>
     </div>

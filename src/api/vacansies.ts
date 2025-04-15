@@ -54,6 +54,6 @@ export class VacancyService {
     }
 
     async resume(id: number): Promise<void> {
-        await this.#api.request(`/vacancy/vacancy/${id}/resume`, 'POST');
+        await this.#api.request(`/vacancy/vacancy/${id}/response`, 'POST');
     }
 }

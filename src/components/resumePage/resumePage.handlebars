@@ -3,7 +3,7 @@
   <div class="resume_info">
     <div class="resume_info__profile">
       <div class="resume_info__avatar">
-        <img src="http://localhost:8000/api/v1/static/{{applicant.avatar_path}}" alt="Фото профиля" onerror="this.src = '/icons-user-profile.svg';">
+        {{> partials/avatar avatar=applicant.avatar_path}}
       </div>
       <div class="resume_info__profile_info">
         <div class="resume_info__profile_name">{{applicant.last_name}} {{applicant.first_name}}

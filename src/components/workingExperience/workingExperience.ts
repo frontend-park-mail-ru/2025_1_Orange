@@ -204,5 +204,10 @@ export class WorkingExperience {
         this.#addEventListeners();
 
         if (this.#defaultData.until_now && this.#untilNow) this.#untilNow.checked = true;
+
+        if (this.#defaultData === emptyWorkExperience) {
+            const first = this.#form.elements[0] as HTMLInputElement
+            first.focus()
+        }
     };
 }

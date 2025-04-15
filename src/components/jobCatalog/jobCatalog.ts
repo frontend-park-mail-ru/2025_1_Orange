@@ -7,10 +7,11 @@ import { VacancyShort } from '../../api/interfaces';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { store } from '../../store';
+import { emptyEmployer } from '../../api/empty';
 
 export class JobCatalog {
     readonly #parent: HTMLElement;
-    #jobs: VacancyShort[] | null = null;
+    #jobs: VacancyShort[]  = [];
     #createResumeLink: HTMLLinkElement | null = null;
 
     /**
@@ -30,7 +31,15 @@ export class JobCatalog {
             this.#jobs = await api.vacancy.all();
         } catch (error) {
             logger.error('Ошибка при загрузке вакансий:', error);
-            this.#jobs = null;
+            this.#jobs = [];
+        }
+        for (const element of this.#jobs) {
+            try {
+                const data = await api.employer.get(element.employer_id);
+                element.employer = data;
+            } catch {
+                element.employer = emptyEmployer
+            }
         }
     };
 
@@ -68,11 +77,11 @@ export class JobCatalog {
         this.#parent.insertAdjacentHTML('beforeend', template({}));
         const filter = new JobCatalogFilter(this.self.querySelector('.jobs_filter') as HTMLElement);
         filter.render();
-        this.#jobs?.forEach((element) => {
+        this.#jobs.forEach((element) => {
             const card = new JobCard(this.self.querySelector('.jobs_list') as HTMLElement, element);
             card.render();
         });
-        if (!this.#jobs) {
+        if (this.#jobs.length === 0) {
             const jobContainer = this.self.querySelector('.jobs_list') as HTMLElement;
             jobContainer.textContent = 'Нету вакансий';
         }

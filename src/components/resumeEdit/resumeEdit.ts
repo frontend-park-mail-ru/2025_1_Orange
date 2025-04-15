@@ -19,10 +19,10 @@ export class ResumeEdit {
 
     #education: HTMLSelectElement | null = null;
 
-    #skillsFieldset: HTMLElement | null = null;
-    #aboutmeFieldset: HTMLElement | null = null;
-    #educationFieldset: HTMLElement | null = null;
-    #experienceFieldset: HTMLElement | null = null;
+    #skillsFieldset: HTMLFieldSetElement | null = null;
+    #aboutmeFieldset: HTMLFieldSetElement | null = null;
+    #educationFieldset: HTMLFieldSetElement | null = null;
+    #experienceFieldset: HTMLFieldSetElement | null = null;
 
     #nextBasicButton: HTMLButtonElement | null = null;
     #nextSkillsButton: HTMLButtonElement | null = null;
@@ -76,7 +76,6 @@ export class ResumeEdit {
                     if (
                         !fieldValidate(
                             element as HTMLInputElement,
-                            errorElement,
                             this.#inputTranslation,
                         )
                     ) {
@@ -91,7 +90,7 @@ export class ResumeEdit {
                 let valid = true;
 
                 fields.forEach((field) => {
-                    if (valid && !fieldValidate(field, errorElement, this.#inputTranslation)) {
+                    if (valid && !fieldValidate(field, this.#inputTranslation)) {
                         valid = false;
                     }
                 });
@@ -198,6 +197,8 @@ export class ResumeEdit {
                 if (this.#skillsFieldset) {
                     this.#nextBasicButton.hidden = true;
                     this.#skillsFieldset.hidden = false;
+                    const first = this.#skillsFieldset.elements[0] as HTMLInputElement
+                    first.focus()
                 }
             });
         }
@@ -209,6 +210,8 @@ export class ResumeEdit {
                 if (this.#formValidate(this.#nextSkillsButton) && this.#educationFieldset) {
                     this.#nextSkillsButton.hidden = true;
                     this.#educationFieldset.hidden = false;
+                    const first = this.#educationFieldset.elements[0] as HTMLInputElement
+                    first.focus()
                 }
             });
         }
@@ -221,6 +224,8 @@ export class ResumeEdit {
                 if (this.#formValidate(this.#nextEducationButton) && this.#aboutmeFieldset) {
                     this.#nextEducationButton.hidden = true;
                     this.#aboutmeFieldset.hidden = false;
+                    const first = this.#aboutmeFieldset.elements[0] as HTMLInputElement
+                    first.focus()
                 }
             });
         }
@@ -240,6 +245,8 @@ export class ResumeEdit {
                     this.#nextAboutMeButton.hidden = true;
                     this.#experienceFieldset.hidden = false;
                     this.#submit.hidden = false;
+                    const first = this.#experienceFieldset.elements[0] as HTMLInputElement
+                    first.focus()
                 }
             });
         }
@@ -265,6 +272,11 @@ export class ResumeEdit {
                     }
                 });
                 console.log(this.#data);
+                let error: HTMLElement | null = null;
+                if (this.#submit) error = this.#submit.parentNode?.querySelector('.vacancyEdit__error') as HTMLElement
+                if (error) {
+                    error.textContent = ''
+                }
                 try {
                     let resumeId: number = 0;
                     if (this.#id !== 0) {
@@ -276,7 +288,8 @@ export class ResumeEdit {
                     }
                     router.go(`/resume/${resumeId}`)
                 } catch {
-                    console.log('Ошибка при создании');
+                    if (this.#id !== 0 && error) error.textContent = 'Ошибка при обновлении вакансии'
+                    else if (error) error.textContent = 'Ошибка при создании вакансии'
                 }
             });
         }
@@ -328,16 +341,16 @@ export class ResumeEdit {
                 this.#submit.textContent = 'Изменить вакансию';
             }
 
-            this.#skillsFieldset = this.#form.elements.namedItem('fieldset_skills') as HTMLElement;
+            this.#skillsFieldset = this.#form.elements.namedItem('fieldset_skills') as HTMLFieldSetElement;
             this.#educationFieldset = this.#form.elements.namedItem(
                 'fieldset_education',
-            ) as HTMLElement;
+            ) as HTMLFieldSetElement;
             this.#aboutmeFieldset = this.#form.elements.namedItem(
                 'fieldset_aboutme',
-            ) as HTMLElement;
+            ) as HTMLFieldSetElement;
             this.#experienceFieldset = document.getElementById(
                 'resume_edit_working_experiences',
-            ) as HTMLElement;
+            ) as HTMLFieldSetElement;
 
             this.#nextBasicButton = document.getElementById('basic_next') as HTMLButtonElement;
             this.#nextSkillsButton = document.getElementById('skills_next') as HTMLButtonElement;

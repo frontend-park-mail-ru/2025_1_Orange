@@ -75,6 +75,7 @@ export const vacancyMock: Vacancy = {
     id: 3,
     title: 'Фулстек веб разработчик',
     is_active: true,
+    employer_id: 1,
     employer: employerMock,
     specialization: 'Фулстек веб разработчик',
     city: 'Санкт-Петербург',
@@ -84,7 +85,7 @@ export const vacancyMock: Vacancy = {
     working_hours: 8,
     salary_from: 30000,
     salary_to: 50000,
-    taxes_included: true,
+    taxes_included: 'gross',
     experience: '1_3_years',
     skills: ['TypeScript', 'Axios', 'React', 'MUI'],
     description:
@@ -102,6 +103,7 @@ export const vacancyShortMock: VacancyShort = {
     resume: false,
     id: 22,
     title: 'Фулстек веб разработчик',
+    employer_id: 1,
     employer: employerShortMock,
     specialization: 'Фулстек веб разработчик',
     city: 'Москва',
@@ -110,7 +112,7 @@ export const vacancyShortMock: VacancyShort = {
     working_hours: 8,
     salary_from: 30000,
     salary_to: 50000,
-    taxes_included: false,
+    taxes_included: 'gross',
     created_at: '2025-03-02T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
 };

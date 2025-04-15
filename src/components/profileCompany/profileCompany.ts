@@ -72,7 +72,7 @@ export class ProfileCompany {
         if (this.#backArrow) {
             this.#backArrow.addEventListener('click', (e: Event) => {
                 e.preventDefault();
-                router.back();
+                router.go('/catalog');
             });
         }
         if (this.#editButton) {

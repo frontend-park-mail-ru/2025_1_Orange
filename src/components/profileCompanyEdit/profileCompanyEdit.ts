@@ -118,11 +118,18 @@ export class ProfileCompanyEdit {
                         )
                     )
                         return;
+                    let error: HTMLElement | null = null;
+                    if (this.#confirm) error = document.getElementById('profile_submit_error') as HTMLElement
+                    if (error) {
+                        error.textContent = ''
+                    }
                     try {
                         console.log(store.data.vacancy);
                         if (this.#data) await api.employer.update(this.#data);
                     } catch {
-                        console.log('Ошибка при обновлении');
+                        if (error) {
+                            error.textContent += 'Ошибка при обновлении информации\n'
+                        }
                     }
                     if (this.#uploadInput) {
                         const files = this.#uploadInput.files;
@@ -135,7 +142,9 @@ export class ProfileCompanyEdit {
                             await api.employer.logo(formData);
                             router.go(`/profileCompany/${store.data.user.user_id}`);
                         } catch {
-                            console.log('Загрузка картинки не удалась');
+                            if (error) {
+                                error.textContent += 'Ошибка при загрузке картинки'
+                            }
                         }
                     }
                 });

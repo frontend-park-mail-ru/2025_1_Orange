@@ -123,11 +123,15 @@ export class ProfileUserEdit {
                         )
                     )
                         return;
+                    let error: HTMLElement | null = null;
+                    if (this.#confirm) error = document.getElementById('profile_submit_error') as HTMLElement
+                    if (error) {
+                        error.textContent = ''
+                    }
                     try {
                         console.log(this.#data);
                         if (this.#data) {
                             await api.applicant.update(this.#data);
-                            router.go(`/profileUser/${store.data.user.user_id}`);
                             if (this.#uploadInput) {
                                 const files = this.#uploadInput.files;
                                 if (!files || files.length === 0)
@@ -135,7 +139,9 @@ export class ProfileUserEdit {
                             }
                         }
                     } catch {
-                        console.log('Ошибка при обновлении');
+                        if (error) {
+                            error.textContent += 'Ошибка при обновлении информации\n'
+                        }
                     }
                     if (this.#uploadInput) {
                         const files = this.#uploadInput.files;
@@ -148,7 +154,9 @@ export class ProfileUserEdit {
                             await api.applicant.avatar(formData);
                             router.go(`/profileUser/${store.data.user.user_id}`);
                         } catch {
-                            console.log('Загрузка картинки не удалась');
+                            if (error) {
+                                error.textContent += 'Ошибка при загрузке картинки'
+                            }
                         }
                     }
                 });

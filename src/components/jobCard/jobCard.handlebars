@@ -3,13 +3,13 @@
         <img src="/heart.svg" alt="Избранное">
     </div>
     <div class="job__avatar">
-        <img src="{{employer.logo}}" alt="Логотип компании">
+        {{> partials/logo logo=employer.logo }}
     </div>
     <div class="job__info">
         <p class="job__name">{{title}}</p>
         <p class="job__salary">
             {{salary_from}} - {{salary_to}}
-            {{#if taxes_included}}
+            {{#if taxes}}
             На руки
             {{else}}
             До вычета налогов
@@ -32,7 +32,7 @@
                 <div class="job__button" id="vacancy_{{id}}_resume">Откликнуться</div>
             </div>
             <div class="job__statistics">
-                {{days_created}} дня назад • {{p.count}} уже откликнулись
+                {{days_created}} дня назад
             </div>
         </div>
     </div>
