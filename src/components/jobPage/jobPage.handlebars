@@ -59,7 +59,13 @@
         <div class="vacancy_info">
             <div class="vacancy_info__item">
                 <span class="vacancy_info__label">Заработная плата</span>
-                <span class="vacancy_info__value">{{salary_from}} - {{salary_to}}</span>
+                <span class="vacancy_info__value">{{salary_from}} - {{salary_to}}<br>
+                    {{#if taxes_included}}
+                    на руки
+                    {{else}}
+                    до вычета налогов
+                    {{/if}}
+                </span>
             </div>
             <div class="vacancy_info__item">
                 <span class="vacancy_info__label">Требуемый опыт работы</span>

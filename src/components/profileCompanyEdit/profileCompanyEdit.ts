@@ -109,23 +109,27 @@ export class ProfileCompanyEdit {
                 element.addEventListener('click', async (e: Event) => {
                     e.preventDefault();
                     if (
-                        this.#form &&
-                        formValidate(
+                        !this.#form ||
+                        !formValidate(
                             this.#form,
                             this.#form as HTMLElement,
                             '.profile__error',
                             this.#inputTranslation,
                         )
-                    )
+                    ) {
+                        console.log("FORM VALIDATE + FORM ERROR")
+                        console.log(this.#form)
                         return;
+                    }
                     let error: HTMLElement | null = null;
                     if (this.#confirm) error = document.getElementById('profile_submit_error') as HTMLElement
                     if (error) {
                         error.textContent = ''
                     }
                     try {
-                        console.log(store.data.vacancy);
+                        console.log(this.#data);
                         if (this.#data) await api.employer.update(this.#data);
+                        router.go(`/profileCompany/${store.data.user.user_id}`);
                     } catch {
                         if (error) {
                             error.textContent += 'Ошибка при обновлении информации\n'
@@ -198,5 +202,7 @@ export class ProfileCompanyEdit {
         this.#avatar = document.querySelectorAll('.profile__avatar-img');
 
         this.#addEventListeners();
+
+        this.#data = this.#formGet(this.#form) as EmployerEdit
     };
 }

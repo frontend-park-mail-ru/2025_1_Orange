@@ -44,6 +44,7 @@ export function fieldValidate(
             error.textContent = customMessage(field, inputTranslation);
             error.style.display = 'block';
         }
+        console.log('ERROR', field)
         return false;
     }
     if (field.validity.valid) field.classList.add('valid');
@@ -58,6 +59,7 @@ export function formValidate(
 ): boolean {
     let fieldset = element.closest('fieldset') as HTMLFieldSetElement;
     if (element.tagName === 'FORM') fieldset = element as HTMLFieldSetElement;
+    console.log("FORM VALIDATE FIELDSET", fieldset)
     if (fieldset) {
         const errorElement = fieldset.querySelector(errorClass) as HTMLElement;
 
@@ -67,6 +69,7 @@ export function formValidate(
 
             if (['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName)) {
                 if (!fieldValidate(element as HTMLInputElement, inputTranslation)) {
+                    console.log("FIELD ERROR", element)
                     return false;
                 }
             }
@@ -79,6 +82,7 @@ export function formValidate(
 
             fields.forEach((field) => {
                 if (valid && !fieldValidate(field, inputTranslation)) {
+                    console.log(" MANY FIELD ERROR", element)
                     valid = false;
                 }
             });
