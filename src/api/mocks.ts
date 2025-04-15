@@ -85,7 +85,7 @@ export const vacancyMock: Vacancy = {
     working_hours: 8,
     salary_from: 30000,
     salary_to: 50000,
-    taxes_included: 'gross',
+    taxes_included: true,
     experience: '1_3_years',
     skills: ['TypeScript', 'Axios', 'React', 'MUI'],
     description:
@@ -112,7 +112,7 @@ export const vacancyShortMock: VacancyShort = {
     working_hours: 8,
     salary_from: 30000,
     salary_to: 50000,
-    taxes_included: 'gross',
+    taxes_included: true,
     created_at: '2025-03-02T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
 };

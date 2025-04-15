@@ -151,6 +151,9 @@ export class VacancyEdit {
                         .map((skill) => skill.trim())
                         .filter((skill) => skill !== '');
                     break;
+                case 'taxes_included':
+                    json[key] = value === 'true'
+                    break;
                 case 'salary_from':
                 case 'salary_to':
                 case 'working_hours':

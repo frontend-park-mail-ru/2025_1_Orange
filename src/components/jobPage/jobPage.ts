@@ -103,7 +103,6 @@ export class JobPage {
                     store.data.authorized &&
                     store.data.user.role === 'employer' &&
                     store.data.user.user_id === this.#props.employer.id,
-                taxes: this.#props.taxes_included === 'net'
             }),
         );
         const companyCard = new JobCompanyCard(

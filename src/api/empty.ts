@@ -105,7 +105,7 @@ export const emptyVacancy: Vacancy = {
     working_hours: 0,
     salary_from: 0,
     salary_to: 0,
-    taxes_included: 'gross',
+    taxes_included: false,
     experience: 'no_matter',
     skills: [],
     description: '',
@@ -129,7 +129,7 @@ export const emptyVacancyShort: VacancyShort = {
     working_hours: 0,
     salary_from: 0,
     salary_to: 0,
-    taxes_included: 'gross',
+    taxes_included: false,
     created_at: '',
     updated_at: '',
 };

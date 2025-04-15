@@ -93,7 +93,7 @@ export interface Vacancy {
     working_hours: number;
     salary_from: number;
     salary_to: number;
-    taxes_included: 'gross' | 'net';
+    taxes_included: boolean;
     experience: 'no_matter' | 'no_experience' | '1_3_years' | '3_6_years' | '6_plus_years';
     skills: string[];
     description: string;
@@ -117,7 +117,7 @@ export interface VacancyShort {
     working_hours: number;
     salary_from: number;
     salary_to: number;
-    taxes_included: 'gross' | 'net';
+    taxes_included: boolean;
     created_at: string;
     updated_at: string;
 }
@@ -195,7 +195,7 @@ export interface VacancyCreate {
     working_hours: number;
     salary_from: number;
     salary_to: number;
-    taxes_included: 'gross' | 'net';
+    taxes_included: boolean;
     experience: 'no_experience' | '1_3_years' | '3_5_years' | 'more_than_5_years';
     skills: string[];
     description: string;
