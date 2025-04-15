@@ -22,7 +22,7 @@ export const staticMock: Static = {
 };
 
 export const applicantMock: Applicant = {
-    id: 12,
+    id: 1,
     first_name: 'Алексей',
     last_name: 'Ларин',
     middle_name: 'Андреевич',
@@ -40,7 +40,7 @@ export const applicantMock: Applicant = {
 };
 
 export const applicantShortMock: ApplicantShort = {
-    id: 12,
+    id: 1,
     first_name: 'Алексей',
     last_name: 'Ларин',
     middle_name: 'Андреевич',
@@ -52,7 +52,7 @@ export const applicantShortMock: ApplicantShort = {
 };
 
 export const employerMock: Employer = {
-    id: 22,
+    id: 1,
     company_name: 'VK',
     slogan: 'Помогаем людям и компаниям объединяться вокруг того, что действительно важно',
     website: 'vk.com',
@@ -65,14 +65,14 @@ export const employerMock: Employer = {
 };
 
 export const employerShortMock: EmployerShort = {
-    id: 22,
+    id: 1,
     company_name: 'VK',
     logo: 'https://placehold.co/100x100/EEE/31343C',
 };
 
 export const vacancyMock: Vacancy = {
     resume: false,
-    id: 3,
+    id: 1,
     title: 'Фулстек веб разработчик',
     is_active: true,
     employer_id: 1,
@@ -101,7 +101,7 @@ export const vacancyMock: Vacancy = {
 
 export const vacancyShortMock: VacancyShort = {
     resume: false,
-    id: 22,
+    id: 1,
     title: 'Фулстек веб разработчик',
     employer_id: 1,
     employer: employerShortMock,
@@ -129,7 +129,7 @@ export const workExperienceMock: WorkExperience = {
 };
 
 export const resumeMock: Resume = {
-    id: 12,
+    id: 1,
     applicant_id: 1,
     applicant: applicantMock,
     about_me: 'Full-Stack Web Developer...',
@@ -145,7 +145,7 @@ export const resumeMock: Resume = {
 };
 
 export const resumeShortMock: ResumeShort = {
-    id: 12,
+    id: 1,
     applicant_id: 1,
     applicant: applicantShortMock,
     specialization: 'Фулстек веб разработчик',

@@ -13,6 +13,7 @@ import { emptyEmployer, emptyVacancy } from '../../api/empty';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { DeleteButton } from '../deleteButton/deleteButton';
+import { vacancyMock } from '../../api/mocks';
 
 export class JobPage {
     readonly #parent: HTMLElement;
@@ -35,7 +36,8 @@ export class JobPage {
         this.#id = Number.parseInt(url[url.length - 1]);
         console.log('resumePage');
         try {
-            const data = await api.vacancy.get(this.#id);
+            //const data = await api.vacancy.get(this.#id);
+            const data = vacancyMock
             this.#props = data;
         } catch {
             console.log('Не удалось загрузить страницу');
@@ -53,7 +55,8 @@ export class JobPage {
         if (this.#resumeButton) {
             this.#resumeButton.addEventListener('click', async () => {
                 try {
-                    await api.vacancy.resume(this.#props.id);
+                    //await api.vacancy.resume(this.#props.id);
+                    vacancyMock.resume = true
                     await this.init();
                     this.render();
                 } catch {

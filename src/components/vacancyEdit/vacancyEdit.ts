@@ -7,6 +7,7 @@ import { store } from '../../store';
 import './vacancyEdit.sass';
 import { router } from '../../router';
 import { fieldValidate } from '../../forms';
+import { vacancyMock } from '../../api/mocks';
 
 export class VacancyEdit {
     readonly #parent: HTMLElement;
@@ -65,25 +66,26 @@ export class VacancyEdit {
         if (!isNaN(Number.parseInt(last)) && last !== '') {
             this.#id = Number.parseInt(last);
             try {
-                const data = await api.vacancy.get(this.#id);
+                //const data = await api.vacancy.get(this.#id);
+                const data = vacancyMock
                 this.#defaultData = data;
             } catch {
                 console.log('Не удалось загрузить вакансию');
                 this.#id = 0;
                 this.#defaultData = emptyVacancy;
-                // try {
-                //     this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
-                // } catch {
-                //     router.back();
-                // }
+                 try {
+                     this.#defaultData.employer = await api.employer.get(this.#defaultData.employer_id);
+                 } catch {
+                     router.back();
+                 }
             }
         } else {
             this.#defaultData = emptyVacancy;
-            // try {
-            //     this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
-            // } catch {
-            //     router.back();
-            // }
+             try {
+                 this.#defaultData.employer = await api.employer.get(this.#defaultData.employer_id);
+             } catch {
+                 router.back();
+             }
         }
     };
 
@@ -114,7 +116,6 @@ export class VacancyEdit {
                     if (
                         !fieldValidate(
                             element as HTMLInputElement,
-                            errorElement,
                             this.#inputTranslation,
                         )
                     ) {
@@ -129,7 +130,7 @@ export class VacancyEdit {
                 let valid = true;
 
                 fields.forEach((field) => {
-                    if (valid && !fieldValidate(field, errorElement, this.#inputTranslation)) {
+                    if (valid && !fieldValidate(field, this.#inputTranslation)) {
                         valid = false;
                     }
                 });
@@ -319,10 +320,12 @@ export class VacancyEdit {
                 try {
                     console.log(store.data.vacancy);
                     if (this.#id !== 0) {
-                        const data = await api.vacancy.update(this.#id, store.data.vacancy);
+                        //const data = await api.vacancy.update(this.#id, store.data.vacancy);
+                        const data = vacancyMock
                         router.go(`/vacancy/${data.id}`)
                     } else {
-                        const data = await api.vacancy.create(store.data.vacancy);
+                        //const data = await api.vacancy.create(store.data.vacancy);
+                        const data = vacancyMock
                         router.go(`/vacancy/${data.id}`)
                     }
                 } catch {
