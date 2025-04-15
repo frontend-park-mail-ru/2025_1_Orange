@@ -278,15 +278,13 @@ export class ResumeEdit {
                     error.textContent = ''
                 }
                 try {
-                    let resumeId: number = 0;
                     if (this.#id !== 0) {
                         const data = await api.resume.update(this.#id, this.#data);
-                        resumeId = data.id
+                        router.go(`/resume/${data.id}`)
                     } else {
                         const data = await api.resume.create(this.#data);
-                        resumeId = data.id
+                        router.go(`/resume/${data.id}`)
                     }
-                    router.go(`/resume/${resumeId}`)
                 } catch {
                     if (this.#id !== 0 && error) error.textContent = 'Ошибка при обновлении вакансии'
                     else if (error) error.textContent = 'Ошибка при создании вакансии'

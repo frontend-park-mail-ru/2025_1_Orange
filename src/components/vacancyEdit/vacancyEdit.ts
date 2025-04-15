@@ -316,9 +316,11 @@ export class VacancyEdit {
                 try {
                     console.log(store.data.vacancy);
                     if (this.#id !== 0) {
-                        await api.vacancy.update(this.#id, store.data.vacancy);
+                        const data = await api.vacancy.update(this.#id, store.data.vacancy);
+                        router.go(`/vacancy/${data.id}`)
                     } else {
-                        await api.vacancy.create(store.data.vacancy);
+                        const data = await api.vacancy.create(store.data.vacancy);
+                        router.go(`/vacancy/${data.id}`)
                     }
                 } catch {
                     if (this.#id !== 0 && error) error.textContent = 'Ошибка при обновлении вакансии'
