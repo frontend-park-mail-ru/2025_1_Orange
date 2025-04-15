@@ -48,14 +48,14 @@ export class RegistrationPassword {
             return false;
         }
 
-        const minLength = 8;
+        const minLength = 10;
 
         this.#password.classList.remove('form__input_error', 'form__input_valid');
         this.#repeatPassword.classList.remove('form__input_error', 'form__input_valid');
 
         if (this.#password.value.length < minLength) {
             errorElement.hidden = false;
-            errorElement.textContent = 'Пароль должен содержать минимум 8 символов';
+            errorElement.textContent = 'Пароль должен содержать минимум 10 символов';
             this.#password.classList.add('form__input_error');
             return false;
         }
