@@ -83,6 +83,7 @@ export interface Vacancy {
     id: number;
     title: string;
     is_active: boolean;
+    employer_id : number;
     employer: Employer;
     specialization: string;
     city: string;
@@ -92,7 +93,7 @@ export interface Vacancy {
     working_hours: number;
     salary_from: number;
     salary_to: number;
-    taxes_included: boolean;
+    taxes_included: 'gross' | 'net';
     experience: 'no_matter' | 'no_experience' | '1_3_years' | '3_6_years' | '6_plus_years';
     skills: string[];
     description: string;
@@ -107,6 +108,7 @@ export interface VacancyShort {
     resume: boolean;
     id: number;
     title: string;
+    employer_id : number;
     employer: EmployerShort;
     specialization: string;
     city: string;
@@ -115,7 +117,7 @@ export interface VacancyShort {
     working_hours: number;
     salary_from: number;
     salary_to: number;
-    taxes_included: boolean;
+    taxes_included: 'gross' | 'net';
     created_at: string;
     updated_at: string;
 }
@@ -193,7 +195,7 @@ export interface VacancyCreate {
     working_hours: number;
     salary_from: number;
     salary_to: number;
-    taxes_included: boolean;
+    taxes_included: 'gross' | 'net';
     experience: 'no_experience' | '1_3_years' | '3_5_years' | 'more_than_5_years';
     skills: string[];
     description: string;

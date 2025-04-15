@@ -2,8 +2,7 @@
     <div class="profile__header">
         <div class="profile__info">
             <div class="profile__avatar">
-                <img src="http://localhost:8000/api/v1/static/{{avatar_path}}" alt="Фото профиля" class="profile__avatar-img"
-                onerror="this.src = '/icons-user-profile.svg';">
+                {{> partials/avatar avatar=avatar_path}}
             </div>
             <div class="profile__details">
                 <h1 class="profile__name">{{last_name}} {{first_name}} {{middle_name}}</h1>
@@ -23,8 +22,7 @@
             <h3 class="profile__section-title">Фотография для резюме</h3>
             <div class="profile__photo-upload">
                 <div class="profile__avatar">
-                    <img src="http://localhost:8000/api/v1/static/{{avatar_path}}" alt="Фото для резюме" class="profile__avatar-img"
-                    onerror="this.src = '/icons-user-profile.svg';">
+                    {{> partials/avatar avatar=avatar_path}}
                 </div>
                 <div class="profile__photo-dropzone">
                     <input type="file" id="file-input" class="profile__photo-input" accept=".jpg, .png"
@@ -42,41 +40,46 @@
             <div class="profile__fields">
                 <fieldset class="profile__fieldset profile__field--full-width">
                     <div class="profile__fields">
-                    <div class="profile__field">
-                        <label class="profile__label">Фамилия</label>
-                        <input type="text" class="profile__input" value="{{last_name}}" name="last_name"  minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s]+$" required>
-                    </div>
-                    <div class="profile__field">
-                        <label class="profile__label">Имя</label>
-                        <input type="text" class="profile__input" value="{{first_name}}" name="first_name"  minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s]+$" required>
-                    </div>
-                    <div class="profile__field">
-                        <label class="profile__label">Отчество</label>
-                        <input type="text" class="profile__input" value="{{middle_name}}" name="middle_name"  minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s]+$">
-                    </div>
+                        <div class="profile__field">
+                            <label class="profile__label">Фамилия</label>
+                            <input type="text" class="profile__input" value="{{last_name}}" name="last_name"
+                                minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s]+$" required>
+                        </div>
+                        <div class="profile__field">
+                            <label class="profile__label">Имя</label>
+                            <input type="text" class="profile__input" value="{{first_name}}" name="first_name"
+                                minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s]+$" required>
+                        </div>
+                        <div class="profile__field">
+                            <label class="profile__label">Отчество</label>
+                            <input type="text" class="profile__input" value="{{middle_name}}" name="middle_name"
+                                minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s]+$">
+                        </div>
                     </div>
                     <div class="profile__error">
                     </div>
                 </fieldset>
                 <fieldset class="profile__fieldset profile__field--full-width">
                     <div class="profile__fields">
-                    <div class="profile__field">
-                        <label class="profile__label">Дата рождения</label>
-                        <input type="date" class="profile__input" value="{{birth_date}}" name="birth_date" min="1900-01-01" max="2025-01-01" required>
-                    </div>
-                    <div class="profile__field">
-                        <label class="profile__label">Пол</label>
-                        <div class="profile__select-wrapper">
-                            <select class="profile__select" name="sex">
-                                <option value="M">Мужской</option>
-                                <option value="F">Женский</option>
-                            </select>
+                        <div class="profile__field">
+                            <label class="profile__label">Дата рождения</label>
+                            <input type="date" class="profile__input" value="{{birth_date}}" name="birth_date"
+                                min="1900-01-01" max="2025-01-01" required>
                         </div>
-                    </div>
-                    <div class="profile__field">
-                        <label class="profile__label">Город проживания</label>
-                        <input type="text" class="profile__input" value="{{city}}" name="city"  minlength="2" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$">
-                    </div>
+                        <div class="profile__field">
+                            <label class="profile__label">Пол</label>
+                            <div class="profile__select-wrapper">
+                                <select class="profile__select" name="sex">
+                                    <option value="M">Мужской</option>
+                                    <option value="F">Женский</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="profile__field">
+                            <label class="profile__label">Город проживания</label>
+                            <input type="text" class="profile__input" value="{{city}}" name="city" minlength="2"
+                                maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$">
+                        </div>
                     </div>
                     <div class="profile__error">
                     </div>
@@ -111,7 +114,7 @@
                     </div>
                 </div>
                 <div class="profile__error">
-                    </div>
+                </div>
             </fieldset>
         </div>
 
@@ -120,16 +123,19 @@
                 <h3 class="profile__section-title">Дополнительно</h3>
                 <div class="profile__field">
                     <label class="profile__label">Статус</label>
-                    <input type="text" class="profile__input" value="{{quote}}" name="quote"  minlength="2" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$">
+                    <input type="text" class="profile__input" value="{{quote}}" name="quote" minlength="2"
+                        maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$">
                 </div>
                 <div class="profile__error">
                 </div>
             </fieldset>
         </div>
-
-        <div class="profile__actions">
-            <button type="button" class="job__button_second">Отменить</button>
-            <button type="submit" class="job__button">Сохранить</button>
+        <div>
+            <div id="profile_submit_error" class="profile__error"></div>
+            <div class="profile__actions">
+                <button type="button" class="job__button_second">Отменить</button>
+                <button type="submit" class="job__button">Сохранить</button>
+            </div>
         </div>
     </form>
 </main>

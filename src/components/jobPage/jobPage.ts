@@ -9,7 +9,7 @@ import {
     workFormatTranslations,
 } from '../../api/translations';
 import { store } from '../../store';
-import { emptyVacancy } from '../../api/empty';
+import { emptyEmployer, emptyVacancy } from '../../api/empty';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { DeleteButton } from '../deleteButton/deleteButton';
@@ -40,6 +40,12 @@ export class JobPage {
         } catch {
             console.log('Не удалось загрузить страницу');
             router.back();
+        }
+        try {
+            const data = await api.employer.get(this.#props.employer_id);
+            this.#props.employer = data;
+        } catch {
+            this.#props.employer = emptyEmployer
         }
     };
 
@@ -97,6 +103,7 @@ export class JobPage {
                     store.data.authorized &&
                     store.data.user.role === 'employer' &&
                     store.data.user.user_id === this.#props.employer.id,
+                taxes: this.#props.taxes_included === 'net'
             }),
         );
         const companyCard = new JobCompanyCard(

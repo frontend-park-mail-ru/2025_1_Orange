@@ -5,7 +5,6 @@ import template from './resumeCatalog.handlebars';
 import { ResumeCatalogFilter } from '../resumeCatalogFilter/resumeCatalogFilter';
 import type { Resume } from '../../api/interfaces';
 import { api } from '../../api/api';
-import { router } from '../../router';
 import { emptyApplicant } from '../../api/empty';
 
 export class ResumeCatalog {
@@ -22,7 +21,7 @@ export class ResumeCatalog {
 
     /**
      * Получение резюме
-     * @return {Resume[]}
+     * 
      */
     init = async () => {
         try {
@@ -30,6 +29,18 @@ export class ResumeCatalog {
         } catch (error) {
             logger.error('Ошибка при загрузке резюме:', error);
             this.#resumes = [];
+        }
+        if (this.#resumes.length === 0) {
+            const jobContainer = this.self.querySelector('.resume_list') as HTMLElement;
+            jobContainer.textContent = 'Нету резюме';
+        }
+        for (const element of this.#resumes) {
+            try {
+                const data = await api.applicant.get(element.applicant_id);
+                element.applicant = data;
+            } catch {
+                element.applicant = emptyApplicant
+            }
         }
     };
 
@@ -59,18 +70,6 @@ export class ResumeCatalog {
             this.self.querySelector('.resume_filter') as HTMLElement,
         );
         filter.render();
-        if (this.#resumes.length === 0) {
-            const jobContainer = this.self.querySelector('.resume_list') as HTMLElement;
-            jobContainer.textContent = 'Нету резюме';
-        }
-        for (const element of this.#resumes) {
-            try {
-                const data = await api.applicant.get(element.applicant_id);
-                element.applicant = data;
-            } catch {
-                element.applicant = emptyApplicant
-            }
-        }
 
         this.#resumes?.forEach((element) => {
             const card = new ResumeCard(

@@ -64,6 +64,26 @@
         &.error
             border-color: #FB0102
     
+    &__select
+        position: relative
+
+        select
+            width:100%
+            appearance: none;
+    
+    &__select:after
+        content: ""
+        position: absolute
+        top: 50%
+        right: 16px
+        transform: translateY(-50%)
+        width: 0
+        height: 0
+        border-left: 6px solid transparent
+        border-right: 6px solid transparent
+        border-top: 6px solid #666
+        pointer-events: none
+    
     &__split
         display: flex
         flex-direction: row

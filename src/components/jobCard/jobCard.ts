@@ -97,6 +97,7 @@ export class JobCard {
                 workFormatTranslations,
                 employmentTranslations,
                 days_created: this.#days_created,
+                taxes: this.#props.taxes_included === 'net'
             }),
         );
 
