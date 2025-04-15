@@ -163,8 +163,11 @@ export class WorkingExperience {
                 if (!this.#start_date || !this.#end_date) return;
                 const end = new Date(this.#end_date.value);
                 const start = new Date(this.#start_date.value);
-                if (end.getTime() - start.getTime() < 0) {
+                if (end.getTime() - start.getTime() < 0 && this.#untilNow && !this.#untilNow.checked) {
                     this.#end_date.setCustomValidity('Конец работы раньше начала работы');
+                } else {
+                    this.#end_date.setCustomValidity('');
+                    this.#start_date.setCustomValidity('');
                 }
             });
             this.#start_date.addEventListener('input', () => {
@@ -174,6 +177,9 @@ export class WorkingExperience {
                 const start = new Date(this.#start_date.value);
                 if (end.getTime() - start.getTime() < 0) {
                     this.#end_date.setCustomValidity('Конец работы раньше начала работы');
+                } else {
+                    this.#end_date.setCustomValidity('');
+                    this.#start_date.setCustomValidity('');
                 }
             });
         }
