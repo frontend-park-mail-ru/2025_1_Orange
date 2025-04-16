@@ -52,7 +52,7 @@ export class ProfileCompany {
             const data = await api.employer.get(this.#id);
             this.#data = data;
         } catch {
-            console.log('Не удалось загрузить страницу');
+            logger.info('Не удалось загрузить страницу');
             router.back();
         }
     };
@@ -105,7 +105,7 @@ export class ProfileCompany {
             }),
         );
         this.#vacancyContainer = document.getElementById('responses-content') as HTMLElement;
-        this.#vacancies = [vacancyMock];
+        this.#vacancies = [];
         this.#vacancies.forEach((vacancy) => {
             const vacancyCard = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
             vacancyCard.render();

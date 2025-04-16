@@ -1,3 +1,5 @@
+import { logger } from "./utils/logger";
+
 export function customMessage(
     field: HTMLInputElement | HTMLSelectElement,
     inputTranslation: Record<string, string>,
@@ -33,18 +35,17 @@ export function fieldValidate(
     inputTranslation: Record<string, string>,
 ): boolean {
     const error = field.closest('fieldset')?.querySelector('[class$="__error"]') as HTMLElement;
-    console.log(error)
+    logger.info(error)
     field.classList.remove('error');
     field.classList.remove('valid');
     if (!field.validity.valid) {
-        console.log(field);
+        logger.info(field);
         if (document.activeElement === field && field.value !== '' && field.value !== '0')
             field.classList.add('error');
         if (error) {
             error.textContent = customMessage(field, inputTranslation);
             error.style.display = 'block';
         }
-        console.log('ERROR', field)
         return false;
     }
     if (field.validity.valid) field.classList.add('valid');
@@ -59,7 +60,6 @@ export function formValidate(
 ): boolean {
     let fieldset = element.closest('fieldset') as HTMLFieldSetElement;
     if (element.tagName === 'FORM') fieldset = element as HTMLFieldSetElement;
-    console.log("FORM VALIDATE FIELDSET", fieldset)
     if (fieldset) {
         const errorElement = fieldset.querySelector(errorClass) as HTMLElement;
 
@@ -69,7 +69,6 @@ export function formValidate(
 
             if (['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName)) {
                 if (!fieldValidate(element as HTMLInputElement, inputTranslation)) {
-                    console.log("FIELD ERROR", element)
                     return false;
                 }
             }
@@ -82,7 +81,6 @@ export function formValidate(
 
             fields.forEach((field) => {
                 if (valid && !fieldValidate(field, inputTranslation)) {
-                    console.log(" MANY FIELD ERROR", element)
                     valid = false;
                 }
             });

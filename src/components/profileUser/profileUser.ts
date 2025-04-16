@@ -40,7 +40,7 @@ export class ProfileUser {
             const data = await api.applicant.get(this.#id);
             this.#data = data;
         } catch {
-            console.log('Не удалось загрузить страницу');
+            logger.info('Не удалось загрузить страницу');
             router.back();
         }
     };
@@ -128,7 +128,7 @@ export class ProfileUser {
         try {
             this.#resumes = await api.resume.all();
         } catch {
-            console.log('Не удалось загрузить');
+            logger.info('Не удалось загрузить');
             return;
         }
 
@@ -158,7 +158,7 @@ export class ProfileUser {
             this.#data.birth_date = '';
         } else if (this.#data) {
             const birth_date = new Date(this.#data.birth_date);
-            console.log(birth_date);
+            logger.info(birth_date);
             this.#data.birth_date = `${birth_date.getUTCDate()}.${birth_date.getUTCMonth()}.${birth_date.getFullYear()}`;
         }
         this.#parent.insertAdjacentHTML(

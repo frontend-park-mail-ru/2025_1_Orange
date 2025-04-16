@@ -23,16 +23,6 @@ export class WorkingExperience {
         if (default_data === emptyWorkExperience) {
             this.#defaultData.id = id;
         }
-
-        let parts = this.#defaultData.start_date.split('.');
-        console.log(parts);
-        if (parts.length === 3) {
-            this.#defaultData.start_date = `${parts[2]}-${parts[1]}-${parts[0]}`;
-        }
-        parts = this.#defaultData.end_date.split('.');
-        if (parts.length === 3) {
-            this.#defaultData.end_date = `${parts[2]}-${parts[1]}-${parts[0]}`;
-        }
     }
 
     readonly #inputTranslation: Record<string, string> = {
@@ -210,10 +200,5 @@ export class WorkingExperience {
         this.#addEventListeners();
 
         if (this.#defaultData.until_now && this.#untilNow) this.#untilNow.checked = true;
-
-        if (this.#defaultData === emptyWorkExperience) {
-            const first = this.#form.elements[0] as HTMLInputElement
-            first.focus()
-        }
     };
 }

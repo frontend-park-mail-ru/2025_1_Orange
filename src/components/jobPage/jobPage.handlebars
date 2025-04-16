@@ -27,24 +27,30 @@
         <div class="vacancy__description">
             <div class="vacancy__header">Описание</div>
             <p>{{description}}</p>
+            {{#if tasks}}
             <div class="vacancy__header">Задачи</div>
             <ul>
             {{#each tasks}}
             <li>{{this}}</li>
             {{/each}}
             </ul>
+            {{/if}}
+            {{#if requirements}}
             <div class="vacancy__header">Требования</div>
             <ul>
             {{#each requirements}}
             <li>{{this}}</li>
             {{/each}}
             </ul>
+            {{/if}}
+            {{#if optional_requirements}}
             <div class="vacancy__header">Будет плюсом</div>
             <ul>
             {{#each optional_requirements}}
             <li>{{this}}</li>
             {{/each}}
             </ul>
+            {{/if}}
         </div>
         <div id="delete_button">
             

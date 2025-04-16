@@ -46,7 +46,7 @@ export class ProfileCompanyEdit {
             const data = await api.employer.get(this.#id);
             this.#defaultData = data;
         } catch {
-            console.log('Не удалось загрузить страницу');
+            logger.info('Не удалось загрузить страницу');
             router.back();
         }
     };
@@ -117,8 +117,8 @@ export class ProfileCompanyEdit {
                             this.#inputTranslation,
                         )
                     ) {
-                        console.log("FORM VALIDATE + FORM ERROR")
-                        console.log(this.#form)
+                        logger.info("FORM VALIDATE + FORM ERROR")
+                        logger.info(this.#form)
                         return;
                     }
                     let error: HTMLElement | null = null;
@@ -127,7 +127,7 @@ export class ProfileCompanyEdit {
                         error.textContent = ''
                     }
                     try {
-                        console.log(this.#data);
+                        logger.info(this.#data);
                         if (this.#data) await api.employer.update(this.#data);
                         router.go(`/profileCompany/${store.data.user.user_id}`);
                     } catch {

@@ -132,7 +132,7 @@ export interface Resume {
     educational_institution: string;
     graduation_year: string;
     skills: string[];
-    work_experience: WorkExperience[];
+    work_experiences: WorkExperience[];
     worked_experience: number;
     created_at: string;
     updated_at: string;
@@ -143,7 +143,7 @@ export interface ResumeShort {
     applicant_id: number;
     applicant: ApplicantShort;
     specialization: string;
-    work_experience: WorkExperience;
+    work_experiences: WorkExperience;
     worked_experience: number;
     created_at: string;
     updated_at: string;
@@ -182,7 +182,7 @@ export interface ResumeCreate {
     educational_institution: string;
     graduation_year: string;
     skills: string[];
-    work_experience: WorkExperienceCreate[];
+    work_experiences: WorkExperienceCreate[];
 }
 
 export interface VacancyCreate {

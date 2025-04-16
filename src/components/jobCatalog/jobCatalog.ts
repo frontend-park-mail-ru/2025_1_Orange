@@ -8,7 +8,6 @@ import { api } from '../../api/api';
 import { router } from '../../router';
 import { store } from '../../store';
 import { emptyEmployer } from '../../api/empty';
-import { vacancyMock } from '../../api/mocks';
 
 export class JobCatalog {
     readonly #parent: HTMLElement;
@@ -29,15 +28,14 @@ export class JobCatalog {
      */
     init = async () => {
         try {
-            //this.#jobs = await api.vacancy.all();
-            this.#jobs = [vacancyMock,]
+            this.#jobs = await api.vacancy.all();
         } catch (error) {
             logger.error('Ошибка при загрузке вакансий:', error);
             this.#jobs = [];
         }
         for (const element of this.#jobs) {
             try {
-                //const data = await api.employer.get(element.employer_id);
+                const data = await api.employer.get(element.employer_id);
                 element.employer = data;
             } catch {
                 element.employer = emptyEmployer

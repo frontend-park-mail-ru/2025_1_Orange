@@ -21,7 +21,10 @@
             <div class="employer-profile__info">
                 <div class="employer-profile__info__header">
                     <div class="employer-profile__info__header__wrapper">
-                        {{> partials/logo logo=logo }}
+                        <div class="profile__avatar">
+                            {{> partials/logo logo=logo_path }}
+                        </div>
+
                         <div class="profile__details">
                             <div class="profile__name">{{company_name}}</div>
                             <div class="job__city">

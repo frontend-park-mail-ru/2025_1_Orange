@@ -107,10 +107,10 @@ export class ResumeEdit {
     #formValidate(element: HTMLElement): boolean {
         const fieldset = element.closest('fieldset') as HTMLFieldSetElement;
         if (fieldset) {
-            console.log(element);
-            console.log(fieldset);
+            logger.info(element);
+            logger.info(fieldset);
             const errorElement = fieldset.querySelector('.resumeEdit__error') as HTMLElement;
-            console.log(errorElement);
+            logger.info(errorElement);
             if (errorElement) {
                 errorElement.textContent = '';
                 errorElement.style.display = 'none';
@@ -146,7 +146,7 @@ export class ResumeEdit {
     init = async () => {
         const url = window.location.pathname.split('/');
         const last = url[url.length - 1];
-        console.log('url: ', url);
+        logger.info('url: ', url);
         if (!isNaN(Number.parseInt(last)) && last !== '') {
             this.#id = Number.parseInt(last);
             try {
@@ -158,7 +158,7 @@ export class ResumeEdit {
                     router.back();
                 }
             } catch {
-                console.log('Не удалось загрузить резюме');
+                logger.info('Не удалось загрузить резюме');
                 this.#id = 0;
                 this.#defaultData = emptyResume;
                 try {
@@ -302,19 +302,22 @@ export class ResumeEdit {
                     return;
                 if (!this.#aboutmeFieldset || !this.#formValidate(this.#aboutmeFieldset)) return;
                 if (this.#form) this.#data = this.#get(this.#form) as ResumeCreate;
-                const experience = this.self.querySelectorAll('.resumeEdit__experience');
-                this.#data.work_experience = [];
+                const experience = document.querySelectorAll('.resumeEdit__experience');
+                this.#data.work_experiences = [];
                 experience.forEach((element) => {
+                    logger.info(element)
                     if (element.tagName === 'FORM') {
+                        logger.info("TRUE", element)
                         const form = element as HTMLFormElement;
                         if (form.checkValidity()) {
-                            this.#data.work_experience.push(
+                            this.#data.work_experiences.push(
                                 this.#get(form) as WorkExperienceCreate,
                             );
+                            logger.info("NOW DATA", this.#data.work_experiences)
                         }
                     }
                 });
-                console.log(this.#data);
+                logger.info(this.#data);
                 let error: HTMLElement | null = null;
                 if (this.#submit) error = this.#submit.parentNode?.querySelector('.vacancyEdit__error') as HTMLElement
                 if (error) {
@@ -360,18 +363,6 @@ export class ResumeEdit {
                 birth_date: `${birth_date.getFullYear()}-${birth_date.getMonth()}-${birth_date.getDay()}`,
             }),
         );
-
-        const experiencesContainer = document.getElementById(
-            'resume_edit_working_experiences',
-        ) as HTMLElement;
-        let max_experience_id = 0;
-        this.#defaultData.work_experience?.forEach((experience) => {
-            const work = new WorkingExperience(experiencesContainer, experience.id, experience);
-            work.render();
-            if (experience.id > max_experience_id) max_experience_id = experience.id;
-        });
-        const work = new WorkingExperience(experiencesContainer, max_experience_id + 1);
-        work.render();
         this.#form = document.forms.namedItem('resume_edit') as HTMLFormElement;
         if (this.#form) {
             this.#education = this.#form.elements.namedItem('education') as HTMLSelectElement;
@@ -415,6 +406,11 @@ export class ResumeEdit {
                 this.#aboutmeFieldset.hidden = true;
                 this.#experienceFieldset.hidden = true;
                 this.#submit.hidden = true;
+                const experiencesContainer = document.getElementById(
+                    'resume_edit_working_experiences',
+                ) as HTMLElement;
+                const work = new WorkingExperience(experiencesContainer, 1);
+                work.render();
             }
 
             if (
@@ -428,6 +424,18 @@ export class ResumeEdit {
                 this.#nextSkillsButton.hidden = true;
                 this.#nextEducationButton.hidden = true;
                 this.#nextAboutMeButton.hidden = true;
+                const experiencesContainer = document.getElementById(
+                    'resume_edit_working_experiences',
+                ) as HTMLElement;
+                let max_experience_id = 0;
+                this.#defaultData.work_experiences?.forEach((experience) => {
+                    logger.info("WORK EXPERIENCES ", experience)
+                    const work = new WorkingExperience(experiencesContainer, experience.id, experience);
+                    work.render();
+                    if (experience.id > max_experience_id) max_experience_id = experience.id;
+                });
+                const work = new WorkingExperience(experiencesContainer, max_experience_id + 1);
+                work.render();
             }
         }
     };
