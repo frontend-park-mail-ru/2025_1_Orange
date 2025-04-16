@@ -42,7 +42,7 @@ export class RegistrationEmail {
         const companyLink = document.getElementById('i_need_users');
         const userLink = document.getElementById('i_need_job');
         if (companyLink && userLink) {
-            console.log(store.data.auth);
+            logger.info(store.data.auth);
             companyLink.hidden = store.data.auth.type === 'employer';
             userLink.hidden = store.data.auth.type === 'applicant';
         }

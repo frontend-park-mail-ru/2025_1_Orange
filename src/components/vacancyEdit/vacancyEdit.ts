@@ -59,22 +59,22 @@ export class VacancyEdit {
      * Получение значений если надо
      */
     init = async () => {
+        logger.info('VACANCY EDIT INIT')
         if (!store.data.authorized || store.data.user.role === 'applicant') router.back()
         const url = window.location.pathname.split('/');
         const last = url[url.length - 1];
-        console.log('url: ', url);
+        logger.info('url: ', url);
         if (!isNaN(Number.parseInt(last)) && last !== '') {
             this.#id = Number.parseInt(last);
             try {
-                //const data = await api.vacancy.get(this.#id);
-                const data = vacancyMock
+                const data = await api.vacancy.get(this.#id);
                 this.#defaultData = data;
             } catch {
-                console.log('Не удалось загрузить вакансию');
+                logger.info('Не удалось загрузить вакансию');
                 this.#id = 0;
                 this.#defaultData = emptyVacancy;
                  try {
-                     this.#defaultData.employer = await api.employer.get(this.#defaultData.employer_id);
+                     this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
                  } catch {
                      router.back();
                  }
@@ -82,7 +82,7 @@ export class VacancyEdit {
         } else {
             this.#defaultData = emptyVacancy;
              try {
-                 this.#defaultData.employer = await api.employer.get(this.#defaultData.employer_id);
+                 this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
              } catch {
                  router.back();
              }
@@ -318,14 +318,12 @@ export class VacancyEdit {
                     error.textContent = ''
                 }
                 try {
-                    console.log(store.data.vacancy);
+                    logger.info(store.data.vacancy);
                     if (this.#id !== 0) {
-                        //const data = await api.vacancy.update(this.#id, store.data.vacancy);
-                        const data = vacancyMock
+                        const data = await api.vacancy.update(this.#id, store.data.vacancy);
                         router.go(`/vacancy/${data.id}`)
                     } else {
-                        //const data = await api.vacancy.create(store.data.vacancy);
-                        const data = vacancyMock
+                        const data = await api.vacancy.create(store.data.vacancy);
                         router.go(`/vacancy/${data.id}`)
                     }
                 } catch {
@@ -343,7 +341,7 @@ export class VacancyEdit {
                     Number.parseInt(this.#salaryFrom.value) <
                     0
                 ) {
-                    console.log(
+                    logger.info(
                         Number.parseInt(this.#salaryTo.value) -
                         Number.parseInt(this.#salaryFrom.value),
                     );
@@ -360,7 +358,7 @@ export class VacancyEdit {
                     Number.parseInt(this.#salaryFrom.value) <
                     0
                 ) {
-                    console.log(
+                    logger.info(
                         Number.parseInt(this.#salaryTo.value) -
                         Number.parseInt(this.#salaryFrom.value),
                     );

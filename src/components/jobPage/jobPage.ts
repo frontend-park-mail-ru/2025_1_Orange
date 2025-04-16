@@ -31,16 +31,14 @@ export class JobPage {
     }
 
     init = async () => {
-        logger.info('ResumePage init method called');
+        logger.info('JobPage init method called');
         const url = window.location.href.split('/');
         this.#id = Number.parseInt(url[url.length - 1]);
-        console.log('resumePage');
         try {
-            //const data = await api.vacancy.get(this.#id);
-            const data = vacancyMock
+            const data = await api.vacancy.get(this.#id);
             this.#props = data;
         } catch {
-            console.log('Не удалось загрузить страницу');
+            logger.info('Не удалось загрузить страницу');
             router.back();
         }
         try {
@@ -53,16 +51,23 @@ export class JobPage {
 
     readonly #addEventListeners = () => {
         if (this.#resumeButton) {
-            this.#resumeButton.addEventListener('click', async () => {
+            const handleResumeClick = async () => {
+                logger.info('resume');
                 try {
-                    //await api.vacancy.resume(this.#props.id);
-                    vacancyMock.resume = true
-                    await this.init();
-                    this.render();
+                    await api.vacancy.resume(this.#props.id);
+                    if (this.#resumeButton) {
+                        this.#resumeButton.removeAttribute('id');
+                        this.#resumeButton.className = 'job__button_second';
+                        this.#resumeButton.textContent = 'Вы откликнулись';
+
+                        // Убираем обработчик события после успешного действия
+                        this.#resumeButton.removeEventListener('click', handleResumeClick);
+                    }
                 } catch {
-                    console.log('Ошибка при отправки отклика');
+                    logger.info('Ошибка при отправки отклика');
                 }
-            });
+            };
+            this.#resumeButton.addEventListener('click', handleResumeClick);
         }
 
         if (this.#editButton) {
@@ -80,7 +85,7 @@ export class JobPage {
             await api.vacancy.delete(this.#id);
             router.back();
         } catch {
-            console.log('Что-то пошло не так');
+            logger.info('Что-то пошло не так');
         }
     };
 
@@ -95,9 +100,9 @@ export class JobPage {
             'beforeend',
             template({
                 ...this.#props,
-                tasks: this.#props.tasks.split('\n'),
-                requirements: this.#props.requirements.split('\n'),
-                optional_requirements: this.#props.optional_requirements.split('\n'),
+                tasks: this.#props.tasks !== '' ? this.#props.tasks.split('\n') : null,
+                requirements: this.#props.requirements !== '' ? this.#props.requirements.split('\n') : null,
+                optional_requirements: this.#props.optional_requirements !== '' ? this.#props.optional_requirements.split('\n') : null,
                 experienceTranslations,
                 workFormatTranslations,
                 employmentTranslations,
@@ -117,7 +122,7 @@ export class JobPage {
         this.#resumeButton = document.getElementById('vacancy_resume_button');
         this.#editButton = document.getElementById('vacancy_edit_button');
 
-        console.log(store.data);
+        logger.info(store.data);
 
         if (this.#resumeButton) {
             this.#resumeButton.hidden = true;

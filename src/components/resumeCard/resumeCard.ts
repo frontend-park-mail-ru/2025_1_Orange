@@ -1,13 +1,13 @@
 import './resumeCard.sass';
 import { logger } from '../../utils/logger';
 import template from './resumeCard.handlebars';
-import type { Resume } from '../../api/interfaces';
+import type { Resume, ResumeShort } from '../../api/interfaces';
 import { router } from '../../router';
 import { statusTranslations } from '../../api/translations';
 
 export class ResumeCard {
     readonly #parent: HTMLElement;
-    readonly #props: Resume;
+    readonly #props: ResumeShort;
     #detailsToggleMore: HTMLElement | null = null;
     #detailsToggleLess: HTMLElement | null = null;
     #detailsWrapper: HTMLElement | null = null;
@@ -17,7 +17,7 @@ export class ResumeCard {
      * @param {HTMLElement} parent  - родительский элемент
      * @param {Resume} props - данные для рендера
      */
-    constructor(parent: HTMLElement, props: Resume) {
+    constructor(parent: HTMLElement, props: ResumeShort) {
         this.#parent = parent;
         this.#props = props;
     }
@@ -114,7 +114,7 @@ export class ResumeCard {
 
         // Получаем последний опыт работы, если есть
         const lastExperience =
-            this.#props.work_experience.length > 0 ? this.#props.work_experience[0] : null;
+            this.#props.work_experiences;
 
         // Форматируем период работы
         let workPeriod = '';

@@ -55,15 +55,16 @@ export class Api {
 
         logger.info(url, init);
 
-        console.log('STORE', store.data.csrf);
+        logger.info('STORE', store.data.csrf);
 
         try {
             const response = await fetch(url, init);
-            const csrfToken = response.headers.get('x-csrf-token');
+            logger.info("API HANDLE", response)
+            const csrfToken = response.headers.get('X-CSRF-Token');
             if (csrfToken) {
                 store.data.csrf = csrfToken;
             }
-            console.log('REQUEST STATUS', response.status, response.ok);
+            logger.info('REQUEST STATUS', response.status, response.ok);
             if (!response.ok) {
                 const error = await response.json();
                 logger.error(`error: ${error.message}`);
@@ -74,8 +75,17 @@ export class Api {
             } catch {
                 return '';
             }
-        } catch {
-            logger.error('Network Error');
+        } catch (error) {
+            // Попытка получить CSRF-токен даже в случае ошибки
+            if (error instanceof Response) { // Проверяем, является ли ошибка объектом Response
+                logger.info("NETWORK ERROR ", error)
+                const csrfToken = error.headers.get('X-CSRF-Token');
+                if (csrfToken) {
+                    store.data.csrf = csrfToken;
+                }
+            }
+        
+            logger.error('Network Error or other error');
             throw new Error('Ошибка при выполнении запроса');
         }
     }

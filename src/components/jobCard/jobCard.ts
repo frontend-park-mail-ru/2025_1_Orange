@@ -43,7 +43,7 @@ export class JobCard {
 
         if (this.#resumeButton) {
             const handleResumeClick = async () => {
-                console.log('resume');
+                logger.info('resume');
                 try {
                     await api.vacancy.resume(this.#props.id);
                     if (this.#resumeButton) {
@@ -55,7 +55,7 @@ export class JobCard {
                         this.#resumeButton.removeEventListener('click', handleResumeClick);
                     }
                 } catch {
-                    console.log('Ошибка при отправки отклика');
+                    logger.info('Ошибка при отправки отклика');
                 }
             };
             this.#resumeButton.addEventListener('click', handleResumeClick);
@@ -85,7 +85,7 @@ export class JobCard {
      */
     render = () => {
         logger.info('JobCard render method called');
-        console.log({
+        logger.info({
             ...this.#props,
             workFormatTranslations,
             employmentTranslations,

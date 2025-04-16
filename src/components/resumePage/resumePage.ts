@@ -30,7 +30,7 @@ export class ResumePage {
         logger.info('ResumePage init method called');
         const url = window.location.href.split('/');
         this.#id = Number.parseInt(url[url.length - 1]);
-        console.log('resumePage');
+        logger.info('resumePage');
         try {
             const data = await api.resume.get(this.#id);
             this.#data = data;
@@ -40,7 +40,7 @@ export class ResumePage {
                 router.back();
             }
         } catch {
-            console.log('Не удалось загрузить страницу');
+            logger.info('Не удалось загрузить страницу');
             router.back();
         }
     };
@@ -61,7 +61,7 @@ export class ResumePage {
             await api.resume.delete(this.#id);
             router.go('/catalog');
         } catch {
-            console.log('Что-то пошло не так');
+            logger.info('Что-то пошло не так');
         }
     };
 
@@ -70,8 +70,8 @@ export class ResumePage {
      */
     readonly #addEventListeners = () => {
         const editButton = this.self.querySelector('.job__button_second') as HTMLElement;
-        console.log(this.#data)
-        console.log(store.data.user)
+        logger.info(this.#data)
+        logger.info(store.data.user)
         if (
             store.data.user.role === 'applicant' &&
             this.#data?.applicant.id === store.data.user.user_id
@@ -91,8 +91,7 @@ export class ResumePage {
         if (this.#data) {
             const birth_date = new Date(this.#data.applicant.birth_date);
             this.#data.applicant.birth_date = `${birth_date.getUTCDate()}.${birth_date.getUTCMonth()}.${birth_date.getFullYear()}`;
-            const graudation_year = new Date(this.#data.applicant.birth_date);
-            this.#data.graduation_year = `${graudation_year.getFullYear()}`;
+            this.#data.graduation_year = this.#data.graduation_year.split('-')[0]
         }
 
         logger.info('ResumePage render method called');
@@ -120,7 +119,7 @@ export class ResumePage {
             '.resume_info__experience',
         ) as HTMLElement;
         if (experienceContainer && this.#data) {
-            this.#data.work_experience?.forEach((experienceItem) => {
+            this.#data.work_experiences?.forEach((experienceItem) => {
                 const experienceCard = new ResumeExperience(experienceContainer, experienceItem);
                 experienceCard.render();
             });

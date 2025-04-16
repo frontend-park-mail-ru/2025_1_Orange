@@ -155,7 +155,7 @@ export const emptyResume: Resume = {
     educational_institution: '',
     graduation_year: '',
     skills: [],
-    work_experience: [],
+    work_experiences: [],
     worked_experience: 0,
     created_at: '',
     updated_at: '',
@@ -166,7 +166,7 @@ export const emptyResumeShort: ResumeShort = {
     applicant: emptyApplicantShort,
     applicant_id: 0,
     specialization: '',
-    work_experience: emptyWorkExperience,
+    work_experiences: emptyWorkExperience,
     worked_experience: 0,
     created_at: '',
     updated_at: '',
@@ -195,7 +195,7 @@ export const emptyResumeCreate: ResumeCreate = {
     educational_institution: '',
     graduation_year: '',
     skills: [],
-    work_experience: [],
+    work_experiences: [],
 };
 
 export const emptyVacancyCreate: VacancyCreate = {

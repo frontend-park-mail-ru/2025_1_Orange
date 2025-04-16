@@ -2,7 +2,7 @@
     <div class="profile__header">
         <div class="profile__info">
             <div class="profile__avatar">
-                {{> partials/logo logo=logo }}
+                {{> partials/logo logo=logo_path }}
             </div>
             <div class="profile__details">
                 <h1 class="profile__name">{{company_name}}</h1>
@@ -23,13 +23,13 @@
             <h3 class="profile__section-title">Логотип компании</h3>
             <div class="profile__photo-upload">
                 <div class="profile__avatar">
-                    {{> partials/logo logo=logo }}
+                    {{> partials/logo logo=logo_path }}
                 </div>
                 <div class="profile__photo-dropzone">
                     <input type="file" id="file-input" class="profile__photo-input" accept=".jpg, .png" name="file_input" />
                     <div class="profile__photo-content">
                         <p class="profile__photo-text">Выбрать изображение</p>
-                        <p class="profile__photo-hint">jpg, png, до 6 МБ, не более 10 000 x 10 000 пикселей</p>
+                        <p class="profile__photo-hint">jpg, png, до 5 МБ, не более 10 000 x 10 000 пикселей</p>
                     </div>
                 </div>
             </div>

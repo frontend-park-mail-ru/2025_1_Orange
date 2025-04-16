@@ -98,11 +98,11 @@ export class Header {
         this.#logoutButton?.addEventListener('click', async () => {
             try {
                 await api.auth.logout();
-                console.log('LOGOUT SUCCESFULLY');
+                logger.info('LOGOUT SUCCESFULLY');
                 store.reset();
                 router.go('/catalog');
             } catch {
-                console.log('ERROR LOGOUT');
+                logger.info('ERROR LOGOUT');
                 router.go('/catalog');
             }
         });
