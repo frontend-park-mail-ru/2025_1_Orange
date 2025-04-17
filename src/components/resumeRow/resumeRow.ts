@@ -2,10 +2,11 @@ import template from './resumeRow.handlebars'; // Шаблон Handlebars
 import { logger } from '../../utils/logger';
 import { Resume } from '../../api/interfaces';
 import './resumeRow.sass';
+import { router } from '../../router';
 
 export class ResumeRow {
     readonly #parent: HTMLElement;
-    #data: Resume | null = null;
+    #data: Resume;
 
     constructor(parent: HTMLElement, data: Resume) {
         this.#parent = parent;
@@ -17,7 +18,7 @@ export class ResumeRow {
      * @returns {HTMLElement}
      */
     get self(): HTMLElement {
-        return this.#parent;
+        return document.getElementById(`resume-table__row-${this.#data.id}`) as HTMLElement
     }
 
     /**
@@ -27,6 +28,17 @@ export class ResumeRow {
         logger.info('ProfileUser remove method called');
         this.self.innerHTML = '';
     };
+
+    /**
+     * Навешивание обработчика
+     */
+    readonly #addEventListeners = () => {
+        if (this.self) {
+            this.self.addEventListener('click', () => {
+                router.go(`/resume/${this.#data.id}`)
+            })
+        }
+    }
 
     /**
      * Рендеринг страницы
@@ -39,5 +51,6 @@ export class ResumeRow {
 
         logger.info('ProfileUser render method called');
         this.#parent.insertAdjacentHTML('beforeend', template(this.#data));
+        this.#addEventListeners()
     };
 }

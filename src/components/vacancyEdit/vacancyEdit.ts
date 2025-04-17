@@ -7,7 +7,6 @@ import { store } from '../../store';
 import './vacancyEdit.sass';
 import { router } from '../../router';
 import { fieldValidate } from '../../forms';
-import { vacancyMock } from '../../api/mocks';
 
 export class VacancyEdit {
     readonly #parent: HTMLElement;
@@ -101,6 +100,7 @@ export class VacancyEdit {
         tasks: 'Задачи',
         requirements: 'Требования',
         optional_requirements: 'Будет плюсом',
+        skills : 'Навыки',
     };
 
     #formValidate(element: HTMLElement): boolean {

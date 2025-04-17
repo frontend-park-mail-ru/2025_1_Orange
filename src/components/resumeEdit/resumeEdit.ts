@@ -344,12 +344,21 @@ export class ResumeEdit {
      */
     render = () => {
         logger.info('ResumeEdit render method called');
-
-        const birth_date = new Date(this.#defaultData.applicant.birth_date);
-        const year = birth_date.getFullYear();
-        const month = String(birth_date.getUTCMonth() + 1).padStart(2, '0'); // Месяцы нумеруются с 0
-        const day = String(birth_date.getUTCDate()).padStart(2, '0');
-        this.#defaultData.applicant.birth_date = `${year}-${month}-${day}`;
+        // const minGraduatingDate = new Date()
+        // minGraduatingDate.setFullYear(minGraduatingDate.getFullYear() - 3)
+        
+        if (this.#defaultData && this.#defaultData.applicant.birth_date === '0001-01-01T00:00:00Z') {
+            this.#defaultData.applicant.birth_date = '';
+        } else if (this.#defaultData) {
+            const birth_date = new Date(this.#defaultData.applicant.birth_date);
+            const year = birth_date.getFullYear();
+            const month = String(birth_date.getMonth() + 1).padStart(2, '0'); // Месяцы нумеруются с 0
+            const day = String(birth_date.getDate()).padStart(2, '0');
+            // minGraduatingDate.setFullYear(year + 20)
+            // minGraduatingDate.setMonth(month - 1)
+            // minGraduatingDate.setDate('' + day)
+            this.#defaultData.applicant.birth_date = `${year}-${month}-${day}`;
+        }
 
 
         this.#parent.insertAdjacentHTML(
@@ -360,7 +369,7 @@ export class ResumeEdit {
                 isMale: this.#defaultData.applicant.sex === 'M',
                 skillsString: this.#defaultData.skills.join(', '),
                 graduation_year: this.#defaultData.graduation_year.split('-')[0],
-                birth_date: `${birth_date.getFullYear()}-${birth_date.getMonth()}-${birth_date.getDay()}`,
+                min_year: this.#defaultData.applicant.birth_date
             }),
         );
         this.#form = document.forms.namedItem('resume_edit') as HTMLFormElement;
@@ -370,7 +379,7 @@ export class ResumeEdit {
 
             this.#submit = this.self.querySelector('#resume_submit') as HTMLElement;
             if (this.#id !== 0) {
-                this.#submit.textContent = 'Изменить вакансию';
+                this.#submit.textContent = 'Изменить резюме';
             }
 
             this.#skillsFieldset = this.#form.elements.namedItem('fieldset_skills') as HTMLFieldSetElement;
