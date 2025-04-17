@@ -60,7 +60,7 @@ export class ProfileUser {
     addEventListeners = () => {
         const profileActions = this.self.querySelector('.profile__actions') as HTMLElement;
         if (profileActions) {
-            this.#addResume = profileActions.querySelector('.profile__button') as HTMLButtonElement;
+            this.#addResume = profileActions.querySelector('.profile__button-black') as HTMLButtonElement;
             this.#editButton = profileActions.querySelector(
                 '.profile__button-white',
             ) as HTMLButtonElement;
