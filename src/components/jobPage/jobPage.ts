@@ -13,7 +13,6 @@ import { emptyEmployer, emptyVacancy } from '../../api/empty';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { DeleteButton } from '../deleteButton/deleteButton';
-import { vacancyMock } from '../../api/mocks';
 
 export class JobPage {
     readonly #parent: HTMLElement;

@@ -3,7 +3,6 @@ import { logger } from '../../utils/logger';
 import { Employer, Vacancy } from '../../api/interfaces';
 import './profileCompany.sass';
 import { JobCard } from '../jobCard/jobCard';
-import { vacancyMock } from '../../api/mocks';
 import { router } from '../../router';
 import { store } from '../../store';
 import { api } from '../../api/api';

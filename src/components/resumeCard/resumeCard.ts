@@ -1,7 +1,7 @@
 import './resumeCard.sass';
 import { logger } from '../../utils/logger';
 import template from './resumeCard.handlebars';
-import type { Resume, ResumeShort } from '../../api/interfaces';
+import type { ResumeShort } from '../../api/interfaces';
 import { router } from '../../router';
 import { statusTranslations } from '../../api/translations';
 
