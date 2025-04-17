@@ -63,9 +63,9 @@ export class ProfileCompany {
     readonly #addEventListeners = () => {
         const profileActions = this.self.querySelector('.profile__actions') as HTMLElement;
         if (profileActions) {
-            this.#addVacancy = profileActions.querySelector('.job__button') as HTMLButtonElement;
+            this.#addVacancy = profileActions.querySelector('.profile__button-black') as HTMLButtonElement;
             this.#editButton = profileActions.querySelector(
-                '.job__button_second',
+                '.profile__button-white',
             ) as HTMLButtonElement;
         }
         this.#backArrow = this.self.querySelector('.profile__back') as HTMLButtonElement;
