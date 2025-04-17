@@ -1,17 +1,35 @@
 .page
-    padding: 0px 100px
+    max-width: 1200px
+    padding: 40px 100px
     display: flex
     flex-direction: row
-    gap: 50px
+    margin: 0 auto
+    gap: 70px
 
 .vacancy
+    position: relative
     display: flex
     flex-direction: column
+    border: 1px solid #CFCFCF
+    border-radius: 15px
+    padding: 20px
+    gap: 20px
     flex-grow: 1
 
+    &-wrapper
+        display: flex
+        flex-direction: column
+        gap: 20px
+        width: 100%
+
+    &__header
+        display: flex
+        flex-direction: row
+        align-items: center
+        justify-content: space-between
+
     &__name
-        padding: 15px 0px
-        font-size: 30px
+        font-size: 28px
         font-weight: bold
 
     &__actions
@@ -22,10 +40,21 @@
     &__buttons
         display: flex
         flex-direction: row
-        gap: 15px
+        gap: 20px
 
     &__description
         font-size: 20px
+        display: flex
+        flex-direction: column
+        gap: 20px
+
+        &__item
+            display: flex
+            flex-direction: column
+            gap: 10px
+
+            p, ul
+                margin: 5px
 
     &__header
         font-size: 24px
@@ -36,7 +65,7 @@
         display: flex
         min-width: 400px
         flex-direction: column
-        gap: 50px
+        gap: 30px
 
 .vacancy_info
     display: flex
@@ -46,15 +75,14 @@
     &__item
         display: flex
         flex-direction: column
-        gap: 0px
+        gap: 10px
 
     &__label
-        padding: 10px 0px
-        font-size: 20px
+        font-size: 16px
+        font-weight: 500
 
     &__value
-        padding: 10px 0px
-        font-size: 36px
+        font-size: 24px
         font-weight: bold
 
     &__card
