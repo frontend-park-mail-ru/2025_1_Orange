@@ -21,6 +21,7 @@ export class ProfileUser {
     #addResume: HTMLButtonElement | null = null;
     #editButton: HTMLButtonElement | null = null;
     #backArrow: HTMLButtonElement | null = null;
+    // #resumeTableRendering: boolean = false;
 
     constructor(parent: HTMLElement) {
         this.#parent = parent;
@@ -59,9 +60,9 @@ export class ProfileUser {
     addEventListeners = () => {
         const profileActions = this.self.querySelector('.profile__actions') as HTMLElement;
         if (profileActions) {
-            this.#addResume = profileActions.querySelector('.job__button') as HTMLButtonElement;
+            this.#addResume = profileActions.querySelector('.profile__button') as HTMLButtonElement;
             this.#editButton = profileActions.querySelector(
-                '.job__button_second',
+                '.profile__button-white',
             ) as HTMLButtonElement;
         }
         this.#backArrow = this.self.querySelector('.profile__back') as HTMLButtonElement;
@@ -89,31 +90,50 @@ export class ProfileUser {
         this.#resumesButton = document.getElementById('profile-resumes');
         this.#responsesButton = document.getElementById('profile-responses');
         this.#favoriteButton = document.getElementById('profile-favorites');
+
         this.#resumesButton?.addEventListener('click', () =>
             this.#handleButton(this.#resumesButton as HTMLElement, this.#renderResumes),
         );
+
+        this.#responsesButton?.addEventListener('click', () => {
+            this.#handleButton(this.#responsesButton as HTMLElement, this.#renderResponses);
+        });
+
+        this.#favoriteButton?.addEventListener('click', () => {
+            this.#handleButton(this.#favoriteButton as HTMLElement, this.#renderFavorites);
+        });
     };
 
     readonly #handleButton = (button: HTMLElement, callback: () => void) => {
-        if (button && button.className === 'job__button_second') {
-            if (this.#responsesButton) {
-                this.#responsesButton.className = 'job__button_second';
+        if (button.classList.contains('profile__tab--active')) return;
+
+        [this.#responsesButton, this.#resumesButton, this.#favoriteButton].forEach(btn => {
+            if (btn) {
+                btn.classList.remove('profile__tab--active');
             }
-            if (this.#resumesButton) {
-                this.#resumesButton.className = 'job__button_second';
-            }
-            if (this.#favoriteButton) {
-                this.#favoriteButton.className = 'job__button_second';
-            }
-            button.className = 'job__button';
-        }
+        });
+
+        button.classList.add('profile__tab--active');
         callback();
+    };
+
+    // TODO реализовать обработчик
+    readonly #renderResponses = () => {
+        console.log('Responses tab clicked - add logic later');
+    };
+
+    // TODO реализовать обработчик
+    readonly #renderFavorites = () => {
+        console.log('Favorite tab clicked - add logic later');
     };
 
     /**
      * Рендеринг списка резюме
      */
     readonly #renderResumes = async (): Promise<void> => {
+        // if (this.#resumeTableRendering) return;
+        // this.#resumeTableRendering = true;
+
         if (this.#resumeContainer) {
             this.#resumeContainer.hidden = false;
         }
@@ -137,6 +157,8 @@ export class ProfileUser {
             const resumeRow = new ResumeRow(this.#resumeContainer as HTMLElement, resume);
             resumeRow.render();
         });
+
+        // this.#resumeTableRendering = false;
     };
 
     /**
