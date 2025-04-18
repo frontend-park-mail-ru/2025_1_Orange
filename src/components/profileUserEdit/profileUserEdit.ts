@@ -208,7 +208,7 @@ export class ProfileUserEdit {
             'beforeend',
             template({
                 ...this.#defaultData,
-                maxBirthDay: `${maxBirthDay.getFullYear}-${String(maxBirthDay.getMonth() + 1).padStart(2, '0')}-${String(maxBirthDay.getDate()).padStart(2, '0')}`,
+                maxBirthDay: `${maxBirthDay.getFullYear()}-${String(maxBirthDay.getMonth() + 1).padStart(2, '0')}-${String(maxBirthDay.getDate()).padStart(2, '0')}`,
             }),
         );
 
