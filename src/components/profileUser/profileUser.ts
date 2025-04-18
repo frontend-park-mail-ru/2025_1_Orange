@@ -23,7 +23,7 @@ export class ProfileUser {
     #addResume: HTMLButtonElement | null = null;
     #editButton: HTMLButtonElement | null = null;
     #backArrow: HTMLButtonElement | null = null;
-    // #resumeTableRendering: boolean = false;
+    #resumeTable: HTMLElement | null = null;
 
     constructor(parent: HTMLElement) {
         this.#parent = parent;
@@ -92,6 +92,7 @@ export class ProfileUser {
         this.#resumesButton = document.getElementById('profile-resumes');
         this.#responsesButton = document.getElementById('profile-responses');
         this.#favoriteButton = document.getElementById('profile-favorites');
+        this.#resumeTable = this.self.querySelector('.resume-table')
 
         this.#resumesButton?.addEventListener('click', () =>
             this.#handleButton(this.#resumesButton as HTMLElement, this.#renderResumes),
@@ -120,6 +121,7 @@ export class ProfileUser {
     };
 
     readonly #renderResponses = async () => {
+        if (this.#resumeTable) this.#resumeTable.hidden = true;
         if (!this.#vacancyContainer) return
         if (this.#vacancyContainer) this.#vacancyContainer.textContent = ''
         if (this.#resumeContainer) this.#resumeContainer.textContent = ''
@@ -152,7 +154,7 @@ export class ProfileUser {
      * Рендеринг списка резюме
      */
     readonly #renderResumes = async (): Promise<void> => {
-
+        if (this.#resumeTable) this.#resumeTable.hidden = false;
         if (this.#vacancyContainer) this.#vacancyContainer.textContent = ''
         if (this.#resumeContainer) this.#resumeContainer.textContent = ''
         logger.info('Rendering Resumes...');
