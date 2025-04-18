@@ -48,10 +48,19 @@ export class RegistrationUser {
      * @returns {boolean}
      */
     readonly #firstNameValidate = (): boolean => {
-        if (this.#firstName) {
-            return fieldValidate(this.#firstName, this.#inputTranslation)
+        if (!this.#error || !this.#firstName) {
+            return false;
         }
-        return false
+        this.#firstName.classList.remove('error', 'valid');
+        this.#error.textContent = ''
+        if (this.#firstName.validity.valid === false) {
+            this.#error.textContent = customMessage(this.#firstName, this.#inputTranslation)
+            this.#firstName.classList.add('error');
+            return false;
+        } else {
+            this.#firstName.classList.add('valid');
+        }
+        return true;
     };
 
     /**
@@ -59,10 +68,19 @@ export class RegistrationUser {
      * @returns {boolean}
      */
     readonly #lastNameValidate = (): boolean => {
-        if (this.#lastName) {
-            return fieldValidate(this.#lastName, this.#inputTranslation)
+        if (!this.#error || !this.#lastName) {
+            return false;
         }
-        return false
+        this.#lastName.classList.remove('error', 'valid');
+        this.#error.textContent = ''
+        if (this.#lastName.validity.valid === false) {
+            this.#error.textContent = customMessage(this.#lastName, this.#inputTranslation)
+            this.#lastName.classList.add('error');
+            return false;
+        } else {
+            this.#lastName.classList.add('valid');
+        }
+        return true;
     };
 
     /**
@@ -73,7 +91,7 @@ export class RegistrationUser {
         this.#firstName = form.elements.namedItem('first_name') as HTMLInputElement;
         this.#lastName = form.elements.namedItem('last_name') as HTMLInputElement;
         this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
-        this.#error = form.querySelector('.form__error') as HTMLElement;
+        this.#error = form.querySelector('.form__error') as HTMLElement
 
         form.querySelector('.form__back')?.addEventListener('click', router.back);
         this.#firstName.addEventListener('input', this.#firstNameValidate);
@@ -112,7 +130,6 @@ export class RegistrationUser {
      */
     render = () => {
         logger.info('RegistrationUser render method caller');
-
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({

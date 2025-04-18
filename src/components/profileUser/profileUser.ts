@@ -145,7 +145,7 @@ export class ProfileUser {
 
     // TODO реализовать обработчик
     readonly #renderFavorites = () => {
-        console.log('Favorite tab clicked - add logic later');
+        logger.info('Favorite tab clicked - add logic later');
     };
 
     /**

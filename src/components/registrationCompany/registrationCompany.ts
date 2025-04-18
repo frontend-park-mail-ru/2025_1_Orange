@@ -1,4 +1,5 @@
 import { api } from '../../api/api';
+import { customMessage } from '../../forms';
 import { router } from '../../router';
 import { store } from '../../store';
 import { logger } from '../../utils/logger';
@@ -9,6 +10,7 @@ export class RegistrationCompany {
     #companyName: HTMLInputElement | null = null;
     #companyAddress: HTMLInputElement | null = null;
     #submitBtn: HTMLButtonElement | null = null;
+    #error: HTMLElement | null = null;
 
     /**
      * Конструктор класса
@@ -36,24 +38,27 @@ export class RegistrationCompany {
         return this.#companyNameValidate() && this.#companyAddressValidate();
     };
 
+    readonly #inputTranslation: Record<string, string> = {
+        company_name: 'Название',
+        company_address: 'Адрес',
+    };
+
     /**
      * Валидация имени компании
      * @returns {boolean}
      */
     readonly #companyNameValidate = (): boolean => {
-        const error = this.self.querySelector('.form__error') as HTMLElement;
-        if (!this.#companyName || !error) {
+        if (!this.#error || !this.#companyName) {
             return false;
         }
+        this.#companyName.classList.remove('error', 'valid');
+        this.#error.textContent = ''
         if (this.#companyName.validity.valid === false) {
-            error.hidden = false;
-            error.textContent = 'Минимальная длина названия компании 2 символа';
-            this.#companyName.classList.add('form__input_error');
+            this.#error.textContent = customMessage(this.#companyName, this.#inputTranslation)
+            this.#companyName.classList.add('error');
             return false;
         } else {
-            this.#companyName.classList.remove('form__input_error');
-            this.#companyName.classList.add('form__input_valid');
-            error.hidden = true;
+            this.#companyName.classList.add('valid');
         }
         return true;
     };
@@ -63,19 +68,17 @@ export class RegistrationCompany {
      * @returns {boolean}
      */
     readonly #companyAddressValidate = () => {
-        const error = this.self.querySelector('.form__error') as HTMLElement;
-        if (!this.#companyAddress || !error) {
+        if (!this.#error || !this.#companyAddress) {
             return false;
         }
+        this.#companyAddress.classList.remove('error', 'valid');
+        this.#error.textContent = ''
         if (this.#companyAddress.validity.valid === false) {
-            error.hidden = false;
-            error.textContent = 'Минимальная длина адреса компании 10 символов';
-            this.#companyAddress.classList.add('form__input_error');
+            this.#error.textContent = customMessage(this.#companyAddress, this.#inputTranslation)
+            this.#companyAddress.classList.add('error');
             return false;
         } else {
-            this.#companyAddress.classList.remove('form__input_error');
-            this.#companyAddress.classList.add('form__input_valid');
-            error.hidden = true;
+            this.#companyAddress.classList.add('valid');
         }
         return true;
     };
@@ -88,6 +91,7 @@ export class RegistrationCompany {
         this.#companyAddress = form.elements.namedItem('company_address') as HTMLInputElement;
         this.#companyName = form.elements.namedItem('company_name') as HTMLInputElement;
         this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
+        this.#error = form.querySelector('.form__error') as HTMLElement
 
         form.querySelector('.form__back')?.addEventListener('click', router.back);
         this.#companyName.addEventListener('input', this.#companyNameValidate);
@@ -129,8 +133,8 @@ export class RegistrationCompany {
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
-                companyName: store.data.auth.request.companyName,
-                companyAddress: store.data.auth.request.companyAddress,
+                companyName: store.data.auth.request.company_name,
+                companyAddress: store.data.auth.request.company_name,
             }),
         );
         this.#addEventListeners();
