@@ -354,7 +354,7 @@ export class ResumeEdit {
             const year = birth_date.getFullYear();
             const month = String(birth_date.getMonth() + 1).padStart(2, '0'); // Месяцы нумеруются с 0
             const day = String(birth_date.getDate()).padStart(2, '0');
-            const minYear = minGraduatingDate.getFullYear() + 20
+            minGraduatingDate.setFullYear(birth_date.getFullYear() + 14)
             this.#defaultData.applicant.birth_date = `${year}-${month}-${day}`;
         }
 
@@ -368,7 +368,7 @@ export class ResumeEdit {
                 skillsString: this.#defaultData.skills.join(', '),
                 graduation_year: this.#defaultData.graduation_year.split('-')[0],
                 min_year: this.#defaultData.applicant.birth_date,
-                minGraduatingDate: minGraduatingDate.getFullYear
+                minGraduatingDate: minGraduatingDate.getFullYear()
             }),
         );
         this.#form = document.forms.namedItem('resume_edit') as HTMLFormElement;
