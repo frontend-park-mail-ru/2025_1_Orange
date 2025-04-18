@@ -35,7 +35,7 @@ export class ResumePage {
             const data = await api.resume.get(this.#id);
             this.#data = data;
             try {
-                this.#data.applicant = await api.applicant.get(store.data.user.user_id);
+                this.#data.applicant = await api.applicant.get(this.#data.applicant_id);
             } catch {
                 router.back();
             }
@@ -110,7 +110,7 @@ export class ResumePage {
         ) {
             const deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
             if (deleteContainer) {
-                const deleteButton = new DeleteButton(deleteContainer, this.#delete);
+                const deleteButton = new DeleteButton(deleteContainer, 'Резюме', this.#delete);
                 deleteButton.render();
             }
         }
