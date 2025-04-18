@@ -70,6 +70,7 @@ export const emptyApplicantShort: ApplicantShort = {
     avatar_path: '',
     created_at: '',
     updated_at: '',
+    status: 'actively_searching',
 };
 
 export const emptyEmployer: Employer = {
@@ -112,7 +113,7 @@ export const emptyVacancy: Vacancy = {
     tasks: '',
     requirements: '',
     optional_requirements: '',
-    responded: 'false'
+    responded: false,
     created_at: '',
     updated_at: '',
 };
@@ -133,6 +134,7 @@ export const emptyVacancyShort: VacancyShort = {
     taxes_included: false,
     created_at: '',
     updated_at: '',
+    responded: false,
 };
 
 export const emptyWorkExperience: WorkExperience = {

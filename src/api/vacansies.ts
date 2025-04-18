@@ -1,5 +1,5 @@
 import { Api } from './api';
-import { Vacancy, VacancyCreate, VacancyShort } from './interfaces';
+import { Vacancy, VacancyCreate } from './interfaces';
 
 export class VacancyService {
     readonly #api: Api;

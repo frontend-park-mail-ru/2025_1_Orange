@@ -57,7 +57,7 @@ export class JobCard {
                             buttonsContainer.innerHTML = ''
                             buttonsContainer.insertAdjacentHTML(
                                 'beforeend',
-                                template({}),
+                                templateButton({}),
                             );
                         }
 
