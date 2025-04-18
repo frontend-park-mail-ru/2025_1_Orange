@@ -83,7 +83,7 @@ export class JobCatalog {
         });
         if (this.#jobs.length === 0) {
             const jobContainer = this.self.querySelector('.jobs_list') as HTMLElement;
-            jobContainer.textContent = 'Нету вакансий';
+            jobContainer.textContent = 'Нет вакансий';
         }
         this.#createResumeLink = this.self.querySelector('.info__link') as HTMLLinkElement;
 
