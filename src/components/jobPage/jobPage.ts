@@ -53,7 +53,7 @@ export class JobPage {
             const handleResumeClick = async () => {
                 logger.info('resume');
                 try {
-                    await api.vacancy.resume(this.#props.id);
+                    await api.vacancy.response(this.#props.id);
                     if (this.#resumeButton) {
                         this.#resumeButton.removeAttribute('id');
                         this.#resumeButton.className = 'job__button_second';

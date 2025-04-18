@@ -128,9 +128,6 @@ export class Header {
                 this.toggleDropdown(false);
             });
         });
-        if (store.data.page === '') {
-            document.addEventListener('click', this.handleDocumentClick);
-        }
 
         if (this.#profileLink) {
             this.#profileLink.addEventListener('click', () => {

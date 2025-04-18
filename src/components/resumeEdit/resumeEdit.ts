@@ -344,8 +344,8 @@ export class ResumeEdit {
      */
     render = () => {
         logger.info('ResumeEdit render method called');
-        // const minGraduatingDate = new Date()
-        // minGraduatingDate.setFullYear(minGraduatingDate.getFullYear() - 3)
+        const minGraduatingDate = new Date()
+        minGraduatingDate.setFullYear(minGraduatingDate.getFullYear() - 3)
         
         if (this.#defaultData && this.#defaultData.applicant.birth_date === '0001-01-01T00:00:00Z') {
             this.#defaultData.applicant.birth_date = '';
@@ -354,9 +354,7 @@ export class ResumeEdit {
             const year = birth_date.getFullYear();
             const month = String(birth_date.getMonth() + 1).padStart(2, '0'); // Месяцы нумеруются с 0
             const day = String(birth_date.getDate()).padStart(2, '0');
-            // minGraduatingDate.setFullYear(year + 20)
-            // minGraduatingDate.setMonth(month - 1)
-            // minGraduatingDate.setDate('' + day)
+            const minYear = minGraduatingDate.getFullYear() + 20
             this.#defaultData.applicant.birth_date = `${year}-${month}-${day}`;
         }
 
@@ -369,7 +367,8 @@ export class ResumeEdit {
                 isMale: this.#defaultData.applicant.sex === 'M',
                 skillsString: this.#defaultData.skills.join(', '),
                 graduation_year: this.#defaultData.graduation_year.split('-')[0],
-                min_year: this.#defaultData.applicant.birth_date
+                min_year: this.#defaultData.applicant.birth_date,
+                minGraduatingDate: minGraduatingDate.getFullYear
             }),
         );
         this.#form = document.forms.namedItem('resume_edit') as HTMLFormElement;

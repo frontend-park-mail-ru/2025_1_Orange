@@ -1,6 +1,7 @@
 import './jobCard.sass';
 import { logger } from '../../utils/logger';
 import template from './jobCard.handlebars';
+import templateButton from '../../partials/jobCardResponded.handlebars';
 import { VacancyShort } from '../../api/interfaces';
 import { router } from '../../router';
 import { employmentTranslations, workFormatTranslations } from '../../api/translations';
@@ -43,19 +44,28 @@ export class JobCard {
 
         if (this.#resumeButton) {
             const handleResumeClick = async () => {
+                const error = this.self.querySelector('.job__error')
+                if (error) {
+                    error.textContent = ''
+                }
                 logger.info('resume');
                 try {
-                    await api.vacancy.resume(this.#props.id);
+                    await api.vacancy.response(this.#props.id);
                     if (this.#resumeButton) {
-                        this.#resumeButton.removeAttribute('id');
-                        this.#resumeButton.className = 'job__button_second';
-                        this.#resumeButton.textContent = 'Вы откликнулись';
+                        const buttonsContainer = this.self.querySelector('.job__buttons')
+                        if (buttonsContainer) {
+                            buttonsContainer.innerHTML = ''
+                            buttonsContainer.insertAdjacentHTML(
+                                'beforeend',
+                                template({}),
+                            );
+                        }
 
                         // Убираем обработчик события после успешного действия
                         this.#resumeButton.removeEventListener('click', handleResumeClick);
                     }
                 } catch {
-                    logger.info('Ошибка при отправки отклика');
+                    if (error) error.textContent = 'Ошибка при отправке отклика';
                 }
             };
             this.#resumeButton.addEventListener('click', handleResumeClick);

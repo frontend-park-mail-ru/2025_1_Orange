@@ -193,6 +193,8 @@ export class ProfileUserEdit {
      */
     render = () => {
         logger.info('ProfileUserEdit render method called');
+        const maxBirthDay = new Date()
+        maxBirthDay.setFullYear(maxBirthDay.getFullYear() - 14)
         if (this.#defaultData && this.#defaultData.birth_date === '0001-01-01T00:00:00Z') {
             this.#defaultData.birth_date = '';
         } else if (this.#defaultData) {
@@ -206,6 +208,7 @@ export class ProfileUserEdit {
             'beforeend',
             template({
                 ...this.#defaultData,
+                maxBirthDay: `${maxBirthDay.getFullYear}-${String(maxBirthDay.getMonth() + 1).padStart(2, '0')}-${String(maxBirthDay.getDate()).padStart(2, '0')}`,
             }),
         );
 

@@ -58,6 +58,12 @@ export interface ApplicantShort {
     avatar_path: string;
     created_at: string;
     updated_at: string;
+    status:
+        | 'actively_searching'
+        | 'open_to_offer'
+        | 'considering_offer'
+        | 'starting_soon'
+        | 'not_searching';
 }
 
 export interface Employer {
@@ -100,6 +106,7 @@ export interface Vacancy {
     tasks: string;
     requirements: string;
     optional_requirements: string;
+    responded: boolean;
     created_at: string;
     updated_at: string;
 }
@@ -118,6 +125,7 @@ export interface VacancyShort {
     salary_from: number;
     salary_to: number;
     taxes_included: boolean;
+    responded: boolean;
     created_at: string;
     updated_at: string;
 }
