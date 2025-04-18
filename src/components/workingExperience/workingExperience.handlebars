@@ -11,8 +11,13 @@
         <div class="resumeEdit__split">
             <input type="date" name="start_date" placeholder="Начало работы" class="resumeEdit__input"
                 value="{{start_date}}" min="2000-01-01" max="2025-11-31" required>
+            {{#if until_now}}
+            <input type="date" name="end_date" placeholder="Окончание работы" class="resumeEdit__input"
+                value="{{end_date}}" min="2000-01-01" max="2025-11-31">
+            {{else}}
             <input type="date" name="end_date" placeholder="Окончание работы" class="resumeEdit__input"
                 value="{{end_date}}" min="2000-01-01" max="2025-11-31" required>
+            {{/if}}
         </div>
 
         <label class="resumeEdit__checkbox">
