@@ -136,7 +136,7 @@ export interface Resume {
     applicant: Applicant;
     about_me: string;
     specialization: string;
-    education: 'secondary_school' | 'incomplete_higher' | 'higer' | 'bachelor' | 'master' | 'phd';
+    education: 'secondary_school' | 'incomplete_higher' | 'higher' | 'bachelor' | 'master' | 'phd';
     educational_institution: string;
     graduation_year: string;
     skills: string[];
@@ -186,7 +186,7 @@ export interface WorkExperienceCreate {
 export interface ResumeCreate {
     about_me: string;
     specialization: string;
-    education: 'secondary_school' | 'incomplete_higher' | 'higer' | 'bachelor' | 'master' | 'phd';
+    education: 'secondary_school' | 'incomplete_higher' | 'higher' | 'bachelor' | 'master' | 'phd';
     educational_institution: string;
     graduation_year: string;
     skills: string[];

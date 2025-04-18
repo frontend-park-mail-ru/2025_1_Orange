@@ -34,7 +34,7 @@ export const experienceTranslations = {
 export const educationTranslations = {
     secondary_school: 'среднее образование',
     incomplete_higher: 'неполное высшее',
-    higer: 'высшее образование',
+    higher: 'высшее образование',
     bachelor: 'бакалавр',
     master: 'магистр',
     phd: 'кандидат наук',
