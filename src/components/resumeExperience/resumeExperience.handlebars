@@ -1,6 +1,14 @@
 <div class="experience__item">
     <div class="experience__period">
-        {{start_date}} - {{end_date}}<br>{{duration}} Месяца
+        {{#if until_now}}
+        {{start_date}} - сейчас
+        {{else}}
+        {{start_date}} - {{end_date}}<br>
+        {{/if}}
+        <br>
+        {{#if duration}}
+        {{duration}} Месяца
+        {{/if}}
     </div>
     <div class="experience__details">
         <h4 class="experience__title">{{position}}</h4>
