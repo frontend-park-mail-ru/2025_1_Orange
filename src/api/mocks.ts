@@ -95,6 +95,7 @@ export const vacancyMock: Vacancy = {
         'Опыт от 1 лет в разработке веб-приложений.\nУверенные знания HTML, CSS (SCSS, Tailwind), JavaScript (ES6+), TypeScript.\nОпыт работы с одним из фреймворков: React, Vue.js или Angular.\nПонимание принципов SSR/SSG (Next.js, Nuxt.js).\nЗнание Node.js (Express, NestJS, Fastify) или Python (Django, FastAPI).\nОпыт работы с реляционными (PostgreSQL, MySQL) и NoSQL (MongoDB, Redis) базами данных.\nОпыт проектирования и разработки API (REST, GraphQL).\nПонимание основ DevOps: Docker, CI/CD, облачные сервисы (AWS, GCP, DigitalOcean).\nУверенное владение Git (GitHub/GitLab, GitFlow).\nОпыт написания тестов (Jest, Mocha, Cypress).\nПонимание принципов SOLID, DRY, KISS, MVC.',
     optional_requirements:
         'Опыт работы с WebSockets.\nЗнание Redis, RabbitMQ, Kafka. \nОпыт работы с GraphQL (Apollo, Hasura).\nНавыки написания bash-скриптов.\nОпыт работы с микросервисной архитектурой.\nЗнание WebAssembly (Wasm).\nОпыт в Web3, блокчейн-разработке (Solidity, ethers.js).\nОпыт работы с AI/ML в веб-приложениях (TensorFlow.js, Hugging Face API).',
+    responded: false,
     created_at: '2025-03-02T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
 };
@@ -113,6 +114,7 @@ export const vacancyShortMock: VacancyShort = {
     salary_from: 30000,
     salary_to: 50000,
     taxes_included: true,
+    responded: false,
     created_at: '2025-03-02T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
 };

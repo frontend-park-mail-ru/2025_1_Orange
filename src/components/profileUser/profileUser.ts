@@ -6,13 +6,14 @@ import { Applicant, Resume } from '../../api/interfaces';
 import { store } from '../../store';
 import { api } from '../../api/api';
 import { router } from '../../router';
+import { JobCard } from '../jobCard/jobCard';
 
 export class ProfileUser {
     readonly #parent: HTMLElement;
     #resumes: Resume[] | null = null;
     #id: number = 0;
     #data: Applicant | null = null;
-    //#vacancies: Vacancy[] | null = null;
+    #vacancies: VacancyShort[] | null = null;
     #resumeContainer: HTMLElement | null = null;
     #vacancyContainer: HTMLElement | null = null;
     #favoriteButton: HTMLElement | null = null;
@@ -117,9 +118,23 @@ export class ProfileUser {
         callback();
     };
 
-    // TODO реализовать обработчик
-    readonly #renderResponses = () => {
-        console.log('Responses tab clicked - add logic later');
+    readonly #renderResponses = async () => {
+        if (!this.#vacancyContainer) return
+        if (this.#vacancyContainer) this.#vacancyContainer.textContent = ''
+        if (this.#resumeContainer) this.#resumeContainer.textContent = ''
+        try {
+            if (this.#data) this.#vacancies = await api.applicant.responsed(this.#data.id)
+            if (!this.#vacancies) {
+                this.#vacancyContainer.textContent = 'Ничего нету'
+                return
+            }
+            this.#vacancies.forEach((vacancy) => {
+                const response = new JobCard(this.#vacancyContainer as HTMLElement, vacancy)
+                response.render()
+            })
+        } catch {
+            if (this.#vacancyContainer) this.#vacancyContainer.textContent = 'При загрузке откликов произошла ошибка'
+        }
     };
 
     // TODO реализовать обработчик
@@ -134,12 +149,14 @@ export class ProfileUser {
         // if (this.#resumeTableRendering) return;
         // this.#resumeTableRendering = true;
 
-        if (this.#resumeContainer) {
-            this.#resumeContainer.hidden = false;
-        }
-        if (this.#vacancyContainer) {
-            this.#vacancyContainer.hidden = true;
-        }
+        // if (this.#resumeContainer) {
+        //     this.#resumeContainer.hidden = false;
+        // }
+        // if (this.#vacancyContainer) {
+        //     this.#vacancyContainer.hidden = true;
+        // }
+        if (this.#vacancyContainer) this.#vacancyContainer.textContent = ''
+        if (this.#resumeContainer) this.#resumeContainer.textContent = ''
         logger.info('Rendering Resumes...');
         if (!this.#resumeContainer) {
             return;

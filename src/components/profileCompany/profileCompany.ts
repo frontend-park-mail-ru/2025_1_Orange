@@ -1,6 +1,6 @@
 import template from './profileCompany.handlebars'; // Шаблон Handlebars
 import { logger } from '../../utils/logger';
-import { Employer, Vacancy } from '../../api/interfaces';
+import { Employer, VacancyShort } from '../../api/interfaces';
 import './profileCompany.sass';
 import { JobCard } from '../jobCard/jobCard';
 import { router } from '../../router';
@@ -11,7 +11,7 @@ export class ProfileCompany {
     readonly #parent: HTMLElement;
     #data: Employer | null = null;
     #id: number = 0;
-    #vacancies: Vacancy[] | null = null;
+    #vacancies: VacancyShort[] | null = null;
     #vacancyContainer: HTMLElement | null = null;
     #backArrow: HTMLButtonElement | null = null;
     #editButton: HTMLButtonElement | null = null;
@@ -53,6 +53,12 @@ export class ProfileCompany {
         } catch {
             logger.info('Не удалось загрузить страницу');
             router.back();
+        }
+
+        try {
+            if (this.#data) this.#vacancies = await api.employer.vacancies(this.#data.id)
+        } catch {
+            this.#vacancies = null;
         }
     };
 
@@ -104,11 +110,12 @@ export class ProfileCompany {
             }),
         );
         this.#vacancyContainer = document.getElementById('responses-content') as HTMLElement;
-        this.#vacancies = [];
-        this.#vacancies.forEach((vacancy) => {
-            const vacancyCard = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
-            vacancyCard.render();
-        });
+        if (this.#vacancies) {
+            this.#vacancies.forEach((vacancy) => {
+                const vacancyCard = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
+                vacancyCard.render();
+            });
+        }
 
         this.#addEventListeners();
     };

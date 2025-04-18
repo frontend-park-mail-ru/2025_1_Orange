@@ -112,6 +112,7 @@ export const emptyVacancy: Vacancy = {
     tasks: '',
     requirements: '',
     optional_requirements: '',
+    responded: 'false'
     created_at: '',
     updated_at: '',
 };

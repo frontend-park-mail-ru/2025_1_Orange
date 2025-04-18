@@ -1,5 +1,5 @@
 import { Api } from './api';
-import { Vacancy, VacancyCreate } from './interfaces';
+import { Vacancy, VacancyCreate, VacancyShort } from './interfaces';
 
 export class VacancyService {
     readonly #api: Api;
@@ -53,7 +53,7 @@ export class VacancyService {
         await this.#api.request(`/vacancy/vacancy/${id}`, 'DELETE');
     }
 
-    async resume(id: number): Promise<void> {
+    async response(id: number): Promise<void> {
         await this.#api.request(`/vacancy/vacancy/${id}/response`, 'POST');
     }
 }

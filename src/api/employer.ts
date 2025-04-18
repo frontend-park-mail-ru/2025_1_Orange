@@ -6,6 +6,7 @@ import {
     SigninRequest,
     SignupRequest,
     Static,
+    VacancyShort,
 } from './interfaces';
 
 export class EmployerService {
@@ -58,5 +59,14 @@ export class EmployerService {
      */
     async register(body: SignupRequest): Promise<AuthResponse> {
         return this.#api.request('/employer/register', 'POST', JSON.stringify(body));
+    }
+
+    /**
+     * Получение списка вакансий компании
+     * @param {number} id - id профиля
+     * @returns {VacancyShort}
+     */
+    async vacancies(id: number): Promise<VacancyShort[]> {
+        return this.#api.request(`vacancy/employer/${id}/vacancies`, 'POST')
     }
 }

@@ -91,7 +91,7 @@
                         pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
                         title="Можно вводить только буквы, знаки препинания и пробел" required>
                     <input type="number" name="graduation_year" placeholder="Год окончания" class="resumeEdit__input"
-                        min="1900" max="2050" value="{{graduation_year}}" required>
+                        min="{{minGraduatingDate}}" max="2050" value="{{graduation_year}}" required>
                     <div>
                         <div class="resumeEdit__error"></div>
                         <button class="job__button" id="education_next">Далее</button>
