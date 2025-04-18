@@ -66,18 +66,23 @@
     </div>
 
     <!-- Местоположение -->
+    {{#if applicant.city}}
     <div class="resume_sidebar__section">
       <div class="resume_sidebar__title">Город проживания</div>
       <div class="resume_sidebar__value">{{applicant.city}}</div>
     </div>
+    {{/if}}
 
     <!-- Дата рождения -->
+    {{#if applicant.birth_date}}
     <div class="resume_sidebar__section">
       <div class="resume_sidebar__title">Дата рождения</div>
       <div class="resume_sidebar__value">{{applicant.birth_date}}</div>
     </div>
+    {{/if}}
 
     <!-- Навыки -->
+    {{#if skills}}
     <div class="resume_sidebar__section">
       <div class="resume_sidebar__title">Профессиональные навыки</div>
       <div class="job__badges">
@@ -86,6 +91,7 @@
         {{/each}}
       </div>
     </div>
+    {{/if}}
 
     <!-- Контакты -->
     <div class="resume_sidebar__section">

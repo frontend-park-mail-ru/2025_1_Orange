@@ -53,12 +53,14 @@
         </div>
         <div class="profile__meta">
             <div class=" profile__item">
+                {{#if website}}
                 <div class="profile__property">Веб сайт</div>
                 <div class="profile__social-icons">
                     <div class="profile__soc-icon">
                         <a href="{{website}}"><img src="/globe.svg" /></a>
                     </div>
                 </div>
+                {{/if}}
             </div>
         </div>
     </div>

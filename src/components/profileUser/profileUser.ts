@@ -2,11 +2,12 @@ import template from './profileUser.handlebars'; // Шаблон Handlebars
 import { logger } from '../../utils/logger';
 import './profileUser.sass';
 import { ResumeRow } from '../resumeRow/resumeRow';
-import { Applicant, Resume } from '../../api/interfaces';
+import { Applicant, Resume, VacancyShort } from '../../api/interfaces';
 import { store } from '../../store';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { JobCard } from '../jobCard/jobCard';
+import { emptyApplicant, emptyEmployer } from '../../api/empty';
 
 export class ProfileUser {
     readonly #parent: HTMLElement;
@@ -128,7 +129,12 @@ export class ProfileUser {
                 this.#vacancyContainer.textContent = 'Ничего нету'
                 return
             }
-            this.#vacancies.forEach((vacancy) => {
+            this.#vacancies.forEach(async (vacancy) => {
+                try {
+                    vacancy.employer = await api.employer.get(vacancy.employer_id)
+                } catch {
+                    vacancy.employer = emptyEmployer
+                }
                 const response = new JobCard(this.#vacancyContainer as HTMLElement, vacancy)
                 response.render()
             })
@@ -146,15 +152,7 @@ export class ProfileUser {
      * Рендеринг списка резюме
      */
     readonly #renderResumes = async (): Promise<void> => {
-        // if (this.#resumeTableRendering) return;
-        // this.#resumeTableRendering = true;
 
-        // if (this.#resumeContainer) {
-        //     this.#resumeContainer.hidden = false;
-        // }
-        // if (this.#vacancyContainer) {
-        //     this.#vacancyContainer.hidden = true;
-        // }
         if (this.#vacancyContainer) this.#vacancyContainer.textContent = ''
         if (this.#resumeContainer) this.#resumeContainer.textContent = ''
         logger.info('Rendering Resumes...');
@@ -170,12 +168,16 @@ export class ProfileUser {
         }
 
         // Используем данные из resumesMock
-        this.#resumes.forEach((resume) => {
+        this.#resumes.forEach(async (resume) => {
+            try {
+                resume.applicant = await api.applicant.get(resume.applicant_id)
+            } catch {
+                resume.applicant = emptyApplicant
+            }
             const resumeRow = new ResumeRow(this.#resumeContainer as HTMLElement, resume);
             resumeRow.render();
         });
 
-        // this.#resumeTableRendering = false;
     };
 
     /**

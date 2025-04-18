@@ -8,10 +8,8 @@
         </div>
         <div class="vacancy__actions">
             <div class="vacancy__buttons">
-                {{#if resume}}
-                <div class="job__button_second">
-                    <span>Вы откликнулись</span>
-                </div>
+                {{#if responded}}
+                {{> partials/jobCardResponded }}
                 {{else}}
                 <div class="job__button" id="vacancy_resume_button">
                     <span>Откликнуться</span>
@@ -22,7 +20,7 @@
                     <span>Настройки</span>
                 </div>
             </div>
-            <div class="job__statistics">{{days_created}} дня назад</div>
+            <div class="job__statistics">опубликовано {{created_at}}</div>
         </div>
         <div class="vacancy__description">
             <div class="vacancy__header">Описание</div>

@@ -11,10 +11,10 @@ export function customMessage(
     if (validity.patternMismatch) {
         return field.title || `${inputTranslation[field.name]}: Неверный формат данных`;
     }
-    if (validity.tooLong && field instanceof HTMLInputElement) {
+    if (validity.tooLong && (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) {
         return `${inputTranslation[field.name]}: Слишком много данных (максимум ${field.maxLength})`;
     }
-    if (validity.tooShort && field instanceof HTMLInputElement) {
+    if (validity.tooShort && (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) {
         return `${inputTranslation[field.name]}: Слишком мало данных (минимум ${field.minLength})`;
     }
     if (validity.rangeOverflow && field instanceof HTMLInputElement) {

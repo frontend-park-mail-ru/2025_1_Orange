@@ -81,16 +81,6 @@ export class JobCard {
     };
 
     /**
-     *
-     * @returns {number} - количество дней с момента создания вакансии
-     */
-    readonly #days_created = (): number => {
-        const created_date = new Date(this.#props.created_at).getTime();
-        const now = Date.now();
-        return Math.floor((now - created_date) / (1000 * 60 * 60 * 24));
-    };
-
-    /**
      * Рендеринг компонента
      */
     render = () => {
@@ -100,13 +90,14 @@ export class JobCard {
             workFormatTranslations,
             employmentTranslations,
         });
+        const created_date = new Date(this.#props.created_at);
+        this.#props.created_at = `${created_date.getDate()}.${created_date.getMonth() + 1}.${created_date.getFullYear()}`
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
                 ...this.#props,
                 workFormatTranslations,
                 employmentTranslations,
-                days_created: this.#days_created,
             }),
         );
 

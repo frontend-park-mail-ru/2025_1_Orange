@@ -6,6 +6,7 @@ import { JobCard } from '../jobCard/jobCard';
 import { router } from '../../router';
 import { store } from '../../store';
 import { api } from '../../api/api';
+import { emptyEmployer } from '../../api/empty';
 
 export class ProfileCompany {
     readonly #parent: HTMLElement;
@@ -107,12 +108,17 @@ export class ProfileCompany {
                 isOwner:
                     store.data.user.role === 'employer' &&
                     store.data.user.user_id === this.#data?.id,
-                vacancyCount : this.#vacancies?.length ?? 0
+                vacancyCount: this.#vacancies?.length ?? 0
             }),
         );
         this.#vacancyContainer = document.getElementById('responses-content') as HTMLElement;
         if (this.#vacancies) {
-            this.#vacancies.forEach((vacancy) => {
+            this.#vacancies.forEach(async (vacancy) => {
+                try {
+                    vacancy.employer = await api.employer.get(vacancy.employer_id)
+                } catch {
+                    vacancy.employer = emptyEmployer
+                }
                 const vacancyCard = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
                 vacancyCard.render();
             });
