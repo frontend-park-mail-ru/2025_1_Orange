@@ -52,15 +52,15 @@ const renderPage = async (name: string, Page: any) => {
  * Функция для подключения всех страниц
  */
 export const routerInit = () => {
-    router.add('auth', async () => renderPage('auth', RegistrationEmail));
+    router.add('auth', async () => renderPage('Авторизация', RegistrationEmail));
     router.add('registrationPassword', async () =>
-        renderPage('registrationPassword', RegistrationPassword),
+        renderPage('Регистрация', RegistrationPassword),
     );
     router.add('registrationApplicant', async () =>
-        renderPage('registrationApplicant', RegistrationUser),
+        renderPage('Регистрация соискателя', RegistrationUser),
     );
     router.add('registrationEmployer', async () =>
-        renderPage('registrationEmployer', RegistrationCompany),
+        renderPage('Регистрация работадателя', RegistrationCompany),
     );
     router.add('login', async () => renderPage('Логин', Login));
     router.add('catalog', async () => renderPage('Вакансии', JobCatalog));
