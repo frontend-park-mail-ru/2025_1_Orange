@@ -2,11 +2,11 @@
     <legend class="resumeEdit__name">Опыт работы</legend>
     <div class="resumeEdit__options">
         <input type="text" name="employer_name" placeholder="Компания" class="resumeEdit__input"
-            value="{{employer_name}}" minlength="2" maxlength="50" required>
+            value="{{employer_name}}" minlength="2" maxlength="50" pattern="^[а-яА-Яa-zA-Z0-9\s\.,\-]+$" title="Можно вводить только буквы, знаки препинания и пробел" required>
         <input type="text" name="position" placeholder="Должность" class="resumeEdit__input"
-            value="{{position}}" minlength="2" maxlength="50" required>
+            value="{{position}}" minlength="2" maxlength="50" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$" title="Можно вводить только буквы, пробел и спецсимволы" required>
         <textarea name="duties" placeholder="Ваши обязанности и достижения" class="resumeEdit__input"
-            required minlength="5" maxlength="250">{{duties}}</textarea>
+            required minlength="5" maxlength="250" pattern="^[а-яА-Яa-zA-Z0-9\s\.,\-]+$" title="Можно вводить только буквы, пробел и спецсимволы">{{duties}}</textarea>
 
         <div class="resumeEdit__split">
             <input type="date" name="start_date" placeholder="Начало работы" class="resumeEdit__input"
