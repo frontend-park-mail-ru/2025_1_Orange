@@ -54,13 +54,13 @@ export class JobPage {
                 logger.info('resume');
                 try {
                     await api.vacancy.response(this.#props.id);
-                    if (this.#resumeButton) {
-                        this.#resumeButton.removeAttribute('id');
-                        this.#resumeButton.className = 'job__button_second';
-                        this.#resumeButton.textContent = 'Вы откликнулись';
-
-                        // Убираем обработчик события после успешного действия
-                        this.#resumeButton.removeEventListener('click', handleResumeClick);
+                    const buttonsContainer = this.self.querySelector('.vacancy__buttons')
+                    if (buttonsContainer) {
+                        buttonsContainer.innerHTML = ''
+                        buttonsContainer.insertAdjacentHTML(
+                            'beforeend',
+                            templateButton({}),
+                        );
                     }
                 } catch {
                     logger.info('Ошибка при отправки отклика');
@@ -95,6 +95,8 @@ export class JobPage {
 
     render = () => {
         logger.info('JobPage render method called');
+        const created_date = new Date(this.#props.created_at);
+        this.#props.created_at = `${created_date.getDate()}.${created_date.getMonth() + 1}.${created_date.getFullYear()}`
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({

@@ -1,7 +1,7 @@
 import './resumeCard.sass';
 import { logger } from '../../utils/logger';
 import template from './resumeCard.handlebars';
-import type { ResumeShort } from '../../api/interfaces';
+import type { ResumeShort, WorkExperience } from '../../api/interfaces';
 import { router } from '../../router';
 import { statusTranslations } from '../../api/translations';
 
@@ -113,13 +113,17 @@ export class ResumeCard {
         logger.info('ResumeCard render method called');
 
         // Получаем последний опыт работы, если есть
-        const lastExperience =
+        let lastExperience : WorkExperience | null =
             this.#props.work_experiences;
+
+        if (lastExperience.employer_name === '') {
+            lastExperience = null
+        }
 
         // Форматируем период работы
         let workPeriod = '';
         if (lastExperience) {
-            workPeriod = lastExperience.until_now
+            workPeriod = lastExperience.until_now 
                 ? `${lastExperience.start_date} — по настоящее время`
                 : `${lastExperience.start_date} — ${lastExperience.end_date}`;
         }

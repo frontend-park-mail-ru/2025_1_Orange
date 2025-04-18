@@ -30,14 +30,14 @@
         <div class="job__error"></div>
         <div class="job__footer">
             <div class="job__buttons">
-                {{#if resumed}}
+                {{#if responded}}
                 {{> partials/jobCardResponded }}
                 {{else}}
                 <div class="job__button" id="vacancy_{{id}}_resume">Откликнуться</div>
                 {{/if}}
             </div>
             <div class="job__statistics">
-                {{days_created}} дня назад
+                опубликовано {{created_at}}
             </div>
         </div>
     </div>

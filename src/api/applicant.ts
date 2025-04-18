@@ -66,6 +66,6 @@ export class ApplicantService {
      * @returns {VacancyShort}
      */
     async responsed(id: number): Promise<VacancyShort[]> {
-        return this.#api.request(`/vacancy/applicant/${id}/vacancies`, 'POST')
+        return this.#api.request(`/vacancy/applicant/${id}/vacancies`, 'GET')
     }
 }

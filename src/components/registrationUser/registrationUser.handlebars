@@ -2,8 +2,8 @@
     <div class="form__back">&#10094;</div>
     <div class="form__name">Как вас зовут?</div>
     <div class="form__input">
-        <input type="text" placeholder="Имя" name="first_name" value="{{firstName}}" required>
-        <input type="text" placeholder="Фамилия" name="last_name" value="{{lastName}}" required>
+        <input type="text" placeholder="Имя" name="first_name" value="{{firstName}}" pattern="^[а-яА-Яa-zA-Z\s\-]+$" required>
+        <input type="text" placeholder="Фамилия" name="last_name" value="{{lastName}}" pattern="^[а-яА-Яa-zA-Z\s\-]+$" required>
     </div>
     <div class="form__error">
 

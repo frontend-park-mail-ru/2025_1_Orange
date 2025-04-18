@@ -1,4 +1,5 @@
 import { api } from '../../api/api';
+import { customMessage, fieldValidate } from '../../forms';
 import { router } from '../../router';
 import { store } from '../../store';
 import { logger } from '../../utils/logger';
@@ -9,6 +10,7 @@ export class RegistrationUser {
     #firstName: HTMLInputElement | null = null;
     #lastName: HTMLInputElement | null = null;
     #submitBtn: HTMLButtonElement | null = null;
+    #error: HTMLElement | null = null;
 
     /**
      * Конструктор класса
@@ -36,26 +38,20 @@ export class RegistrationUser {
         return this.#firstNameValidate() && this.#lastNameValidate();
     };
 
+    readonly #inputTranslation: Record<string, string> = {
+        first_name: 'Имя',
+        last_name: 'Фамилия',
+    };
+
     /**
      * Валидация имени
      * @returns {boolean}
      */
     readonly #firstNameValidate = (): boolean => {
-        const error = this.self.querySelector('.form__error') as HTMLElement;
-        if (!error || !this.#firstName) {
-            return false;
+        if (this.#firstName) {
+            return fieldValidate(this.#firstName, this.#inputTranslation)
         }
-        if (this.#firstName.validity.valid === false) {
-            error.hidden = false;
-            error.textContent = 'Введите имя';
-            this.#firstName.classList.add('form__input_error');
-            return false;
-        } else {
-            this.#firstName.classList.remove('form__input_error');
-            this.#firstName.classList.add('form__input_valid');
-            error.hidden = true;
-        }
-        return true;
+        return false
     };
 
     /**
@@ -63,21 +59,10 @@ export class RegistrationUser {
      * @returns {boolean}
      */
     readonly #lastNameValidate = (): boolean => {
-        const error = this.self.querySelector('.form__error') as HTMLElement;
-        if (!error || !this.#lastName) {
-            return false;
+        if (this.#lastName) {
+            return fieldValidate(this.#lastName, this.#inputTranslation)
         }
-        if (this.#lastName.validity.valid === false) {
-            error.hidden = false;
-            error.textContent = 'Введите фамилию';
-            this.#lastName.classList.add('form__input_error');
-            return false;
-        } else {
-            this.#lastName.classList.remove('form__input_error');
-            this.#lastName.classList.add('form__input_valid');
-            error.hidden = true;
-        }
-        return true;
+        return false
     };
 
     /**
@@ -88,6 +73,7 @@ export class RegistrationUser {
         this.#firstName = form.elements.namedItem('first_name') as HTMLInputElement;
         this.#lastName = form.elements.namedItem('last_name') as HTMLInputElement;
         this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
+        this.#error = form.querySelector('.form__error') as HTMLElement;
 
         form.querySelector('.form__back')?.addEventListener('click', router.back);
         this.#firstName.addEventListener('input', this.#firstNameValidate);
@@ -130,8 +116,8 @@ export class RegistrationUser {
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
-                firstName: store.data.auth.request.firstName,
-                lastName: store.data.auth.request.lastName,
+                firstName: store.data.auth.request.first_name,
+                lastName: store.data.auth.request.last_name,
             }),
         );
         this.#addEventListeners();

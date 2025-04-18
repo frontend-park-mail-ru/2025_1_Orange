@@ -89,9 +89,13 @@ export class ResumePage {
      */
     render = () => {
         if (this.#data) {
+            if (this.#data.applicant.birth_date !== '0001-01-01T00:00:00Z') {
             const birth_date = new Date(this.#data.applicant.birth_date);
             this.#data.applicant.birth_date = `${birth_date.getUTCDate()}.${birth_date.getUTCMonth()}.${birth_date.getFullYear()}`;
             this.#data.graduation_year = this.#data.graduation_year.split('-')[0]
+            } else {
+                this.#data.applicant.birth_date = ''
+            }
         }
 
         logger.info('ResumePage render method called');
