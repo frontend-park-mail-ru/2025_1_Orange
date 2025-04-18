@@ -50,13 +50,13 @@ export class RegistrationPassword {
 
         const minLength = 10;
 
-        this.#password.classList.remove('form__input_error', 'form__input_valid');
-        this.#repeatPassword.classList.remove('form__input_error', 'form__input_valid');
+        this.#password.classList.remove('error', 'valid');
+        this.#repeatPassword.classList.remove('error', 'valid');
 
         if (this.#password.value.length < minLength) {
             errorElement.hidden = false;
             errorElement.textContent = 'Пароль должен содержать минимум 10 символов';
-            this.#password.classList.add('form__input_error');
+            this.#password.classList.add('error');
             return false;
         }
 
@@ -64,21 +64,21 @@ export class RegistrationPassword {
             errorElement.hidden = false;
             errorElement.textContent =
                 'Пароль может содержать только латинские буквы, цифры и спецсимволы';
-            this.#password.classList.add('form__input_error');
+            this.#password.classList.add('error');
             return false;
         }
 
         if (this.#password.value !== this.#repeatPassword.value) {
             errorElement.hidden = false;
             errorElement.textContent = 'Пароли не совпадают';
-            this.#repeatPassword.classList.add('form__input_error');
+            this.#repeatPassword.classList.add('error');
             return false;
         }
 
         // Если все проверки пройдены успешно
         errorElement.hidden = true;
-        this.#password.classList.add('form__input_valid');
-        this.#repeatPassword.classList.add('form__input_valid');
+        this.#password.classList.add('valid');
+        this.#repeatPassword.classList.add('valid');
         return true;
     };
 
@@ -165,7 +165,6 @@ export class RegistrationPassword {
      */
     render = () => {
         logger.info('RegistrationPassword render method called');
-
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
