@@ -107,6 +107,7 @@ export class ProfileCompany {
                 isOwner:
                     store.data.user.role === 'employer' &&
                     store.data.user.user_id === this.#data?.id,
+                vacancyCount : this.#vacancies?.length ?? 0
             }),
         );
         this.#vacancyContainer = document.getElementById('responses-content') as HTMLElement;
@@ -115,6 +116,11 @@ export class ProfileCompany {
                 const vacancyCard = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
                 vacancyCard.render();
             });
+            if (this.#vacancies.length === 0) {
+                this.#vacancyContainer.textContent = 'Нет вакансий'
+            }
+        } else {
+            this.#vacancyContainer.textContent = 'Ошибка при загрузке'
         }
 
         this.#addEventListeners();
