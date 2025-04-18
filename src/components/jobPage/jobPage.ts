@@ -148,7 +148,7 @@ export class JobPage {
         ) {
             const deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
             if (deleteContainer) {
-                const deleteButton = new DeleteButton(deleteContainer, this.#delete);
+                const deleteButton = new DeleteButton(deleteContainer, 'Вакансию', this.#delete);
                 deleteButton.render();
             }
         }
