@@ -10,10 +10,10 @@
             <legend class="vacancyEdit__name">Общая информация</legend>
             <div class="vacancyEdit__options">
                 <input type="text" name="title" placeholder="Название" class="vacancyEdit__input" value="{{title}}"
-                    minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s]+$"
+                    minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
                     title="Можно вводить только буквы и пробел">
                 <input type="text" name="specialization" placeholder="Специализация" class="vacancyEdit__input"
-                    value="{{specialization}}" minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s]+$"
+                    value="{{specialization}}" minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
                     title="Можно вводить только буквы и пробел">
                 <input type="text" name="city" placeholder="Город" class="vacancyEdit__input" value="{{city}}"
                     minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
@@ -157,7 +157,7 @@
             <legend class="vacancyEdit__name">Описание вакансии</legend>
             <div class="vacancyEdit__options">
                 <textarea name="description" placeholder="Введите описание вакансии" class="vacancyEdit__input"
-                    minlength="10" maxlength="500" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
+                    minlength="10" maxlength="500" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
                     title="Можно вводить только буквы, знаки препинания и пробел">{{description}}</textarea>
                 <div class="vacancyEdit__error"></div>
             </div>
@@ -168,7 +168,7 @@
             <legend class="vacancyEdit__name">Задачи</legend>
             <div class="vacancyEdit__options">
                 <textarea name="tasks" placeholder="Введите задачи вакансии" class="vacancyEdit__input"
-                 minlength="10" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
+                 minlength="10" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
                     title="Можно вводить только буквы, знаки препинания и пробел">{{tasks}}</textarea>
                 <div class="vacancyEdit__error"></div>
             </div>
@@ -191,7 +191,7 @@
             <div class="vacancyEdit__options">
                 <textarea name="optional_requirements" placeholder="Введите дополнительные требования вакансии"
                     class="vacancyEdit__input" minlength="10" maxlength="500"
-                    pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
+                    pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
                     title="Можно вводить только буквы, знаки препинания и пробел">{{optional_requirements}}</textarea>
                 <div>
                     <div class="vacancyEdit__error"></div>
@@ -204,7 +204,7 @@
             <legend class="vacancyEdit__name">Навыки</legend>
             <div class="vacancyEdit__options">
                 <input type="text" name="skills" placeholder="Вводите навыки через запятую" class="vacancyEdit__input"
-                    value="{{skills}}" minlength="3" maxlength="150" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
+                    value="{{skills}}" minlength="3" maxlength="150" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
                     title="Можно вводить только буквы, знаки препинания и пробел" required>
                 <div class="vacancyEdit__error"></div>
             </div>
