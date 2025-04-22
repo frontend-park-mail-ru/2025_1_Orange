@@ -70,13 +70,13 @@ export class RegistrationEmail {
         }
         if (this.#email.validity.valid === false) {
             error.hidden = false;
-            error.textContent = 'Напишите валидный адрес почты';
+            error.textContent = 'Напишите корректный адрес почты';
             this.#email.classList.add('form__input_error');
             return false;
         }
         if (this.#email.value.split('').indexOf('.') === -1) {
             error.hidden = false;
-            error.textContent = 'Напишите валидный адрес почты';
+            error.textContent = 'Напишите корректный адрес почты';
             this.#email.classList.add('form__input_error');
             return false;
         }
