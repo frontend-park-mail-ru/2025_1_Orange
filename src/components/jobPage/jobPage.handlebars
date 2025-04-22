@@ -15,10 +15,8 @@
             </div>
             <div class="vacancy__actions">
                 <div class="vacancy__buttons">
-                    {{#if resume}}
-                    <div class="job__button_second">
-                        <span>Вы откликнулись</span>
-                    </div>
+                    {{#if responded}}
+                    {{> partials/jobCardResponded }}
                     {{else}}
                     <div class="job__button" id="vacancy_resume_button">
                         <span>Откликнуться</span>

@@ -1,5 +1,6 @@
 import { logger } from '../../utils/logger';
 import template from './jobPage.handlebars';
+import templateButton from '../../partials/jobCardResponded.handlebars';
 import { Vacancy } from '../../api/interfaces';
 import { JobCompanyCard } from '../jobCompanyCard/jobCompanyCard';
 import './jobPage.sass';
