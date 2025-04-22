@@ -52,6 +52,7 @@ export class RegistrationUser {
             return false;
         }
         this.#firstName.classList.remove('error', 'valid');
+        this.#firstName.value = this.#firstName.value.trimStart()
         this.#error.textContent = ''
         if (this.#firstName.validity.valid === false) {
             this.#error.textContent = customMessage(this.#firstName, this.#inputTranslation)
@@ -72,6 +73,7 @@ export class RegistrationUser {
             return false;
         }
         this.#lastName.classList.remove('error', 'valid');
+        this.#lastName.value = this.#lastName.value.trimStart()
         this.#error.textContent = ''
         if (this.#lastName.validity.valid === false) {
             this.#error.textContent = customMessage(this.#lastName, this.#inputTranslation)

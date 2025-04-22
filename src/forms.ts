@@ -6,28 +6,31 @@ export function customMessage(
 ): string {
     const validity = field.validity;
     if (validity.valueMissing) {
-        return `Заполните поле ${inputTranslation[field.name]}`;
+        return `Заполните поле ${inputTranslation[field.name] || ''}`;
     }
     if (validity.patternMismatch) {
-        return field.title || `${inputTranslation[field.name]}: Неверный формат данных`;
+        return field.title || `${inputTranslation[field.name] || ''}: Неверный формат данных`;
     }
     if (validity.tooLong && (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) {
-        return `${inputTranslation[field.name]}: Слишком много данных (максимум ${field.maxLength})`;
+        return `${inputTranslation[field.name] || ''}: Слишком много данных (максимум ${field.maxLength})`;
     }
     if (validity.tooShort && (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) {
-        return `${inputTranslation[field.name]}: Слишком мало данных (минимум ${field.minLength})`;
+        return `${inputTranslation[field.name] || ''}: Слишком мало данных (минимум ${field.minLength})`;
     }
     if (validity.rangeOverflow && field instanceof HTMLInputElement) {
-        return `${inputTranslation[field.name]}: Слишком большое значение (максимум ${field.max})`;
+        return `${inputTranslation[field.name] || ''}: Слишком большое значение (максимум ${field.max})`;
     }
     if (validity.rangeUnderflow && field instanceof HTMLInputElement) {
-        return `${inputTranslation[field.name]}: Слишком маленькое значение (минимум ${field.min})`;
+        return `${inputTranslation[field.name] || ''}: Слишком маленькое значение (минимум ${field.min})`;
     }
     // Для почты и сайта
     if (validity.typeMismatch) {
-        return `${inputTranslation[field.name]}: Неверный тип данных`;
+        if (field.type === 'date') return `${inputTranslation[field.name] || ''}: Введите корректную дату`;
+        if (field.type === 'mail') return `${inputTranslation[field.name] || ''}: Введите корректную почту`;
+        if (field.type === 'url') return `${inputTranslation[field.name] || ''}: Введите адрес начиная с http://`;
+        return `${inputTranslation[field.name] || ''}: Неверный тип данных`;
     }
-    return `${inputTranslation[field.name]}: ${field.validationMessage}`;
+    return `${inputTranslation[field.name] || ''}: ${field.validationMessage}`;
 }
 
 export function fieldValidate(
@@ -38,6 +41,7 @@ export function fieldValidate(
     logger.info(error)
     field.classList.remove('error');
     field.classList.remove('valid');
+    field.value = field.value.trimStart()
     if (!field.validity.valid) {
         logger.info(field);
         if (document.activeElement === field && field.value !== '' && field.value !== '0')

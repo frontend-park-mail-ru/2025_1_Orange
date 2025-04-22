@@ -52,6 +52,7 @@ export class RegistrationCompany {
             return false;
         }
         this.#companyName.classList.remove('error', 'valid');
+        this.#companyName.value = this.#companyName.value.trimStart()
         this.#error.textContent = ''
         if (this.#companyName.validity.valid === false) {
             this.#error.textContent = customMessage(this.#companyName, this.#inputTranslation)
@@ -72,6 +73,7 @@ export class RegistrationCompany {
             return false;
         }
         this.#companyAddress.classList.remove('error', 'valid');
+        this.#companyAddress.value = this.#companyAddress.value.trimStart()
         this.#error.textContent = ''
         if (this.#companyAddress.validity.valid === false) {
             this.#error.textContent = customMessage(this.#companyAddress, this.#inputTranslation)
