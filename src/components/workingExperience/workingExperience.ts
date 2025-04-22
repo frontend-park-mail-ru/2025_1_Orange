@@ -2,6 +2,7 @@ import template from './workingExperience.handlebars'; // Шаблон Handlebar
 import { logger } from '../../utils/logger';
 import { WorkExperience } from '../../api/interfaces';
 import { emptyWorkExperience } from '../../api/empty';
+import { customMessage } from '../../forms';
 
 export class WorkingExperience {
     readonly #parent: HTMLElement;
@@ -33,24 +34,6 @@ export class WorkingExperience {
         end_date: 'Окончание работы',
     };
 
-    #customMessage(field: HTMLInputElement | HTMLSelectElement): string {
-        const validity = field.validity;
-        if (validity.valueMissing) {
-            return `Заполните поле ${this.#inputTranslation[field.name]}`;
-        }
-        if (validity.patternMismatch) {
-            return field.title;
-        }
-        if (validity.tooLong) {
-            return `${this.#inputTranslation[field.name]}: Много введённых данных`;
-        }
-
-        if (validity.tooShort) {
-            return `${this.#inputTranslation[field.name]}: Мало введённых данных`;
-        }
-        return `${this.#inputTranslation[field.name]}: ${field.validationMessage}`;
-    }
-
     #fieldValidate(
         field: HTMLInputElement | HTMLSelectElement,
         errorElement: HTMLElement,
@@ -60,7 +43,7 @@ export class WorkingExperience {
         if (!field.validity.valid) {
             if (document.activeElement === field && field.value !== '' && field.value !== '0')
                 field.classList.add('error');
-            errorElement.textContent = this.#customMessage(field);
+            errorElement.textContent = customMessage(field, this.#inputTranslation);
             errorElement.style.display = 'block';
             return false;
         }
