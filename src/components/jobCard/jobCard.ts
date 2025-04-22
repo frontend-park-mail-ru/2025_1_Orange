@@ -6,6 +6,7 @@ import { VacancyShort } from '../../api/interfaces';
 import { router } from '../../router';
 import { employmentTranslations, workFormatTranslations } from '../../api/translations';
 import { api } from '../../api/api';
+import { store } from '../../store';
 
 export class JobCard {
     readonly #parent: HTMLElement;
@@ -44,8 +45,13 @@ export class JobCard {
 
         if (this.#resumeButton) {
             const handleResumeClick = async () => {
-                const error = this.self.querySelector('.job__error')
+                if (!store.data.authorized) {
+                    router.go('/auth')
+                    return
+                }
+                const error = this.self.querySelector('.job__error') as HTMLElement
                 if (error) {
+                    error.hidden = true
                     error.textContent = ''
                 }
                 logger.info('resume');
@@ -65,7 +71,10 @@ export class JobCard {
                         this.#resumeButton.removeEventListener('click', handleResumeClick);
                     }
                 } catch {
-                    if (error) error.textContent = 'Ошибка при отправке отклика';
+                    if (error) {
+                        error.hidden = false
+                        error.textContent = 'Ошибка при отправке отклика';
+                    }
                 }
             };
             this.#resumeButton.addEventListener('click', handleResumeClick);
