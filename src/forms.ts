@@ -41,7 +41,7 @@ export function fieldValidate(
     logger.info(error)
     field.classList.remove('error');
     field.classList.remove('valid');
-    field.value = field.value.trimStart()
+    if (field.type !== 'file') field.value = field.value.trimStart();
     if (!field.validity.valid) {
         logger.info(field);
         if (document.activeElement === field && field.value !== '' && field.value !== '0')
