@@ -39,7 +39,8 @@ export class JobCard {
             const target = e.target as HTMLElement;
             // Если клик не на кнопке
             if (target.className !== 'job__button' && target.className !== 'job__button_second') {
-                router.go(`/vacancy/${this.#props.id}`);
+                if (store.data.authorized) router.go(`/vacancy/${this.#props.id}`);
+                else router.go('/auth')
             }
         });
 
