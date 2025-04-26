@@ -1,10 +1,11 @@
 import {
     emptyAuthResponse,
     emptyResumeCreate,
+    emptyReview,
     emptySignupRequest,
     emptyVacancyCreate,
 } from './api/empty';
-import { VacancyCreate, ResumeCreate, SignupRequest, AuthResponse } from './api/interfaces';
+import { VacancyCreate, ResumeCreate, SignupRequest, AuthResponse, Review } from './api/interfaces';
 
 interface StoreData {
     csrf: string;
@@ -17,6 +18,7 @@ interface StoreData {
     user: AuthResponse;
     vacancy: VacancyCreate;
     resume: ResumeCreate;
+    review: Review;
 }
 
 const emptyData: StoreData = {
@@ -30,6 +32,7 @@ const emptyData: StoreData = {
     user: emptyAuthResponse,
     vacancy: emptyVacancyCreate,
     resume: emptyResumeCreate,
+    review: emptyReview,
 };
 
 class Store {

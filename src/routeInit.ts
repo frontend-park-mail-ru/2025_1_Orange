@@ -17,6 +17,7 @@ import { ProfileUser } from './components/profileUser/profileUser';
 import { ProfileCompany } from './components/profileCompany/profileCompany';
 import { ProfileUserEdit } from './components/profileUserEdit/profileUserEdit';
 import { ProfileCompanyEdit } from './components/profileCompanyEdit/profileCompanyEdit';
+import { PollForm } from './components/pollForm/pollForm';
 
 /**
  *
@@ -46,6 +47,27 @@ const renderPage = async (name: string, Page: any) => {
 
     await page.render();
     document.title = store.data.page;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const renderReview = async (name: string, Page: any) => {
+
+    const app = document.getElementById('app') as HTMLElement;
+
+    store.data.page = name;
+
+    const page = new Page(app);
+    if (page.init !== undefined) {
+        try {
+            await page.init();
+        } catch {
+            logger.error('Не смог взять данные');
+        }
+    }
+
+    app.innerHTML = '';
+
+    await page.render();
 };
 
 /**
@@ -79,5 +101,8 @@ export const routerInit = () => {
     );
     router.add('profileCompanyEdit', async () =>
         renderPage('Редактирование профиля', ProfileCompanyEdit),
+    );
+    router.add('review', async () =>
+        renderReview('Оценка сайта', PollForm),
     );
 };

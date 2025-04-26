@@ -92,16 +92,24 @@
     padding: 0 50px
     margin-bottom: 30px
     margin-top: 30px
+    @media screen and ( max-width: 800px )
+        padding: 0 10px
+        
 
     &__name
         padding: 10px
         font-weight: 600
         font-size: 20px
+        @media screen and ( max-width: 800px )
+            display: none
+        
+            
 
     &__slider
         display: flex
         flex-direction: row
         align-items: center
+        overflow-x: scroll
         gap: 10px
 
     &__badge
@@ -112,6 +120,7 @@
         font-size: 16px
         cursor: pointer
         transition: all 0.2s ease
+        white-space: nowrap
 
         &:hover
             border-color: #0071fe

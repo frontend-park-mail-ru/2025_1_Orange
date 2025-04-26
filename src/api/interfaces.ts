@@ -233,3 +233,8 @@ export interface ApplicantEdit {
     vk: string;
     facebook: string;
 }
+
+export interface Review {
+    id: number;
+    question: string;
+}

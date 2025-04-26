@@ -12,6 +12,7 @@ import {
     WorkExperience,
     User,
     AuthResponse,
+    Review,
 } from './interfaces';
 
 export const staticMock: Static = {
@@ -178,3 +179,8 @@ export const AuthResponseEmployerMock: AuthResponse = {
     role: 'employer',
     user_id: 1,
 };
+
+export const ReviewMock: Review = {
+    id: 1,
+    question: "hello world?"
+}
