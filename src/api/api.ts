@@ -3,6 +3,7 @@ import { logger } from '../utils/logger';
 import { ApplicantService } from './applicant';
 import { AuthService } from './auth';
 import { EmployerService } from './employer';
+import { PollService } from './poll';
 import { ResumeService } from './resumes';
 import { VacancyService } from './vacansies';
 
@@ -13,6 +14,7 @@ export class Api {
     readonly applicant: ApplicantService;
     readonly employer: EmployerService;
     readonly resume: ResumeService;
+    readonly poll: PollService;
 
     /**
      * Конструктор класса api - взаимодействие с бекендом
@@ -25,6 +27,7 @@ export class Api {
         this.applicant = new ApplicantService(this);
         this.employer = new EmployerService(this);
         this.resume = new ResumeService(this);
+        this.poll = new PollService(this);
     }
 
     /**

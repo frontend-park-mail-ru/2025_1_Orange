@@ -19,24 +19,24 @@ export class PollForm {
         this.#parent = parent;
     }
 
-    init = async () => {
-        logger.info('pollForm init method called');
-        if (
-            !store.data.authorized
-        )
-            router.back();
-        try {
-            if (store.data.review.id === 0) {
-            //const data = await api.applicant.get(1);
-            //console.log("API", data)
-            store.data.review = ReviewMock
-            console.log("STORE UPDATED", store.data.review)
-            }
-        } catch {
-            logger.info('Не удалось загрузить страницу');
-            router.back();
-        }
-    };
+    // init = async () => {
+    //     logger.info('pollForm init method called');
+    //     if (
+    //         !store.data.authorized
+    //     )
+    //         router.back();
+    //     try {
+    //         if (store.data.review.id === 0) {
+    //         //const data = await api.applicant.get(1);
+    //         //console.log("API", data)
+    //         store.data.review = ReviewMock
+    //         console.log("STORE UPDATED", store.data.review)
+    //         }
+    //     } catch {
+    //         logger.info('Не удалось загрузить страницу');
+    //         router.back();
+    //     }
+    // };
 
     /**
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
@@ -50,35 +50,49 @@ export class PollForm {
      * Добавление обработчиков событий
      */
     addEventListeners = () => {
-        this.#closeButton = this.self.querySelector('.poll__close')
-        this.#submitButton = this.self.querySelector('.job__button')
-        this.#starsButtons = this.self.querySelectorAll('.poll__star')
-        if (this.#closeButton) {
-            this.#closeButton.addEventListener('click', () => {
-                console.log("POLL FORM: CLOSE")
+        if (this.self) {
+            this.#closeButton = this.self.querySelector('.poll__close')
+            this.#submitButton = this.self.querySelector('.job__button')
+            this.#starsButtons = this.self.querySelectorAll('.poll__star')
+            if (this.#closeButton) {
+                this.#closeButton.addEventListener('click', () => {
+                    console.log("POLL FORM: CLOSE")
+                    window.parent.postMessage("CLOSE", '*');
+                })
+            }
+            if (this.#submitButton) {
+                this.#submitButton.addEventListener('click', (e: Event) => {
+                    e.preventDefault();
+                    console.log("POLL FORM: SUBMIT", this.#stars)
+                    window.parent.postMessage({
+                        poll_id: store.data.review.poll_id,
+                        answer: this.#stars
+                    }, '*');
+                })
+            }
+
+            console.log("STARS ", this.#starsButtons)
+            this.#starsButtons.forEach((element) => {
+                element.addEventListener('click', () => {
+                    console.log("STAR CLICKED", element)
+                    if (element.id) {
+                        const splittedId = element.id.split('_')
+                        const id = Number.parseInt(splittedId[splittedId.length - 1]) || 0
+                        this.#stars = id;
+                        this.#renderStars()
+                    } else console.log("POLL FORM: CANT FIND ID", element)
+                })
             })
         }
-        if (this.#submitButton) {
-            this.#submitButton.addEventListener('click', (e: Event) => {
-                e.preventDefault();
-                console.log("POLL FORM: SUBMIT", this.#stars)
-            })
-        }
 
-        console.log("STARS ", this.#starsButtons)
-        this.#starsButtons.forEach((element) => {
-            element.addEventListener('click', () => {
-                console.log("STAR CLICKED", element)
-                if (element.id) {
-                    const splittedId = element.id.split('_')
-                    const id = Number.parseInt(splittedId[splittedId.length - 1]) || 0
-                    this.#stars = id;
-                    this.#renderStars()
-                } else console.log("POLL FORM: CANT FIND ID", element)
-            })
-        })
-
-
+        window.addEventListener('message', function (event) {
+            console.log("IFRAME GET", event.data)
+            if (event.data.poll_id && event.data.name) {
+                store.data.review.name = event.data.name
+                store.data.review.poll_id = event.data.poll_id
+                router.go('/review')
+            }
+        });
     };
 
     readonly #renderStars = () => {
@@ -112,13 +126,14 @@ export class PollForm {
     render = () => {
         logger.info('pollForm render method called');
         // Если нету вопроса что бы показывать не рендерим
-        if (store.data.review === emptyReview) return
-        this.#parent.insertAdjacentHTML(
-            'beforeend',
-            template({
-                ...store.data.review
-            }),
-        );
+        if (store.data.review.poll_id !== 0) {
+            this.#parent.insertAdjacentHTML(
+                'beforeend',
+                template({
+                    ...store.data.review
+                }),
+            );
+        }
         this.#renderStars()
         this.addEventListeners();
     };

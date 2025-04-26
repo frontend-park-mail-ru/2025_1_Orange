@@ -2,15 +2,22 @@
     display: flex
     gap: 20px
     padding: 10px
+    border: 1px solid #CFCFCF
     border-left: 3px solid #0070ff
-    position: relative
     border-radius: 5px
+    position: relative
+    height: 100%
 
     &__close
         position: absolute
-        right: 20px
+        right: 0px
+        top: 0px
         font-size: 20px
         cursor: pointer
+
+        svg
+            width: 32px
+            height: 32px
     
     &__section
         display: flex
@@ -30,3 +37,12 @@
         display: flex
         flex-direction: row
         gap: 5px
+
+    &__star
+        height: 32px
+        width: 32px
+        color: #ffd700
+
+        svg
+            width: 100%
+            height: 100%

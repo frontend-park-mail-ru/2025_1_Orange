@@ -1,19 +1,19 @@
-import { emptyApplicant, emptyEmployer } from "./empty"
-import type {
-  Static,
-  Applicant,
-  ApplicantShort,
-  Employer,
-  EmployerShort,
-  Vacancy,
-  VacancyShort,
-  Resume,
-  ResumeShort,
-  WorkExperience,
-  User,
-  AuthResponse,
-  Review,
-} from "./interfaces"
+import { emptyApplicant, emptyEmployer } from './empty';
+import {
+    Static,
+    Applicant,
+    ApplicantShort,
+    Employer,
+    EmployerShort,
+    Vacancy,
+    VacancyShort,
+    Resume,
+    ResumeShort,
+    WorkExperience,
+    User,
+    AuthResponse,
+    ReviewResponse,
+} from './interfaces';
 
 export const staticMock: Static = {
   id: 12,
@@ -181,34 +181,7 @@ export const AuthResponseEmployerMock: AuthResponse = {
   user_id: 1,
 }
 
-export const ReviewMock: Review = {
-  id: 1,
-  question: "hello world?",
+export const ReviewMock: ReviewResponse = {
+    poll_id: 1,
+    name: "hello world?"
 }
-
-export const PollStatisticsMock = [
-  {
-    id: 1,
-    question: "Насколько вы удовлетворены удобством ResuMatch?",
-    averageRating: 4.8,
-    statistics: [
-      { stars: 5, percentage: 91, votes: 18 },
-      { stars: 4, percentage: 4, votes: 18 },
-      { stars: 3, percentage: 2, votes: 18 },
-      { stars: 2, percentage: 2, votes: 18 },
-      { stars: 1, percentage: 1, votes: 18 },
-    ],
-  },
-  {
-    id: 2,
-    question: "Насколько вы удовлетворены удобством ResuMatch?",
-    averageRating: 4.8,
-    statistics: [
-      { stars: 5, percentage: 91, votes: 18 },
-      { stars: 4, percentage: 4, votes: 18 },
-      { stars: 3, percentage: 2, votes: 18 },
-      { stars: 2, percentage: 2, votes: 18 },
-      { stars: 1, percentage: 1, votes: 18 },
-    ],
-  },
-]
