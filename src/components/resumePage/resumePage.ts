@@ -34,11 +34,6 @@ export class ResumePage {
         try {
             const data = await api.resume.get(this.#id);
             this.#data = data;
-            try {
-                this.#data.applicant = await api.applicant.get(this.#data.applicant_id);
-            } catch {
-                router.back();
-            }
         } catch {
             logger.info('Не удалось загрузить страницу');
             router.back();

@@ -1,5 +1,5 @@
 import { Api } from './api';
-import { ReviewRequest, ReviewResponse } from './interfaces';
+import { PollStatistic, ReviewRequest, ReviewResponse } from './interfaces';
 
 
 export class PollService {
@@ -24,5 +24,13 @@ export class PollService {
      */
     async answer(body: ReviewRequest): Promise<void> {
         return this.#api.request('/poll/vote', 'POST', JSON.stringify(body));
+    }
+
+    /**
+     * Получаем статискику ответов
+     * @returns {Promise<PollStatistic[]>} - Список статистики
+     */
+    async statics(): Promise<PollStatistic[]> {
+        return this.#api.request('/poll/stats', 'GET')
     }
 }

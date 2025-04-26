@@ -106,6 +106,8 @@ export class Header {
                 await api.auth.logout();
                 logger.info('LOGOUT SUCCESFULLY');
                 store.reset();
+                const frame = document.getElementById('review_frame')
+                if (frame) frame.hidden = true
                 router.go('/catalog');
             } catch {
                 logger.info('ERROR LOGOUT');

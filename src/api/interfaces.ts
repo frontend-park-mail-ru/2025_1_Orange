@@ -243,3 +243,22 @@ export interface ReviewResponse {
     poll_id: number;
     name: string;
 }
+
+  /**
+   * Интерфейс для статистики по одному рейтингу (звезды)
+   */
+  export interface RatingStatistic {
+    stars: number
+    percentage: number
+    votes: number
+  }
+  
+  /**
+   * Интерфейс для статистики по одному опросу
+   */
+  export interface PollStatistic {
+    id: number
+    question: string
+    averageRating: number
+    statistics: RatingStatistic[]
+  }
