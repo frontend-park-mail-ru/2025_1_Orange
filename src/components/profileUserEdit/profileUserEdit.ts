@@ -20,6 +20,10 @@ export class ProfileUserEdit {
     #uploadInput: HTMLInputElement | null = null;
     #avatar: NodeListOf<HTMLImageElement> | null = null;
 
+    /**
+     * Конструктор класса
+     * @param parent {HTMLElement} - родительский элемент
+     */
     constructor(parent: HTMLElement) {
         this.#parent = parent;
     }
@@ -32,6 +36,11 @@ export class ProfileUserEdit {
         return document.getElementById('profile_user_edit') as HTMLElement;
     }
 
+    /**
+     * Получение информации о профиле
+     * defaultData = Applicant
+     * defaultData используется при рендеринге формы
+     */
     init = async () => {
         logger.info('profileUser init method called');
         const url = window.location.href.split('/');
@@ -52,6 +61,9 @@ export class ProfileUserEdit {
         }
     };
 
+    /**
+     * Словарь перевода полей ввода
+     */
     readonly #inputTranslation: Record<string, string> = {
         first_name: 'Имя',
         last_name: 'Фамилия',
@@ -66,6 +78,11 @@ export class ProfileUserEdit {
         facebook: 'Веб страница',
     };
 
+    /**
+     * Получение данных из формы на основе типа
+     * @param {HTMLFormElement} form - форма из которой получаем значения
+     * @returns {Object} - JSON данных формы
+     */
     #formGet(form: HTMLFormElement): unknown {
         const formData = new FormData(form);
         const json: Record<string, unknown> = {};
@@ -94,8 +111,15 @@ export class ProfileUserEdit {
         this.self.innerHTML = '';
     };
 
+    /**
+     * Навешивание обработчиков
+     */
     readonly #addEventListeners = () => {
         if (this.#form) {
+            this.#back = document.querySelectorAll('.job__button_second');
+            this.#confirm = document.querySelectorAll('.job__button');
+            this.#uploadInput = this.#form.elements.namedItem('file_input') as HTMLInputElement;
+            this.#avatar = document.querySelectorAll('.profile__avatar-img');
             this.#form.addEventListener('input', (e: Event) => {
                 if (this.#form) {
                     formValidate(
@@ -215,9 +239,6 @@ export class ProfileUserEdit {
         this.#form = document.forms.namedItem('profile_user_edit') as HTMLFormElement;
         if (this.#form) {
             this.#sex = this.#form.elements.namedItem('sex') as HTMLSelectElement;
-            this.#back = document.querySelectorAll('.job__button_second');
-            this.#confirm = document.querySelectorAll('.job__button');
-            this.#uploadInput = this.#form.elements.namedItem('file_input') as HTMLInputElement;
         }
 
         if (this.#sex) {

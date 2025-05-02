@@ -259,6 +259,6 @@ export interface ReviewResponse {
   export interface PollStatistic {
     id: number
     question: string
-    averageRating: number
-    statistics: RatingStatistic[]
+    rating: number
+    stars: RatingStatistic[]
   }

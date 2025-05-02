@@ -25,10 +25,18 @@ export class ProfileUser {
     #backArrow: HTMLButtonElement | null = null;
     #resumeTable: HTMLElement | null = null;
 
+    /**
+     * Конструктор класса
+     * @param parent {HTMLElement} - родительский элемент
+     */
     constructor(parent: HTMLElement) {
         this.#parent = parent;
     }
 
+    /**
+     * Получение данных о профиле
+     * data = Applicant
+     */
     init = async () => {
         logger.info('profileUser init method called');
         const url = window.location.href.split('/');
@@ -107,6 +115,13 @@ export class ProfileUser {
         });
     };
 
+
+    /**
+     * Обработка нажатия вкладки
+     * @param {HTMLElement} button - кнопка вкладки
+     * @param {Function} callback - функция рендерига вкладки
+     * @returns {void}
+     */
     readonly #handleButton = (button: HTMLElement, callback: () => void) => {
         if (button.classList.contains('profile__tab--active')) return;
 
@@ -120,23 +135,22 @@ export class ProfileUser {
         callback();
     };
 
+    /**
+     * Рендеринг вкладки резюме
+     * @returns {void}
+     */
     readonly #renderResponses = async () => {
         if (this.#resumeTable) this.#resumeTable.hidden = true;
         if (!this.#vacancyContainer) return
         if (this.#vacancyContainer) this.#vacancyContainer.textContent = ''
         if (this.#resumeContainer) this.#resumeContainer.textContent = ''
         try {
-            if (this.#data) this.#vacancies = await api.applicant.responsed(this.#data.id)
+            if (this.#data) this.#vacancies = await api.applicant.responsed(this.#data.id, 0, 10)
             if (!this.#vacancies) {
                 this.#vacancyContainer.textContent = 'Ничего нету'
                 return
             }
             this.#vacancies.forEach(async (vacancy) => {
-                try {
-                    vacancy.employer = await api.employer.get(vacancy.employer_id)
-                } catch {
-                    vacancy.employer = emptyEmployer
-                }
                 const response = new JobCard(this.#vacancyContainer as HTMLElement, vacancy)
                 response.render()
             })
@@ -146,6 +160,9 @@ export class ProfileUser {
     };
 
     // TODO реализовать обработчик
+    /**
+     * Рендеринг списка лайкнутых вакансий
+     */
     readonly #renderFavorites = () => {
         logger.info('Favorite tab clicked - add logic later');
     };
@@ -163,13 +180,12 @@ export class ProfileUser {
         }
         this.#resumeContainer.innerHTML = ''; // Очищаем контейнер перед рендерингом
         try {
-            this.#resumes = await api.resume.all();
+            this.#resumes = await api.resume.all(0, 10);
         } catch {
             logger.info('Не удалось загрузить');
             return;
         }
 
-        // Используем данные из resumesMock
         this.#resumes.forEach(async (resume) => {
             try {
                 resume.applicant = await api.applicant.get(resume.applicant_id)

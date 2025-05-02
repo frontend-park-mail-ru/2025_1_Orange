@@ -1,5 +1,5 @@
 import { api } from '../../api/api';
-import { customMessage, fieldValidate } from '../../forms';
+import { customMessage } from '../../forms';
 import { router } from '../../router';
 import { store } from '../../store';
 import { logger } from '../../utils/logger';

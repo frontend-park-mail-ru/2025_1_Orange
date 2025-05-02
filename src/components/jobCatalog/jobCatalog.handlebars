@@ -1,13 +1,16 @@
 <div id="job_catalog_page">
+    
     <div class="info">
         <div class="info__welcome"><b>Твоя карьера - наш приоритет</b></div>
-
-        <form class="info__search">
+        <form class="info__search" name="vacancy_search">
             <div class="info__search__container">
-                <svg class="info__search__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#AAAAB3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg class="info__search__icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
+                        stroke="#AAAAB3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-                <input type="text" placeholder="Профессия, должность или компания">
+                <input type="text" placeholder="Профессия, должность или компания" name="search" value="{{search}}">
                 <button type="submit" class="info__search__button">Найти</button>
             </div>
         </form>
@@ -19,18 +22,29 @@
     <div class="job_category">
         <div class="job_category__name">Специализация</div>
         <div class="job_category__slider">
-            <div class="job_category__badge">Юристы, адвокаты</div>
+            <div class="job_category__badge">world</div>
             <div class="job_category__badge">Наука, образование</div>
             <div class="job_category__badge">Туризм, гостиницы</div>
+            <div class="job_category__badge">IT-специальности</div>
+            <div class="job_category__badge">IT-специальности</div>
+            <div class="job_category__badge">IT-специальности</div>
+            <div class="job_category__badge">IT-специальности</div>
+            <div class="job_category__badge">IT-специальности</div>
+            <div class="job_category__badge">IT-специальности</div>
+            <div class="job_category__badge">IT-специальности</div>
+            <div class="job_category__badge">IT-специальности</div>
             <div class="job_category__badge">IT-специальности</div>
         </div>
     </div>
     <div class="page">
-            
+
         <div class="jobs_filter">
         </div>
-        <div class="jobs_list">
+        <div class="job_catalog__wrapper">
+            <div class="jobs_list">
 
+            </div>
+            <div class="job__button_second" id="pagination_button">Показать ещё</div>
         </div>
     </div>
 </div>

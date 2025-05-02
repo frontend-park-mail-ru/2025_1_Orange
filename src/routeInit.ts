@@ -18,12 +18,57 @@ import { ProfileCompany } from './components/profileCompany/profileCompany';
 import { ProfileUserEdit } from './components/profileUserEdit/profileUserEdit';
 import { ProfileCompanyEdit } from './components/profileCompanyEdit/profileCompanyEdit';
 import { PollForm } from './components/pollForm/pollForm';
-import { ReviewMock } from './api/mocks';
 import { SuperTimer } from './iframeTimer';
 import { emptyReview } from './api/empty';
 import { PollStatistics } from './components/pollStatistics/pollStatistics';
 import { api } from './api/api';
 
+const PollLogic = (parent: ParentNode) => {
+    const frame = document.createElement('iframe')
+    frame.id = 'review_frame'
+    frame.src = 'http://localhost:8001/review'
+    frame.hidden = true
+    parent.appendChild(frame)
+    SuperTimer.start(async () => {
+        const frame = document.getElementById('review_frame') as HTMLIFrameElement
+        if (frame) {
+            if (!store.data.authorized) frame.hidden = true
+            if (store.data.review.poll_id === 0 && store.data.authorized) {
+                try {
+                    store.data.review = await api.poll.get()
+                    frame.contentWindow?.postMessage(store.data.review, '*');
+                    frame.hidden = false
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }
+    }, 10)
+    window.addEventListener('message', async (event) => {
+        if (event.data === 'CLOSE') {
+            SuperTimer.stop()
+            frame.hidden = true
+        }
+        if (event.data.poll_id && event.data.answer) {
+            console.log("SEND REVIEW")
+            try {
+                await api.poll.answer({
+                    poll_id: event.data.poll_id,
+                    answer: event.data.answer
+                })
+                store.data.review = emptyReview
+                frame.hidden = true
+            } catch {
+                const frame = document.getElementById('review_frame') as HTMLIFrameElement
+                if (frame) {
+                    frame.contentWindow?.postMessage("ERROR", '*');
+                }
+            }
+        }
+        console.log("IFRAME DATA", event.data); // присланные данные
+        console.log("IFRAME SOURCE", event.source); // ссылка на окно-отправитель сообщения
+    });
+}
 
 /**
  *
@@ -36,50 +81,7 @@ const renderPage = async (name: string, Page: any) => {
     const app = document.getElementById('app') as HTMLElement;
 
     if (app.parentNode && !document.getElementById('review_frame')) {
-        const frame = document.createElement('iframe')
-        frame.id = 'review_frame'
-        frame.src = 'http://localhost:8001/review'
-        frame.hidden = true
-        app.parentNode.appendChild(frame)
-        SuperTimer.start(async () => {
-            const frame = document.getElementById('review_frame') as HTMLIFrameElement
-            if (frame) {
-                if (!store.data.authorized) frame.hidden = true
-                if (store.data.review.poll_id === 0 && store.data.authorized) {
-                    try {
-                        store.data.review = await api.poll.get()
-                        frame.contentWindow?.postMessage(ReviewMock, '*');
-                        frame.hidden = false
-                    } catch (error) {
-                        console.log(error)
-                    }
-                }
-            }
-        }, 1)
-        window.addEventListener('message', async (event) => {
-            if (event.data === 'CLOSE') {
-                SuperTimer.stop()
-                frame.hidden = true
-            }
-            if (event.data.poll_id && event.data.answer) {
-                console.log("SEND REVIEW")
-                try {
-                    await api.poll.answer({
-                        poll_id: event.data.poll_id,
-                        answer: event.data.poll_id
-                    })
-                    store.data.review = emptyReview
-                    frame.hidden = true
-                } catch {
-                    const frame = document.getElementById('review_frame') as HTMLIFrameElement
-                    if (frame) {
-                        frame.contentWindow?.postMessage("ERROR", '*');
-                    }
-                }
-            }
-            console.log("IFRAME DATA", event.data); // присланные данные
-            console.log("IFRAME SOURCE", event.source); // ссылка на окно-отправитель сообщения
-        });
+        PollLogic(app.parentNode)
     }
 
     store.data.page = name;

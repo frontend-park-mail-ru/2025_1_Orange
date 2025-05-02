@@ -7,25 +7,34 @@
     </div>
     <div class="header__auth">
         {{#if authorized}}
-            {{#if isEmployer}}
-                <div class="header__button">Создать вакансию</div>
-            {{else}}
-                <div class="header__button">Создать резюме</div>
-            {{/if}}
-            <div class="header__profile">
-                <img src="/icons-user-profile.svg" class="header__profile-icon" alt="Профиль"/>          
-
-                <div class="header__dropdown">
-                    <div class="header__dropdown__item" id="profile_page_link">Профиль</div>
-                    <div class="header__dropdown__item" id="edit_profile_page_link">Настройки</div>
-                    <div class="header__dropdown__item" id="poll_statistics_page_link">Статистика сайта</div>
-                    <div class="header__dropdown__divider"></div>
-                    <div class="header__dropdown__item header__dropdown__item--logout" id="logout_profile_link">Выход</div>
-                </div>
-            </div>
+        {{#if isEmployer}}
+        <div class="header__button">Создать вакансию</div>
         {{else}}
-            <div class="header__button">Создать резюме</div>
-            <div class="header__link header__login">Войти</div>
+        <div class="header__button">Создать резюме</div>
+        {{/if}}
+        <div class="header__profile">
+            <img src="/icons-user-profile.svg" class="header__profile-icon" alt="Профиль" />
+
+            <div class="header__dropdown">
+                <div class="header__dropdown__item" id="profile_page_link">Профиль</div>
+                <div class="header__dropdown__item" id="edit_profile_page_link">Настройки</div>
+                <div class="header__dropdown__divider--mobile"></div>
+                <div class="header__dropdown__item--mobile" id="mobile_vacancy">Вакансии</div>
+                <div class="header__dropdown__item--mobile" id="mobile_resume">Соискатели</div>
+                {{#if isEmployer}}
+                <div class="header__dropdown__item--mobile" id="mobile_create">Создать вакансию</div>
+                {{else}}
+                <div class="header__dropdown__item--mobile" id="mobile_create">Создать резюме</div>
+                {{/if}}
+                <div class="header__dropdown__divider"></div>
+                <div class="header__dropdown__item" id="poll_statistics_page_link">Статистика сайта</div>
+                <div class="header__dropdown__divider"></div>
+                <div class="header__dropdown__item header__dropdown__item--logout" id="logout_profile_link">Выход</div>
+            </div>
+        </div>
+        {{else}}
+        <div class="header__button">Создать резюме</div>
+        <div class="header__link header__login">Войти</div>
         {{/if}}
     </div>
 </div>

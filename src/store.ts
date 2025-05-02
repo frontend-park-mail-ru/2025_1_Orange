@@ -16,6 +16,13 @@ interface StoreData {
         type: 'applicant' | 'employer';
         request: SignupRequest;
     };
+    vacancyCategory: string;
+    vacancySearch: string;
+    resumeSearch: string;
+    vacancyLimit: number;
+    vacancyOffset: number;
+    resumeLimit: number;
+    resumeOffset: number;
     user: AuthResponse;
     vacancy: VacancyCreate;
     resume: ResumeCreate;
@@ -34,6 +41,13 @@ const emptyData: StoreData = {
     vacancy: emptyVacancyCreate,
     resume: emptyResumeCreate,
     review: emptyReview,
+    vacancyCategory: '',
+    vacancySearch: '',
+    vacancyLimit: 10,
+    vacancyOffset: 0,
+    resumeSearch: '',
+    resumeLimit: 10,
+    resumeOffset: 0,
 };
 
 class Store {

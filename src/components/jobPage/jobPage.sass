@@ -1,11 +1,8 @@
-.page
-    max-width: 1200px
-    padding: 40px 100px
-    display: flex
-    flex-direction: row
-    margin: 0 auto
-    gap: 70px
-
+#job_page
+    @media screen and ( max-width: 800px)
+        flex-direction: column
+        margin-top: 30px
+    
 .vacancy
     position: relative
     display: flex
@@ -63,9 +60,13 @@
     &__sidebar
         padding: 0px 10px
         display: flex
-        min-width: 400px
+        max-width: 400px
         flex-direction: column
         gap: 30px
+
+        @media screen and ( max-width: 800px)
+            width: 100%
+            padding: 0px
 
 .vacancy_info
     display: flex

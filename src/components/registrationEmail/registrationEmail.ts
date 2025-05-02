@@ -106,8 +106,9 @@ export class RegistrationEmail {
             if (this.#emailValidate() === true) {
                 store.data.auth.request.email = this.#email?.value ?? '';
                 try {
-                    const request = await api.auth.checkEmail(store.data.auth.request.email);
-                    store.data.auth.type = request.role as 'applicant' | 'employer'
+                    if (store.data.auth.type === 'applicant')
+                    await api.auth.checkEmailApplicant(store.data.auth.request.email);
+                    else await api.auth.checkEmailEmployer(store.data.auth.request.email);
                     router.go('/login');
                 } catch {
                     logger.info('check email ERROR');

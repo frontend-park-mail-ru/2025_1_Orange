@@ -63,9 +63,11 @@ export class ApplicantService {
     /**
      * Получение списка откликов соискателя
      * @param {number} id - id профиля
+     * @param {number} offset - с какого отклика выводить
+     * @param {number} limit - сколько откликов выводить
      * @returns {VacancyShort}
      */
-    async responsed(id: number): Promise<VacancyShort[]> {
-        return this.#api.request(`/vacancy/applicant/${id}/vacancies`, 'GET')
+    async responsed(id: number, offset: number, limit: number): Promise<VacancyShort[]> {
+        return this.#api.request(`/vacancy/applicant/${id}/vacancies?offset=${offset}&limit=${limit}`, 'GET')
     }
 }

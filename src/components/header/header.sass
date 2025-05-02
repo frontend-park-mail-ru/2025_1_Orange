@@ -29,6 +29,9 @@
         width: fit-content
         pointer-events: auto
 
+        @media screen and ( max-width: 800px )
+            display: none
+
     &__link
         font-size: 16px
         cursor: pointer
@@ -55,6 +58,10 @@
 
         &:hover
             background-color: #4a555f
+        
+        @media screen and ( max-width: 800px )
+            display: none
+            
 
     &__profile
         height: 34px
@@ -95,7 +102,17 @@
             &--logout
                 color: #f32526
 
+            &--mobile
+                @extend .header__dropdown__item
+                @media screen and ( min-width: 800px )
+                    display: none
+
         &__divider
             height: 1px
             background-color: #e8e8e8
             margin: 8px 0
+
+            &--mobile
+                @extend .header__dropdown__divider
+                @media screen and ( min-width: 800px )
+                    display: none

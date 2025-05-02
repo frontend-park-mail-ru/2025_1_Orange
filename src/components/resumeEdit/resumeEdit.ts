@@ -39,7 +39,7 @@ export class ResumeEdit {
     }
 
     /**
-     * Перевод input
+     * Перевод полей ввода в форме
      */
     readonly #inputTranslation: Record<string, string> = {
         last_name: 'Фамилия',
@@ -57,9 +57,9 @@ export class ResumeEdit {
     };
 
     /**
-     * 
+     * Валидация формы
      * @param {HTMLElement} element - элемент
-     * @returns 
+     * @returns {boolean} - валидна ли форма?
      */
     #formValidate(element: HTMLElement): boolean {
         const fieldset = element.closest('fieldset') as HTMLFieldSetElement;
@@ -100,6 +100,11 @@ export class ResumeEdit {
         return false;
     }
 
+    /**
+     * Получение данных о резюме
+     * defaultData = Resume
+     * defaultData используется при рендеринге формы
+     */
     init = async () => {
         const url = window.location.pathname.split('/');
         const last = url[url.length - 1];
@@ -150,6 +155,11 @@ export class ResumeEdit {
         this.self.innerHTML = '';
     };
 
+    /**
+     * Получение данных из формы
+     * @param {HTMLFormElement} form - форма из которой берутся значения
+     * @returns {object} - JSON данных из формы
+     */
     #get(form: HTMLFormElement): unknown {
         const formData = new FormData(form);
         const json: Record<string, unknown> = {};
@@ -175,6 +185,9 @@ export class ResumeEdit {
         return json;
     }
 
+    /**
+     * Навешивание обработчиков
+     */
     readonly #addEventListeners = () => {
         this.#profileEdit = document.getElementById('profile_change') as HTMLButtonElement
         if (this.#profileEdit) {

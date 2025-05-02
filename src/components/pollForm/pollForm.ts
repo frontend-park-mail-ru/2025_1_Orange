@@ -3,10 +3,7 @@ import starTemplate from '../../partials/star.handlebars';
 import { logger } from '../../utils/logger';
 import './pollForm.sass';
 import { store } from '../../store';
-import { api } from '../../api/api';
 import { router } from '../../router';
-import { emptyReview } from '../../api/empty';
-import { ReviewMock } from '../../api/mocks';
 
 export class PollForm {
     readonly #parent: HTMLElement;
@@ -15,28 +12,13 @@ export class PollForm {
     #stars: number = 1;
     #starsButtons: NodeListOf<HTMLElement> = [];
 
+    /**
+     * Конструктор класса
+     * @param parent {HTMLElement} - родительский элемент
+     */
     constructor(parent: HTMLElement) {
         this.#parent = parent;
     }
-
-    // init = async () => {
-    //     logger.info('pollForm init method called');
-    //     if (
-    //         !store.data.authorized
-    //     )
-    //         router.back();
-    //     try {
-    //         if (store.data.review.id === 0) {
-    //         //const data = await api.applicant.get(1);
-    //         //console.log("API", data)
-    //         store.data.review = ReviewMock
-    //         console.log("STORE UPDATED", store.data.review)
-    //         }
-    //     } catch {
-    //         logger.info('Не удалось загрузить страницу');
-    //         router.back();
-    //     }
-    // };
 
     /**
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
@@ -57,6 +39,7 @@ export class PollForm {
             if (this.#closeButton) {
                 this.#closeButton.addEventListener('click', () => {
                     console.log("POLL FORM: CLOSE")
+                    // Отправка события о закрытии iframe
                     window.parent.postMessage("CLOSE", '*');
                 })
             }
@@ -64,6 +47,7 @@ export class PollForm {
                 this.#submitButton.addEventListener('click', (e: Event) => {
                     e.preventDefault();
                     console.log("POLL FORM: SUBMIT", this.#stars)
+                    // Отправка события о отправке голоса
                     window.parent.postMessage({
                         poll_id: store.data.review.poll_id,
                         answer: this.#stars
@@ -71,7 +55,6 @@ export class PollForm {
                 })
             }
 
-            console.log("STARS ", this.#starsButtons)
             this.#starsButtons.forEach((element) => {
                 element.addEventListener('click', () => {
                     console.log("STAR CLICKED", element)
@@ -80,21 +63,28 @@ export class PollForm {
                         const id = Number.parseInt(splittedId[splittedId.length - 1]) || 0
                         this.#stars = id;
                         this.#renderStars()
-                    } else console.log("POLL FORM: CANT FIND ID", element)
+                    }
                 })
             })
         }
 
         window.addEventListener('message', function (event) {
             console.log("IFRAME GET", event.data)
+            // Событие получения данных об опросе с основного окна
             if (event.data.poll_id && event.data.name) {
                 store.data.review.name = event.data.name
                 store.data.review.poll_id = event.data.poll_id
                 router.go('/review')
             }
+            // Событие о ошибке при отправке
+            if (event.data === "ERROR")
+                console.log("ERROR")
         });
     };
 
+    /**
+     * Рендеринг звёзд
+     */
     readonly #renderStars = () => {
         for (let i = 1; i < 6; i++) {
             const element = document.getElementById(`poll__star_${i}`)

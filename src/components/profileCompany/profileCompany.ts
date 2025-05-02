@@ -18,6 +18,10 @@ export class ProfileCompany {
     #editButton: HTMLButtonElement | null = null;
     #addVacancy: HTMLButtonElement | null = null;
 
+    /**
+     * Конструктор класса
+     * @param parent {HTMLElement} - родительский элемент
+     */
     constructor(parent: HTMLElement) {
         this.#parent = parent;
     }
@@ -31,13 +35,17 @@ export class ProfileCompany {
     }
 
     /**
-     * Очистка
+     * Удаление компонента
      */
     remove = () => {
         logger.info('ProfileCompany remove method called');
         this.self.remove();
     };
 
+    /**
+     * Получение данных о профиле компании
+     * data = Employer
+     */
     init = async () => {
         logger.info('profileCompany init method called');
         const url = window.location.href.split('/');
@@ -57,7 +65,7 @@ export class ProfileCompany {
         }
 
         try {
-            if (this.#data) this.#vacancies = await api.employer.vacancies(this.#data.id)
+            if (this.#data) this.#vacancies = await api.employer.vacancies(this.#data.id, 0, 10)
         } catch {
             this.#vacancies = null;
         }

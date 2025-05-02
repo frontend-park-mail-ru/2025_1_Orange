@@ -58,7 +58,8 @@
             <fieldset class="resumeEdit__group" name="fieldset_skills">
                 <legend class="resumeEdit__name">Навыки</legend>
                 <div class="resumeEdit__options">
-                    <input type="text" name="specialization" placeholder="Специализация" class="resumeEdit__input"
+                    <input type="text" name="specialization" value="hello" hidden>
+                    <input type="text" name="profession" placeholder="Профессия" class="resumeEdit__input"
                         minlength="3" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
                         title="Можно вводить только буквы, пробел и спец символы" required value="{{specialization}}">
                     <input type="text" name="skills" placeholder="Навыки" class="resumeEdit__input" minlength="3"

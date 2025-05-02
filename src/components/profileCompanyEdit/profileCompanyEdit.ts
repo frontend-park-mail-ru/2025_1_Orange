@@ -20,6 +20,10 @@ export class ProfileCompanyEdit {
     #avatar: NodeListOf<HTMLImageElement> | null = null;
     #uploadInput: HTMLInputElement | null = null;
 
+    /**
+     * Конструктор класса
+     * @param parent {HTMLElement} - родительский элемент
+     */
     constructor(parent: HTMLElement) {
         this.#parent = parent;
     }
@@ -32,6 +36,11 @@ export class ProfileCompanyEdit {
         return document.getElementById('profile_company_edit') as HTMLElement;
     }
 
+    /**
+     * Получение данных о профиле
+     * defaultData = employer
+     * defaultDate используется при рендеринге
+     */
     init = async () => {
         logger.info('profileCompany init method called');
         const url = window.location.href.split('/');
@@ -51,6 +60,9 @@ export class ProfileCompanyEdit {
         }
     };
 
+    /**
+     * Словарь переводов для полей ввода
+     */
     readonly #inputTranslation: Record<string, string> = {
         company_name: 'Название компании',
         slogan: 'Слоган',
@@ -59,6 +71,11 @@ export class ProfileCompanyEdit {
         legal_address: 'Адрес',
     };
 
+    /**
+     * Получение данных с формы
+     * @param {HTMLFormElement} form - форма с которой получаем данные
+     * @returns {Object} - JSON с данными
+     */
     #formGet(form: HTMLFormElement): unknown {
         const formData = new FormData(form);
         const json: Record<string, unknown> = {};
@@ -89,8 +106,16 @@ export class ProfileCompanyEdit {
         this.self.innerHTML = '';
     };
 
+    /**
+     * Навешивание обработчиков
+     */
     readonly #addEventListeners = () => {
         if (this.#form) {
+            this.#back = document.querySelectorAll('.job__button_second');
+            this.#confirm = document.querySelectorAll('.job__button');
+            this.#uploadInput = this.#form.elements.namedItem('file_input') as HTMLInputElement;
+            this.#avatar = document.querySelectorAll('.profile__avatar-img');
+            
             this.#form.addEventListener('input', (e: Event) => {
                 if (this.#form) {
                     formValidate(
@@ -193,13 +218,6 @@ export class ProfileCompanyEdit {
         );
 
         this.#form = document.forms.namedItem('profile_company_edit') as HTMLFormElement;
-        if (this.#form) {
-            this.#back = document.querySelectorAll('.job__button_second');
-            this.#confirm = document.querySelectorAll('.job__button');
-            this.#uploadInput = this.#form.elements.namedItem('file_input') as HTMLInputElement;
-        }
-
-        this.#avatar = document.querySelectorAll('.profile__avatar-img');
 
         this.#addEventListeners();
 
