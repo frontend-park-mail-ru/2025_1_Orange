@@ -46,10 +46,6 @@ export class JobCard {
 
         if (this.#resumeButton) {
             const handleResumeClick = async () => {
-                if (!store.data.authorized) {
-                    router.go('/auth')
-                    return
-                }
                 const error = this.self.querySelector('.job__error') as HTMLElement
                 if (error) {
                     error.hidden = true
