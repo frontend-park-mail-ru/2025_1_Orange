@@ -33,6 +33,7 @@ export class VacancyEdit {
     #descriptionNext: HTMLButtonElement | null = null;
     #confirm: HTMLButtonElement | null = null;
 
+    #specialization: HTMLInputElement | null = null;
     #workFormatInput: RadioNodeList | null = null;
     #employmentInput: RadioNodeList | null = null;
     #scheduleInput: HTMLInputElement | null = null;
@@ -432,6 +433,7 @@ export class VacancyEdit {
         }
 
         if (this.#form) {
+            this.#specialization = this.#form.elements.namedItem('specialization') as HTMLInputElement
             this.#workFormatInput = this.#form.elements.namedItem('work_format') as RadioNodeList;
             this.#employmentInput = this.#form.elements.namedItem('employment') as RadioNodeList;
             this.#scheduleInput = this.#form.elements.namedItem('schedule') as HTMLInputElement;
@@ -468,8 +470,10 @@ export class VacancyEdit {
             this.#scheduleInput &&
             this.#taxesIncludedInput &&
             this.#experienceInput &&
-            this.#skillsInput
+            this.#skillsInput &&
+            this.#specialization
         ) {
+            this.#specialization.value = this.#defaultData.specialization;
             this.#workFormatInput.value = this.#defaultData.work_format;
             this.#employmentInput.value = this.#defaultData.employment;
             this.#scheduleInput.value = this.#defaultData.schedule;
