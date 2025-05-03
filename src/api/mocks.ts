@@ -50,6 +50,7 @@ export const applicantShortMock: ApplicantShort = {
   avatar_path: "https://placehold.co/100x100/EEE/31343C",
   created_at: "2025-01-12T14:36:23.281Z",
   updated_at: "2025-03-02T14:36:23.281Z",
+  status: 'actively_searching'
 }
 
 export const employerMock: Employer = {
@@ -63,6 +64,9 @@ export const employerMock: Employer = {
   logo: "https://placehold.co/100x100/EEE/31343C",
   created_at: "2024-08-22T14:36:23.281Z",
   updated_at: "2025-03-02T14:36:23.281Z",
+  telegram: "https://t.me/vk",
+  vk: "https://vk.com/vk",
+  facebook: "https://fb.com/vk"
 }
 
 export const employerShortMock: EmployerShort = {
@@ -138,6 +142,7 @@ export const resumeMock: Resume = {
   applicant: applicantMock,
   about_me: "Full-Stack Web Developer...",
   specialization: "Фулстек веб разработчик",
+  profession: 'Программист',
   education: "bachelor",
   educational_institution: "МГТУ им. Н.Э. Баумана",
   graduation_year: "2026",
@@ -153,6 +158,7 @@ export const resumeShortMock: ResumeShort = {
   applicant_id: 1,
   applicant: applicantShortMock,
   specialization: "Фулстек веб разработчик",
+  profession: 'Программист',
   work_experiences: workExperienceMock,
   worked_experience: 2,
   created_at: "2025-03-02T14:36:23.281Z",

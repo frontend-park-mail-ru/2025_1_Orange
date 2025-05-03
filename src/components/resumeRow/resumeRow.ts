@@ -46,7 +46,7 @@ export class ResumeRow {
     render = () => {
         if (this.#data) {
             const update_at = new Date(this.#data.updated_at)
-            this.#data.updated_at = `${update_at.getUTCDate()}.${update_at.getUTCMonth()+1}.${update_at.getFullYear()}`
+            this.#data.updated_at = update_at.toLocaleDateString('ru-RU')
         }
 
         logger.info('ProfileUser render method called');

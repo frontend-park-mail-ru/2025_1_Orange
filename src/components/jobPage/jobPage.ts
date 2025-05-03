@@ -115,7 +115,7 @@ export class JobPage {
     render = () => {
         logger.info('JobPage render method called');
         const created_date = new Date(this.#props.created_at);
-        this.#props.created_at = `${created_date.getDate()}.${created_date.getMonth() + 1}.${created_date.getFullYear()}`
+        this.#props.created_at = created_date.toLocaleDateString('ru-RU')
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({

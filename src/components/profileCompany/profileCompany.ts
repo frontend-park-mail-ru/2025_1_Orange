@@ -116,7 +116,8 @@ export class ProfileCompany {
                 isOwner:
                     store.data.user.role === 'employer' &&
                     store.data.user.user_id === this.#data?.id,
-                vacancyCount: this.#vacancies?.length ?? 0
+                vacancyCount: this.#vacancies?.length ?? 0,
+                hasSocialLinks: this.#data?.website !== '' || this.#data.facebook !== '' || this.#data.telegram !== '' || this.#data.vk !== ''
             }),
         );
         this.#vacancyContainer = document.getElementById('responses-content') as HTMLElement;

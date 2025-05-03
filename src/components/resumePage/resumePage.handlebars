@@ -13,6 +13,7 @@
     </div>
 
     <div class="resume_sidebar__actions-mobile">
+      {{#if owner}}
       <div class="job__button_second">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
           viewBox="0 0 16 16">
@@ -23,6 +24,7 @@
         </svg>
         <span>Редактировать</span>
       </div>
+      {{/if}}
       <div class="job__button">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
           class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
@@ -36,7 +38,7 @@
     </div>
 
     <!-- Должность -->
-    <div class="resume_info__job">{{specialization}}</div>
+    <div class="resume_info__job">{{profession}}</div>
 
     <!-- О себе -->
     <div class="resume_info__section">
@@ -72,6 +74,7 @@
   <div class="resume_sidebar">
     <!-- Кнопки действий -->
     <div class="resume_sidebar__actions">
+      {{#if owner}}
       <div class="job__button_second">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
           viewBox="0 0 16 16">
@@ -82,6 +85,7 @@
         </svg>
         <span>Редактировать</span>
       </div>
+      {{/if}}
       <div class="job__button">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
           class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">

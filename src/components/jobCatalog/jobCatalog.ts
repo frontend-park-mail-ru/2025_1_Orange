@@ -36,7 +36,7 @@ export class JobCatalog {
         await this.#getVacancy()
     };
 
-    #getVacancy = async () => {
+    readonly #getVacancy = async () => {
         try {
             if (store.data.vacancySearch === '') {
                 if (store.data.vacancyCategory !== '') this.#jobs = await api.vacancy.category([store.data.vacancyCategory], store.data.vacancyOffset, store.data.vacancyLimit)
@@ -72,7 +72,7 @@ export class JobCatalog {
      * @param {string} name - название выбранной категории
      * @returns {void}
      */
-    #setCategory = async (name: string) => {
+    readonly #setCategory = async (name: string) => {
         if (this.#categories) {
             this.#categories.forEach((c) => {
                 if (c.textContent === name) {
@@ -92,7 +92,7 @@ export class JobCatalog {
      * @param {string} query - строка для поиска
      * @returns {void}
      */
-    #searchVacancy = async (query: string) => {
+    readonly #searchVacancy = async (query: string) => {
         if (query === store.data.vacancySearch) return
         store.data.vacancySearch = query
         router.go('/catalog')
@@ -101,7 +101,7 @@ export class JobCatalog {
     /**
      * Рендеринг карточек вакансий хранящихся в #jobs
      */
-    #renderVacancy = () => {
+    readonly #renderVacancy = () => {
         if (this.#jobContainer) {
             this.#jobs.forEach((element) => {
                 const card = new JobCard(this.#jobContainer as HTMLElement, element);
@@ -118,7 +118,7 @@ export class JobCatalog {
     /**
      * Навешивание обработчиков
      */
-    #addEventListeners = () => {
+    readonly #addEventListeners = () => {
         if (this.#createResumeLink) {
             this.#createResumeLink.addEventListener('click', (e: Event) => {
                 e.preventDefault();

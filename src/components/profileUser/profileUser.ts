@@ -7,7 +7,6 @@ import { store } from '../../store';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { JobCard } from '../jobCard/jobCard';
-import { emptyApplicant, emptyEmployer } from '../../api/empty';
 
 export class ProfileUser {
     readonly #parent: HTMLElement;
@@ -187,11 +186,6 @@ export class ProfileUser {
         }
 
         this.#resumes.forEach(async (resume) => {
-            try {
-                resume.applicant = await api.applicant.get(resume.applicant_id)
-            } catch {
-                resume.applicant = emptyApplicant
-            }
             const resumeRow = new ResumeRow(this.#resumeContainer as HTMLElement, resume);
             resumeRow.render();
         });
@@ -212,18 +206,21 @@ export class ProfileUser {
     render = () => {
         logger.info('ProfileUser render method called');
         if (!store.data.authorized || store.data.user.role !== 'applicant') router.back();
-        if (!this.#data) router.back();
+        if (!this.#data) {
+            router.back();
+            return
+        }
         if (this.#data && this.#data.birth_date === '0001-01-01T00:00:00Z') {
             this.#data.birth_date = '';
-        } else if (this.#data) {
+        } else {
             const birth_date = new Date(this.#data.birth_date);
-            logger.info(birth_date);
-            this.#data.birth_date = `${birth_date.getUTCDate()}.${birth_date.getUTCMonth()}.${birth_date.getFullYear()}`;
+            this.#data.birth_date = birth_date.toLocaleDateString('ru-RU');
         }
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
                 ...this.#data,
+                'hasSocialLinks' : this.#data?.facebook !== '' || this.#data.vk !== '' || this.#data.telegram !== ''
             }),
         );
         this.addEventListeners();
