@@ -67,6 +67,16 @@ export class JobCatalog {
         this.self.remove();
     };
 
+    #addEventListeners = () => {
+        if (this.#createResumeLink) {
+            this.#createResumeLink.addEventListener('click', (e: Event) => {
+                e.preventDefault();
+                if (store.data.authorized && store.data.user.role === 'applicant') router.go('/createResume');
+                else if (!store.data.authorized) router.go('/auth')
+            });
+        }
+    };
+
     /**
      * Выбор другой категории
      * @param {string} name - название выбранной категории

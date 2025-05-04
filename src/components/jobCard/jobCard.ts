@@ -6,6 +6,7 @@ import { VacancyShort } from '../../api/interfaces';
 import { router } from '../../router';
 import { employmentTranslations, workFormatTranslations } from '../../api/translations';
 import { api } from '../../api/api';
+import { store } from '../../store';
 
 export class JobCard {
     readonly #parent: HTMLElement;
@@ -38,7 +39,8 @@ export class JobCard {
             const target = e.target as HTMLElement;
             // Если клик не на кнопке
             if (target.className !== 'job__button' && target.className !== 'job__button_second') {
-                router.go(`/vacancy/${this.#props.id}`);
+                if (store.data.authorized) router.go(`/vacancy/${this.#props.id}`);
+                else router.go('/auth')
             }
         });
 
