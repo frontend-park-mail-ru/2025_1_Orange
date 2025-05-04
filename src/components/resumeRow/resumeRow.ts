@@ -18,7 +18,7 @@ export class ResumeRow {
      * @returns {HTMLElement}
      */
     get self(): HTMLElement {
-        return document.getElementById(`resume-table__row-${this.#data.id}`) as HTMLElement
+        return document.getElementById(`resume-table__row-${this.#data.id}`) as HTMLElement;
     }
 
     /**
@@ -35,22 +35,22 @@ export class ResumeRow {
     readonly #addEventListeners = () => {
         if (this.self) {
             this.self.addEventListener('click', () => {
-                router.go(`/resume/${this.#data.id}`)
-            })
+                router.go(`/resume/${this.#data.id}`);
+            });
         }
-    }
+    };
 
     /**
      * Рендеринг страницы
      */
     render = () => {
         if (this.#data) {
-            const update_at = new Date(this.#data.updated_at)
-            this.#data.updated_at = update_at.toLocaleDateString('ru-RU')
+            const update_at = new Date(this.#data.updated_at);
+            this.#data.updated_at = update_at.toLocaleDateString('ru-RU');
         }
 
         logger.info('ProfileUser render method called');
         this.#parent.insertAdjacentHTML('beforeend', template(this.#data));
-        this.#addEventListeners()
+        this.#addEventListeners();
     };
 }

@@ -59,8 +59,8 @@ export class VacancyEdit {
      * Получение значений если надо
      */
     init = async () => {
-        logger.info('VACANCY EDIT INIT')
-        if (!store.data.authorized || store.data.user.role === 'applicant') router.back()
+        logger.info('VACANCY EDIT INIT');
+        if (!store.data.authorized || store.data.user.role === 'applicant') router.back();
         const url = window.location.pathname.split('/');
         const last = url[url.length - 1];
         logger.info('url: ', url);
@@ -114,12 +114,7 @@ export class VacancyEdit {
                 errorElement.style.display = 'none';
 
                 if (['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName)) {
-                    if (
-                        !fieldValidate(
-                            element as HTMLInputElement,
-                            this.#inputTranslation,
-                        )
-                    ) {
+                    if (!fieldValidate(element as HTMLInputElement, this.#inputTranslation)) {
                         return false;
                     }
                 }
@@ -154,7 +149,7 @@ export class VacancyEdit {
                         .filter((skill) => skill !== '');
                     break;
                 case 'taxes_included':
-                    json[key] = value === 'true'
+                    json[key] = value === 'true';
                     break;
                 case 'salary_from':
                 case 'salary_to':
@@ -166,11 +161,15 @@ export class VacancyEdit {
                 case 'requirements':
                 case 'optional_requirements':
                     if (typeof value === 'string')
-                        json[key] = value.split('\n').map(line => line.trim()).filter(line => line !== '').join('\n')
-                    break
+                        json[key] = value
+                            .split('\n')
+                            .map((line) => line.trim())
+                            .filter((line) => line !== '')
+                            .join('\n');
+                    break;
                 default:
-                    console.log(key, typeof value)
-                    if (typeof value === 'string') json[key] = value.trim()
+                    logger.info(key, typeof value);
+                    if (typeof value === 'string') json[key] = value.trim();
                     else json[key] = value;
             }
         });
@@ -199,8 +198,8 @@ export class VacancyEdit {
                 if (this.#basicFieldset && !this.#formValidate(this.#basicFieldset)) return;
                 if (this.#employmentFieldset && this.#basicNext) {
                     this.#employmentFieldset.hidden = false;
-                    const first = this.#employmentFieldset.elements[0] as HTMLInputElement
-                    first.focus()
+                    const first = this.#employmentFieldset.elements[0] as HTMLInputElement;
+                    first.focus();
                     this.#basicNext.hidden = true;
                 }
             });
@@ -215,8 +214,8 @@ export class VacancyEdit {
 
                 if (this.#workformatFieldset && this.#employmentNext) {
                     this.#workformatFieldset.hidden = false;
-                    const first = this.#workformatFieldset.elements[0] as HTMLInputElement
-                    first.focus()
+                    const first = this.#workformatFieldset.elements[0] as HTMLInputElement;
+                    first.focus();
                     this.#employmentNext.hidden = true;
                 }
             });
@@ -233,8 +232,8 @@ export class VacancyEdit {
 
                 if (this.#salaryFieldset && this.#experienceFieldset && this.#workformatNext) {
                     this.#salaryFieldset.hidden = false;
-                    const first = this.#salaryFieldset.elements[0] as HTMLInputElement
-                    first.focus()
+                    const first = this.#salaryFieldset.elements[0] as HTMLInputElement;
+                    first.focus();
                     this.#experienceFieldset.hidden = false;
                     this.#workformatNext.hidden = true;
                 }
@@ -265,8 +264,8 @@ export class VacancyEdit {
                     this.#moneyexperienceNext
                 ) {
                     this.#descriptionFieldset.hidden = false;
-                    const first = this.#descriptionFieldset.elements[0] as HTMLInputElement
-                    first.focus()
+                    const first = this.#descriptionFieldset.elements[0] as HTMLInputElement;
+                    first.focus();
                     this.#requirementsFieldset.hidden = false;
                     this.#tasksFieldset.hidden = false;
                     this.#optionalFieldset.hidden = false;
@@ -295,8 +294,8 @@ export class VacancyEdit {
 
                 if (this.#skillsFieldset && this.#descriptionNext && this.#confirm) {
                     this.#skillsFieldset.hidden = false;
-                    const first = this.#skillsFieldset.elements[0] as HTMLInputElement
-                    first.focus()
+                    const first = this.#skillsFieldset.elements[0] as HTMLInputElement;
+                    first.focus();
                     this.#descriptionNext.hidden = true;
                     this.#confirm.hidden = false;
                 }
@@ -323,23 +322,27 @@ export class VacancyEdit {
                     return;
                 if (this.#skillsFieldset && !this.#formValidate(this.#skillsFieldset)) return;
                 let error: HTMLElement | null = null;
-                if (this.#confirm) error = this.#confirm.parentNode?.querySelector('.vacancyEdit__error') as HTMLElement
+                if (this.#confirm)
+                    error = this.#confirm.parentNode?.querySelector(
+                        '.vacancyEdit__error',
+                    ) as HTMLElement;
                 if (error) {
-                    error.textContent = ''
+                    error.textContent = '';
                 }
                 try {
                     store.data.vacancy = this.#formGet(this.#form) as VacancyCreate;
                     logger.info(store.data.vacancy);
                     if (this.#id !== 0) {
                         const data = await api.vacancy.update(this.#id, store.data.vacancy);
-                        router.go(`/vacancy/${data.id}`)
+                        router.go(`/vacancy/${data.id}`);
                     } else {
                         const data = await api.vacancy.create(store.data.vacancy);
-                        router.go(`/vacancy/${data.id}`)
+                        router.go(`/vacancy/${data.id}`);
                     }
                 } catch {
-                    if (this.#id !== 0 && error) error.textContent = 'Ошибка при обновлении вакансии'
-                    else if (error) error.textContent = 'Ошибка при создании вакансии'
+                    if (this.#id !== 0 && error)
+                        error.textContent = 'Ошибка при обновлении вакансии';
+                    else if (error) error.textContent = 'Ошибка при создании вакансии';
                 }
             });
         }
@@ -349,29 +352,29 @@ export class VacancyEdit {
                 if (!this.#salaryFrom || !this.#salaryTo) return;
                 if (
                     Number.parseInt(this.#salaryTo.value) -
-                    Number.parseInt(this.#salaryFrom.value) <
+                        Number.parseInt(this.#salaryFrom.value) <
                     0
                 ) {
                     logger.info(
                         Number.parseInt(this.#salaryTo.value) -
-                        Number.parseInt(this.#salaryFrom.value),
+                            Number.parseInt(this.#salaryFrom.value),
                     );
                     this.#salaryFrom.setCustomValidity('Неправильно задан диапазон зарплаты');
                 } else {
                     this.#salaryFrom.setCustomValidity('');
-                    this.#salaryTo.setCustomValidity('')
+                    this.#salaryTo.setCustomValidity('');
                 }
             });
             this.#salaryTo.addEventListener('input', () => {
                 if (!this.#salaryFrom || !this.#salaryTo) return;
                 if (
                     Number.parseInt(this.#salaryTo.value) -
-                    Number.parseInt(this.#salaryFrom.value) <
+                        Number.parseInt(this.#salaryFrom.value) <
                     0
                 ) {
                     logger.info(
                         Number.parseInt(this.#salaryTo.value) -
-                        Number.parseInt(this.#salaryFrom.value),
+                            Number.parseInt(this.#salaryFrom.value),
                     );
                     this.#salaryTo.setCustomValidity('Неправильно задан диапазон зарплаты');
                 } else {
@@ -433,7 +436,9 @@ export class VacancyEdit {
         }
 
         if (this.#form) {
-            this.#specialization = this.#form.elements.namedItem('specialization') as HTMLInputElement
+            this.#specialization = this.#form.elements.namedItem(
+                'specialization',
+            ) as HTMLInputElement;
             this.#workFormatInput = this.#form.elements.namedItem('work_format') as RadioNodeList;
             this.#employmentInput = this.#form.elements.namedItem('employment') as RadioNodeList;
             this.#scheduleInput = this.#form.elements.namedItem('schedule') as HTMLInputElement;
@@ -459,8 +464,8 @@ export class VacancyEdit {
             this.#optionalFieldset.hidden = true;
             this.#skillsFieldset.hidden = true;
             this.#confirm.hidden = true;
-            const first = this.#basicFieldset.elements[0] as HTMLInputElement
-            first.focus()
+            const first = this.#basicFieldset.elements[0] as HTMLInputElement;
+            first.focus();
         }
 
         if (

@@ -7,14 +7,14 @@ class IframeTimer {
      * @param {function} f - функция которую будет вызывать таймер
      * @param {number} minutes - раз во сколько минут будет вызывать
      */
-    start = (f: () => void, minutes : number) => {
-        if (this.#timer) clearInterval(this.#timer) 
+    start = (f: () => void, minutes: number) => {
+        if (this.#timer) clearInterval(this.#timer);
         this.#timer = setInterval(() => f(), 1000 * 60 * minutes);
-    }
+    };
 
     stop = () => {
-        clearInterval(this.#timer)
-    }
+        clearInterval(this.#timer);
+    };
 }
 
-export const SuperTimer = new IframeTimer()
+export const SuperTimer = new IframeTimer();

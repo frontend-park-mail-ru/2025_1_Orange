@@ -1,7 +1,6 @@
 import { Api } from './api';
 import { PollStatistic, ReviewRequest, ReviewResponse } from './interfaces';
 
-
 export class PollService {
     readonly #api: Api;
 
@@ -31,6 +30,6 @@ export class PollService {
      * @returns {Promise<PollStatistic[]>} - Список статистики
      */
     async statics(): Promise<PollStatistic[]> {
-        return this.#api.request('/poll/stats', 'GET')
+        return this.#api.request('/poll/stats', 'GET');
     }
 }

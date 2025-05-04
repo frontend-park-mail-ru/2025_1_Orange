@@ -69,7 +69,9 @@ export class ProfileUser {
     addEventListeners = () => {
         const profileActions = this.self.querySelector('.profile__actions') as HTMLElement;
         if (profileActions) {
-            this.#addResume = profileActions.querySelector('.profile__button-black') as HTMLButtonElement;
+            this.#addResume = profileActions.querySelector(
+                '.profile__button-black',
+            ) as HTMLButtonElement;
             this.#editButton = profileActions.querySelector(
                 '.profile__button-white',
             ) as HTMLButtonElement;
@@ -99,7 +101,7 @@ export class ProfileUser {
         this.#resumesButton = document.getElementById('profile-resumes');
         this.#responsesButton = document.getElementById('profile-responses');
         this.#favoriteButton = document.getElementById('profile-favorites');
-        this.#resumeTable = this.self.querySelector('.resume-table')
+        this.#resumeTable = this.self.querySelector('.resume-table');
 
         this.#resumesButton?.addEventListener('click', () =>
             this.#handleButton(this.#resumesButton as HTMLElement, this.#renderResumes),
@@ -114,7 +116,6 @@ export class ProfileUser {
         });
     };
 
-
     /**
      * Обработка нажатия вкладки
      * @param {HTMLElement} button - кнопка вкладки
@@ -124,7 +125,7 @@ export class ProfileUser {
     readonly #handleButton = (button: HTMLElement, callback: () => void) => {
         if (button.classList.contains('profile__tab--active')) return;
 
-        [this.#responsesButton, this.#resumesButton, this.#favoriteButton].forEach(btn => {
+        [this.#responsesButton, this.#resumesButton, this.#favoriteButton].forEach((btn) => {
             if (btn) {
                 btn.classList.remove('profile__tab--active');
             }
@@ -140,21 +141,22 @@ export class ProfileUser {
      */
     readonly #renderResponses = async () => {
         if (this.#resumeTable) this.#resumeTable.hidden = true;
-        if (!this.#vacancyContainer) return
-        if (this.#vacancyContainer) this.#vacancyContainer.textContent = ''
-        if (this.#resumeContainer) this.#resumeContainer.textContent = ''
+        if (!this.#vacancyContainer) return;
+        if (this.#vacancyContainer) this.#vacancyContainer.textContent = '';
+        if (this.#resumeContainer) this.#resumeContainer.textContent = '';
         try {
-            if (this.#data) this.#vacancies = await api.applicant.responsed(this.#data.id, 0, 10)
+            if (this.#data) this.#vacancies = await api.applicant.responsed(this.#data.id, 0, 10);
             if (!this.#vacancies) {
-                this.#vacancyContainer.textContent = 'Ничего нету'
-                return
+                this.#vacancyContainer.textContent = 'Ничего нету';
+                return;
             }
             this.#vacancies.forEach(async (vacancy) => {
-                const response = new JobCard(this.#vacancyContainer as HTMLElement, vacancy)
-                response.render()
-            })
+                const response = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
+                response.render();
+            });
         } catch {
-            if (this.#vacancyContainer) this.#vacancyContainer.textContent = 'При загрузке откликов произошла ошибка'
+            if (this.#vacancyContainer)
+                this.#vacancyContainer.textContent = 'При загрузке откликов произошла ошибка';
         }
     };
 
@@ -171,8 +173,8 @@ export class ProfileUser {
      */
     readonly #renderResumes = async (): Promise<void> => {
         if (this.#resumeTable) this.#resumeTable.hidden = false;
-        if (this.#vacancyContainer) this.#vacancyContainer.textContent = ''
-        if (this.#resumeContainer) this.#resumeContainer.textContent = ''
+        if (this.#vacancyContainer) this.#vacancyContainer.textContent = '';
+        if (this.#resumeContainer) this.#resumeContainer.textContent = '';
         logger.info('Rendering Resumes...');
         if (!this.#resumeContainer) {
             return;
@@ -189,7 +191,6 @@ export class ProfileUser {
             const resumeRow = new ResumeRow(this.#resumeContainer as HTMLElement, resume);
             resumeRow.render();
         });
-
     };
 
     /**
@@ -208,7 +209,7 @@ export class ProfileUser {
         if (!store.data.authorized || store.data.user.role !== 'applicant') router.back();
         if (!this.#data) {
             router.back();
-            return
+            return;
         }
         if (this.#data && this.#data.birth_date === '0001-01-01T00:00:00Z') {
             this.#data.birth_date = '';
@@ -220,7 +221,10 @@ export class ProfileUser {
             'beforeend',
             template({
                 ...this.#data,
-                'hasSocialLinks' : this.#data?.facebook !== '' || this.#data.vk !== '' || this.#data.telegram !== ''
+                hasSocialLinks:
+                    this.#data?.facebook !== '' ||
+                    this.#data.vk !== '' ||
+                    this.#data.telegram !== '',
             }),
         );
         this.addEventListeners();

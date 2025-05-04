@@ -6,7 +6,6 @@ import { JobCard } from '../jobCard/jobCard';
 import { router } from '../../router';
 import { store } from '../../store';
 import { api } from '../../api/api';
-import { emptyEmployer } from '../../api/empty';
 
 export class ProfileCompany {
     readonly #parent: HTMLElement;
@@ -59,7 +58,7 @@ export class ProfileCompany {
         }
 
         try {
-            if (this.#data) this.#vacancies = await api.employer.vacancies(this.#data.id, 0, 10)
+            if (this.#data) this.#vacancies = await api.employer.vacancies(this.#data.id, 0, 10);
         } catch {
             this.#vacancies = null;
         }
@@ -71,7 +70,9 @@ export class ProfileCompany {
     readonly #addEventListeners = () => {
         const profileActions = this.self.querySelector('.profile__actions') as HTMLElement;
         if (profileActions) {
-            this.#addVacancy = profileActions.querySelector('.profile__button-black') as HTMLButtonElement;
+            this.#addVacancy = profileActions.querySelector(
+                '.profile__button-black',
+            ) as HTMLButtonElement;
             this.#editButton = profileActions.querySelector(
                 '.profile__button-white',
             ) as HTMLButtonElement;
@@ -111,7 +112,11 @@ export class ProfileCompany {
                     store.data.user.role === 'employer' &&
                     store.data.user.user_id === this.#data?.id,
                 vacancyCount: this.#vacancies?.length ?? 0,
-                hasSocialLinks: this.#data?.website !== '' || this.#data.facebook !== '' || this.#data.telegram !== '' || this.#data.vk !== ''
+                hasSocialLinks:
+                    this.#data?.website !== '' ||
+                    this.#data.facebook !== '' ||
+                    this.#data.telegram !== '' ||
+                    this.#data.vk !== '',
             }),
         );
         this.#vacancyContainer = document.getElementById('responses-content') as HTMLElement;
@@ -121,10 +126,10 @@ export class ProfileCompany {
                 vacancyCard.render();
             });
             if (this.#vacancies.length === 0) {
-                this.#vacancyContainer.textContent = 'Нет вакансий'
+                this.#vacancyContainer.textContent = 'Нет вакансий';
             }
         } else {
-            this.#vacancyContainer.textContent = 'Ошибка при загрузке'
+            this.#vacancyContainer.textContent = 'Ошибка при загрузке';
         }
 
         this.#addEventListeners();

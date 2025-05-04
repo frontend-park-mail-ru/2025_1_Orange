@@ -107,7 +107,7 @@ export class RegistrationEmail {
                 store.data.auth.request.email = this.#email?.value ?? '';
                 try {
                     if (store.data.auth.type === 'applicant')
-                    await api.auth.checkEmailApplicant(store.data.auth.request.email);
+                        await api.auth.checkEmailApplicant(store.data.auth.request.email);
                     else await api.auth.checkEmailEmployer(store.data.auth.request.email);
                     router.go('/login');
                 } catch {

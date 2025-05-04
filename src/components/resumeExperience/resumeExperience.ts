@@ -22,29 +22,29 @@ export class ResumeExperience {
      */
     readonly #duration = (): number => {
         const start_date = new Date(this.#props.start_date);
-        this.#props.start_date = start_date.toLocaleDateString('ru-RU')
+        this.#props.start_date = start_date.toLocaleDateString('ru-RU');
         if (this.#props.until_now) {
             const end_date = new Date();
             const duration = Math.floor(
                 (end_date.getTime() - start_date.getTime()) / (1000 * 60 * 60 * 24 * 30),
             );
-            if (duration < 0) return 0
-            return duration
+            if (duration < 0) return 0;
+            return duration;
         }
         const end_date = new Date(this.#props.end_date);
-        this.#props.end_date = end_date.toLocaleDateString('ru-RU')
+        this.#props.end_date = end_date.toLocaleDateString('ru-RU');
         const duration = Math.floor(
             (end_date.getTime() - start_date.getTime()) / (1000 * 60 * 60 * 24 * 30),
         );
-        if (duration < 0) return 0
-        return duration
+        if (duration < 0) return 0;
+        return duration;
     };
 
     /**
      * Рендеринг опыта работы
      */
     render = () => {
-        const duration = this.#duration()
+        const duration = this.#duration();
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({

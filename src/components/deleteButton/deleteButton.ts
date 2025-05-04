@@ -7,7 +7,7 @@ export class DeleteButton {
     readonly #parent: HTMLElement;
     #deleteButton: HTMLElement | null = null;
     #cancelButton: HTMLElement | null = null;
-    readonly #whatDelete: string
+    readonly #whatDelete: string;
     readonly #callback: () => void;
 
     constructor(parent: HTMLElement, whatDelete: string, callback: () => void) {
@@ -71,7 +71,7 @@ export class DeleteButton {
     render = (): void => {
         logger.info('DeleteButton render method called');
         this.#parent.innerHTML = '';
-        this.#parent.insertAdjacentHTML('beforeend', template({whatDelete: this.#whatDelete}));
+        this.#parent.insertAdjacentHTML('beforeend', template({ whatDelete: this.#whatDelete }));
 
         this.#deleteButton = this.#parent.querySelector('.button__delete');
         if (this.#deleteButton) {

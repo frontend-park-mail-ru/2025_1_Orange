@@ -52,10 +52,10 @@ export class RegistrationCompany {
             return false;
         }
         this.#companyName.classList.remove('error', 'valid');
-        this.#companyName.value = this.#companyName.value.trimStart()
-        this.#error.textContent = ''
+        this.#companyName.value = this.#companyName.value.trimStart();
+        this.#error.textContent = '';
         if (this.#companyName.validity.valid === false) {
-            this.#error.textContent = customMessage(this.#companyName, this.#inputTranslation)
+            this.#error.textContent = customMessage(this.#companyName, this.#inputTranslation);
             this.#companyName.classList.add('error');
             return false;
         } else {
@@ -73,10 +73,10 @@ export class RegistrationCompany {
             return false;
         }
         this.#companyAddress.classList.remove('error', 'valid');
-        this.#companyAddress.value = this.#companyAddress.value.trimStart()
-        this.#error.textContent = ''
+        this.#companyAddress.value = this.#companyAddress.value.trimStart();
+        this.#error.textContent = '';
         if (this.#companyAddress.validity.valid === false) {
-            this.#error.textContent = customMessage(this.#companyAddress, this.#inputTranslation)
+            this.#error.textContent = customMessage(this.#companyAddress, this.#inputTranslation);
             this.#companyAddress.classList.add('error');
             return false;
         } else {
@@ -93,7 +93,7 @@ export class RegistrationCompany {
         this.#companyAddress = form.elements.namedItem('company_address') as HTMLInputElement;
         this.#companyName = form.elements.namedItem('company_name') as HTMLInputElement;
         this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
-        this.#error = form.querySelector('.form__error') as HTMLElement
+        this.#error = form.querySelector('.form__error') as HTMLElement;
 
         form.querySelector('.form__back')?.addEventListener('click', router.back);
         this.#companyName.addEventListener('input', this.#companyNameValidate);

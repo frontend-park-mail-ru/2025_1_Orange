@@ -15,6 +15,9 @@
     <div class="resume_catalog__page">
         <div class="resume_filter"></div>
         <div class="resume_catalog__wrapper">
+            {{#if search}}
+            <div class="job_catalog__search">Резюме по запросу: {{search}}</div>
+            {{/if}}
             <div class="resume_list"></div>
             <div class="job__button_second" id="pagination_button">Показать ещё</div>
         </div>

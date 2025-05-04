@@ -62,7 +62,7 @@ export class Api {
 
         try {
             const response = await fetch(url, init);
-            logger.info("API HANDLE", response)
+            logger.info('API HANDLE', response);
             const csrfToken = response.headers.get('X-CSRF-Token');
             if (csrfToken) {
                 store.data.csrf = csrfToken;
@@ -80,14 +80,15 @@ export class Api {
             }
         } catch (error) {
             // Попытка получить CSRF-токен даже в случае ошибки
-            if (error instanceof Response) { // Проверяем, является ли ошибка объектом Response
-                logger.info("NETWORK ERROR ", error)
+            if (error instanceof Response) {
+                // Проверяем, является ли ошибка объектом Response
+                logger.info('NETWORK ERROR ', error);
                 const csrfToken = error.headers.get('X-CSRF-Token');
                 if (csrfToken) {
                     store.data.csrf = csrfToken;
                 }
             }
-        
+
             logger.error('Network Error or other error');
             throw new Error('Ошибка при выполнении запроса');
         }

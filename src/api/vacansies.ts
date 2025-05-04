@@ -63,7 +63,11 @@ export class VacancyService {
      * @returns {Promise<Vacancy[]>}
      */
     async category(categories: string[], offset: number, limit: number): Promise<Vacancy[]> {
-        return this.#api.request(`/vacancy/search/specializations?offset=${offset}&limit=${limit}`, 'POST', JSON.stringify({ 'specializations': categories }));
+        return this.#api.request(
+            `/vacancy/search/specializations?offset=${offset}&limit=${limit}`,
+            'POST',
+            JSON.stringify({ specializations: categories }),
+        );
     }
 
     /**
@@ -74,7 +78,10 @@ export class VacancyService {
      * @returns {Promise<Vacancy[]>}
      */
     async search(query: string, offset: number, limit: number): Promise<Vacancy[]> {
-        return this.#api.request(`/vacancy/search?query=${query}&offset=${offset}&limit=${limit}`, 'GET');
+        return this.#api.request(
+            `/vacancy/search?query=${query}&offset=${offset}&limit=${limit}`,
+            'GET',
+        );
     }
 
     /**
@@ -85,8 +92,17 @@ export class VacancyService {
      * @param {number} limit - сколько выводить вакансий
      * @returns {Promise<Vacancy[]>}
      */
-    async combined(categories: string[], query: string, offset: number, limit: number): Promise<Vacancy[]> {
-        return this.#api.request(`/vacancy/search/combined?query=${query}&offset=${offset}&limit=${limit}`, 'POST', JSON.stringify({ 'specializations': categories }));
+    async combined(
+        categories: string[],
+        query: string,
+        offset: number,
+        limit: number,
+    ): Promise<Vacancy[]> {
+        return this.#api.request(
+            `/vacancy/search/combined?query=${query}&offset=${offset}&limit=${limit}`,
+            'POST',
+            JSON.stringify({ specializations: categories }),
+        );
     }
 
     /**

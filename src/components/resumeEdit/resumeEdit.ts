@@ -73,12 +73,7 @@ export class ResumeEdit {
                 errorElement.style.display = 'none';
 
                 if (['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName)) {
-                    if (
-                        !fieldValidate(
-                            element as HTMLInputElement,
-                            this.#inputTranslation,
-                        )
-                    ) {
+                    if (!fieldValidate(element as HTMLInputElement, this.#inputTranslation)) {
                         return false;
                     }
                 }
@@ -173,17 +168,21 @@ export class ResumeEdit {
                         .filter((skill) => skill !== '');
                     break;
                 case 'graduation_year':
-                    json[key] = `${value as string}-01-01`
+                    json[key] = `${value as string}-01-01`;
                     break;
                 case 'until_now':
-                    json[key] = (value as string) === 'on'
-                    break
+                    json[key] = (value as string) === 'on';
+                    break;
                 case 'aboutme':
                     if (typeof value === 'string')
-                        json[key] = value.split('\n').map(line => line.trim()).filter(line => line !== '').join('\n')
-                    break
+                        json[key] = value
+                            .split('\n')
+                            .map((line) => line.trim())
+                            .filter((line) => line !== '')
+                            .join('\n');
+                    break;
                 default:
-                    if (typeof value === 'string') json[key] = value.trim()
+                    if (typeof value === 'string') json[key] = value.trim();
                     else json[key] = value;
             }
         });
@@ -194,12 +193,12 @@ export class ResumeEdit {
      * Навешивание обработчиков
      */
     readonly #addEventListeners = () => {
-        this.#profileEdit = document.getElementById('profile_change') as HTMLButtonElement
+        this.#profileEdit = document.getElementById('profile_change') as HTMLButtonElement;
         if (this.#profileEdit) {
             this.#profileEdit.addEventListener('click', (e: Event) => {
-                e.preventDefault()
-                router.go(`/profileUserEdit/${store.data.user.user_id}`)
-            })
+                e.preventDefault();
+                router.go(`/profileUserEdit/${store.data.user.user_id}`);
+            });
         }
         if (this.#form) {
             this.#form.addEventListener('input', (e: Event) => {
@@ -214,8 +213,8 @@ export class ResumeEdit {
                 if (this.#skillsFieldset) {
                     this.#nextBasicButton.hidden = true;
                     this.#skillsFieldset.hidden = false;
-                    const first = this.#skillsFieldset.elements[0] as HTMLInputElement
-                    first.focus()
+                    const first = this.#skillsFieldset.elements[0] as HTMLInputElement;
+                    first.focus();
                 }
             });
         }
@@ -227,8 +226,8 @@ export class ResumeEdit {
                 if (this.#formValidate(this.#nextSkillsButton) && this.#educationFieldset) {
                     this.#nextSkillsButton.hidden = true;
                     this.#educationFieldset.hidden = false;
-                    const first = this.#educationFieldset.elements[0] as HTMLInputElement
-                    first.focus()
+                    const first = this.#educationFieldset.elements[0] as HTMLInputElement;
+                    first.focus();
                 }
             });
         }
@@ -241,8 +240,8 @@ export class ResumeEdit {
                 if (this.#formValidate(this.#nextEducationButton) && this.#aboutmeFieldset) {
                     this.#nextEducationButton.hidden = true;
                     this.#aboutmeFieldset.hidden = false;
-                    const first = this.#aboutmeFieldset.elements[0] as HTMLInputElement
-                    first.focus()
+                    const first = this.#aboutmeFieldset.elements[0] as HTMLInputElement;
+                    first.focus();
                 }
             });
         }
@@ -262,8 +261,8 @@ export class ResumeEdit {
                     this.#nextAboutMeButton.hidden = true;
                     this.#experienceFieldset.hidden = false;
                     this.#submit.hidden = false;
-                    const first = this.#experienceFieldset.elements[0] as HTMLInputElement
-                    first.focus()
+                    const first = this.#experienceFieldset.elements[0] as HTMLInputElement;
+                    first.focus();
                 }
             });
         }
@@ -279,35 +278,39 @@ export class ResumeEdit {
                 const experience = document.querySelectorAll('.resumeEdit__experience');
                 this.#data.work_experiences = [];
                 experience.forEach((element) => {
-                    logger.info(element)
+                    logger.info(element);
                     if (element.tagName === 'FORM') {
-                        logger.info("TRUE", element)
+                        logger.info('TRUE', element);
                         const form = element as HTMLFormElement;
                         if (form.checkValidity()) {
                             this.#data.work_experiences.push(
                                 this.#get(form) as WorkExperienceCreate,
                             );
-                            logger.info("NOW DATA", this.#data.work_experiences)
+                            logger.info('NOW DATA', this.#data.work_experiences);
                         }
                     }
                 });
                 let error: HTMLElement | null = null;
-                if (this.#submit) error = this.#submit.parentNode?.querySelector('.vacancyEdit__error') as HTMLElement
+                if (this.#submit)
+                    error = this.#submit.parentNode?.querySelector(
+                        '.vacancyEdit__error',
+                    ) as HTMLElement;
                 if (error) {
-                    error.textContent = ''
+                    error.textContent = '';
                 }
                 try {
                     logger.info(this.#data);
                     if (this.#id !== 0) {
                         const data = await api.resume.update(this.#id, this.#data);
-                        router.go(`/resume/${data.id}`)
+                        router.go(`/resume/${data.id}`);
                     } else {
                         const data = await api.resume.create(this.#data);
-                        router.go(`/resume/${data.id}`)
+                        router.go(`/resume/${data.id}`);
                     }
                 } catch {
-                    if (this.#id !== 0 && error) error.textContent = 'Ошибка при обновлении вакансии'
-                    else if (error) error.textContent = 'Ошибка при создании вакансии'
+                    if (this.#id !== 0 && error)
+                        error.textContent = 'Ошибка при обновлении вакансии';
+                    else if (error) error.textContent = 'Ошибка при создании вакансии';
                 }
             });
         }
@@ -318,20 +321,22 @@ export class ResumeEdit {
      */
     render = () => {
         logger.info('ResumeEdit render method called');
-        const minGraduatingDate = new Date()
-        minGraduatingDate.setFullYear(minGraduatingDate.getFullYear() - 3)
+        const minGraduatingDate = new Date();
+        minGraduatingDate.setFullYear(minGraduatingDate.getFullYear() - 3);
 
-        if (this.#defaultData && this.#defaultData.applicant.birth_date === '0001-01-01T00:00:00Z') {
+        if (
+            this.#defaultData &&
+            this.#defaultData.applicant.birth_date === '0001-01-01T00:00:00Z'
+        ) {
             this.#defaultData.applicant.birth_date = '';
         } else if (this.#defaultData) {
             const birth_date = new Date(this.#defaultData.applicant.birth_date);
             const year = birth_date.getFullYear();
             const month = String(birth_date.getMonth() + 1).padStart(2, '0'); // Месяцы нумеруются с 0
             const day = String(birth_date.getDate()).padStart(2, '0');
-            minGraduatingDate.setFullYear(birth_date.getFullYear() + 14)
+            minGraduatingDate.setFullYear(birth_date.getFullYear() + 14);
             this.#defaultData.applicant.birth_date = `${year}-${month}-${day}`;
         }
-
 
         this.#parent.insertAdjacentHTML(
             'beforeend',
@@ -342,7 +347,7 @@ export class ResumeEdit {
                 skillsString: this.#defaultData.skills.join(', '),
                 graduation_year: this.#defaultData.graduation_year.split('-')[0],
                 min_year: this.#defaultData.applicant.birth_date,
-                minGraduatingDate: minGraduatingDate.getFullYear()
+                minGraduatingDate: minGraduatingDate.getFullYear(),
             }),
         );
         this.#form = document.forms.namedItem('resume_edit') as HTMLFormElement;
@@ -355,7 +360,9 @@ export class ResumeEdit {
                 this.#submit.textContent = 'Изменить резюме';
             }
 
-            this.#skillsFieldset = this.#form.elements.namedItem('fieldset_skills') as HTMLFieldSetElement;
+            this.#skillsFieldset = this.#form.elements.namedItem(
+                'fieldset_skills',
+            ) as HTMLFieldSetElement;
             this.#educationFieldset = this.#form.elements.namedItem(
                 'fieldset_education',
             ) as HTMLFieldSetElement;
@@ -411,8 +418,12 @@ export class ResumeEdit {
                 ) as HTMLElement;
                 let max_experience_id = 0;
                 this.#defaultData.work_experiences?.forEach((experience) => {
-                    logger.info("WORK EXPERIENCES ", experience)
-                    const work = new WorkingExperience(experiencesContainer, experience.id, experience);
+                    logger.info('WORK EXPERIENCES ', experience);
+                    const work = new WorkingExperience(
+                        experiencesContainer,
+                        experience.id,
+                        experience,
+                    );
                     work.render();
                     if (experience.id > max_experience_id) max_experience_id = experience.id;
                 });

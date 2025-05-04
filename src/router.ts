@@ -54,7 +54,7 @@ class Router {
             logger.info(`Маршрут ${parsed} найден`);
             this.#routes[parsed]();
         } else {
-            this.go('/catalog')
+            this.go('/catalog');
             logger.warn(`Маршрут ${parsed} не найден`);
         }
     };
