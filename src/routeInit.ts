@@ -24,6 +24,7 @@ import { emptyReview } from './api/empty';
 import { PollStatistics } from './components/pollStatistics/pollStatistics';
 import { api } from './api/api';
 
+
 /**
  *
  * @param {string} name - название страницы (возможно legacy)

@@ -7,6 +7,7 @@ import {
 } from './api/empty';
 import { VacancyCreate, ResumeCreate, SignupRequest, AuthResponse, ReviewResponse } from './api/interfaces';
 
+
 interface StoreData {
     csrf: string;
     authorized: boolean;
