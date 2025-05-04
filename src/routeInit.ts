@@ -24,7 +24,6 @@ import { emptyReview } from './api/empty';
 import { PollStatistics } from './components/pollStatistics/pollStatistics';
 import { api } from './api/api';
 
-
 /**
  *
  * @param {string} name - название страницы (возможно legacy)
@@ -101,6 +100,7 @@ const renderPage = async (name: string, Page: any) => {
     await page.render();
     document.title = store.data.page;
 };
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderReview = async (name: string, Page: any) => {
