@@ -13,8 +13,17 @@ export class AuthService {
      * @param {string} email
      * @returns {Promise<void>}
      */
-    async checkEmail(email: string): Promise<{role: string}> {
-        return await this.#api.request('/auth/emailExists', 'POST', JSON.stringify({ email }));
+    async checkEmailApplicant(email: string): Promise<{role: string}> {
+        return await this.#api.request('/applicant/emailExists', 'POST', JSON.stringify({ email }));
+    }
+
+    /**
+     * Проверка использования почты. Если почта занята, то возвращается 200, иначе 400
+     * @param {string} email
+     * @returns {Promise<void>}
+     */
+    async checkEmailEmployer(email: string): Promise<{role: string}> {
+        return await this.#api.request('/employer/emailExists', 'POST', JSON.stringify({ email }));
     }
 
     /**

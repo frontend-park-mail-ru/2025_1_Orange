@@ -1,10 +1,13 @@
-[hidden] 
+[hidden]
     display: none !important
 
 .profile
     max-width: 1200px
     margin: 0 auto
     padding: 32px
+
+    @media screen and ( max-width: 800px )
+        padding: 10px
 
     &__fieldset
         border: 0
@@ -43,6 +46,7 @@
         margin-bottom: 32px
 
         @media (max-width: 768px)
+            margin-bottom: 20px
             flex-direction: column
             align-items: flex-start
             gap: 35px
@@ -51,9 +55,6 @@
         display: flex
         align-items: center
         gap: 34px
-
-        @media (max-width: 768px)
-            order: 2
 
     &__avatar
         width: 120px
@@ -69,6 +70,7 @@
             width: 100%
             height: 100%
             object-fit: cover
+            border-radius: 10px;
 
     &__name
         font-size: 28px
@@ -227,7 +229,6 @@
         &:focus
             outline: none
             border-color: #0d6efd
-        
         &.error
             border-color: #FB0102
 
@@ -341,8 +342,6 @@
             outline: none
             border-color: #0071FE
 
-
-
     &__button--edit
         background-color: #ffffff
         color: #000000
@@ -383,6 +382,9 @@
         gap: 0
         margin-bottom: 24px
 
+        @media screen and ( max-width: 800px )
+            width: 100%
+
     &__tab
         display: flex
         align-items: center
@@ -399,6 +401,11 @@
         transition: background-color 0.2s
         user-select: none
 
+        @media screen and ( max-width: 400px )
+            height: 60px
+            flex-grow: 1
+            justify-content: center
+
         &#profile-resumes
             border-radius: 10px 0 0 10px
 
@@ -409,13 +416,29 @@
         &#profile-favorites
             border-radius: 0 10px 10px 0
 
+        @media screen and ( max-width: 800px )
+            span
+                display: none
+
+        &-icon
+            path
+                stroke: #000
+            svg
+                width: 20px
+                height: 20px
+
         &--active
             background-color: #000
             border: none
             color: #fff
 
-            .profile__tab-icon path
-                stroke: white
+            .profile__tab-icon
+                path
+                    stroke: #fff
+
+            @media screen and ( max-width: 800px )
+            span
+                display: inline-block
 
     &__view__avatar
         width: 120px
@@ -438,6 +461,10 @@
         flex-direction: row
         justify-content: space-between
 
+        @media screen and ( max-width: 800px)
+            flex-direction: column
+            gap: 30px
+
     &__social-icons
         display: flex
         gap: 15px
@@ -452,6 +479,5 @@
         img
             width: 100%
             height: 100%
-    
     &__error
         color: #FB0102

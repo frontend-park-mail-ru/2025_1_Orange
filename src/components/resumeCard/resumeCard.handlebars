@@ -4,7 +4,7 @@
              {{> partials/avatar avatar=applicant.avatar_path}}
         </div>
         <div class="resume-card__main-info">
-            <h1 class="resume-card__title">{{specialization}}</h1>
+            <h1 class="resume-card__title">{{profession}}</h1>
             <div class="resume-card__personal-info">
                 {{#if hasAge}}
                 <span class="resume-card__age">{{age}} лет</span>
@@ -23,7 +23,6 @@
     <div class="resume-card__content">
         <div class="resume-card__row">
             <div class="resume-card__label">Опыт работы</div>
-            <div class="resume-card__value">{{worked_experience}} {{#if worked_experience}}лет{{else}}Без опыта{{/if}}</div>
         </div>
         <div class="resume-card__row__divider"></div>
         {{#if lastExperience}}
@@ -46,7 +45,7 @@
                     </div>
                     <!-- Кнопка "Подробнее" (показывается, когда контент скрыт) -->
                     <button class="resume-card__details-toggle resume-card__details-toggle--more">
-                        Подробнее о последнем месте
+                        Подробнее
                         <span class="resume-card__details-arrow"></span>
                     </button>
                     <!-- Кнопка "Свернуть" (показывается, когда контент раскрыт) -->

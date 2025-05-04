@@ -12,9 +12,36 @@
                 <input type="text" name="title" placeholder="Название" class="vacancyEdit__input" value="{{title}}"
                     minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
                     title="Можно вводить только буквы и пробел">
-                <input type="text" name="specialization" placeholder="Специализация" class="vacancyEdit__input"
-                    value="{{specialization}}" minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
-                    title="Можно вводить только буквы и пробел">
+                <select name="specialization" class="vacancyEdit__input" required>
+                    <option value="" disabled selected>Специализация</option>
+                    <option value="Автомобильный бизнес">Автомобильный бизнес</option>
+                    <option value="Административный персонал">Административный персонал</option>
+                    <option value="Безопасность">Безопасность</option>
+                    <option value="Высший и средний менеджмент">Высший и средний менеджмент</option>
+                    <option value="Добыча сырья">Добыча сырья</option>
+                    <option value="Домашний, обслуживающий персонал">Домашний, обслуживающий персонал</option>
+                    <option value="Закупки">Закупки</option>
+                    <option value="Информационные технологии">Информационные технологии</option>
+                    <option value="Искусство, развлечения, массмедиа">Искусство, развлечения, массмедиа</option>
+                    <option value="Маркетинг, реклама, PR">Маркетинг, реклама, PR</option>
+                    <option value="Медицина, фармацевтика">Медицина, фармацевтика</option>
+                    <option value="Наука, образование">Наука, образование</option>
+                    <option value="Продажи, обслуживание клиентов">Продажи, обслуживание клиентов</option>
+                    <option value="Производство, сервисное обслуживание">Производство, сервисное обслуживание</option>
+                    <option value="Рабочий персонал">Рабочий персонал</option>
+                    <option value="Розничная торговля">Розничная торговля</option>
+                    <option value="Сельское хозяйство">Сельское хозяйство</option>
+                    <option value="Спортивные клубы, фитнес, салоны красоты">Спортивные клубы, фитнес, салоны красоты
+                    </option>
+                    <option value="Стратегия, инвестиции, консалтинг">Стратегия, инвестиции, консалтинг</option>
+                    <option value="Страхование">Страхование</option>
+                    <option value="Строительство, недвижимость">Строительство, недвижимость</option>
+                    <option value="Транспорт, логистика, перевозки">Транспорт, логистика, перевозки</option>
+                    <option value="Туризм, гостиницы, рестораны">Туризм, гостиницы, рестораны</option>
+                    <option value="Управление персоналом, тренинги">Управление персоналом, тренинги</option>
+                    <option value="Финансы, бухгалтерия">Финансы, бухгалтерия</option>
+                    <option value="Юристы">Юристы</option>
+                </select>
                 <input type="text" name="city" placeholder="Город" class="vacancyEdit__input" value="{{city}}"
                     minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
                     title="Можно вводить только буквы, знаки препинания и пробел">
@@ -167,8 +194,8 @@
         <fieldset class="vacancyEdit__group" id="tasks_fieldset">
             <legend class="vacancyEdit__name">Задачи</legend>
             <div class="vacancyEdit__options">
-                <textarea name="tasks" placeholder="Введите задачи вакансии" class="vacancyEdit__input"
-                 minlength="10" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
+                <textarea name="tasks" placeholder="Введите задачи вакансии" class="vacancyEdit__input" minlength="10"
+                    maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
                     title="Можно вводить только буквы, знаки препинания и пробел">{{tasks}}</textarea>
                 <div class="vacancyEdit__error"></div>
             </div>
@@ -190,8 +217,7 @@
             <legend class="vacancyEdit__name">Будет плюсом</legend>
             <div class="vacancyEdit__options">
                 <textarea name="optional_requirements" placeholder="Введите дополнительные требования вакансии"
-                    class="vacancyEdit__input" minlength="10" maxlength="500"
-                    pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
+                    class="vacancyEdit__input" minlength="10" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
                     title="Можно вводить только буквы, знаки препинания и пробел">{{optional_requirements}}</textarea>
                 <div>
                     <div class="vacancyEdit__error"></div>

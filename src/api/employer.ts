@@ -64,9 +64,11 @@ export class EmployerService {
     /**
      * Получение списка вакансий компании
      * @param {number} id - id профиля
+     * @param {number} offset - с какой вакансии выводить
+     * @param {number} limit - сколько выводить
      * @returns {VacancyShort}
      */
-    async vacancies(id: number): Promise<VacancyShort[]> {
-        return this.#api.request(`/vacancy/employer/${id}/vacancies`, 'GET')
+    async vacancies(id: number, offset: number, limit: number): Promise<VacancyShort[]> {
+        return this.#api.request(`/vacancy/employer/${id}/vacancies?offset=${offset}&limit=${limit}`, 'GET')
     }
 }

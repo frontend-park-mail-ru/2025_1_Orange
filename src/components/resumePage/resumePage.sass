@@ -56,9 +56,9 @@
     &__experience
         display: flex
         flex-direction: column
-        border: 1px solid #cfcfcf;
-        border-radius: 15px;
-        overflow: hidden;
+        border: 1px solid #cfcfcf
+        border-radius: 15px
+        overflow: hidden
         gap: 15px
 
     &__delete
@@ -85,11 +85,20 @@
     @media (max-width 1200px)
         min-width: auto
 
+    @media screen and ( max-width: 800px)
+        display: none
+
     &__actions
         display: flex
         gap: 15px
-        margin-top: 80px;
-        margin-bottom: 40px;
+        margin-top: 80px
+        margin-bottom: 40px
+
+        &-mobile
+            display: none
+            @media screen and ( max-width: 800px)
+                display: flex
+                gap: 15px
 
     &__section
         margin-bottom: 25px

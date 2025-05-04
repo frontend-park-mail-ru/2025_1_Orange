@@ -18,6 +18,10 @@ export class ProfileCompany {
     #editButton: HTMLButtonElement | null = null;
     #addVacancy: HTMLButtonElement | null = null;
 
+    /**
+     * Конструктор класса
+     * @param parent {HTMLElement} - родительский элемент
+     */
     constructor(parent: HTMLElement) {
         this.#parent = parent;
     }
@@ -31,23 +35,21 @@ export class ProfileCompany {
     }
 
     /**
-     * Очистка
+     * Удаление компонента
      */
     remove = () => {
         logger.info('ProfileCompany remove method called');
         this.self.remove();
     };
 
+    /**
+     * Получение данных о профиле компании
+     * data = Employer
+     */
     init = async () => {
         logger.info('profileCompany init method called');
         const url = window.location.href.split('/');
         this.#id = Number.parseInt(url[url.length - 1]);
-        if (
-            !store.data.authorized ||
-            store.data.user.role !== 'employer' ||
-            store.data.user.user_id !== this.#id
-        )
-            router.back();
         try {
             const data = await api.employer.get(this.#id);
             this.#data = data;
@@ -57,7 +59,7 @@ export class ProfileCompany {
         }
 
         try {
-            if (this.#data) this.#vacancies = await api.employer.vacancies(this.#data.id)
+            if (this.#data) this.#vacancies = await api.employer.vacancies(this.#data.id, 0, 10)
         } catch {
             this.#vacancies = null;
         }
@@ -108,17 +110,13 @@ export class ProfileCompany {
                 isOwner:
                     store.data.user.role === 'employer' &&
                     store.data.user.user_id === this.#data?.id,
-                vacancyCount: this.#vacancies?.length ?? 0
+                vacancyCount: this.#vacancies?.length ?? 0,
+                hasSocialLinks: this.#data?.website !== '' || this.#data.facebook !== '' || this.#data.telegram !== '' || this.#data.vk !== ''
             }),
         );
         this.#vacancyContainer = document.getElementById('responses-content') as HTMLElement;
         if (this.#vacancies) {
             this.#vacancies.forEach(async (vacancy) => {
-                try {
-                    vacancy.employer = await api.employer.get(vacancy.employer_id)
-                } catch {
-                    vacancy.employer = emptyEmployer
-                }
                 const vacancyCard = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
                 vacancyCard.render();
             });

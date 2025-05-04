@@ -46,10 +46,6 @@ export class JobCard {
 
         if (this.#resumeButton) {
             const handleResumeClick = async () => {
-                if (!store.data.authorized) {
-                    router.go('/auth')
-                    return
-                }
                 const error = this.self.querySelector('.job__error') as HTMLElement
                 if (error) {
                     error.hidden = true
@@ -101,7 +97,7 @@ export class JobCard {
             employmentTranslations,
         });
         const created_date = new Date(this.#props.created_at);
-        this.#props.created_at = `${created_date.getDate()}.${created_date.getMonth() + 1}.${created_date.getFullYear()}`
+        this.#props.created_at = created_date.toLocaleDateString('ru-RU')
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({

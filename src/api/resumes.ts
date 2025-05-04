@@ -10,10 +10,12 @@ export class ResumeService {
 
     /**
      * Получение списка всех резюме
+     * @param {number} offset - с какого резюме выводить
+     * @param {number} limit - сколько резюме выводить
      * @returns {Promise<Resume[]>}
      */
-    async all(): Promise<Resume[]> {
-        return this.#api.request('/resume/all', 'GET');
+    async all(offset: number, limit: number): Promise<Resume[]> {
+        return this.#api.request(`/resume/all?offset=${offset}&limit=${limit}`, 'GET');
     }
 
     /**
@@ -51,5 +53,16 @@ export class ResumeService {
      */
     async delete(id: number): Promise<void> {
         await this.#api.request(`/resume/${id}`, 'DELETE');
+    }
+
+    /**
+     * Поиск резюме по введённой строке
+     * @param {string} query - строка которую будем искать в резюме
+     * @param {number} offset - с какого резюме выводить
+     * @param {number} limit - сколько резюме выводить
+     * @returns {Promise<Resume[]>}
+     */
+    async search(query: string, offset: number, limit: number): Promise<Resume[]> {
+        return this.#api.request(`/resume/search?profession=${query}&offset=${offset}&limit=${limit}`, 'GET');
     }
 }

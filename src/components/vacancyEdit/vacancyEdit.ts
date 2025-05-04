@@ -33,6 +33,7 @@ export class VacancyEdit {
     #descriptionNext: HTMLButtonElement | null = null;
     #confirm: HTMLButtonElement | null = null;
 
+    #specialization: HTMLInputElement | null = null;
     #workFormatInput: RadioNodeList | null = null;
     #employmentInput: RadioNodeList | null = null;
     #scheduleInput: HTMLInputElement | null = null;
@@ -72,19 +73,19 @@ export class VacancyEdit {
                 logger.info('Не удалось загрузить вакансию');
                 this.#id = 0;
                 this.#defaultData = emptyVacancy;
-                 try {
-                     this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
-                 } catch {
-                     router.back();
-                 }
+                try {
+                    this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
+                } catch {
+                    router.back();
+                }
             }
         } else {
             this.#defaultData = emptyVacancy;
-             try {
-                 this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
-             } catch {
-                 router.back();
-             }
+            try {
+                this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
+            } catch {
+                router.back();
+            }
         }
     };
 
@@ -100,7 +101,7 @@ export class VacancyEdit {
         tasks: 'Задачи',
         requirements: 'Требования',
         optional_requirements: 'Будет плюсом',
-        skills : 'Навыки',
+        skills: 'Навыки',
     };
 
     #formValidate(element: HTMLElement): boolean {
@@ -160,8 +161,17 @@ export class VacancyEdit {
                 case 'working_hours':
                     json[key] = parseInt(value as string) || 0;
                     break;
+                case 'description':
+                case 'tasks':
+                case 'requirements':
+                case 'optional_requirements':
+                    if (typeof value === 'string')
+                        json[key] = value.split('\n').map(line => line.trim()).filter(line => line !== '').join('\n')
+                    break
                 default:
-                    json[key] = value;
+                    console.log(key, typeof value)
+                    if (typeof value === 'string') json[key] = value.trim()
+                    else json[key] = value;
             }
         });
         return json;
@@ -179,7 +189,6 @@ export class VacancyEdit {
         if (this.#form) {
             this.#form.addEventListener('input', (e: Event) => {
                 this.#formValidate(e.target as HTMLElement);
-                if (this.#form) store.data.vacancy = this.#formGet(this.#form) as VacancyCreate;
             });
         }
 
@@ -297,6 +306,7 @@ export class VacancyEdit {
         if (this.#confirm) {
             this.#confirm.addEventListener('click', async (e: Event) => {
                 e.preventDefault();
+                if (!this.#form) return;
                 if (this.#basicFieldset && !this.#formValidate(this.#basicFieldset)) return;
                 if (this.#employmentFieldset && !this.#formValidate(this.#employmentFieldset))
                     return;
@@ -318,6 +328,7 @@ export class VacancyEdit {
                     error.textContent = ''
                 }
                 try {
+                    store.data.vacancy = this.#formGet(this.#form) as VacancyCreate;
                     logger.info(store.data.vacancy);
                     if (this.#id !== 0) {
                         const data = await api.vacancy.update(this.#id, store.data.vacancy);
@@ -417,8 +428,12 @@ export class VacancyEdit {
         ) as HTMLButtonElement;
         this.#descriptionNext = document.getElementById('description_next') as HTMLButtonElement;
         this.#confirm = document.getElementById('vacancy_edit_confirm') as HTMLButtonElement;
+        if (this.#id !== 0) {
+            this.#confirm.textContent = 'Изменить вакансию';
+        }
 
         if (this.#form) {
+            this.#specialization = this.#form.elements.namedItem('specialization') as HTMLInputElement
             this.#workFormatInput = this.#form.elements.namedItem('work_format') as RadioNodeList;
             this.#employmentInput = this.#form.elements.namedItem('employment') as RadioNodeList;
             this.#scheduleInput = this.#form.elements.namedItem('schedule') as HTMLInputElement;
@@ -455,8 +470,10 @@ export class VacancyEdit {
             this.#scheduleInput &&
             this.#taxesIncludedInput &&
             this.#experienceInput &&
-            this.#skillsInput
+            this.#skillsInput &&
+            this.#specialization
         ) {
+            this.#specialization.value = this.#defaultData.specialization;
             this.#workFormatInput.value = this.#defaultData.work_format;
             this.#employmentInput.value = this.#defaultData.employment;
             this.#scheduleInput.value = this.#defaultData.schedule;

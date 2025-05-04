@@ -47,7 +47,7 @@ export class PollStatistics {
 
   /**
    * Подготавливает данные для отображения
-   * @param statistics {RatingStatistic[]} - статистика рейтингов
+   * @param {RatingStatistic[]} statistics - статистика рейтингов
    * @returns {RatingStatistic[]} - подготовленная статистика с HTML для звезд
    */
   #prepareStatisticsData(statistics: RatingStatistic[]): (RatingStatistic & { starsHtml: string })[] {
@@ -78,7 +78,7 @@ export class PollStatistics {
   }
 
   /**
-   * Очистка
+   * Удаление компонента
    */
   remove = () => {
     logger.info("PollStatistics remove method called")

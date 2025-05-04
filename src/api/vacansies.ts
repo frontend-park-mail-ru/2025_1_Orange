@@ -10,10 +10,12 @@ export class VacancyService {
 
     /**
      * Получение списка всех вакансий
+     * @param {number} offset - с какой вакансии по счёту выводить
+     * @param {number} limit - сколько выводить вакансий
      * @returns {Promise<Vacancy[]>}
      */
-    async all(): Promise<Vacancy[]> {
-        return this.#api.request('/vacancy/vacancies', 'GET');
+    async all(offset: number, limit: number): Promise<Vacancy[]> {
+        return this.#api.request(`/vacancy/vacancies?offset=${offset}&limit=${limit}`, 'GET');
     }
 
     /**
@@ -53,6 +55,45 @@ export class VacancyService {
         await this.#api.request(`/vacancy/vacancy/${id}`, 'DELETE');
     }
 
+    /**
+     * Получение списка вакансий по категории
+     * @param {string[]} categories - выбранные категории
+     * @param {number} offset - с какой вакансии по счёту выводить
+     * @param {number} limit - сколько выводить вакансий
+     * @returns {Promise<Vacancy[]>}
+     */
+    async category(categories: string[], offset: number, limit: number): Promise<Vacancy[]> {
+        return this.#api.request(`/vacancy/search/specializations?offset=${offset}&limit=${limit}`, 'POST', JSON.stringify({ 'specializations': categories }));
+    }
+
+    /**
+     * Получение списка вакансий по полям вакансии
+     * @param {string} query - строку которую будем искать
+     * @param {number} offset - с какой вакансии по счёту выводить
+     * @param {number} limit - сколько выводить вакансий
+     * @returns {Promise<Vacancy[]>}
+     */
+    async search(query: string, offset: number, limit: number): Promise<Vacancy[]> {
+        return this.#api.request(`/vacancy/search?query=${query}&offset=${offset}&limit=${limit}`, 'GET');
+    }
+
+    /**
+     * Получение списка вакансий по категории и по введённому выражению
+     * @param {string[]} categories - выбранные категории
+     * @param {string} query - выражение которое будем искать в вакансиях
+     * @param {number} offset - с какой вакансии по счёту выводить
+     * @param {number} limit - сколько выводить вакансий
+     * @returns {Promise<Vacancy[]>}
+     */
+    async combined(categories: string[], query: string, offset: number, limit: number): Promise<Vacancy[]> {
+        return this.#api.request(`/vacancy/search/combined?query=${query}&offset=${offset}&limit=${limit}`, 'POST', JSON.stringify({ 'specializations': categories }));
+    }
+
+    /**
+     * Откклик на вакансию
+     * @param {number} id - идентификатор вакансии
+     * @return {Promise<void>}
+     */
     async response(id: number): Promise<void> {
         await this.#api.request(`/vacancy/vacancy/${id}/response`, 'POST');
     }

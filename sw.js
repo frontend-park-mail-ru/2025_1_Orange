@@ -1,15 +1,25 @@
-self.addEventListener('install', (event) => {
+const URLS = ['/index.html', '/assets'];
+// index.html - html в бандлере
+// assets - папка где хранится js и css
+
+this.addEventListener('install', (event) => {
   console.log('SW: INSTALLED!');
 
   event.waitUntil(
-    caches.open('MY-CACHE').then((cache) => {
-      return cache.add('/');
-    })
+    caches
+      .open('MY-CACHE')
+      .then(cache => {
+        return cache.addAll(URLS);
+      })
+      .catch(err => {
+        console.log(err);
+        throw err;
+      })
   );
 });
 
 
-self.addEventListener('fetch', (event) => {
+this.addEventListener('fetch', (event) => {
   event.waitUntil(async () => {
     const request = new URL(event.request.url);
     // Проверяем, есть ли запрашиваемый ресурс в кэше

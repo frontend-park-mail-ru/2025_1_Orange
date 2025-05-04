@@ -22,6 +22,10 @@ export class JobPage {
     #resumeButton: HTMLElement | null = null;
     #id: number = 0;
 
+    /**
+     * Конструктор класса
+     * @param parent {HTMLElement} - родительский элемент
+     */
     constructor(parent: HTMLElement) {
         this.#parent = parent;
     }
@@ -30,6 +34,11 @@ export class JobPage {
         return document.getElementById('job_page') as HTMLElement;
     }
 
+    /**
+     * Получение ваканси
+     * props = Vacancy
+     * @return {void}
+     */
     init = async () => {
         logger.info('JobPage init method called');
         const url = window.location.href.split('/');
@@ -49,6 +58,9 @@ export class JobPage {
         }
     };
 
+    /**
+     * Навешивание обработчиков
+     */
     readonly #addEventListeners = () => {
         if (this.#resumeButton) {
             const handleResumeClick = async () => {
@@ -89,15 +101,21 @@ export class JobPage {
         }
     };
 
+    /**
+     * Удаление компонента
+     */
     remove = () => {
         logger.info('JobPage remove method called');
         this.self.remove();
     };
 
+    /**
+     * Рендеринг компонента
+     */
     render = () => {
         logger.info('JobPage render method called');
         const created_date = new Date(this.#props.created_at);
-        this.#props.created_at = `${created_date.getDate()}.${created_date.getMonth() + 1}.${created_date.getFullYear()}`
+        this.#props.created_at = created_date.toLocaleDateString('ru-RU')
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({

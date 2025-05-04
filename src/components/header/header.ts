@@ -17,6 +17,9 @@ export class Header {
     #editProfileLink: HTMLElement | null = null;
     #pollStatisticsLink: HTMLElement | null = null;
     #profileLink: HTMLElement | null = null;
+    #mobileVacancy: HTMLElement | null = null;
+    #mobileResume: HTMLElement | null = null;
+    #mobileCreate: HTMLElement | null = null;
 
     #vacancyCatalogLink: HTMLElement | null = null;
     #resumeCatalogLink: HTMLElement | null = null;
@@ -85,6 +88,9 @@ export class Header {
         this.#profileLink = document.getElementById('profile_page_link');
         this.#editProfileLink = document.getElementById('edit_profile_page_link');
         this.#pollStatisticsLink = document.getElementById('poll_statistics_page_link');
+        this.#mobileVacancy = document.getElementById('mobile_vacancy');
+        this.#mobileResume = document.getElementById('mobile_resume');
+        this.#mobileCreate = document.getElementById('mobile_create')
 
         this.#vacancyCatalogLink = document.getElementById('vacancy_catalog_link');
         this.#resumeCatalogLink = document.getElementById('resume_catalog_link');
@@ -162,6 +168,29 @@ export class Header {
             this.#vacancyCatalogLink.addEventListener('click', () => {
                 router.go('/catalog');
             });
+        }
+
+        if (this.#mobileResume) {
+            this.#mobileResume.addEventListener('click', () => {
+                router.go('/resumeCatalog');
+            });
+        }
+        if (this.#mobileVacancy) {
+            this.#mobileVacancy.addEventListener('click', () => {
+                router.go('/catalog');
+            });
+        }
+
+        if (this.#mobileCreate) {
+            this.#mobileCreate.addEventListener('click', () => {
+                if (store.data.authorized === false) {
+                    router.go('/auth');
+                } else if (store.data.user.role === 'applicant') {
+                    router.go('/createResume');
+                } else {
+                    router.go('/createVacancy');
+                }
+            })
         }
     };
 

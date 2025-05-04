@@ -58,9 +58,10 @@
             <fieldset class="resumeEdit__group" name="fieldset_skills">
                 <legend class="resumeEdit__name">Навыки</legend>
                 <div class="resumeEdit__options">
-                    <input type="text" name="specialization" placeholder="Специализация" class="resumeEdit__input"
+                    <input type="text" name="specialization" value="hello" hidden>
+                    <input type="text" name="profession" placeholder="Профессия" class="resumeEdit__input"
                         minlength="3" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
-                        title="Можно вводить только буквы, пробел и спец символы" required value="{{specialization}}">
+                        title="Можно вводить только буквы, пробел и спец символы" required value="{{profession}}">
                     <input type="text" name="skills" placeholder="Навыки" class="resumeEdit__input" minlength="3"
                         maxlength="200" pattern="^[а-яА-Яa-zA-Z0-9\s\.,!@#$*()_+\-]+$"
                         title="Можно вводить только буквы, знаки препинания, пробел и спецсимволы" required value="{{skillsString}}">
@@ -103,7 +104,7 @@
             <fieldset class="resumeEdit__group" name="fieldset_aboutme">
                 <legend class="resumeEdit__name">Обо мне</legend>
                 <div class="resumeEdit__options">
-                    <textarea name="about_me" placeholder="Ваши обязанности и достижения" class="resumeEdit__input"
+                    <textarea name="about_me" placeholder="Напишите о себе" class="resumeEdit__input"
                         minlength="10" maxlength="500" value="{{about_me}}" pattern="^[а-яА-Яa-zA-Z0-9\s\.,%#!?\-]+$"
                         title="Можно вводить только буквы, знаки препинания и пробел" required>{{about_me}}</textarea>
                     <div>

@@ -74,6 +74,9 @@ export interface Employer {
     description: string;
     legal_address: string;
     logo: string;
+    telegram: string;
+    vk: string;
+    facebook: string;
     created_at: string;
     updated_at: string;
 }
@@ -136,6 +139,7 @@ export interface Resume {
     applicant: Applicant;
     about_me: string;
     specialization: string;
+    profession: string;
     education: 'secondary_school' | 'incomplete_higher' | 'higher' | 'bachelor' | 'master' | 'phd';
     educational_institution: string;
     graduation_year: string;
@@ -151,6 +155,7 @@ export interface ResumeShort {
     applicant_id: number;
     applicant: ApplicantShort;
     specialization: string;
+    profession: string;
     work_experiences: WorkExperience;
     worked_experience: number;
     created_at: string;
@@ -186,11 +191,15 @@ export interface WorkExperienceCreate {
 export interface ResumeCreate {
     about_me: string;
     specialization: string;
+    profession: string;
     education: 'secondary_school' | 'incomplete_higher' | 'higher' | 'bachelor' | 'master' | 'phd';
     educational_institution: string;
     graduation_year: string;
     skills: string[];
     work_experiences: WorkExperienceCreate[];
+    telegram: string;
+    vk: string;
+    facebook: string;
 }
 
 export interface VacancyCreate {
@@ -259,6 +268,6 @@ export interface ReviewResponse {
   export interface PollStatistic {
     id: number
     question: string
-    averageRating: number
-    statistics: RatingStatistic[]
+    rating: number
+    stars: RatingStatistic[]
   }

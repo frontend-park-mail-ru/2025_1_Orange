@@ -39,7 +39,7 @@ export class ResumeEdit {
     }
 
     /**
-     * Перевод input
+     * Перевод полей ввода в форме
      */
     readonly #inputTranslation: Record<string, string> = {
         last_name: 'Фамилия',
@@ -57,9 +57,9 @@ export class ResumeEdit {
     };
 
     /**
-     * 
+     * Валидация формы
      * @param {HTMLElement} element - элемент
-     * @returns 
+     * @returns {boolean} - валидна ли форма?
      */
     #formValidate(element: HTMLElement): boolean {
         const fieldset = element.closest('fieldset') as HTMLFieldSetElement;
@@ -100,6 +100,11 @@ export class ResumeEdit {
         return false;
     }
 
+    /**
+     * Получение данных о резюме
+     * defaultData = Resume
+     * defaultData используется при рендеринге формы
+     */
     init = async () => {
         const url = window.location.pathname.split('/');
         const last = url[url.length - 1];
@@ -150,6 +155,11 @@ export class ResumeEdit {
         this.self.innerHTML = '';
     };
 
+    /**
+     * Получение данных из формы
+     * @param {HTMLFormElement} form - форма из которой берутся значения
+     * @returns {object} - JSON данных из формы
+     */
     #get(form: HTMLFormElement): unknown {
         const formData = new FormData(form);
         const json: Record<string, unknown> = {};
@@ -168,13 +178,21 @@ export class ResumeEdit {
                 case 'until_now':
                     json[key] = (value as string) === 'on'
                     break
+                case 'aboutme':
+                    if (typeof value === 'string')
+                        json[key] = value.split('\n').map(line => line.trim()).filter(line => line !== '').join('\n')
+                    break
                 default:
-                    json[key] = value;
+                    if (typeof value === 'string') json[key] = value.trim()
+                    else json[key] = value;
             }
         });
         return json;
     }
 
+    /**
+     * Навешивание обработчиков
+     */
     readonly #addEventListeners = () => {
         this.#profileEdit = document.getElementById('profile_change') as HTMLButtonElement
         if (this.#profileEdit) {
@@ -186,7 +204,6 @@ export class ResumeEdit {
         if (this.#form) {
             this.#form.addEventListener('input', (e: Event) => {
                 this.#formValidate(e.target as HTMLElement);
-                if (this.#form) this.#data = this.#get(this.#form) as ResumeCreate;
             });
         }
 
@@ -274,13 +291,13 @@ export class ResumeEdit {
                         }
                     }
                 });
-                logger.info(this.#data);
                 let error: HTMLElement | null = null;
                 if (this.#submit) error = this.#submit.parentNode?.querySelector('.vacancyEdit__error') as HTMLElement
                 if (error) {
                     error.textContent = ''
                 }
                 try {
+                    logger.info(this.#data);
                     if (this.#id !== 0) {
                         const data = await api.resume.update(this.#id, this.#data);
                         router.go(`/resume/${data.id}`)
@@ -303,7 +320,7 @@ export class ResumeEdit {
         logger.info('ResumeEdit render method called');
         const minGraduatingDate = new Date()
         minGraduatingDate.setFullYear(minGraduatingDate.getFullYear() - 3)
-        
+
         if (this.#defaultData && this.#defaultData.applicant.birth_date === '0001-01-01T00:00:00Z') {
             this.#defaultData.applicant.birth_date = '';
         } else if (this.#defaultData) {

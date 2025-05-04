@@ -1,4 +1,5 @@
 class IframeTimer {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     #timer: any = null;
 
     /**
@@ -8,7 +9,7 @@ class IframeTimer {
      */
     start = (f: () => void, minutes : number) => {
         if (this.#timer) clearInterval(this.#timer) 
-        this.#timer = setInterval(() => f(), 1000 * 10 * minutes);
+        this.#timer = setInterval(() => f(), 1000 * 60 * minutes);
     }
 
     stop = () => {
