@@ -15,6 +15,7 @@ export class Header {
     #logoLink: HTMLElement | null = null;
     #createButton: HTMLElement | null = null;
     #editProfileLink: HTMLElement | null = null;
+    #pollStatisticsLink: HTMLElement | null = null;
     #profileLink: HTMLElement | null = null;
 
     #vacancyCatalogLink: HTMLElement | null = null;
@@ -83,12 +84,17 @@ export class Header {
         this.#logoLink = this.self.querySelector('.header__name');
         this.#profileLink = document.getElementById('profile_page_link');
         this.#editProfileLink = document.getElementById('edit_profile_page_link');
+        this.#pollStatisticsLink = document.getElementById('poll_statistics_page_link');
 
         this.#vacancyCatalogLink = document.getElementById('vacancy_catalog_link');
         this.#resumeCatalogLink = document.getElementById('resume_catalog_link');
 
         this.#logoLink?.addEventListener('click', () => {
             router.go('/catalog');
+        });
+
+        this.#pollStatisticsLink?.addEventListener('click', () => {
+            router.go('/pollStatistics');
         });
 
         this.#loginButton?.addEventListener('click', () => {
@@ -100,6 +106,8 @@ export class Header {
                 await api.auth.logout();
                 logger.info('LOGOUT SUCCESFULLY');
                 store.reset();
+                const frame = document.getElementById('review_frame')
+                if (frame) frame.hidden = true
                 router.go('/catalog');
             } catch {
                 logger.info('ERROR LOGOUT');

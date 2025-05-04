@@ -56,54 +56,11 @@ export class ResumeEdit {
         about_me: 'Обо мне',
     };
 
-    #customMessage(field: HTMLInputElement | HTMLSelectElement): string {
-        const validity = field.validity;
-        if (validity.valueMissing) {
-            return `Заполните поле ${this.#inputTranslation[field.name]}`;
-        }
-        if (validity.patternMismatch) {
-            return field.title;
-        }
-        if (validity.tooLong) {
-            return `${this.#inputTranslation[field.name]}: Много введённых данных`;
-        }
-
-        if (validity.tooShort) {
-            return `${this.#inputTranslation[field.name]}: Мало введённых данных`;
-        }
-        return `${this.#inputTranslation[field.name]}: ${field.validationMessage}`;
-    }
-
-    #fieldValidate(field: HTMLInputElement | HTMLSelectElement, errorElement: HTMLElement): boolean {
-        field.classList.remove('error');
-        field.classList.remove('valid');
-        if (!field.validity.valid) {
-            console.log(field)
-            if (document.activeElement === field && field.value !== '' && field.value !== '0')
-                field.classList.add('error');
-            errorElement.textContent = this.#customMessage(field);
-            errorElement.style.display = 'block';
-            return false
-        }
-        if (field.validity.valid) field.classList.add('valid');
-        return true
-    }
-
-    #fieldValidate(field: HTMLInputElement | HTMLSelectElement, errorElement: HTMLElement): boolean {
-        field.classList.remove('error');
-        field.classList.remove('valid');
-        if (!field.validity.valid) {
-            console.log(field)
-            if (document.activeElement === field && field.value !== '' && field.value !== '0')
-                field.classList.add('error');
-            errorElement.textContent = this.#customMessage(field);
-            errorElement.style.display = 'block';
-            return false
-        }
-        if (field.validity.valid) field.classList.add('valid');
-        return true
-    }
-
+    /**
+     * 
+     * @param {HTMLElement} element - элемент
+     * @returns 
+     */
     #formValidate(element: HTMLElement): boolean {
         const fieldset = element.closest('fieldset') as HTMLFieldSetElement;
         if (fieldset) {

@@ -34,14 +34,6 @@ export class ResumeCatalog {
             const jobContainer = this.self.querySelector('.resume_list') as HTMLElement;
             jobContainer.textContent = 'Нету резюме';
         }
-        for (const element of this.#resumes) {
-            try {
-                const data = await api.applicant.get(element.applicant_id);
-                element.applicant = data;
-            } catch {
-                element.applicant = emptyApplicant
-            }
-        }
     };
 
     /**

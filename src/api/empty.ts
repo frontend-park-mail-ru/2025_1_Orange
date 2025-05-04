@@ -18,6 +18,7 @@ import {
     VacancyCreate,
     WorkExperienceCreate,
     AuthResponse,
+    ReviewResponse,
 } from './interfaces';
 
 export const emptySignupRequest: SignupRequest = {
@@ -246,3 +247,8 @@ export const emptyAuthResponse: AuthResponse = {
     role: 'applicant',
     user_id: 0,
 };
+
+export const emptyReview: ReviewResponse = {
+    poll_id: 0,
+    name: ''
+}
