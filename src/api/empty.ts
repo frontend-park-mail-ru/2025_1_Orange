@@ -17,16 +17,17 @@ import {
     ResumeCreate,
     VacancyCreate,
     WorkExperienceCreate,
+    AuthResponse,
 } from './interfaces';
 
 export const emptySignupRequest: SignupRequest = {
     email: '',
     password: '',
     repeatPassword: '',
-    firstName: '',
-    lastName: '',
-    companyName: '',
-    companyAddress: '',
+    first_name: '',
+    last_name: '',
+    company_name: '',
+    legal_address: '',
 };
 
 export const emptySigninRequest: SigninRequest = {
@@ -48,12 +49,12 @@ export const emptyApplicant: Applicant = {
     middle_name: '',
     city: '',
     birth_date: '',
-    sex: 'male',
+    sex: 'M',
     quote: '',
-    avatar: '',
+    avatar_path: '',
     telegram: '',
     vk: '',
-    web: '',
+    facebook: '',
     created_at: '',
     updated_at: '',
     status: 'actively_searching',
@@ -65,10 +66,11 @@ export const emptyApplicantShort: ApplicantShort = {
     last_name: '',
     middle_name: '',
     birth_date: '',
-    sex: 'male',
-    avatar: '',
+    sex: 'M',
+    avatar_path: '',
     created_at: '',
     updated_at: '',
+    status: 'actively_searching',
 };
 
 export const emptyEmployer: Employer = {
@@ -77,7 +79,7 @@ export const emptyEmployer: Employer = {
     slogan: '',
     website: '',
     description: '',
-    address: '',
+    legal_address: '',
     logo: '',
     created_at: '',
     updated_at: '',
@@ -94,6 +96,7 @@ export const emptyVacancy: Vacancy = {
     id: 0,
     title: '',
     is_active: false,
+    employer_id: 0,
     employer: emptyEmployer,
     specialization: '',
     city: '',
@@ -110,6 +113,7 @@ export const emptyVacancy: Vacancy = {
     tasks: '',
     requirements: '',
     optional_requirements: '',
+    responded: false,
     created_at: '',
     updated_at: '',
 };
@@ -119,6 +123,7 @@ export const emptyVacancyShort: VacancyShort = {
     id: 0,
     title: '',
     employer: emptyEmployerShort,
+    employer_id: 0,
     specialization: '',
     city: '',
     work_format: 'office',
@@ -129,6 +134,7 @@ export const emptyVacancyShort: VacancyShort = {
     taxes_included: false,
     created_at: '',
     updated_at: '',
+    responded: false,
 };
 
 export const emptyWorkExperience: WorkExperience = {
@@ -145,13 +151,14 @@ export const emptyWorkExperience: WorkExperience = {
 export const emptyResume: Resume = {
     id: 0,
     applicant: emptyApplicant,
+    applicant_id: 0,
     about_me: '',
     specialization: '',
     education: 'secondary_school',
     educational_institution: '',
     graduation_year: '',
     skills: [],
-    work_experience: [],
+    work_experiences: [],
     worked_experience: 0,
     created_at: '',
     updated_at: '',
@@ -160,8 +167,9 @@ export const emptyResume: Resume = {
 export const emptyResumeShort: ResumeShort = {
     id: 0,
     applicant: emptyApplicantShort,
+    applicant_id: 0,
     specialization: '',
-    work_experience: emptyWorkExperience,
+    work_experiences: emptyWorkExperience,
     worked_experience: 0,
     created_at: '',
     updated_at: '',
@@ -190,7 +198,7 @@ export const emptyResumeCreate: ResumeCreate = {
     educational_institution: '',
     graduation_year: '',
     skills: [],
-    work_experience: [],
+    work_experiences: [],
 };
 
 export const emptyVacancyCreate: VacancyCreate = {
@@ -217,7 +225,7 @@ export const emptyEmployerEdit: EmployerEdit = {
     slogan: '',
     website: '',
     description: '',
-    address: '',
+    legal_address: '',
 };
 
 export const emptyApplicantEdit: ApplicantEdit = {
@@ -226,10 +234,15 @@ export const emptyApplicantEdit: ApplicantEdit = {
     middle_name: '',
     city: '',
     birth_date: '',
-    sex: 'male',
+    sex: 'M',
     quote: '',
-    avatar: '',
+    avatar_path: '',
     telegram: '',
     vk: '',
-    web: '',
+    facebook: '',
+};
+
+export const emptyAuthResponse: AuthResponse = {
+    role: 'applicant',
+    user_id: 0,
 };

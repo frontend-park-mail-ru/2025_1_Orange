@@ -42,7 +42,7 @@ export class RegistrationEmail {
         const companyLink = document.getElementById('i_need_users');
         const userLink = document.getElementById('i_need_job');
         if (companyLink && userLink) {
-            console.log(store.data.auth);
+            logger.info(store.data.auth);
             companyLink.hidden = store.data.auth.type === 'employer';
             userLink.hidden = store.data.auth.type === 'applicant';
         }
@@ -70,13 +70,13 @@ export class RegistrationEmail {
         }
         if (this.#email.validity.valid === false) {
             error.hidden = false;
-            error.textContent = 'Напишите валидный адрес почты';
+            error.textContent = 'Напишите корректный адрес почты';
             this.#email.classList.add('form__input_error');
             return false;
         }
         if (this.#email.value.split('').indexOf('.') === -1) {
             error.hidden = false;
-            error.textContent = 'Напишите валидный адрес почты';
+            error.textContent = 'Напишите корректный адрес почты';
             this.#email.classList.add('form__input_error');
             return false;
         }
@@ -107,7 +107,7 @@ export class RegistrationEmail {
                 store.data.auth.request.email = this.#email?.value ?? '';
                 try {
                     const request = await api.auth.checkEmail(store.data.auth.request.email);
-                    logger.info(request);
+                    store.data.auth.type = request.role as 'applicant' | 'employer'
                     router.go('/login');
                 } catch {
                     logger.info('check email ERROR');

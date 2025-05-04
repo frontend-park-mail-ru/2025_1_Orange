@@ -13,7 +13,7 @@ export class ResumeService {
      * @returns {Promise<Resume[]>}
      */
     async all(): Promise<Resume[]> {
-        return this.#api.request('/resumes', 'GET');
+        return this.#api.request('/resume/all', 'GET');
     }
 
     /**
@@ -22,7 +22,7 @@ export class ResumeService {
      * @returns {Promise<Resume>}
      */
     async create(body: ResumeCreate): Promise<Resume> {
-        return this.#api.request('/resumes', 'POST', JSON.stringify(body));
+        return this.#api.request('/resume/create', 'POST', JSON.stringify(body));
     }
 
     /**
@@ -31,7 +31,7 @@ export class ResumeService {
      * @returns {Promise<Resume>}
      */
     async get(id: number): Promise<Resume> {
-        return this.#api.request(`/resumes/${id}`, 'GET');
+        return this.#api.request(`/resume/${id}`, 'GET');
     }
 
     /**
@@ -41,7 +41,7 @@ export class ResumeService {
      * @returns {Promise<Resume>}
      */
     async update(id: number, body: ResumeCreate): Promise<Resume> {
-        return this.#api.request(`/resumes/${id}`, 'PUT', JSON.stringify(body));
+        return this.#api.request(`/resume/${id}`, 'PUT', JSON.stringify(body));
     }
 
     /**
@@ -50,6 +50,6 @@ export class ResumeService {
      * @returns {Promise<void>}
      */
     async delete(id: number): Promise<void> {
-        await this.#api.request(`/resumes/${id}`, 'DELETE');
+        await this.#api.request(`/resume/${id}`, 'DELETE');
     }
 }

@@ -10,14 +10,14 @@
             <legend class="vacancyEdit__name">Общая информация</legend>
             <div class="vacancyEdit__options">
                 <input type="text" name="title" placeholder="Название" class="vacancyEdit__input" value="{{title}}"
-                    minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s]+$"
-                        title="Можно вводить только буквы и пробел">
+                    minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
+                    title="Можно вводить только буквы и пробел">
                 <input type="text" name="specialization" placeholder="Специализация" class="vacancyEdit__input"
-                    value="{{specialization}}" minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s]+$"
-                        title="Можно вводить только буквы и пробел">
+                    value="{{specialization}}" minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
+                    title="Можно вводить только буквы и пробел">
                 <input type="text" name="city" placeholder="Город" class="vacancyEdit__input" value="{{city}}"
                     minlength="3" maxlength="50" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
-                        title="Можно вводить только буквы, знаки препинания и пробел">
+                    title="Можно вводить только буквы, знаки препинания и пробел">
                 <div>
                     <div class="vacancyEdit__error"></div>
                     <button class="job__button" id="basic_next">Далее</button>
@@ -54,26 +54,28 @@
                     <span>Временная</span>
                 </label>
                 <div>
-                <div class="vacancyEdit__error"></div>
-                <button class="job__button" id="employment_next">Далее</button>
+                    <div class="vacancyEdit__error"></div>
+                    <button class="job__button" id="employment_next">Далее</button>
+                </div>
             </div>
-            </div>
-            
+
         </fieldset>
 
         <!-- Режим работы -->
         <fieldset class="vacancyEdit__group" id="workformat_fieldset">
             <legend class="vacancyEdit__name">Условия работы работы</legend>
             <div class="vacancyEdit__options">
-                <select name="schedule" class="vacancyEdit__input" required>
-                    <option value="" disabled selected>График работы</option>
-                    <option value="5/2">5/2</option>
-                    <option value="2/2">2/2</option>
-                    <option value="6/1">6/1</option>
-                    <option value="3/3">3/3</option>
-                    <option value="on_weekend">В выходные</option>
-                    <option value="by_agreement">Согласовывается</option>
-                </select>
+                <div class="vacancyEdit__select">
+                    <select name="schedule" class="vacancyEdit__input" required>
+                        <option value="" disabled selected>График работы</option>
+                        <option value="5/2">5/2</option>
+                        <option value="2/2">2/2</option>
+                        <option value="6/1">6/1</option>
+                        <option value="3/3">3/3</option>
+                        <option value="on_weekend">В выходные</option>
+                        <option value="by_agreement">Согласовывается</option>
+                    </select>
+                </div>
                 <input type="number" name="working_hours" placeholder="Количество часов в неделю"
                     class="vacancyEdit__input" min="1" max="96" value="{{working_hours}}" required>
                 <label class="vacancyEdit__checkbox">
@@ -93,9 +95,9 @@
                     <span>Разъездной</span>
                 </label>
                 <div>
-                <div class="vacancyEdit__error"></div>
-                <button class="job__button" id="workformat_next">Далее</button>
-            </div>
+                    <div class="vacancyEdit__error"></div>
+                    <button class="job__button" id="workformat_next">Далее</button>
+                </div>
             </div>
         </fieldset>
 
@@ -136,17 +138,17 @@
                     <span>1-3 года</span>
                 </label>
                 <label class="vacancyEdit__checkbox">
-                    <input type="radio" name="experience" value="3_5_years">
-                    <span>3-5 лет</span>
+                    <input type="radio" name="experience" value="3_6_years">
+                    <span>3-6 лет</span>
                 </label>
                 <label class="vacancyEdit__checkbox">
-                    <input type="radio" name="experience" value="more_than_5_years">
-                    <span>5+ лет</span>
+                    <input type="radio" name="experience" value="6_plus_years">
+                    <span>более 6 лет</span>
                 </label>
                 <div>
-                <div class="vacancyEdit__error"></div>
-                <button class="job__button" id="moneyexperience_next">Далее</button>
-            </div>
+                    <div class="vacancyEdit__error"></div>
+                    <button class="job__button" id="moneyexperience_next">Далее</button>
+                </div>
             </div>
         </fieldset>
 
@@ -155,8 +157,8 @@
             <legend class="vacancyEdit__name">Описание вакансии</legend>
             <div class="vacancyEdit__options">
                 <textarea name="description" placeholder="Введите описание вакансии" class="vacancyEdit__input"
-                    value="{{description}}" minlength="10" maxlength="500" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
-                        title="Можно вводить только буквы, знаки препинания и пробел"></textarea>
+                    minlength="10" maxlength="500" required pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
+                    title="Можно вводить только буквы, знаки препинания и пробел">{{description}}</textarea>
                 <div class="vacancyEdit__error"></div>
             </div>
         </fieldset>
@@ -166,8 +168,8 @@
             <legend class="vacancyEdit__name">Задачи</legend>
             <div class="vacancyEdit__options">
                 <textarea name="tasks" placeholder="Введите задачи вакансии" class="vacancyEdit__input"
-                    value="{{tasks}}" minlength="10" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
-                        title="Можно вводить только буквы, знаки препинания и пробел"></textarea>
+                 minlength="10" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
+                    title="Можно вводить только буквы, знаки препинания и пробел">{{tasks}}</textarea>
                 <div class="vacancyEdit__error"></div>
             </div>
         </fieldset>
@@ -177,8 +179,8 @@
             <legend class="vacancyEdit__name">Требования</legend>
             <div class="vacancyEdit__options">
                 <textarea name="requirements" placeholder="Введите требования вакансии" class="vacancyEdit__input"
-                    value="{{requirements}}" minlength="10" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
-                        title="Можно вводить только буквы, знаки препинания и пробел"></textarea>
+                    minlength="10" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
+                    title="Можно вводить только буквы, знаки препинания и пробел">{{requirements}}</textarea>
                 <div class="vacancyEdit__error"></div>
             </div>
         </fieldset>
@@ -188,12 +190,13 @@
             <legend class="vacancyEdit__name">Будет плюсом</legend>
             <div class="vacancyEdit__options">
                 <textarea name="optional_requirements" placeholder="Введите дополнительные требования вакансии"
-                    class="vacancyEdit__input" value="{{optional_requirements}}" minlength="10" maxlength="500" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
-                        title="Можно вводить только буквы, знаки препинания и пробел"></textarea>
-            <div>
-                <div class="vacancyEdit__error"></div>
-                <button class="job__button" id="description_next">Далее</button>
-            </div>
+                    class="vacancyEdit__input" minlength="10" maxlength="500"
+                    pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
+                    title="Можно вводить только буквы, знаки препинания и пробел">{{optional_requirements}}</textarea>
+                <div>
+                    <div class="vacancyEdit__error"></div>
+                    <button class="job__button" id="description_next">Далее</button>
+                </div>
             </div>
         </fieldset>
 
@@ -201,13 +204,14 @@
             <legend class="vacancyEdit__name">Навыки</legend>
             <div class="vacancyEdit__options">
                 <input type="text" name="skills" placeholder="Вводите навыки через запятую" class="vacancyEdit__input"
-                    value="{{skills}}" minlength="3" maxlength="150" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
-                        title="Можно вводить только буквы, знаки препинания и пробел" required>
+                    value="{{skills}}" minlength="3" maxlength="150" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
+                    title="Можно вводить только буквы, знаки препинания и пробел" required>
                 <div class="vacancyEdit__error"></div>
             </div>
         </fieldset>
         <!-- Кнопка отправки -->
         <div>
+            <div class="vacancyEdit__error"></div>
             <button class="job__button" id="vacancy_edit_confirm">Создать вакансию</button>
         </div>
     </form>

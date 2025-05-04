@@ -1,7 +1,7 @@
 import { EmployerShort } from '../../api/interfaces';
 import { router } from '../../router';
 import { logger } from '../../utils/logger';
-import template from './JobCompanyCard.handlebars';
+import template from './jobCompanyCard.handlebars';
 import './jobCompanyCard.sass';
 
 export class JobCompanyCard {
@@ -25,7 +25,7 @@ export class JobCompanyCard {
      * Навешивание обработчиков
      */
     readonly #addEventListeners = () => {
-        this.self.addEventListener('click', () => router.go('/company'));
+        this.self.addEventListener('click', () => router.go(`/profileCompany/${this.#props.id}`));
     };
 
     render = () => {

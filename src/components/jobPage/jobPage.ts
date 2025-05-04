@@ -1,17 +1,16 @@
 import { logger } from '../../utils/logger';
 import template from './jobPage.handlebars';
-import { Vacancy, VacancyShort } from '../../api/interfaces';
-import { SimilarJobCard } from '../similarJobCard/similarJobCard';
+import templateButton from '../../partials/jobCardResponded.handlebars';
+import { Vacancy } from '../../api/interfaces';
 import { JobCompanyCard } from '../jobCompanyCard/jobCompanyCard';
 import './jobPage.sass';
-import { vacancyMock, vacancyShortMock } from '../../api/mocks';
 import {
     employmentTranslations,
     experienceTranslations,
     workFormatTranslations,
 } from '../../api/translations';
 import { store } from '../../store';
-import { emptyVacancy } from '../../api/empty';
+import { emptyEmployer, emptyVacancy } from '../../api/empty';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { DeleteButton } from '../deleteButton/deleteButton';
@@ -19,7 +18,6 @@ import { DeleteButton } from '../deleteButton/deleteButton';
 export class JobPage {
     readonly #parent: HTMLElement;
     #props: Vacancy = emptyVacancy;
-    #similarJob: VacancyShort[] | null = null;
     #editButton: HTMLElement | null = null;
     #resumeButton: HTMLElement | null = null;
     #id: number = 0;
@@ -33,40 +31,51 @@ export class JobPage {
     }
 
     init = async () => {
-        logger.info('ResumePage init method called');
+        logger.info('JobPage init method called');
         const url = window.location.href.split('/');
         this.#id = Number.parseInt(url[url.length - 1]);
-        console.log('resumePage');
         try {
             const data = await api.vacancy.get(this.#id);
             this.#props = data;
         } catch {
-            console.log('Не удалось загрузить страницу');
-            //router.back()
+            logger.info('Не удалось загрузить страницу');
+            router.back();
         }
-        this.#props = vacancyMock;
-        this.#similarJob = [vacancyShortMock];
+        try {
+            const data = await api.employer.get(this.#props.employer_id);
+            this.#props.employer = data;
+        } catch {
+            this.#props.employer = emptyEmployer
+        }
     };
 
     readonly #addEventListeners = () => {
         if (this.#resumeButton) {
-            this.#resumeButton.addEventListener('click', async () => {
+            const handleResumeClick = async () => {
+                logger.info('resume');
                 try {
-                await api.vacancy.resume(this.#props.id);
-                await this.init()
-                this.render()
+                    await api.vacancy.response(this.#props.id);
+                    const buttonsContainer = this.self.querySelector('.vacancy__buttons')
+                    if (buttonsContainer) {
+                        buttonsContainer.innerHTML = ''
+                        buttonsContainer.insertAdjacentHTML(
+                            'beforeend',
+                            templateButton({}),
+                        );
+                    }
                 } catch {
-                    console.log('Ошибка при отправки отклика')
+                    logger.info('Ошибка при отправки отклика');
                 }
-            })
+            };
+            this.#resumeButton.addEventListener('click', handleResumeClick);
         }
 
         if (this.#editButton) {
             this.#editButton.addEventListener('click', () => {
-                router.go(`/vacancyEdit/${this.#props.id}`)
-            })
+                router.go(`/vacancyEdit/${this.#props.id}`);
+            });
         }
-    }
+    };
 
     /**
      * Обработчик удаления вакансии
@@ -76,7 +85,7 @@ export class JobPage {
             await api.vacancy.delete(this.#id);
             router.back();
         } catch {
-            console.log('Что-то пошло не так');
+            logger.info('Что-то пошло не так');
         }
     };
 
@@ -87,18 +96,23 @@ export class JobPage {
 
     render = () => {
         logger.info('JobPage render method called');
+        const created_date = new Date(this.#props.created_at);
+        this.#props.created_at = `${created_date.getDate()}.${created_date.getMonth() + 1}.${created_date.getFullYear()}`
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
                 ...this.#props,
-                tasks: this.#props.tasks.split('\n'),
-                requirements: this.#props.requirements.split('\n'),
-                optional_requirements: this.#props.optional_requirements.split('\n'),
+                tasks: this.#props.tasks !== '' ? this.#props.tasks.split('\n') : null,
+                requirements: this.#props.requirements !== '' ? this.#props.requirements.split('\n') : null,
+                optional_requirements: this.#props.optional_requirements !== '' ? this.#props.optional_requirements.split('\n') : null,
                 experienceTranslations,
                 workFormatTranslations,
                 employmentTranslations,
-                'isApplicant': store.data.authorized && store.data.user.type === 'applicant',
-                'isOwner': store.data.authorized && store.data.user.type === 'employer' && store.data.user.employer?.id === this.#props.employer.id
+                isApplicant: store.data.authorized && store.data.user.role === 'applicant',
+                isOwner:
+                    store.data.authorized &&
+                    store.data.user.role === 'employer' &&
+                    store.data.user.user_id === this.#props.employer.id,
             }),
         );
         const companyCard = new JobCompanyCard(
@@ -107,38 +121,39 @@ export class JobPage {
         );
         companyCard.render();
 
-        const similarJobsContainer = this.self.querySelector('.similar_jobs') as HTMLElement;
-        if (similarJobsContainer && this.#similarJob) {
-            this.#similarJob.forEach((job) => {
-                const similarJobCard = new SimilarJobCard(similarJobsContainer, job);
-                similarJobCard.render();
-            });
-        }
+        this.#resumeButton = document.getElementById('vacancy_resume_button');
+        this.#editButton = document.getElementById('vacancy_edit_button');
 
-        this.#resumeButton = document.getElementById('vacancy_resume_button')
-        this.#editButton = document.getElementById('vacancy_edit_button')
-
-        console.log(store.data)
+        logger.info(store.data);
 
         if (this.#resumeButton) {
-            this.#resumeButton.hidden = true
-            if (store.data.user.type === 'applicant' && store.data.authorized) this.#resumeButton.hidden = false
+            this.#resumeButton.hidden = true;
+            if (store.data.user.role === 'applicant' && store.data.authorized)
+                this.#resumeButton.hidden = false;
         }
 
         if (this.#editButton) {
-            this.#editButton.hidden = true
-            if (store.data.user.type === 'employer' && store.data.authorized && store.data.user.employer?.id === this.#props.employer.id) this.#editButton.hidden = false
+            this.#editButton.hidden = true;
+            if (
+                store.data.user.role === 'employer' &&
+                store.data.authorized &&
+                store.data.user.user_id === this.#props.employer.id
+            )
+                this.#editButton.hidden = false;
         }
 
-        this.#addEventListeners()
+        this.#addEventListeners();
 
-        if (store.data.user.type === 'employer' && store.data.authorized && store.data.user.employer?.id === this.#props.employer.id) {
+        if (
+            store.data.user.role === 'employer' &&
+            store.data.authorized &&
+            store.data.user.user_id === this.#props.employer.id
+        ) {
             const deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
             if (deleteContainer) {
-                const deleteButton = new DeleteButton(deleteContainer, this.#delete);
+                const deleteButton = new DeleteButton(deleteContainer, 'Вакансию', this.#delete);
                 deleteButton.render();
             }
         }
-
     };
 }

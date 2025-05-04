@@ -1,16 +1,17 @@
 import template from './vacancyEdit.handlebars'; // Шаблон Handlebars
 import { logger } from '../../utils/logger';
 import { Vacancy, VacancyCreate } from '../../api/interfaces';
-import { emptyEmployer, emptyVacancy } from '../../api/empty';
+import { emptyVacancy } from '../../api/empty';
 import { api } from '../../api/api';
 import { store } from '../../store';
-import './vacancyEdit.sass'
-import { vacancyMock } from '../../api/mocks';
+import './vacancyEdit.sass';
+import { router } from '../../router';
+import { fieldValidate } from '../../forms';
 
 export class VacancyEdit {
     readonly #parent: HTMLElement;
-    #defaultData: Vacancy = emptyVacancy
-    #id: number = 0
+    #defaultData: Vacancy = emptyVacancy;
+    #id: number = 0;
 
     #form: HTMLFormElement | null = null;
 
@@ -25,12 +26,12 @@ export class VacancyEdit {
     #optionalFieldset: HTMLFieldSetElement | null = null;
     #skillsFieldset: HTMLFieldSetElement | null = null;
 
-    #basicNext: HTMLButtonElement | null = null
-    #employmentNext: HTMLButtonElement | null = null
-    #workformatNext: HTMLButtonElement | null = null
-    #moneyexperienceNext: HTMLButtonElement | null = null
-    #descriptionNext: HTMLButtonElement | null = null
-    #confirm: HTMLButtonElement | null = null
+    #basicNext: HTMLButtonElement | null = null;
+    #employmentNext: HTMLButtonElement | null = null;
+    #workformatNext: HTMLButtonElement | null = null;
+    #moneyexperienceNext: HTMLButtonElement | null = null;
+    #descriptionNext: HTMLButtonElement | null = null;
+    #confirm: HTMLButtonElement | null = null;
 
     #workFormatInput: RadioNodeList | null = null;
     #employmentInput: RadioNodeList | null = null;
@@ -39,7 +40,7 @@ export class VacancyEdit {
     #experienceInput: RadioNodeList | null = null;
     #skillsInput: HTMLInputElement | null = null;
     #salaryFrom: HTMLInputElement | null = null;
-    #salaryTo: HTMLInputElement| null = null;
+    #salaryTo: HTMLInputElement | null = null;
 
     constructor(parent: HTMLElement) {
         this.#parent = parent;
@@ -50,34 +51,42 @@ export class VacancyEdit {
      * @returns {HTMLElement}
      */
     get self(): HTMLElement {
-        return document.getElementById('vacancy_edit_page') as HTMLElement
+        return document.getElementById('vacancy_edit_page') as HTMLElement;
     }
 
     /**
      * Получение значений если надо
      */
     init = async () => {
+        logger.info('VACANCY EDIT INIT')
+        if (!store.data.authorized || store.data.user.role === 'applicant') router.back()
         const url = window.location.pathname.split('/');
         const last = url[url.length - 1];
-        console.log('url: ', url);
+        logger.info('url: ', url);
         if (!isNaN(Number.parseInt(last)) && last !== '') {
             this.#id = Number.parseInt(last);
             try {
-                //const data = await api.vacancy.get(this.#id);
-                const data = vacancyMock
+                const data = await api.vacancy.get(this.#id);
                 this.#defaultData = data;
             } catch {
-                console.log('Не удалось загрузить вакансию');
+                logger.info('Не удалось загрузить вакансию');
                 this.#id = 0;
                 this.#defaultData = emptyVacancy;
-                this.#defaultData.employer = store.data.user.employer ?? emptyEmployer;
-                //router.back()
+                 try {
+                     this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
+                 } catch {
+                     router.back();
+                 }
             }
         } else {
             this.#defaultData = emptyVacancy;
-            this.#defaultData.employer = store.data.user.employer ?? emptyEmployer;
+             try {
+                 this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
+             } catch {
+                 router.back();
+             }
         }
-    }
+    };
 
     readonly #inputTranslation: Record<string, string> = {
         title: 'Название',
@@ -90,41 +99,9 @@ export class VacancyEdit {
         description: 'Описание',
         tasks: 'Задачи',
         requirements: 'Требования',
-        optional_requirements: 'Будет плюсом'
+        optional_requirements: 'Будет плюсом',
+        skills : 'Навыки',
     };
-
-    #customMessage(field: HTMLInputElement | HTMLSelectElement): string {
-        const validity = field.validity;
-        if (validity.valueMissing) {
-            return `Заполните поле ${this.#inputTranslation[field.name]}`;
-        }
-        if (validity.patternMismatch) {
-            return field.title;
-        }
-        if (validity.tooLong) {
-            return `${this.#inputTranslation[field.name]}: Много введённых данных`;
-        }
-
-        if (validity.tooShort) {
-            return `${this.#inputTranslation[field.name]}: Мало введённых данных`;
-        }
-        return `${this.#inputTranslation[field.name]}: ${field.validationMessage}`;
-    }
-
-    #fieldValidate(field: HTMLInputElement | HTMLSelectElement, errorElement: HTMLElement): boolean {
-        field.classList.remove('error');
-        field.classList.remove('valid');
-        if (!field.validity.valid) {
-            if (document.activeElement === field && field.value !== '' && field.value !== '0')
-                field.classList.add('error');
-            errorElement.textContent = this.#customMessage(field);
-            errorElement.style.display = 'block';
-            return false
-        }
-        if (field.validity.valid) field.classList.add('valid');
-        return true
-    }
-
 
     #formValidate(element: HTMLElement): boolean {
         const fieldset = element.closest('fieldset') as HTMLFieldSetElement;
@@ -136,8 +113,13 @@ export class VacancyEdit {
                 errorElement.style.display = 'none';
 
                 if (['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName)) {
-                    if (!this.#fieldValidate(element as HTMLInputElement, errorElement)) {
-                        return false
+                    if (
+                        !fieldValidate(
+                            element as HTMLInputElement,
+                            this.#inputTranslation,
+                        )
+                    ) {
+                        return false;
                     }
                 }
 
@@ -148,8 +130,8 @@ export class VacancyEdit {
                 let valid = true;
 
                 fields.forEach((field) => {
-                    if (valid && !this.#fieldValidate(field, errorElement)) {
-                        valid = false
+                    if (valid && !fieldValidate(field, this.#inputTranslation)) {
+                        valid = false;
                     }
                 });
                 return valid;
@@ -159,24 +141,27 @@ export class VacancyEdit {
     }
 
     #formGet(form: HTMLFormElement): unknown {
-        const formData = new FormData(form)
+        const formData = new FormData(form);
         const json: Record<string, unknown> = {};
 
         formData.forEach((value, key) => {
             switch (key) {
+                case 'skills':
+                    json[key] = (value as string)
+                        .split(',')
+                        .map((skill) => skill.trim())
+                        .filter((skill) => skill !== '');
+                    break;
                 case 'taxes_included':
                     json[key] = value === 'true'
-                    break
-                case 'skills':
-                    json[key] = (value as string).split(',').map(skill => skill.trim()).filter(skill => skill !== '');
-                    break
+                    break;
                 case 'salary_from':
                 case 'salary_to':
                 case 'working_hours':
                     json[key] = parseInt(value as string) || 0;
-                    break
+                    break;
                 default:
-                    json[key] = value
+                    json[key] = value;
             }
         });
         return json;
@@ -194,7 +179,7 @@ export class VacancyEdit {
         if (this.#form) {
             this.#form.addEventListener('input', (e: Event) => {
                 this.#formValidate(e.target as HTMLElement);
-                if (this.#form) store.data.vacancy = this.#formGet(this.#form) as VacancyCreate
+                if (this.#form) store.data.vacancy = this.#formGet(this.#form) as VacancyCreate;
             });
         }
 
@@ -205,6 +190,8 @@ export class VacancyEdit {
                 if (this.#basicFieldset && !this.#formValidate(this.#basicFieldset)) return;
                 if (this.#employmentFieldset && this.#basicNext) {
                     this.#employmentFieldset.hidden = false;
+                    const first = this.#employmentFieldset.elements[0] as HTMLInputElement
+                    first.focus()
                     this.#basicNext.hidden = true;
                 }
             });
@@ -214,10 +201,13 @@ export class VacancyEdit {
             this.#employmentNext.addEventListener('click', (e: Event) => {
                 e.preventDefault();
                 if (this.#basicFieldset && !this.#formValidate(this.#basicFieldset)) return;
-                if (this.#employmentFieldset && !this.#formValidate(this.#employmentFieldset)) return;
+                if (this.#employmentFieldset && !this.#formValidate(this.#employmentFieldset))
+                    return;
 
                 if (this.#workformatFieldset && this.#employmentNext) {
                     this.#workformatFieldset.hidden = false;
+                    const first = this.#workformatFieldset.elements[0] as HTMLInputElement
+                    first.focus()
                     this.#employmentNext.hidden = true;
                 }
             });
@@ -227,11 +217,15 @@ export class VacancyEdit {
             this.#workformatNext.addEventListener('click', (e: Event) => {
                 e.preventDefault();
                 if (this.#basicFieldset && !this.#formValidate(this.#basicFieldset)) return;
-                if (this.#employmentFieldset && !this.#formValidate(this.#employmentFieldset)) return;
-                if (this.#workformatFieldset && !this.#formValidate(this.#workformatFieldset)) return;
+                if (this.#employmentFieldset && !this.#formValidate(this.#employmentFieldset))
+                    return;
+                if (this.#workformatFieldset && !this.#formValidate(this.#workformatFieldset))
+                    return;
 
                 if (this.#salaryFieldset && this.#experienceFieldset && this.#workformatNext) {
                     this.#salaryFieldset.hidden = false;
+                    const first = this.#salaryFieldset.elements[0] as HTMLInputElement
+                    first.focus()
                     this.#experienceFieldset.hidden = false;
                     this.#workformatNext.hidden = true;
                 }
@@ -242,12 +236,28 @@ export class VacancyEdit {
             this.#moneyexperienceNext.addEventListener('click', (e: Event) => {
                 e.preventDefault();
                 if (this.#basicFieldset && !this.#formValidate(this.#basicFieldset)) return;
-                if (this.#employmentFieldset && !this.#formValidate(this.#employmentFieldset)) return;
-                if (this.#workformatFieldset && !this.#formValidate(this.#workformatFieldset)) return;
-                if (this.#salaryFieldset && this.#experienceFieldset && !this.#formValidate(this.#salaryFieldset) && !this.#formValidate(this.#experienceFieldset)) return;
+                if (this.#employmentFieldset && !this.#formValidate(this.#employmentFieldset))
+                    return;
+                if (this.#workformatFieldset && !this.#formValidate(this.#workformatFieldset))
+                    return;
+                if (
+                    this.#salaryFieldset &&
+                    this.#experienceFieldset &&
+                    !this.#formValidate(this.#salaryFieldset) &&
+                    !this.#formValidate(this.#experienceFieldset)
+                )
+                    return;
 
-                if (this.#descriptionFieldset && this.#requirementsFieldset && this.#tasksFieldset && this.#optionalFieldset && this.#moneyexperienceNext) {
+                if (
+                    this.#descriptionFieldset &&
+                    this.#requirementsFieldset &&
+                    this.#tasksFieldset &&
+                    this.#optionalFieldset &&
+                    this.#moneyexperienceNext
+                ) {
                     this.#descriptionFieldset.hidden = false;
+                    const first = this.#descriptionFieldset.elements[0] as HTMLInputElement
+                    first.focus()
                     this.#requirementsFieldset.hidden = false;
                     this.#tasksFieldset.hidden = false;
                     this.#optionalFieldset.hidden = false;
@@ -260,13 +270,24 @@ export class VacancyEdit {
             this.#descriptionNext.addEventListener('click', (e: Event) => {
                 e.preventDefault();
                 if (this.#basicFieldset && !this.#formValidate(this.#basicFieldset)) return;
-                if (this.#employmentFieldset && !this.#formValidate(this.#employmentFieldset)) return;
-                if (this.#workformatFieldset && !this.#formValidate(this.#workformatFieldset)) return;
-                if (this.#salaryFieldset && this.#experienceFieldset && !this.#formValidate(this.#salaryFieldset) && !this.#formValidate(this.#experienceFieldset)) return;
-                if (this.#descriptionFieldset && !this.#formValidate(this.#descriptionFieldset)) return;
+                if (this.#employmentFieldset && !this.#formValidate(this.#employmentFieldset))
+                    return;
+                if (this.#workformatFieldset && !this.#formValidate(this.#workformatFieldset))
+                    return;
+                if (
+                    this.#salaryFieldset &&
+                    this.#experienceFieldset &&
+                    !this.#formValidate(this.#salaryFieldset) &&
+                    !this.#formValidate(this.#experienceFieldset)
+                )
+                    return;
+                if (this.#descriptionFieldset && !this.#formValidate(this.#descriptionFieldset))
+                    return;
 
                 if (this.#skillsFieldset && this.#descriptionNext && this.#confirm) {
                     this.#skillsFieldset.hidden = false;
+                    const first = this.#skillsFieldset.elements[0] as HTMLInputElement
+                    first.focus()
                     this.#descriptionNext.hidden = true;
                     this.#confirm.hidden = false;
                 }
@@ -277,88 +298,140 @@ export class VacancyEdit {
             this.#confirm.addEventListener('click', async (e: Event) => {
                 e.preventDefault();
                 if (this.#basicFieldset && !this.#formValidate(this.#basicFieldset)) return;
-                if (this.#employmentFieldset && !this.#formValidate(this.#employmentFieldset)) return;
-                if (this.#workformatFieldset && !this.#formValidate(this.#workformatFieldset)) return;
-                if (this.#salaryFieldset && this.#experienceFieldset && !this.#formValidate(this.#salaryFieldset) && !this.#formValidate(this.#experienceFieldset)) return;
-                if (this.#descriptionFieldset && !this.#formValidate(this.#descriptionFieldset)) return;
+                if (this.#employmentFieldset && !this.#formValidate(this.#employmentFieldset))
+                    return;
+                if (this.#workformatFieldset && !this.#formValidate(this.#workformatFieldset))
+                    return;
+                if (
+                    this.#salaryFieldset &&
+                    this.#experienceFieldset &&
+                    !this.#formValidate(this.#salaryFieldset) &&
+                    !this.#formValidate(this.#experienceFieldset)
+                )
+                    return;
+                if (this.#descriptionFieldset && !this.#formValidate(this.#descriptionFieldset))
+                    return;
                 if (this.#skillsFieldset && !this.#formValidate(this.#skillsFieldset)) return;
+                let error: HTMLElement | null = null;
+                if (this.#confirm) error = this.#confirm.parentNode?.querySelector('.vacancyEdit__error') as HTMLElement
+                if (error) {
+                    error.textContent = ''
+                }
                 try {
-                    console.log(store.data.vacancy)
+                    logger.info(store.data.vacancy);
                     if (this.#id !== 0) {
-                        await api.vacancy.update(this.#id, store.data.vacancy);
+                        const data = await api.vacancy.update(this.#id, store.data.vacancy);
+                        router.go(`/vacancy/${data.id}`)
                     } else {
-                        await api.vacancy.create(store.data.vacancy);
+                        const data = await api.vacancy.create(store.data.vacancy);
+                        router.go(`/vacancy/${data.id}`)
                     }
                 } catch {
-                    console.log('Ошибка при создании');
+                    if (this.#id !== 0 && error) error.textContent = 'Ошибка при обновлении вакансии'
+                    else if (error) error.textContent = 'Ошибка при создании вакансии'
                 }
             });
         }
 
         if (this.#salaryFrom && this.#salaryTo) {
             this.#salaryFrom.addEventListener('input', () => {
-                if (!this.#salaryFrom || !this.#salaryTo) return
-                if ((Number.parseInt(this.#salaryTo.value) - Number.parseInt(this.#salaryFrom.value)) < 0) {
-                    console.log((Number.parseInt(this.#salaryTo.value) - Number.parseInt(this.#salaryFrom.value)))
-                    this.#salaryFrom.setCustomValidity('Неправильно задан диапазон зарплаты')
+                if (!this.#salaryFrom || !this.#salaryTo) return;
+                if (
+                    Number.parseInt(this.#salaryTo.value) -
+                    Number.parseInt(this.#salaryFrom.value) <
+                    0
+                ) {
+                    logger.info(
+                        Number.parseInt(this.#salaryTo.value) -
+                        Number.parseInt(this.#salaryFrom.value),
+                    );
+                    this.#salaryFrom.setCustomValidity('Неправильно задан диапазон зарплаты');
                 } else {
-                    this.#salaryFrom.setCustomValidity('')
+                    this.#salaryFrom.setCustomValidity('');
+                    this.#salaryTo.setCustomValidity('')
                 }
-            })
+            });
             this.#salaryTo.addEventListener('input', () => {
-                if (!this.#salaryFrom || !this.#salaryTo) return
-                if ((Number.parseInt(this.#salaryTo.value) - Number.parseInt(this.#salaryFrom.value)) < 0) {
-                    console.log((Number.parseInt(this.#salaryTo.value) - Number.parseInt(this.#salaryFrom.value)))
-                    this.#salaryTo.setCustomValidity('Неправильно задан диапазон зарплаты')
+                if (!this.#salaryFrom || !this.#salaryTo) return;
+                if (
+                    Number.parseInt(this.#salaryTo.value) -
+                    Number.parseInt(this.#salaryFrom.value) <
+                    0
+                ) {
+                    logger.info(
+                        Number.parseInt(this.#salaryTo.value) -
+                        Number.parseInt(this.#salaryFrom.value),
+                    );
+                    this.#salaryTo.setCustomValidity('Неправильно задан диапазон зарплаты');
                 } else {
-                    this.#salaryFrom.setCustomValidity('')
+                    this.#salaryTo.setCustomValidity('');
+                    this.#salaryFrom.setCustomValidity('');
                 }
-            })
+            });
         }
-    }
+    };
 
     /**
      * Рендеринг страницы
      */
     render = () => {
         logger.info('VacancyEdit render method called');
-        this.#parent.insertAdjacentHTML('beforeend', template({
-            ...this.#defaultData,
-            'isEdit': this.#id !== 0,
-        }));
+        this.#parent.insertAdjacentHTML(
+            'beforeend',
+            template({
+                ...this.#defaultData,
+                isEdit: this.#id !== 0,
+            }),
+        );
 
-        this.#form = document.forms.namedItem('vacancy_edit') as HTMLFormElement
+        this.#form = document.forms.namedItem('vacancy_edit') as HTMLFormElement;
 
-        this.#basicFieldset = document.getElementById('basic_fieldset') as HTMLFieldSetElement
-        this.#employmentFieldset = document.getElementById('employment_fieldset') as HTMLFieldSetElement
-        this.#workformatFieldset = document.getElementById('workformat_fieldset') as HTMLFieldSetElement
-        this.#salaryFieldset = document.getElementById('salary_fieldset') as HTMLFieldSetElement
-        this.#experienceFieldset = document.getElementById('experience_fieldset') as HTMLFieldSetElement
-        this.#descriptionFieldset = document.getElementById('description_fieldset') as HTMLFieldSetElement
-        this.#tasksFieldset = document.getElementById('tasks_fieldset') as HTMLFieldSetElement
-        this.#requirementsFieldset = document.getElementById('requirements_fieldset') as HTMLFieldSetElement
-        this.#optionalFieldset = document.getElementById('optional_fieldset') as HTMLFieldSetElement
-        this.#skillsFieldset = document.getElementById('skills_fieldset') as HTMLFieldSetElement
+        this.#basicFieldset = document.getElementById('basic_fieldset') as HTMLFieldSetElement;
+        this.#employmentFieldset = document.getElementById(
+            'employment_fieldset',
+        ) as HTMLFieldSetElement;
+        this.#workformatFieldset = document.getElementById(
+            'workformat_fieldset',
+        ) as HTMLFieldSetElement;
+        this.#salaryFieldset = document.getElementById('salary_fieldset') as HTMLFieldSetElement;
+        this.#experienceFieldset = document.getElementById(
+            'experience_fieldset',
+        ) as HTMLFieldSetElement;
+        this.#descriptionFieldset = document.getElementById(
+            'description_fieldset',
+        ) as HTMLFieldSetElement;
+        this.#tasksFieldset = document.getElementById('tasks_fieldset') as HTMLFieldSetElement;
+        this.#requirementsFieldset = document.getElementById(
+            'requirements_fieldset',
+        ) as HTMLFieldSetElement;
+        this.#optionalFieldset = document.getElementById(
+            'optional_fieldset',
+        ) as HTMLFieldSetElement;
+        this.#skillsFieldset = document.getElementById('skills_fieldset') as HTMLFieldSetElement;
 
-        this.#basicNext = document.getElementById('basic_next') as HTMLButtonElement
-        this.#employmentNext = document.getElementById('employment_next') as HTMLButtonElement
-        this.#workformatNext = document.getElementById('workformat_next') as HTMLButtonElement
-        this.#moneyexperienceNext = document.getElementById('moneyexperience_next') as HTMLButtonElement
-        this.#descriptionNext = document.getElementById('description_next') as HTMLButtonElement
-        this.#confirm = document.getElementById('vacancy_edit_confirm') as HTMLButtonElement
+        this.#basicNext = document.getElementById('basic_next') as HTMLButtonElement;
+        this.#employmentNext = document.getElementById('employment_next') as HTMLButtonElement;
+        this.#workformatNext = document.getElementById('workformat_next') as HTMLButtonElement;
+        this.#moneyexperienceNext = document.getElementById(
+            'moneyexperience_next',
+        ) as HTMLButtonElement;
+        this.#descriptionNext = document.getElementById('description_next') as HTMLButtonElement;
+        this.#confirm = document.getElementById('vacancy_edit_confirm') as HTMLButtonElement;
 
         if (this.#form) {
-            this.#workFormatInput = this.#form.elements.namedItem('work_format') as RadioNodeList
-            this.#employmentInput = this.#form.elements.namedItem('employment') as RadioNodeList
-            this.#scheduleInput = this.#form.elements.namedItem('schedule') as HTMLInputElement
-            this.#taxesIncludedInput = this.#form.elements.namedItem('taxes_included') as RadioNodeList
-            this.#experienceInput = this.#form.elements.namedItem('experience') as RadioNodeList
-            this.#skillsInput = this.#form.elements.namedItem('skills') as HTMLInputElement
-            this.#salaryFrom = this.#form.elements.namedItem('salary_from') as HTMLInputElement
-            this.#salaryTo = this.#form.elements.namedItem('salary_to') as HTMLInputElement
+            this.#workFormatInput = this.#form.elements.namedItem('work_format') as RadioNodeList;
+            this.#employmentInput = this.#form.elements.namedItem('employment') as RadioNodeList;
+            this.#scheduleInput = this.#form.elements.namedItem('schedule') as HTMLInputElement;
+            this.#taxesIncludedInput = this.#form.elements.namedItem(
+                'taxes_included',
+            ) as RadioNodeList;
+            this.#experienceInput = this.#form.elements.namedItem('experience') as RadioNodeList;
+            this.#skillsInput = this.#form.elements.namedItem('skills') as HTMLInputElement;
+            this.#salaryFrom = this.#form.elements.namedItem('salary_from') as HTMLInputElement;
+            this.#salaryTo = this.#form.elements.namedItem('salary_to') as HTMLInputElement;
         }
 
-        this.#addEventListeners()
+        this.#addEventListeners();
 
         if (this.#id === 0) {
             this.#employmentFieldset.hidden = true;
@@ -371,24 +444,41 @@ export class VacancyEdit {
             this.#optionalFieldset.hidden = true;
             this.#skillsFieldset.hidden = true;
             this.#confirm.hidden = true;
+            const first = this.#basicFieldset.elements[0] as HTMLInputElement
+            first.focus()
         }
 
-        if (this.#id !== 0 && this.#workFormatInput && this.#employmentInput && this.#scheduleInput && this.#taxesIncludedInput && this.#experienceInput && this.#skillsInput) {
-            this.#workFormatInput.value = this.#defaultData.work_format
-            this.#employmentInput.value = this.#defaultData.employment
-            this.#scheduleInput.value = this.#defaultData.schedule
-            this.#taxesIncludedInput.value = this.#defaultData.taxes_included ? 'true' : 'false'
-            this.#experienceInput.value = this.#defaultData.experience
-            this.#skillsInput.value = this.#defaultData.skills.join(", ")
+        if (
+            this.#id !== 0 &&
+            this.#workFormatInput &&
+            this.#employmentInput &&
+            this.#scheduleInput &&
+            this.#taxesIncludedInput &&
+            this.#experienceInput &&
+            this.#skillsInput
+        ) {
+            this.#workFormatInput.value = this.#defaultData.work_format;
+            this.#employmentInput.value = this.#defaultData.employment;
+            this.#scheduleInput.value = this.#defaultData.schedule;
+            this.#taxesIncludedInput.value = this.#defaultData.taxes_included ? 'true' : 'false';
+            this.#experienceInput.value = this.#defaultData.experience;
+            this.#skillsInput.value = this.#defaultData.skills.join(', ');
         }
-        if (this.#id !== 0 && this.#basicNext && this.#employmentNext && this.#workformatNext && this.#descriptionNext && this.#moneyexperienceNext) {
-            this.#basicNext.hidden = true
-            this.#employmentNext.hidden = true
-            this.#workformatNext.hidden = true
-            this.#descriptionNext.hidden = true
-            this.#moneyexperienceNext.hidden = true
+        if (
+            this.#id !== 0 &&
+            this.#basicNext &&
+            this.#employmentNext &&
+            this.#workformatNext &&
+            this.#descriptionNext &&
+            this.#moneyexperienceNext
+        ) {
+            this.#basicNext.hidden = true;
+            this.#employmentNext.hidden = true;
+            this.#workformatNext.hidden = true;
+            this.#descriptionNext.hidden = true;
+            this.#moneyexperienceNext.hidden = true;
         }
 
-        this.#formGet(this.#form)
+        this.#formGet(this.#form);
     };
 }

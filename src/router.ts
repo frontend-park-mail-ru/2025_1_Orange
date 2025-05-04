@@ -45,15 +45,16 @@ class Router {
      */
     readonly #navigate = () => {
         const url = window.location.pathname;
-        console.log(url);
+        logger.info(url);
         // /catalog -> '', 'catalog'
-        console.log(url.split('/'));
+        logger.info(url.split('/'));
         const parsed = url.split('/')[1];
 
         if (this.#routes[parsed]) {
             logger.info(`Маршрут ${parsed} найден`);
             this.#routes[parsed]();
         } else {
+            this.go('/catalog')
             logger.warn(`Маршрут ${parsed} не найден`);
         }
     };

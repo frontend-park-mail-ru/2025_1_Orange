@@ -11,6 +11,7 @@ import {
     ResumeShort,
     WorkExperience,
     User,
+    AuthResponse,
 } from './interfaces';
 
 export const staticMock: Static = {
@@ -21,59 +22,60 @@ export const staticMock: Static = {
 };
 
 export const applicantMock: Applicant = {
-    id: 12,
+    id: 1,
     first_name: 'Алексей',
     last_name: 'Ларин',
     middle_name: 'Андреевич',
     city: 'Москва',
     birth_date: '12.01.2004',
-    sex: 'male',
+    sex: 'M',
     quote: 'hello55 one love',
-    avatar: 'https://placehold.co/100x100/EEE/31343C',
+    avatar_path: 'https://placehold.co/100x100/EEE/31343C',
     telegram: 't.me/iu5la',
     vk: 'vk.com/iu5la',
-    web: 'mario.ru',
+    facebook: 'mario.ru',
     created_at: '2025-01-12T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
     status: 'actively_searching',
 };
 
 export const applicantShortMock: ApplicantShort = {
-    id: 12,
+    id: 1,
     first_name: 'Алексей',
     last_name: 'Ларин',
     middle_name: 'Андреевич',
     birth_date: '12.01.04',
-    sex: 'male',
-    avatar: 'https://placehold.co/100x100/EEE/31343C',
+    sex: 'M',
+    avatar_path: 'https://placehold.co/100x100/EEE/31343C',
     created_at: '2025-01-12T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
 };
 
 export const employerMock: Employer = {
-    id: 22,
+    id: 1,
     company_name: 'VK',
     slogan: 'Помогаем людям и компаниям объединяться вокруг того, что действительно важно',
     website: 'vk.com',
     description:
         'VK — крупнейшая российская технологическая компания. Мы помогаем миллионам людей решать повседневные задачи в онлайне. Нашими продуктами и сервисами пользуется больше 95% аудитории рунета.',
-    address: 'Москва',
+    legal_address: 'Москва',
     logo: 'https://placehold.co/100x100/EEE/31343C',
     created_at: '2024-08-22T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
 };
 
 export const employerShortMock: EmployerShort = {
-    id: 22,
+    id: 1,
     company_name: 'VK',
     logo: 'https://placehold.co/100x100/EEE/31343C',
 };
 
 export const vacancyMock: Vacancy = {
     resume: false,
-    id: 3,
+    id: 1,
     title: 'Фулстек веб разработчик',
     is_active: true,
+    employer_id: 1,
     employer: employerMock,
     specialization: 'Фулстек веб разработчик',
     city: 'Санкт-Петербург',
@@ -93,14 +95,16 @@ export const vacancyMock: Vacancy = {
         'Опыт от 1 лет в разработке веб-приложений.\nУверенные знания HTML, CSS (SCSS, Tailwind), JavaScript (ES6+), TypeScript.\nОпыт работы с одним из фреймворков: React, Vue.js или Angular.\nПонимание принципов SSR/SSG (Next.js, Nuxt.js).\nЗнание Node.js (Express, NestJS, Fastify) или Python (Django, FastAPI).\nОпыт работы с реляционными (PostgreSQL, MySQL) и NoSQL (MongoDB, Redis) базами данных.\nОпыт проектирования и разработки API (REST, GraphQL).\nПонимание основ DevOps: Docker, CI/CD, облачные сервисы (AWS, GCP, DigitalOcean).\nУверенное владение Git (GitHub/GitLab, GitFlow).\nОпыт написания тестов (Jest, Mocha, Cypress).\nПонимание принципов SOLID, DRY, KISS, MVC.',
     optional_requirements:
         'Опыт работы с WebSockets.\nЗнание Redis, RabbitMQ, Kafka. \nОпыт работы с GraphQL (Apollo, Hasura).\nНавыки написания bash-скриптов.\nОпыт работы с микросервисной архитектурой.\nЗнание WebAssembly (Wasm).\nОпыт в Web3, блокчейн-разработке (Solidity, ethers.js).\nОпыт работы с AI/ML в веб-приложениях (TensorFlow.js, Hugging Face API).',
+    responded: false,
     created_at: '2025-03-02T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
 };
 
 export const vacancyShortMock: VacancyShort = {
     resume: false,
-    id: 22,
+    id: 1,
     title: 'Фулстек веб разработчик',
+    employer_id: 1,
     employer: employerShortMock,
     specialization: 'Фулстек веб разработчик',
     city: 'Москва',
@@ -109,7 +113,8 @@ export const vacancyShortMock: VacancyShort = {
     working_hours: 8,
     salary_from: 30000,
     salary_to: 50000,
-    taxes_included: false,
+    taxes_included: true,
+    responded: false,
     created_at: '2025-03-02T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
 };
@@ -126,7 +131,8 @@ export const workExperienceMock: WorkExperience = {
 };
 
 export const resumeMock: Resume = {
-    id: 12,
+    id: 1,
+    applicant_id: 1,
     applicant: applicantMock,
     about_me: 'Full-Stack Web Developer...',
     specialization: 'Фулстек веб разработчик',
@@ -134,17 +140,18 @@ export const resumeMock: Resume = {
     educational_institution: 'МГТУ им. Н.Э. Баумана',
     graduation_year: '2026',
     skills: ['PostgreSQL', 'Redis', 'TypeScript', 'React', 'Golang'],
-    work_experience: [workExperienceMock],
+    work_experiences: [workExperienceMock],
     worked_experience: 2,
     created_at: '2025-03-02T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
 };
 
 export const resumeShortMock: ResumeShort = {
-    id: 12,
+    id: 1,
+    applicant_id: 1,
     applicant: applicantShortMock,
     specialization: 'Фулстек веб разработчик',
-    work_experience: workExperienceMock,
+    work_experiences: workExperienceMock,
     worked_experience: 2,
     created_at: '2025-03-02T14:36:23.281Z',
     updated_at: '2025-03-02T14:36:23.281Z',
@@ -160,4 +167,14 @@ export const userEmployerMock: User = {
     type: 'employer',
     employer: employerMock,
     applicant: emptyApplicant,
+};
+
+export const AuthResponseApplicantMock: AuthResponse = {
+    role: 'applicant',
+    user_id: 1,
+};
+
+export const AuthResponseEmployerMock: AuthResponse = {
+    role: 'employer',
+    user_id: 1,
 };

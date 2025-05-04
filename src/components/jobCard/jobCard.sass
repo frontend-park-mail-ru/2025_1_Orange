@@ -2,14 +2,13 @@
     border: 1px solid #cfcfcf
     position: relative
     border-radius: 15px
-    width: 870px
+    box-sizing: border-box
+    width: 876px
     display: flex
-    flex-direction: row
     overflow: hidden
-    padding: 10px
-    transition: 
-        box-shadow: 0.3s ease
-        border-color: 0.3s ease
+    padding: 15px
+    transition: box-shadow 0.3s ease, border-color 0.3s ease
+
     &:hover
         box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.1)
         border-color: #aaaab3
@@ -19,28 +18,33 @@
         right: 20px
         top: 20px
         font-size: 20px
+        cursor: pointer
 
         img
             cursor: pointer
             width: 28px
             height: 28px
-            object-fit: contain
+            object-fit: cover
 
     &__avatar
-        padding: 10px
-
         img
-            width: 100px
-            height: 100px
+            width: 66px
+            height: 66px
             border-radius: 10px
-            object-fit: contain
+            object-fit: cover
 
     &__info
         display: flex
         flex-direction: column
-        gap: 15px
-        padding: 10px
+        margin-left: 15px
+        gap: 40px
         width: 100%
+
+        &-wrapper
+            display: flex
+            flex-direction: column
+            gap: 10px
+            width: 100%
 
     &__name
         cursor: pointer
@@ -67,7 +71,7 @@
         img
             width: 27px
             height: 27px
-            object-fit: contain
+            object-fit: cover
 
         &__name
             font-weight: 600
@@ -87,19 +91,20 @@
         background-color: #f1f4f9
         color: #768695
         font-size: 14px
-        font-weight: bold
+        font-weight: 600
         text-align: center
         padding: 10px
         border-radius: 10px
 
     &__footer
-        margin-top: 40px
         display: flex
         justify-content: space-between
         align-items: center
 
     &__buttons
         display: flex
+        flex-direction: row
+        gap: 12px
 
     &__button
         cursor: pointer
@@ -114,32 +119,52 @@
         display: flex
         flex-direction: row
         gap: 10px
+        user-select: none
+        transition: background-color 0.3s ease
+
+        &:hover
+            background-color: #338efe
 
         img, svg
-            width: 25px
-            height: 25px
+            width: 24px
+            height: 24px
             object-fit: contain
 
     &__button_second
-        cursor: pointer
-        padding: 10px 15px
         border: none
-        border-radius: 10px
-        background-color: #F1F4F9
-        color: #0071FE
-        font-size: 16px
-        font-weight: 600
-        align-items: center
         display: flex
         flex-direction: row
         gap: 10px
+        align-items: center
+        border-radius: 10px
+        padding: 6px 15px
+        background-color: #f1f4f9
+        font-weight: 600
+        font-size: 16px
+        color: #0071FE
+        user-select: none
+        cursor: pointer
 
         img, svg
-            width: 25px
-            height: 25px
+            width: 24px
+            height: 24px
             object-fit: contain
+
+    &__button-chat
+        background-color: #EDF5FF
+        font-weight: 600
+        font-size: 16px
+        color: #0071FE
+        padding: 10px
+        border-radius: 10px
+        user-select: none
+        cursor: pointer
 
     &__statistics
         display: flex
-        align-items: center
+        flex-direction: row
+        gap: 10px
         color: #768695
+    
+    &__error
+        color: #FB0102

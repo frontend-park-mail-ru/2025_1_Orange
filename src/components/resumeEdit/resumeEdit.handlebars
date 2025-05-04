@@ -10,7 +10,7 @@
             <fieldset class="resumeEdit__group" name="fieldset_basic">
                 <legend class="resumeEdit__name">Общая информация</legend>
                 <div class="resumeEdit__options">
-                    <input type="text" name="last_name" placeholder="Фамлия" class="resumeEdit__input"
+                    <input type="text" name="last_name" placeholder="Фамилия" class="resumeEdit__input"
                         value="{{applicant.last_name}}" disabled>
                     <input type="text" name="first_name" placeholder="Имя" class="resumeEdit__input"
                         value="{{applicant.first_name}}" disabled>
@@ -39,7 +39,7 @@
                         {{/if}}
                     </div>
 
-                    <input type="text" name="birth_date" placeholder="Год рождения" class="resumeEdit__input"
+                    <input type="date" name="birth_date" placeholder="Год рождения" class="resumeEdit__input"
                         value="{{applicant.birth_date}}" disabled>
                     <input type="text" name="phone" placeholder="Номер телефона" class="resumeEdit__input"
                         value="{{applicant.phone}}" disabled>
@@ -59,11 +59,11 @@
                 <legend class="resumeEdit__name">Навыки</legend>
                 <div class="resumeEdit__options">
                     <input type="text" name="specialization" placeholder="Специализация" class="resumeEdit__input"
-                        minlength="3" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s]+$"
-                        title="Можно вводить только буквы и пробел" required value="{{specialization}}">
+                        minlength="3" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
+                        title="Можно вводить только буквы, пробел и спец символы" required value="{{specialization}}">
                     <input type="text" name="skills" placeholder="Навыки" class="resumeEdit__input" minlength="3"
-                        maxlength="200" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
-                        title="Можно вводить только буквы, знаки препинания и пробел" required value="{{skillsString}}">
+                        maxlength="200" pattern="^[а-яА-Яa-zA-Z0-9\s\.,!@#$*()_+\-]+$"
+                        title="Можно вводить только буквы, знаки препинания, пробел и спецсимволы" required value="{{skillsString}}">
                     <div>
                         <div class="resumeEdit__error"></div>
                         <button class="job__button" id="skills_next">Далее</button>
@@ -75,21 +75,23 @@
             <fieldset class="resumeEdit__group" name="fieldset_education">
                 <legend class="resumeEdit__name">Образование</legend>
                 <div class="resumeEdit__options">
+                    <div class="resumeEdit__select">
                     <select name="education" class="resumeEdit__input" required>
                         <option value="" disabled selected>Тип образования</option>
                         <option value="secondary_school">среднее образование</option>
                         <option value="incomplete_higher">неполное высшее</option>
-                        <option value="higer">высшее образование</option>
+                        <option value="higher">высшее образование</option>
                         <option value="bachelor">бакалавр</option>
                         <option value="master">магистр</option>
                         <option value="phd">кандидат наук</option>
                     </select>
+                    </div>
                     <input type="text" name="educational_institution" placeholder="Название учебного заведения"
                         minlength="3" maxlength="50" class="resumeEdit__input" value="{{educational_institution}}"
                         pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
                         title="Можно вводить только буквы, знаки препинания и пробел" required>
                     <input type="number" name="graduation_year" placeholder="Год окончания" class="resumeEdit__input"
-                        min="1900" max="2050" value="{{graduation_year}}" required>
+                        min="{{minGraduatingDate}}" max="2050" value="{{graduation_year}}" required>
                     <div>
                         <div class="resumeEdit__error"></div>
                         <button class="job__button" id="education_next">Далее</button>
@@ -102,8 +104,8 @@
                 <legend class="resumeEdit__name">Обо мне</legend>
                 <div class="resumeEdit__options">
                     <textarea name="about_me" placeholder="Ваши обязанности и достижения" class="resumeEdit__input"
-                        minlength="10" maxlength="500" value="{{about_me}}" pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
-                        title="Можно вводить только буквы, знаки препинания и пробел" required></textarea>
+                        minlength="10" maxlength="500" value="{{about_me}}" pattern="^[а-яА-Яa-zA-Z0-9\s\.,%#!?\-]+$"
+                        title="Можно вводить только буквы, знаки препинания и пробел" required>{{about_me}}</textarea>
                     <div>
                         <div class="resumeEdit__error"></div>
                         <button class="job__button" id="aboutme_next">Далее</button>
@@ -117,7 +119,8 @@
 
         <!-- Кнопка отправки -->
         <div class="resumeEdit__confirm">
-            <button class="job__button" id="resume_submit">Создать вакансию</button>
+            <div class="resumeEdit__error"></div>
+            <button class="job__button" id="resume_submit">Создать резюме</button>
         </div>
     </div>
 </div>

@@ -13,7 +13,7 @@ export class VacancyService {
      * @returns {Promise<Vacancy[]>}
      */
     async all(): Promise<Vacancy[]> {
-        return this.#api.request('/vacancies', 'GET');
+        return this.#api.request('/vacancy/vacancies', 'GET');
     }
 
     /**
@@ -22,7 +22,7 @@ export class VacancyService {
      * @returns {Promise<Vacancy>}
      */
     async create(body: VacancyCreate): Promise<Vacancy> {
-        return this.#api.request('/vacancies', 'POST', JSON.stringify(body));
+        return this.#api.request('/vacancy/vacancies', 'POST', JSON.stringify(body));
     }
 
     /**
@@ -31,7 +31,7 @@ export class VacancyService {
      * @returns {Promise<Vacancy>}
      */
     async get(id: number): Promise<Vacancy> {
-        return this.#api.request(`/vacancy/${id}`, 'GET');
+        return this.#api.request(`/vacancy/vacancy/${id}`, 'GET');
     }
 
     /**
@@ -41,7 +41,7 @@ export class VacancyService {
      * @returns {Promise<Vacancy>}
      */
     async update(id: number, body: VacancyCreate): Promise<Vacancy> {
-        return this.#api.request(`/vacancy/${id}`, 'PUT', JSON.stringify(body));
+        return this.#api.request(`/vacancy/vacancy/${id}`, 'PUT', JSON.stringify(body));
     }
 
     /**
@@ -50,10 +50,10 @@ export class VacancyService {
      * @returns {Promise<void>}
      */
     async delete(id: number): Promise<void> {
-        await this.#api.request(`/vacancy/${id}`, 'DELETE');
+        await this.#api.request(`/vacancy/vacancy/${id}`, 'DELETE');
     }
 
-    async resume(id: number): Promise<void> {
-        await this.#api.request(`/vacancy/${id}/resume`, 'POST');
+    async response(id: number): Promise<void> {
+        await this.#api.request(`/vacancy/vacancy/${id}/response`, 'POST');
     }
 }

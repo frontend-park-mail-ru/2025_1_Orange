@@ -2,8 +2,8 @@
     <div class="form__back">&#10094;</div>
         <div class="form__name">О компании</div>
         <div class="form__input">
-            <input type="text" placeholder="Название компании" name="company_name" minlength="2" value="{{companyName}}" required>
-            <input type="text" placeholder="Юридический адрес" name="company_address" minlength="10" value="{{companyAddress}}" required>
+            <input type="text" placeholder="Название компании" name="company_name" minlength="2" value="{{companyName}}" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s\.,\-]+$" required>
+            <input type="text" placeholder="Юридический адрес" name="company_address" minlength="4" value="{{companyAddress}}" maxlength="50" pattern="^[а-яА-Яa-zA-Z0-9\s\.,\-]+$" required>
         </div>
         <div class="form__error">
 

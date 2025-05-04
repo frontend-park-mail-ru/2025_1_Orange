@@ -1,38 +1,52 @@
 <div class="job" id="jobCard-{{id}}">
     <div class="job__favorite">
-        <img src="heart.svg" alt="Избранное">
+        <svg width="28" height="25" viewBox="0 0 28 25" fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+            <path d="M14.0162 4.00171C5.75012 -3.08324 -2.49987 6.83343 4.67171 13.9176L14.0162 23.8334L23.3606 13.9176C30.5001 6.83342 22.2501 -3.08324 14.0162 4.00171Z"
+                  stroke="#111928" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
     </div>
     <div class="job__avatar">
-        <img src="{{employer.logo}}" alt="Логотип компании">
+        {{> partials/logo logo=employer.logo_path }}
     </div>
     <div class="job__info">
-        <p class="job__name">{{title}}</p>
-        <p class="job__salary">
-            {{salary_from}} - {{salary_to}}
-            {{#if taxes_included}}
-            На руки
-            {{else}}
-            До вычета налогов
-            {{/if}}
-        </p>
-        <p class="job__company">{{employer.company_name}}</p>
-        <div class="job__advantages">
-            <div class="job__city">
-                <img src="geo-alt.svg" alt="address--v1" />
-                <p class="job__city__name">{{city}}</p>
-            </div>
-            <div class="job__badges">
-                <div class="job__badge">{{lookup workFormatTranslations work_format}}</div>
-                <div class="job__badge">{{lookup employmentTranslations employment}}</div>
-                <div class="job__badge">{{working_hours}}ч в неделю</div>
+        <div class="job__info-wrapper">
+            <p class="job__name">{{title}}</p>
+            <p class="job__salary">
+                {{salary_from}} - {{salary_to}} ₽ в месяц,
+                {{#if taxes_included}}
+                на руки
+                {{else}}
+                до вычета налогов
+                {{/if}}
+            </p>
+            <p class="job__company">{{employer.company_name}}</p>
+            <div class="job__advantages">
+                <div class="job__city">
+                    <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.99346 11.007C9.65032 11.007 10.9935 9.66387 10.9935 8.00702C10.9935 6.35017 9.65032 5.00702 7.99346 5.00702C6.33661 5.00702 4.99346 6.35017 4.99346 8.00702C4.99346 9.66387 6.33661 11.007 7.99346 11.007Z" stroke="#111928" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13.7935 11.945H13.7825C14.5043 10.887 14.922 9.65117 14.9901 8.37216C15.0582 7.09315 14.7741 5.81997 14.1687 4.69127C13.5632 3.56256 12.6598 2.6216 11.5566 1.97084C10.4534 1.32007 9.1928 0.984465 7.91208 1.00055C6.63136 1.01664 5.37961 1.38381 4.29312 2.06207C3.20663 2.74034 2.32706 3.7037 1.75019 4.84726C1.17332 5.99081 0.921256 7.27072 1.02146 8.54762C1.12166 9.82451 1.57028 11.0494 2.31846 12.089H2.30246L2.44346 12.26C2.54346 12.387 2.64346 12.511 2.74346 12.631L7.99346 19.007L13.1235 12.759C13.3165 12.5503 13.4968 12.3303 13.6635 12.1L13.7935 11.945Z" stroke="#111928" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <p class="job__city__name">{{city}}</p>
+                </div>
+                <div class="job__badges">
+                    <div class="job__badge">{{lookup workFormatTranslations work_format}}</div>
+                    <div class="job__badge">{{lookup employmentTranslations employment}}</div>
+                    <div class="job__badge">{{working_hours}} часов в неделю</div>
+                </div>
             </div>
         </div>
+        <div class="job__error" hidden></div>
         <div class="job__footer">
             <div class="job__buttons">
-                <div class="job__button" id="vacancy_{{id}}_resume">Откликнуться</div>
+                {{#if responded}}
+                {{> partials/jobCardResponded }}
+                {{else}}
+                    <div class="job__button" id="vacancy_{{id}}_resume">Откликнуться</div>
+                {{/if}}
             </div>
             <div class="job__statistics">
-                {{days_created}} дня назад • {{p.count}} уже откликнулись
+                опубликовано {{created_at}}
             </div>
         </div>
     </div>

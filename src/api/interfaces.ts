@@ -2,15 +2,20 @@ export interface SignupRequest {
     email: string;
     password: string;
     repeatPassword: string;
-    firstName?: string;
-    lastName?: string;
-    companyName?: string;
-    companyAddress?: string;
+    first_name?: string;
+    last_name?: string;
+    company_name?: string;
+    legal_address?: string;
 }
 
 export interface SigninRequest {
     email: string;
     password: string;
+}
+
+export interface AuthResponse {
+    role: 'applicant' | 'employer';
+    user_id: number;
 }
 
 export interface Static {
@@ -27,12 +32,12 @@ export interface Applicant {
     middle_name: string;
     city: string;
     birth_date: string;
-    sex: 'male' | 'female';
+    sex: 'M' | 'F';
     quote: string;
-    avatar: string;
+    avatar_path: string;
     telegram: string;
     vk: string;
-    web: string;
+    facebook: string;
     created_at: string;
     updated_at: string;
     status:
@@ -49,10 +54,16 @@ export interface ApplicantShort {
     last_name: string;
     middle_name: string;
     birth_date: string;
-    sex: 'male' | 'female';
-    avatar: string;
+    sex: 'M' | 'F';
+    avatar_path: string;
     created_at: string;
     updated_at: string;
+    status:
+        | 'actively_searching'
+        | 'open_to_offer'
+        | 'considering_offer'
+        | 'starting_soon'
+        | 'not_searching';
 }
 
 export interface Employer {
@@ -61,7 +72,7 @@ export interface Employer {
     slogan: string;
     website: string;
     description: string;
-    address: string;
+    legal_address: string;
     logo: string;
     created_at: string;
     updated_at: string;
@@ -74,10 +85,11 @@ export interface EmployerShort {
 }
 
 export interface Vacancy {
-    resume: boolean
+    resume: boolean;
     id: number;
     title: string;
     is_active: boolean;
+    employer_id : number;
     employer: Employer;
     specialization: string;
     city: string;
@@ -94,6 +106,7 @@ export interface Vacancy {
     tasks: string;
     requirements: string;
     optional_requirements: string;
+    responded: boolean;
     created_at: string;
     updated_at: string;
 }
@@ -102,6 +115,7 @@ export interface VacancyShort {
     resume: boolean;
     id: number;
     title: string;
+    employer_id : number;
     employer: EmployerShort;
     specialization: string;
     city: string;
@@ -111,20 +125,22 @@ export interface VacancyShort {
     salary_from: number;
     salary_to: number;
     taxes_included: boolean;
+    responded: boolean;
     created_at: string;
     updated_at: string;
 }
 
 export interface Resume {
     id: number;
+    applicant_id: number;
     applicant: Applicant;
     about_me: string;
     specialization: string;
-    education: 'secondary_school' | 'incomplete_higher' | 'higer' | 'bachelor' | 'master' | 'phd';
+    education: 'secondary_school' | 'incomplete_higher' | 'higher' | 'bachelor' | 'master' | 'phd';
     educational_institution: string;
     graduation_year: string;
     skills: string[];
-    work_experience: WorkExperience[];
+    work_experiences: WorkExperience[];
     worked_experience: number;
     created_at: string;
     updated_at: string;
@@ -132,9 +148,10 @@ export interface Resume {
 
 export interface ResumeShort {
     id: number;
+    applicant_id: number;
     applicant: ApplicantShort;
     specialization: string;
-    work_experience: WorkExperience;
+    work_experiences: WorkExperience;
     worked_experience: number;
     created_at: string;
     updated_at: string;
@@ -169,11 +186,11 @@ export interface WorkExperienceCreate {
 export interface ResumeCreate {
     about_me: string;
     specialization: string;
-    education: 'secondary_school' | 'incomplete_higher' | 'higer' | 'bachelor' | 'master' | 'phd';
+    education: 'secondary_school' | 'incomplete_higher' | 'higher' | 'bachelor' | 'master' | 'phd';
     educational_institution: string;
     graduation_year: string;
     skills: string[];
-    work_experience: WorkExperienceCreate[];
+    work_experiences: WorkExperienceCreate[];
 }
 
 export interface VacancyCreate {
@@ -200,7 +217,7 @@ export interface EmployerEdit {
     slogan: string;
     website: string;
     description: string;
-    address: string;
+    legal_address: string;
 }
 
 export interface ApplicantEdit {
@@ -209,10 +226,10 @@ export interface ApplicantEdit {
     middle_name: string;
     city: string;
     birth_date: string;
-    sex: 'male' | 'female';
+    sex: 'M' | 'F';
     quote: string;
-    avatar: string;
+    avatar_path: string;
     telegram: string;
     vk: string;
-    web: string;
+    facebook: string;
 }

@@ -1,3 +1,4 @@
+import { store } from '../store';
 import { logger } from '../utils/logger';
 import { ApplicantService } from './applicant';
 import { AuthService } from './auth';
@@ -17,7 +18,7 @@ export class Api {
      * Конструктор класса api - взаимодействие с бекендом
      * @param {string} baseUrl - url бекенда
      */
-    constructor(baseUrl: string = 'http://localhost:8000') {
+    constructor(baseUrl: string = 'http://localhost:8000/api/v1') {
         this.#baseUrl = baseUrl;
         this.auth = new AuthService(this);
         this.vacancy = new VacancyService(this);
@@ -41,7 +42,8 @@ export class Api {
     ) {
         const url = this.#baseUrl + endpoint;
         const headers = new Headers();
-        headers.append('Content-Type', content_type);
+        if (content_type !== 'multipart/form-data') headers.append('Content-Type', content_type);
+        if (store.data.csrf !== '') headers.append('X-CSRF-Token', store.data.csrf);
 
         const init: RequestInit = {
             method,
@@ -53,17 +55,37 @@ export class Api {
 
         logger.info(url, init);
 
+        logger.info('STORE', store.data.csrf);
+
         try {
             const response = await fetch(url, init);
+            logger.info("API HANDLE", response)
+            const csrfToken = response.headers.get('X-CSRF-Token');
+            if (csrfToken) {
+                store.data.csrf = csrfToken;
+            }
+            logger.info('REQUEST STATUS', response.status, response.ok);
             if (!response.ok) {
                 const error = await response.json();
                 logger.error(`error: ${error.message}`);
                 throw new Error(error.message || 'Ошибка при выполнении запроса');
             }
-
-            return response.json();
-        } catch {
-            logger.error('Network Error');
+            try {
+                return await response.json();
+            } catch {
+                return '';
+            }
+        } catch (error) {
+            // Попытка получить CSRF-токен даже в случае ошибки
+            if (error instanceof Response) { // Проверяем, является ли ошибка объектом Response
+                logger.info("NETWORK ERROR ", error)
+                const csrfToken = error.headers.get('X-CSRF-Token');
+                if (csrfToken) {
+                    store.data.csrf = csrfToken;
+                }
+            }
+        
+            logger.error('Network Error or other error');
             throw new Error('Ошибка при выполнении запроса');
         }
     }

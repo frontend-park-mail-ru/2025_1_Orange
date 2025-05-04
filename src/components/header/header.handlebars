@@ -1,9 +1,9 @@
 <div class="header">
     <div class="header__name"><b>Resu<span style="color:#F32526">Match</span></b></div>
     <div class="header__links">
-        <div class="header__link">Вакансии</div>
-        <div class="header__link">Соискатели</div>
-        <div class="header__link">Компании</div>
+        <div class="header__link" id="vacancy_catalog_link">Вакансии</div>
+        <div class="header__link" id="resume_catalog_link">Соискатели</div>
+        {{!-- <div class="header__link">Компании</div> --}}
     </div>
     <div class="header__auth">
         {{#if authorized}}
@@ -16,9 +16,10 @@
                 <img src="/icons-user-profile.svg" class="header__profile-icon" alt="Профиль"/>          
 
                 <div class="header__dropdown">
-                    <div class="header__dropdown__item">Настройки</div>
+                    <div class="header__dropdown__item" id="profile_page_link">Профиль</div>
+                    <div class="header__dropdown__item" id="edit_profile_page_link">Настройки</div>
                     <div class="header__dropdown__divider"></div>
-                    <div class="header__dropdown__item header__dropdown__item--logout">Выход</div>
+                    <div class="header__dropdown__item header__dropdown__item--logout" id="logout_profile_link">Выход</div>
                 </div>
             </div>
         {{else}}

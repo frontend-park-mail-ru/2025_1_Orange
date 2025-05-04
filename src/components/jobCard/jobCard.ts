@@ -1,10 +1,12 @@
 import './jobCard.sass';
 import { logger } from '../../utils/logger';
 import template from './jobCard.handlebars';
+import templateButton from '../../partials/jobCardResponded.handlebars';
 import { VacancyShort } from '../../api/interfaces';
 import { router } from '../../router';
 import { employmentTranslations, workFormatTranslations } from '../../api/translations';
 import { api } from '../../api/api';
+import { store } from '../../store';
 
 export class JobCard {
     readonly #parent: HTMLElement;
@@ -37,30 +39,48 @@ export class JobCard {
             const target = e.target as HTMLElement;
             // Если клик не на кнопке
             if (target.className !== 'job__button' && target.className !== 'job__button_second') {
-                router.go(`/vacancy/${this.#props.id}`);
+                if (store.data.authorized) router.go(`/vacancy/${this.#props.id}`);
+                else router.go('/auth')
             }
         });
 
         if (this.#resumeButton) {
-            const handleResumeClick = async () => { 
-                console.log('resume')   
+            const handleResumeClick = async () => {
+                if (!store.data.authorized) {
+                    router.go('/auth')
+                    return
+                }
+                const error = this.self.querySelector('.job__error') as HTMLElement
+                if (error) {
+                    error.hidden = true
+                    error.textContent = ''
+                }
+                logger.info('resume');
                 try {
-                    //await api.vacancy.resume(this.#props.id);    
+                    await api.vacancy.response(this.#props.id);
                     if (this.#resumeButton) {
-                        this.#resumeButton.removeAttribute('id');
-                        this.#resumeButton.className = 'job__button_second';
-                        this.#resumeButton.textContent = 'Вы откликнулись';
-    
+                        const buttonsContainer = this.self.querySelector('.job__buttons')
+                        if (buttonsContainer) {
+                            buttonsContainer.innerHTML = ''
+                            buttonsContainer.insertAdjacentHTML(
+                                'beforeend',
+                                templateButton({}),
+                            );
+                        }
+
                         // Убираем обработчик события после успешного действия
                         this.#resumeButton.removeEventListener('click', handleResumeClick);
                     }
                 } catch {
-                    console.log('Ошибка при отправки отклика');
+                    if (error) {
+                        error.hidden = false
+                        error.textContent = 'Ошибка при отправке отклика';
+                    }
                 }
             };
             this.#resumeButton.addEventListener('click', handleResumeClick);
         }
-    }
+    };
 
     /**
      * Очистка
@@ -71,36 +91,29 @@ export class JobCard {
     };
 
     /**
-     *
-     * @returns {number} - количество дней с момента создания вакансии
-     */
-    readonly #days_created = (): number => {
-        const created_date = new Date(this.#props.created_at).getTime();
-        const now = Date.now();
-        return Math.floor((now - created_date) / (1000 * 60 * 60 * 24));
-    };
-
-    /**
      * Рендеринг компонента
      */
     render = () => {
         logger.info('JobCard render method called');
-        console.log({
+        logger.info({
             ...this.#props,
             workFormatTranslations,
             employmentTranslations,
         });
+        const created_date = new Date(this.#props.created_at);
+        this.#props.created_at = `${created_date.getDate()}.${created_date.getMonth() + 1}.${created_date.getFullYear()}`
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
                 ...this.#props,
                 workFormatTranslations,
                 employmentTranslations,
-                days_created: this.#days_created,
             }),
         );
 
-        this.#resumeButton = document.getElementById(`vacancy_${this.#props.id}_resume`) as HTMLElement
+        this.#resumeButton = document.getElementById(
+            `vacancy_${this.#props.id}_resume`,
+        ) as HTMLElement;
 
         this.#addEventListeners();
     };

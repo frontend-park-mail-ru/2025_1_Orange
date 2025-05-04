@@ -1,4 +1,4 @@
-import template from './ResumeExperience.handlebars';
+import template from './resumeExperience.handlebars';
 import { WorkExperience } from '../../api/interfaces';
 import { logger } from '../../utils/logger';
 import './resumeExperience.sass';
@@ -14,25 +14,31 @@ export class ResumeExperience {
 
     readonly #duration = (): number => {
         const start_date = new Date(this.#props.start_date);
+        this.#props.start_date = `${start_date.getDate()}.${start_date.getMonth() + 1}.${start_date.getFullYear()}`
         if (this.#props.until_now) {
             const end_date = new Date();
-            return Math.floor(
+            const duration = Math.floor(
                 (end_date.getTime() - start_date.getTime()) / (1000 * 60 * 60 * 24 * 30),
             );
-        } else {
-            const end_date = new Date(this.#props.end_date);
-            return Math.floor(
-                (end_date.getTime() - start_date.getTime()) / (1000 * 60 * 60 * 24 * 30),
-            );
+            if (duration < 0) return 0
+            return duration
         }
+        const end_date = new Date(this.#props.end_date);
+        this.#props.end_date = `${end_date.getDate()}.${end_date.getMonth() + 1}.${end_date.getFullYear()}`
+        const duration = Math.floor(
+            (end_date.getTime() - start_date.getTime()) / (1000 * 60 * 60 * 24 * 30),
+        );
+        if (duration < 0) return 0
+        return duration
     };
 
     render = () => {
+        const duration = this.#duration()
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
                 ...this.#props,
-                duration: this.#duration(),
+                duration,
             }),
         );
         logger.info('ResumeExperience rendered:', this.#props.position);

@@ -134,12 +134,18 @@ export class Login {
             if (this.#passwordValidate() === true) {
                 store.data.auth.request.password = this.#password?.value ?? '';
                 try {
-                    const user = await api.auth.login({
-                        email: store.data.auth.request.email,
-                        password: store.data.auth.request.password,
-                    });
+                    if (store.data.auth.type === 'applicant')
+                        store.data.user = await api.applicant.login({
+                            email: store.data.auth.request.email,
+                            password: store.data.auth.request.password,
+                        });
+                    else
+                        store.data.user = await api.employer.login({
+                            email: store.data.auth.request.email,
+                            password: store.data.auth.request.password,
+                        });
                     store.data.authorized = true;
-                    store.data.user = user;
+                    router.go('/catalog');
                 } catch {
                     const error = document.querySelector('.form__error') as HTMLElement;
                     if (error) {
