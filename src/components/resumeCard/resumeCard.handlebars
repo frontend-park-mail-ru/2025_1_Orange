@@ -1,0 +1,58 @@
+<div id="resumeCard-{{id}}" class="resume-card">
+    <div class="resume-card__header">
+        <div class="resume-card__avatar">
+            <img src="{{applicant.avatar}}" alt="Фото компании">
+        </div>
+        <div class="resume-card__main-info">
+            <h1 class="resume-card__title">{{specialization}}</h1>
+            <div class="resume-card__personal-info">
+                <span class="resume-card__age">{{age}} лет</span>
+                <span class="resume-card__separator">•</span>
+                <span class="resume-card__updated">Обновлено {{updatedDate}}</span>
+            </div>
+            <div class="resume-card__status-badge__wrapper">
+                <div class="resume-card__status-badge">{{statusText}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="resume-card__content">
+        <div class="resume-card__row">
+            <div class="resume-card__label">Опыт работы</div>
+            <div class="resume-card__value">{{worked_experience}} {{#if worked_experience}}лет{{else}}Без опыта{{/if}}</div>
+        </div>
+        <div class="resume-card__row__divider"></div>
+        {{#if lastExperience}}
+        <div class="resume-card__row">
+            <div class="resume-card__label">Последнее место работы</div>
+            <div class="resume-card__value">
+                <div class="resume-card__company">{{lastExperience.employer_name}}</div>
+                <div class="resume-card__position">
+                    {{lastExperience.position}}
+                    <span class="resume-card__separator">•</span>
+                    <span class="resume-card__period">{{workPeriod}}</span>
+                </div>
+                <div class="resume-card__details-wrapper">
+                    <!-- Содержимое, которое будет показываться/скрываться -->
+                    <div class="resume-card__details-content">
+                        <p>{{lastExperience.duties}}</p>
+                        {{#if lastExperience.achievements}}
+                        <p><strong>Достижения:</strong> {{lastExperience.achievements}}</p>
+                        {{/if}}
+                    </div>
+                    <!-- Кнопка "Подробнее" (показывается, когда контент скрыт) -->
+                    <button class="resume-card__details-toggle resume-card__details-toggle--more">
+                        Подробнее о последнем месте
+                        <span class="resume-card__details-arrow"></span>
+                    </button>
+                    <!-- Кнопка "Свернуть" (показывается, когда контент раскрыт) -->
+                    <button class="resume-card__details-toggle resume-card__details-toggle--less">
+                        Свернуть
+                        <span class="resume-card__details-arrow"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+</div>

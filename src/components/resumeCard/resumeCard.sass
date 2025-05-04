@@ -1,0 +1,158 @@
+.resume-card
+  display: flex
+  flex-direction: column
+  gap: 20px
+  position: relative
+  overflow: hidden
+  border: 1px solid #cfcfcf
+  background-color: #fff
+  border-radius: 16px
+  padding: 24px
+  transition: box-shadow 0.3s ease, border-color 0.3s ease
+  cursor: pointer
+
+  &:hover
+    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.1)
+
+  &__header
+    display: flex
+    align-items: flex-start
+    gap: 20px
+
+  &__avatar
+    width: 150px
+
+    img
+      width: 100px
+      height: 100px
+      border-radius: 20px
+      object-fit: contain
+
+  &__main-info
+    flex-grow: 1
+
+  &__title
+    font-size: 24px
+    font-weight: 600
+    color: #0071FE
+    margin: 0 0 10px
+
+  &__personal-info
+    font-size: 16px
+    font-weight: 500
+    margin-bottom: 8px
+
+  &__age
+    color: #000000
+
+  &__updated
+    color: #0dc267
+
+  &__separator
+    margin: 0 8px
+    color: #6f7885
+
+  &__status-badge__wrapper
+    display: flex
+    align-items: center
+
+  &__status-badge
+    background-color: #f1f4f9
+    color: #768695
+    padding: 6px 12px
+    border-radius: 10px
+    font-size: 14px
+    font-weight: 600
+
+  &__content
+    display: flex
+    flex-direction: column
+    gap: 12px
+
+  &__row
+    display: flex
+    gap: 20px
+
+  &__label
+    width: 150px
+    flex-shrink: 0
+    color: #6f7885
+    font-weight: 500
+
+  &__value
+    flex-grow: 1
+    font-weight: 500
+
+  &__row__divider
+    border-bottom: 1px solid #CFCFCF
+
+  &__company
+    font-weight: bold
+    margin-bottom: 4px
+
+  &__position
+    margin-bottom: 8px
+    font-weight: 500
+    color: #000
+
+  &__details-wrapper
+    margin-top: 8px
+    position: relative
+
+  &__details-content
+    display: none
+    margin-bottom: 8px
+    line-height: 1.4
+
+  &__details-toggle
+    background: none
+    border: none
+    color: #0071fe
+    cursor: pointer
+    font-size: 14px
+    padding: 0
+    display: flex
+    align-items: center
+    gap: 5px
+
+  &__details-arrow
+    display: inline-block
+    width: 10px
+    height: 10px
+    margin-left: 5px
+    position: relative
+
+.resume-card__details-toggle--more .resume-card__details-arrow::before
+  content: ""
+  position: absolute
+  width: 6px
+  height: 6px
+  border-right: 2px solid #0071fe
+  border-bottom: 2px solid #0071fe
+  transform: rotate(45deg)
+  top: 0
+  left: 0
+
+.resume-card__details-toggle--less .resume-card__details-arrow::before
+  content: ""
+  position: absolute
+  width: 6px
+  height: 6px
+  border-right: 2px solid #0071fe
+  border-bottom: 2px solid #0071fe
+  transform: rotate(-135deg)
+  top: 4px
+  left: 0
+
+.resume-card__details-toggle--less
+  display: none
+
+.resume-card__details-wrapper--expanded
+  .resume-card__details-content
+    display: block
+
+  .resume-card__details-toggle--more
+    display: none
+
+  .resume-card__details-toggle--less
+    display: flex

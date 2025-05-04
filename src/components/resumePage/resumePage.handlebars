@@ -1,0 +1,111 @@
+<div class="page" id="resume_page">
+  {{log this}}
+  <div class="resume_info">
+    <div class="resume_info__profile">
+      <div class="resume_info__avatar">
+        <img src="{{applicant.avatar}}" alt="Фото профиля">
+      </div>
+      <div class="resume_info__profile_info">
+        <div class="resume_info__profile_name">{{applicant.last_name}} {{applicant.first_name}}
+          {{applicant.middle_name}}</div>
+        <div class="resume_info__profile_quote">{{applicant.quote}}</div>
+      </div>
+    </div>
+
+    <!-- Должность -->
+    <div class="resume_info__job">{{specialization}}</div>
+
+    <!-- О себе -->
+    <div class="resume_info__section">
+      <div class="resume_info__title">О себе</div>
+      <div class="resume_info__text">
+        {{about_me}}
+      </div>
+    </div>
+
+    <!-- Образование -->
+    <div class="resume_info__section">
+      <div class="resume_info__title">Образование</div>
+      <div class="resume_info__title">{{lookup educationTranslations education}}</div>
+      <div class="resume_info__text">{{educational_institution}}</div>
+      <div class="resume_info__text">{{graduation_year}}</div>
+    </div>
+
+    <!-- Опыт работы -->
+    <div class="resume_info__section">
+      <h3 class="resume_info__title">Опыт работы</h3>
+      <div class="resume_info__experience">
+      </div>
+    </div>
+
+    <!-- Кнопка удаления резюме -->
+    <div id="delete_button">
+      
+    </div>
+
+  </div>
+
+  <!-- Правая колонка - Сайдбар -->
+  <div class="resume_sidebar">
+    <!-- Кнопки действий -->
+    <div class="resume_sidebar__actions">
+      <div class="job__button_second">
+        <img src="gear.svg" />
+        <span>Редактировать</span>
+      </div>
+      <div class="job__button">
+        <img src="pdf.svg" />
+        <span>Сохранить PDF</span>
+      </div>
+    </div>
+
+    <!-- Местоположение -->
+    <div class="resume_sidebar__section">
+      <div class="resume_sidebar__title">Город проживания</div>
+      <div class="resume_sidebar__value">{{applicant.city}}</div>
+    </div>
+
+    <!-- Дата рождения -->
+    <div class="resume_sidebar__section">
+      <div class="resume_sidebar__title">Дата рождения</div>
+      <div class="resume_sidebar__value">{{applicant.birth_date}}</div>
+    </div>
+
+    <!-- Навыки -->
+    <div class="resume_sidebar__section">
+      <div class="resume_sidebar__title">Профессиональные навыки</div>
+      <div class="job__badges">
+        {{#each skills}}
+        <div class="job__badge">{{this}}</div>
+        {{/each}}
+      </div>
+    </div>
+
+    <!-- Контакты -->
+    <div class="resume_sidebar__section">
+      <div class="resume_sidebar__title">Контакты</div>
+      <div class="resume_sidebar__contacts">
+        <div class="contact-link">
+          <img src="vk.svg" />
+          <span>{{applicant.vk}}</span>
+        </div>
+        <div class="contact-link">
+          <img src="tg.svg" />
+          <span>{{applicant.telegram}}</span>
+        </div>
+        <div class="contact-link">
+          <img src="web.svg" />
+          <span>{{applicant.web}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Статус -->
+    <div class="resume_sidebar__section">
+      <div class="resume_sidebar__title">Статус</div>
+      <div class="resume_sidebar__badge">
+        {{lookup statusTranslations applicant.status}}
+      </div>
+    </div>
+  </div>
+</div>

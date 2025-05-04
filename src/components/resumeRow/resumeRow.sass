@@ -1,0 +1,116 @@
+.resume-table
+    width: 100%
+    border-collapse: collapse
+    border-radius: 12px
+    border: 1px solid #e4e4e4
+    overflow: hidden
+    margin-top: 24px
+    background-color: #fff
+
+    &__row
+        display: flex
+        flex-direction: row
+        justify-content: space-between
+        align-items: center
+        padding: 16px 24px
+        border-bottom: 1px solid #e0e0e0
+        transition: background-color 0.2s
+        cursor: pointer
+        gap: 20px
+
+        &:last-child
+            border-bottom: none
+
+        &:hover
+            background-color: #f1f4f9
+
+    &__cell
+        display: flex
+        align-items: center
+
+        &--profession
+            display: flex
+            align-items: center
+            min-width: 400px
+            gap: 25px
+
+    &__avatar
+        img
+            width: 66px
+            height: 66px
+            border-radius: 50%
+            object-fit: contain
+
+    &__profession-info
+        display: flex
+        flex-direction: column
+        gap: 4px
+
+    &__profession-title
+        font-size: 24px
+        font-weight: 700
+        color: #000
+        margin: 0
+
+    &__updated
+        font-size: 16px
+        color: #768695
+        font-weight: 500
+        margin: 0
+
+    &__skills-list
+        display: flex
+        flex-wrap: wrap
+        gap: 8px
+
+    &__skill
+        background-color: #f1f4f9
+        color: #768695
+        font-size: 14px
+        font-weight: 600
+        text-align: center
+        padding: 10px
+        border-radius: 10px
+
+    &__action
+        width: 40px
+        height: 40px
+        background-color: #000000
+        border-radius: 50%
+        display: flex
+        align-items: center
+        justify-content: center
+        cursor: pointer
+        transition: transform 0.2s, background-color 0.2s
+
+        &:hover
+            transform: scale(1.05)
+            background-color: #333333
+        
+        img
+            width: 100%
+            height: 100%
+            border-radius: 50%
+            object-fit: contain
+
+    &__action-icon
+        color: white
+
+/* Responsive styles */
+@media (max-width: 768px)
+    .resume-table__row
+        flex-direction: column
+        align-items: flex-start
+        gap: 16px
+
+    .resume-table__cell--profession,
+    .resume-table__cell--skills
+        width: 100%
+
+    .resume-table__action
+        margin-left: 0
+        margin-top: 16px
+        align-self: flex-end
+
+    .resume-table__header
+        display: none // Скрываем заголовок на мобильных устройствах
