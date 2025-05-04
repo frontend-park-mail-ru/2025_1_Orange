@@ -50,12 +50,6 @@ export class ProfileCompany {
         logger.info('profileCompany init method called');
         const url = window.location.href.split('/');
         this.#id = Number.parseInt(url[url.length - 1]);
-        if (
-            !store.data.authorized ||
-            store.data.user.role !== 'employer' ||
-            store.data.user.user_id !== this.#id
-        )
-            router.back();
         try {
             const data = await api.employer.get(this.#id);
             this.#data = data;
@@ -123,11 +117,6 @@ export class ProfileCompany {
         this.#vacancyContainer = document.getElementById('responses-content') as HTMLElement;
         if (this.#vacancies) {
             this.#vacancies.forEach(async (vacancy) => {
-                try {
-                    vacancy.employer = await api.employer.get(vacancy.employer_id)
-                } catch {
-                    vacancy.employer = emptyEmployer
-                }
                 const vacancyCard = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
                 vacancyCard.render();
             });

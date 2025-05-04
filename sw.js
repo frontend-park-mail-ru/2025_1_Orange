@@ -2,7 +2,7 @@ const URLS = ['/index.html', '/assets'];
 // index.html - html в бандлере
 // assets - папка где хранится js и css
 
-self.addEventListener('install', (event) => {
+this.addEventListener('install', (event) => {
   console.log('SW: INSTALLED!');
 
   event.waitUntil(
@@ -19,7 +19,7 @@ self.addEventListener('install', (event) => {
 });
 
 
-self.addEventListener('fetch', (event) => {
+this.addEventListener('fetch', (event) => {
   event.waitUntil(async () => {
     const request = new URL(event.request.url);
     // Проверяем, есть ли запрашиваемый ресурс в кэше

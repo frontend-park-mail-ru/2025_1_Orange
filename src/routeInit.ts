@@ -94,14 +94,17 @@ const renderPage = async (name: string, Page: any) => {
             logger.error('Не смог взять данные');
         }
     }
-
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    })
     app.innerHTML = '';
-
     const header = new Header(app);
     header.render();
 
     await page.render();
     document.title = store.data.page;
+    
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

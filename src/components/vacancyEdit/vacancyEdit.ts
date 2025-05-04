@@ -73,19 +73,19 @@ export class VacancyEdit {
                 logger.info('Не удалось загрузить вакансию');
                 this.#id = 0;
                 this.#defaultData = emptyVacancy;
-                 try {
-                     this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
-                 } catch {
-                     router.back();
-                 }
+                try {
+                    this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
+                } catch {
+                    router.back();
+                }
             }
         } else {
             this.#defaultData = emptyVacancy;
-             try {
-                 this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
-             } catch {
-                 router.back();
-             }
+            try {
+                this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
+            } catch {
+                router.back();
+            }
         }
     };
 
@@ -101,7 +101,7 @@ export class VacancyEdit {
         tasks: 'Задачи',
         requirements: 'Требования',
         optional_requirements: 'Будет плюсом',
-        skills : 'Навыки',
+        skills: 'Навыки',
     };
 
     #formValidate(element: HTMLElement): boolean {
@@ -166,7 +166,7 @@ export class VacancyEdit {
                 case 'requirements':
                 case 'optional_requirements':
                     if (typeof value === 'string')
-                    json[key] = value.split('\n').map(line => line.trim()).filter(line => line !== '').join('\n')
+                        json[key] = value.split('\n').map(line => line.trim()).filter(line => line !== '').join('\n')
                     break
                 default:
                     console.log(key, typeof value)

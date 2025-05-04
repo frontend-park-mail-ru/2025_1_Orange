@@ -1,5 +1,5 @@
 <div class="profile" id="profile_company_page">
-    <div class="profile__header" style="margin-bottom: 55px">
+    <div class="profile__header">
         <div class="profile__back">
             <div class="profile__back-icon">
                 <img src="/arrow-left.svg" />
@@ -8,12 +8,12 @@
                 Вернуться к списку вакансий
             </div>
         </div>
+        {{#if isOwner}}
         <div class="profile__actions">
-            {{#if isOwner}}
             <button class="profile__button profile__button-black">Создать вакансию</button>
             <button class="profile__button profile__button-white">Настройки</button>
-            {{/if}}
         </div>
+        {{/if}}
     </div>
 
     <div class="employer-profile__wrapper">
