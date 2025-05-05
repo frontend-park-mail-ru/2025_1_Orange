@@ -86,7 +86,7 @@ export const emptyEmployer: Employer = {
     updated_at: '',
     vk: '',
     telegram: '',
-    facebook: ''
+    facebook: '',
 };
 
 export const emptyEmployerShort: EmployerShort = {
@@ -208,7 +208,7 @@ export const emptyResumeCreate: ResumeCreate = {
     work_experiences: [],
     vk: '',
     telegram: '',
-    facebook: ''
+    facebook: '',
 };
 
 export const emptyVacancyCreate: VacancyCreate = {
@@ -259,5 +259,5 @@ export const emptyAuthResponse: AuthResponse = {
 
 export const emptyReview: ReviewResponse = {
     poll_id: 0,
-    name: ''
-}
+    name: '',
+};

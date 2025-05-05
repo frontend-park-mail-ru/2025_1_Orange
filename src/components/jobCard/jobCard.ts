@@ -40,28 +40,25 @@ export class JobCard {
             // Если клик не на кнопке
             if (target.className !== 'job__button' && target.className !== 'job__button_second') {
                 if (store.data.authorized) router.go(`/vacancy/${this.#props.id}`);
-                else router.go('/auth')
+                else router.go('/auth');
             }
         });
 
         if (this.#resumeButton) {
             const handleResumeClick = async () => {
-                const error = this.self.querySelector('.job__error') as HTMLElement
+                const error = this.self.querySelector('.job__error') as HTMLElement;
                 if (error) {
-                    error.hidden = true
-                    error.textContent = ''
+                    error.hidden = true;
+                    error.textContent = '';
                 }
                 logger.info('resume');
                 try {
                     await api.vacancy.response(this.#props.id);
                     if (this.#resumeButton) {
-                        const buttonsContainer = this.self.querySelector('.job__buttons')
+                        const buttonsContainer = this.self.querySelector('.job__buttons');
                         if (buttonsContainer) {
-                            buttonsContainer.innerHTML = ''
-                            buttonsContainer.insertAdjacentHTML(
-                                'beforeend',
-                                templateButton({}),
-                            );
+                            buttonsContainer.innerHTML = '';
+                            buttonsContainer.insertAdjacentHTML('beforeend', templateButton({}));
                         }
 
                         // Убираем обработчик события после успешного действия
@@ -69,7 +66,7 @@ export class JobCard {
                     }
                 } catch {
                     if (error) {
-                        error.hidden = false
+                        error.hidden = false;
                         error.textContent = 'Ошибка при отправке отклика';
                     }
                 }
@@ -97,7 +94,7 @@ export class JobCard {
             employmentTranslations,
         });
         const created_date = new Date(this.#props.created_at);
-        this.#props.created_at = created_date.toLocaleDateString('ru-RU')
+        this.#props.created_at = created_date.toLocaleDateString('ru-RU');
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({

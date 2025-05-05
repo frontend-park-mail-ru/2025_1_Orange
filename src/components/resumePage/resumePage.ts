@@ -76,7 +76,7 @@ export class ResumePage {
             element.addEventListener('click', () => {
                 router.go(`/resumeEdit/${this.#id}`);
             });
-        })
+        });
     };
 
     /**
@@ -86,11 +86,11 @@ export class ResumePage {
         if (this.#data) {
             if (this.#data.applicant.birth_date !== '0001-01-01T00:00:00Z') {
                 const birth_date = new Date(this.#data.applicant.birth_date);
-                this.#data.applicant.birth_date = birth_date.toLocaleDateString('ru-RU')
+                this.#data.applicant.birth_date = birth_date.toLocaleDateString('ru-RU');
             } else {
-                this.#data.applicant.birth_date = ''
+                this.#data.applicant.birth_date = '';
             }
-            this.#data.graduation_year = this.#data.graduation_year.split('-')[0]
+            this.#data.graduation_year = this.#data.graduation_year.split('-')[0];
         }
 
         logger.info('ResumePage render method called');
@@ -100,8 +100,14 @@ export class ResumePage {
                 ...this.#data,
                 educationTranslations,
                 statusTranslations,
-                owner: store.data.authorized && store.data.user.role === 'applicant' && this.#data.applicant.id === store.data.user.user_id,
-                hasSocialLinks: this.#data.applicant.facebook !== '' || this.#data.applicant.vk !== '' || this.#data.applicant.telegram !== ''
+                owner:
+                    store.data.authorized &&
+                    store.data.user.role === 'applicant' &&
+                    this.#data.applicant.id === store.data.user.user_id,
+                hasSocialLinks:
+                    this.#data.applicant.facebook !== '' ||
+                    this.#data.applicant.vk !== '' ||
+                    this.#data.applicant.telegram !== '',
             }),
         );
 

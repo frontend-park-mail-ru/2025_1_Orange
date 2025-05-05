@@ -148,9 +148,10 @@ export class ProfileUserEdit {
                     )
                         return;
                     let error: HTMLElement | null = null;
-                    if (this.#confirm) error = document.getElementById('profile_submit_error') as HTMLElement
+                    if (this.#confirm)
+                        error = document.getElementById('profile_submit_error') as HTMLElement;
                     if (error) {
-                        error.textContent = ''
+                        error.textContent = '';
                     }
                     try {
                         logger.info(this.#data);
@@ -164,7 +165,7 @@ export class ProfileUserEdit {
                         }
                     } catch {
                         if (error) {
-                            error.textContent += 'Ошибка при обновлении информации\n'
+                            error.textContent += 'Ошибка при обновлении информации\n';
                         }
                     }
                     if (this.#uploadInput) {
@@ -179,7 +180,7 @@ export class ProfileUserEdit {
                             router.go(`/profileUser/${store.data.user.user_id}`);
                         } catch {
                             if (error) {
-                                error.textContent += 'Ошибка при загрузке картинки'
+                                error.textContent += 'Ошибка при загрузке картинки';
                             }
                         }
                     }
@@ -217,8 +218,8 @@ export class ProfileUserEdit {
      */
     render = () => {
         logger.info('ProfileUserEdit render method called');
-        const maxBirthDay = new Date()
-        maxBirthDay.setFullYear(maxBirthDay.getFullYear() - 14)
+        const maxBirthDay = new Date();
+        maxBirthDay.setFullYear(maxBirthDay.getFullYear() - 14);
         if (this.#defaultData && this.#defaultData.birth_date === '0001-01-01T00:00:00Z') {
             this.#defaultData.birth_date = '';
         } else if (this.#defaultData) {

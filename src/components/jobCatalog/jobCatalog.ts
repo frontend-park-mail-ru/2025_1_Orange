@@ -16,7 +16,7 @@ export class JobCatalog {
     #createResumeLink: HTMLLinkElement | null = null;
     #categories: NodeListOf<HTMLElement> = [];
     #searchForm: HTMLFormElement | null = null;
-    #paginationButton: HTMLElement | null = null
+    #paginationButton: HTMLElement | null = null;
 
     /**
      * Конструктор класса
@@ -31,25 +31,45 @@ export class JobCatalog {
      * @return {Vacancy}
      */
     init = async () => {
-        store.data.vacancyOffset = 0
-        store.data.vacancyLimit = 2
-        await this.#getVacancy()
+        store.data.vacancyOffset = 0;
+        store.data.vacancyLimit = 2;
+        await this.#getVacancy();
     };
 
     readonly #getVacancy = async () => {
         try {
             if (store.data.vacancySearch === '') {
-                if (store.data.vacancyCategory !== '') this.#jobs = await api.vacancy.category([store.data.vacancyCategory], store.data.vacancyOffset, store.data.vacancyLimit)
-                else this.#jobs = await api.vacancy.all(store.data.vacancyOffset, store.data.vacancyLimit)
+                if (store.data.vacancyCategory !== '')
+                    this.#jobs = await api.vacancy.category(
+                        [store.data.vacancyCategory],
+                        store.data.vacancyOffset,
+                        store.data.vacancyLimit,
+                    );
+                else
+                    this.#jobs = await api.vacancy.all(
+                        store.data.vacancyOffset,
+                        store.data.vacancyLimit,
+                    );
             } else {
-                if (store.data.vacancyCategory !== '') this.#jobs = await api.vacancy.combined([store.data.vacancyCategory], store.data.vacancySearch, store.data.vacancyOffset, store.data.vacancyLimit)
-                else this.#jobs = await api.vacancy.search(store.data.vacancySearch, store.data.vacancyOffset, store.data.vacancyLimit)
+                if (store.data.vacancyCategory !== '')
+                    this.#jobs = await api.vacancy.combined(
+                        [store.data.vacancyCategory],
+                        store.data.vacancySearch,
+                        store.data.vacancyOffset,
+                        store.data.vacancyLimit,
+                    );
+                else
+                    this.#jobs = await api.vacancy.search(
+                        store.data.vacancySearch,
+                        store.data.vacancyOffset,
+                        store.data.vacancyLimit,
+                    );
             }
         } catch (error) {
             logger.error('Ошибка при загрузке вакансий:', error);
             this.#jobs = [];
         }
-    }
+    };
 
     /**
      * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
@@ -67,16 +87,6 @@ export class JobCatalog {
         this.self.remove();
     };
 
-    #addEventListeners = () => {
-        if (this.#createResumeLink) {
-            this.#createResumeLink.addEventListener('click', (e: Event) => {
-                e.preventDefault();
-                if (store.data.authorized && store.data.user.role === 'applicant') router.go('/createResume');
-                else if (!store.data.authorized) router.go('/auth')
-            });
-        }
-    };
-
     /**
      * Выбор другой категории
      * @param {string} name - название выбранной категории
@@ -86,16 +96,17 @@ export class JobCatalog {
         if (this.#categories) {
             this.#categories.forEach((c) => {
                 if (c.textContent === name) {
-                    c.classList.add('job_category__badge--active')
-                    const element = this.self.querySelector('.job_category__badge--active') as HTMLElement
-                    const parent = element.parentElement
-                    parent?.removeChild(c)
-                    parent?.insertBefore(element, parent?.firstChild as HTMLElement)
-                }
-                else c.classList.remove('job_category__badge--active')
-            })
+                    c.classList.add('job_category__badge--active');
+                    const element = this.self.querySelector(
+                        '.job_category__badge--active',
+                    ) as HTMLElement;
+                    const parent = element.parentElement;
+                    parent?.removeChild(c);
+                    parent?.insertBefore(element, parent?.firstChild as HTMLElement);
+                } else c.classList.remove('job_category__badge--active');
+            });
         }
-    }
+    };
 
     /**
      * Поиск вакансии
@@ -103,10 +114,10 @@ export class JobCatalog {
      * @returns {void}
      */
     readonly #searchVacancy = async (query: string) => {
-        if (query === store.data.vacancySearch) return
-        store.data.vacancySearch = query
-        router.go('/catalog')
-    }
+        if (query === store.data.vacancySearch) return;
+        store.data.vacancySearch = query;
+        router.go('/catalog');
+    };
 
     /**
      * Рендеринг карточек вакансий хранящихся в #jobs
@@ -120,10 +131,10 @@ export class JobCatalog {
             if (this.#jobs.length === 0 && store.data.vacancyOffset === 0) {
                 this.#jobContainer.textContent = 'Нет вакансий';
             }
-            this.#paginationButton = document.getElementById('pagination_button') as HTMLElement
-            if (this.#jobs.length < store.data.vacancyLimit) this.#paginationButton?.remove()
+            this.#paginationButton = document.getElementById('pagination_button') as HTMLElement;
+            if (this.#jobs.length < store.data.vacancyLimit) this.#paginationButton?.remove();
         }
-    }
+    };
 
     /**
      * Навешивание обработчиков
@@ -132,49 +143,52 @@ export class JobCatalog {
         if (this.#createResumeLink) {
             this.#createResumeLink.addEventListener('click', (e: Event) => {
                 e.preventDefault();
-                if (store.data.authorized && store.data.user.role === 'applicant') router.go('/createResume');
-                else if (!store.data.authorized) router.go('/auth')
+                if (store.data.authorized && store.data.user.role === 'applicant')
+                    router.go('/createResume');
+                else if (!store.data.authorized) router.go('/auth');
             });
         }
-        this.#categories = document.querySelectorAll('.job_category__badge')
+        this.#categories = document.querySelectorAll('.job_category__badge');
         if (this.#categories) {
             this.#categories.forEach((category) => {
                 category.addEventListener('click', () => {
                     if (category.textContent) {
-                        this.#setCategory(category.textContent)
+                        this.#setCategory(category.textContent);
                         if (store.data.vacancyCategory === category.textContent) {
-                            store.data.vacancyCategory = ''
-                            router.go('/catalog')
+                            store.data.vacancyCategory = '';
+                            router.go('/catalog');
                         } else {
-                            store.data.vacancyCategory = category.textContent
-                            router.go('/catalog')
+                            store.data.vacancyCategory = category.textContent;
+                            router.go('/catalog');
                         }
                     }
-                })
-            })
+                });
+            });
         }
-        this.#searchForm = document.forms.namedItem('vacancy_search') as HTMLFormElement
+        this.#searchForm = document.forms.namedItem('vacancy_search') as HTMLFormElement;
         if (this.#searchForm) {
             this.#searchForm.addEventListener('submit', (e: Event) => {
-                e.preventDefault()
+                e.preventDefault();
                 if (this.#searchForm) {
-                    const searchField = this.#searchForm.elements.namedItem('search') as HTMLInputElement
-                    const value = searchField.value.trim()
-                    this.#searchVacancy(value)
+                    const searchField = this.#searchForm.elements.namedItem(
+                        'search',
+                    ) as HTMLInputElement;
+                    const value = searchField.value.trim();
+                    this.#searchVacancy(value);
                 }
-            })
+            });
         }
-        this.#paginationButton = document.getElementById('pagination_button') as HTMLElement
+        this.#paginationButton = document.getElementById('pagination_button') as HTMLElement;
         if (this.#paginationButton) {
             this.#paginationButton.addEventListener('click', async () => {
-                store.data.vacancyOffset += store.data.vacancyLimit
+                store.data.vacancyOffset += store.data.vacancyLimit;
                 try {
-                    await this.#getVacancy()
+                    await this.#getVacancy();
                 } catch {
-                    this.#paginationButton?.remove()
+                    this.#paginationButton?.remove();
                 }
-                this.#renderVacancy()
-            })
+                this.#renderVacancy();
+            });
         }
     };
 
@@ -183,20 +197,23 @@ export class JobCatalog {
      */
     render = async () => {
         logger.info('JobCatalog render method called');
-        this.#parent.insertAdjacentHTML('beforeend', template({
-            search: store.data.vacancySearch,
-        }));
+        this.#parent.insertAdjacentHTML(
+            'beforeend',
+            template({
+                search: store.data.vacancySearch,
+            }),
+        );
         const filter = new JobCatalogFilter(this.self.querySelector('.jobs_filter') as HTMLElement);
         filter.render();
         this.#createResumeLink = this.self.querySelector('.info__link') as HTMLLinkElement;
         this.#jobContainer = this.self.querySelector('.jobs_list') as HTMLElement;
-        this.#renderVacancy()
+        this.#renderVacancy();
         if (store.data.vacancyCategory !== '') {
-            this.#categories = document.querySelectorAll('.job_category__badge')
-            if (this.#categories) this.#setCategory(store.data.vacancyCategory)
+            this.#categories = document.querySelectorAll('.job_category__badge');
+            if (this.#categories) this.#setCategory(store.data.vacancyCategory);
         }
         this.#addEventListeners();
-        const burger = new BurgerMenu(this.self, JobCatalogFilter)
-        burger.render()
+        const burger = new BurgerMenu(this.self, JobCatalogFilter);
+        burger.render();
     };
 }

@@ -33,52 +33,54 @@ export class PollForm {
      */
     addEventListeners = () => {
         if (this.self) {
-            this.#closeButton = this.self.querySelector('.poll__close')
-            this.#submitButton = this.self.querySelector('.job__button')
-            this.#starsButtons = this.self.querySelectorAll('.poll__star')
+            this.#closeButton = this.self.querySelector('.poll__close');
+            this.#submitButton = this.self.querySelector('.job__button');
+            this.#starsButtons = this.self.querySelectorAll('.poll__star');
             if (this.#closeButton) {
                 this.#closeButton.addEventListener('click', () => {
-                    console.log("POLL FORM: CLOSE")
+                    logger.info('POLL FORM: CLOSE');
                     // Отправка события о закрытии iframe
-                    window.parent.postMessage("CLOSE", '*');
-                })
+                    window.parent.postMessage('CLOSE', '*');
+                });
             }
             if (this.#submitButton) {
                 this.#submitButton.addEventListener('click', (e: Event) => {
                     e.preventDefault();
-                    console.log("POLL FORM: SUBMIT", this.#stars)
+                    logger.info('POLL FORM: SUBMIT', this.#stars);
                     // Отправка события о отправке голоса
-                    window.parent.postMessage({
-                        poll_id: store.data.review.poll_id,
-                        answer: this.#stars
-                    }, '*');
-                })
+                    window.parent.postMessage(
+                        {
+                            poll_id: store.data.review.poll_id,
+                            answer: this.#stars,
+                        },
+                        '*',
+                    );
+                });
             }
 
             this.#starsButtons.forEach((element) => {
                 element.addEventListener('click', () => {
-                    console.log("STAR CLICKED", element)
+                    logger.info('STAR CLICKED', element);
                     if (element.id) {
-                        const splittedId = element.id.split('_')
-                        const id = Number.parseInt(splittedId[splittedId.length - 1]) || 0
+                        const splittedId = element.id.split('_');
+                        const id = Number.parseInt(splittedId[splittedId.length - 1]) || 0;
                         this.#stars = id;
-                        this.#renderStars()
+                        this.#renderStars();
                     }
-                })
-            })
+                });
+            });
         }
 
         window.addEventListener('message', function (event) {
-            console.log("IFRAME GET", event.data)
+            logger.info('IFRAME GET', event.data);
             // Событие получения данных об опросе с основного окна
             if (event.data.poll_id && event.data.name) {
-                store.data.review.name = event.data.name
-                store.data.review.poll_id = event.data.poll_id
-                router.go('/review')
+                store.data.review.name = event.data.name;
+                store.data.review.poll_id = event.data.poll_id;
+                router.go('/review');
             }
             // Событие о ошибке при отправке
-            if (event.data === "ERROR")
-                console.log("ERROR")
+            if (event.data === 'ERROR') logger.info('ERROR');
         });
     };
 
@@ -87,20 +89,20 @@ export class PollForm {
      */
     readonly #renderStars = () => {
         for (let i = 1; i < 6; i++) {
-            const element = document.getElementById(`poll__star_${i}`)
+            const element = document.getElementById(`poll__star_${i}`);
             if (element) {
-                element.innerHTML = ''
-                let checked = true
-                if (i > this.#stars) checked = false
+                element.innerHTML = '';
+                let checked = true;
+                if (i > this.#stars) checked = false;
                 element.insertAdjacentHTML(
                     'beforeend',
                     starTemplate({
-                        checked
+                        checked,
                     }),
                 );
             }
         }
-    }
+    };
 
     /**
      * Очистка
@@ -120,11 +122,11 @@ export class PollForm {
             this.#parent.insertAdjacentHTML(
                 'beforeend',
                 template({
-                    ...store.data.review
+                    ...store.data.review,
                 }),
             );
         }
-        this.#renderStars()
+        this.#renderStars();
         this.addEventListeners();
     };
 }

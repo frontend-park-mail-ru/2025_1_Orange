@@ -52,10 +52,10 @@ export class RegistrationUser {
             return false;
         }
         this.#firstName.classList.remove('error', 'valid');
-        this.#firstName.value = this.#firstName.value.trimStart()
-        this.#error.textContent = ''
+        this.#firstName.value = this.#firstName.value.trimStart();
+        this.#error.textContent = '';
         if (this.#firstName.validity.valid === false) {
-            this.#error.textContent = customMessage(this.#firstName, this.#inputTranslation)
+            this.#error.textContent = customMessage(this.#firstName, this.#inputTranslation);
             this.#firstName.classList.add('error');
             return false;
         } else {
@@ -73,10 +73,10 @@ export class RegistrationUser {
             return false;
         }
         this.#lastName.classList.remove('error', 'valid');
-        this.#lastName.value = this.#lastName.value.trimStart()
-        this.#error.textContent = ''
+        this.#lastName.value = this.#lastName.value.trimStart();
+        this.#error.textContent = '';
         if (this.#lastName.validity.valid === false) {
-            this.#error.textContent = customMessage(this.#lastName, this.#inputTranslation)
+            this.#error.textContent = customMessage(this.#lastName, this.#inputTranslation);
             this.#lastName.classList.add('error');
             return false;
         } else {
@@ -93,7 +93,7 @@ export class RegistrationUser {
         this.#firstName = form.elements.namedItem('first_name') as HTMLInputElement;
         this.#lastName = form.elements.namedItem('last_name') as HTMLInputElement;
         this.#submitBtn = form.elements.namedItem('submit') as HTMLButtonElement;
-        this.#error = form.querySelector('.form__error') as HTMLElement
+        this.#error = form.querySelector('.form__error') as HTMLElement;
 
         form.querySelector('.form__back')?.addEventListener('click', router.back);
         this.#firstName.addEventListener('input', this.#firstNameValidate);

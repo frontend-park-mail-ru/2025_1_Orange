@@ -13,7 +13,7 @@ export class AuthService {
      * @param {string} email
      * @returns {Promise<void>}
      */
-    async checkEmailApplicant(email: string): Promise<{role: string}> {
+    async checkEmailApplicant(email: string): Promise<{ role: string }> {
         return await this.#api.request('/applicant/emailExists', 'POST', JSON.stringify({ email }));
     }
 
@@ -22,7 +22,7 @@ export class AuthService {
      * @param {string} email
      * @returns {Promise<void>}
      */
-    async checkEmailEmployer(email: string): Promise<{role: string}> {
+    async checkEmailEmployer(email: string): Promise<{ role: string }> {
         return await this.#api.request('/employer/emailExists', 'POST', JSON.stringify({ email }));
     }
 

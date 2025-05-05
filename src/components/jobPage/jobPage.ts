@@ -54,7 +54,7 @@ export class JobPage {
             const data = await api.employer.get(this.#props.employer_id);
             this.#props.employer = data;
         } catch {
-            this.#props.employer = emptyEmployer
+            this.#props.employer = emptyEmployer;
         }
     };
 
@@ -67,13 +67,10 @@ export class JobPage {
                 logger.info('resume');
                 try {
                     await api.vacancy.response(this.#props.id);
-                    const buttonsContainer = this.self.querySelector('.vacancy__buttons')
+                    const buttonsContainer = this.self.querySelector('.vacancy__buttons');
                     if (buttonsContainer) {
-                        buttonsContainer.innerHTML = ''
-                        buttonsContainer.insertAdjacentHTML(
-                            'beforeend',
-                            templateButton({}),
-                        );
+                        buttonsContainer.innerHTML = '';
+                        buttonsContainer.insertAdjacentHTML('beforeend', templateButton({}));
                     }
                 } catch {
                     logger.info('Ошибка при отправки отклика');
@@ -115,14 +112,18 @@ export class JobPage {
     render = () => {
         logger.info('JobPage render method called');
         const created_date = new Date(this.#props.created_at);
-        this.#props.created_at = created_date.toLocaleDateString('ru-RU')
+        this.#props.created_at = created_date.toLocaleDateString('ru-RU');
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
                 ...this.#props,
                 tasks: this.#props.tasks !== '' ? this.#props.tasks.split('\n') : null,
-                requirements: this.#props.requirements !== '' ? this.#props.requirements.split('\n') : null,
-                optional_requirements: this.#props.optional_requirements !== '' ? this.#props.optional_requirements.split('\n') : null,
+                requirements:
+                    this.#props.requirements !== '' ? this.#props.requirements.split('\n') : null,
+                optional_requirements:
+                    this.#props.optional_requirements !== ''
+                        ? this.#props.optional_requirements.split('\n')
+                        : null,
                 experienceTranslations,
                 workFormatTranslations,
                 employmentTranslations,

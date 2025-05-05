@@ -69,6 +69,9 @@ export class EmployerService {
      * @returns {VacancyShort}
      */
     async vacancies(id: number, offset: number, limit: number): Promise<VacancyShort[]> {
-        return this.#api.request(`/vacancy/employer/${id}/vacancies?offset=${offset}&limit=${limit}`, 'GET')
+        return this.#api.request(
+            `/vacancy/employer/${id}/vacancies?offset=${offset}&limit=${limit}`,
+            'GET',
+        );
     }
 }

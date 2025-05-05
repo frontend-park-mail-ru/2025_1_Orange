@@ -115,7 +115,7 @@ export class ProfileCompanyEdit {
             this.#confirm = document.querySelectorAll('.job__button');
             this.#uploadInput = this.#form.elements.namedItem('file_input') as HTMLInputElement;
             this.#avatar = document.querySelectorAll('.profile__avatar-img');
-            
+
             this.#form.addEventListener('input', (e: Event) => {
                 if (this.#form) {
                     formValidate(
@@ -142,14 +142,15 @@ export class ProfileCompanyEdit {
                             this.#inputTranslation,
                         )
                     ) {
-                        logger.info("FORM VALIDATE + FORM ERROR")
-                        logger.info(this.#form)
+                        logger.info('FORM VALIDATE + FORM ERROR');
+                        logger.info(this.#form);
                         return;
                     }
                     let error: HTMLElement | null = null;
-                    if (this.#confirm) error = document.getElementById('profile_submit_error') as HTMLElement
+                    if (this.#confirm)
+                        error = document.getElementById('profile_submit_error') as HTMLElement;
                     if (error) {
-                        error.textContent = ''
+                        error.textContent = '';
                     }
                     try {
                         logger.info(this.#data);
@@ -157,7 +158,7 @@ export class ProfileCompanyEdit {
                         router.go(`/profileCompany/${store.data.user.user_id}`);
                     } catch {
                         if (error) {
-                            error.textContent += 'Ошибка при обновлении информации\n'
+                            error.textContent += 'Ошибка при обновлении информации\n';
                         }
                     }
                     if (this.#uploadInput) {
@@ -172,7 +173,7 @@ export class ProfileCompanyEdit {
                             router.go(`/profileCompany/${store.data.user.user_id}`);
                         } catch {
                             if (error) {
-                                error.textContent += 'Ошибка при загрузке картинки'
+                                error.textContent += 'Ошибка при загрузке картинки';
                             }
                         }
                     }
@@ -221,6 +222,6 @@ export class ProfileCompanyEdit {
 
         this.#addEventListeners();
 
-        this.#data = this.#formGet(this.#form) as EmployerEdit
+        this.#data = this.#formGet(this.#form) as EmployerEdit;
     };
 }

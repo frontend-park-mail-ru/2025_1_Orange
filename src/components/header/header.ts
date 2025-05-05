@@ -90,7 +90,7 @@ export class Header {
         this.#pollStatisticsLink = document.getElementById('poll_statistics_page_link');
         this.#mobileVacancy = document.getElementById('mobile_vacancy');
         this.#mobileResume = document.getElementById('mobile_resume');
-        this.#mobileCreate = document.getElementById('mobile_create')
+        this.#mobileCreate = document.getElementById('mobile_create');
 
         this.#vacancyCatalogLink = document.getElementById('vacancy_catalog_link');
         this.#resumeCatalogLink = document.getElementById('resume_catalog_link');
@@ -112,8 +112,8 @@ export class Header {
                 await api.auth.logout();
                 logger.info('LOGOUT SUCCESFULLY');
                 store.reset();
-                const frame = document.getElementById('review_frame')
-                if (frame) frame.hidden = true
+                const frame = document.getElementById('review_frame');
+                if (frame) frame.hidden = true;
                 router.go('/catalog');
             } catch {
                 logger.info('ERROR LOGOUT');
@@ -190,7 +190,7 @@ export class Header {
                 } else {
                     router.go('/createVacancy');
                 }
-            })
+            });
         }
     };
 

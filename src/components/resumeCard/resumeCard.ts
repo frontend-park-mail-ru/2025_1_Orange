@@ -1,13 +1,13 @@
 import './resumeCard.sass';
 import { logger } from '../../utils/logger';
 import template from './resumeCard.handlebars';
-import type { Resume, WorkExperience } from '../../api/interfaces';
+import type { ResumeShort, WorkExperience } from '../../api/interfaces';
 import { router } from '../../router';
 import { statusTranslations } from '../../api/translations';
 
 export class ResumeCard {
     readonly #parent: HTMLElement;
-    readonly #props: Resume;
+    readonly #props: ResumeShort;
     #detailsToggleMore: HTMLElement | null = null;
     #detailsToggleLess: HTMLElement | null = null;
     #detailsWrapper: HTMLElement | null = null;
@@ -17,7 +17,7 @@ export class ResumeCard {
      * @param {HTMLElement} parent  - родительский элемент
      * @param {Resume} props - данные для рендера
      */
-    constructor(parent: HTMLElement, props: Resume) {
+    constructor(parent: HTMLElement, props: ResumeShort) {
         this.#parent = parent;
         this.#props = props;
     }
@@ -113,15 +113,20 @@ export class ResumeCard {
         logger.info('ResumeCard render method called');
 
         // Получаем последний опыт работы, если есть
-        let lastExperience : WorkExperience | null = null
-        if (this.#props.work_experiences.length !== 0) lastExperience = this.#props.work_experiences[this.#props.work_experiences.length - 1]
+        let lastExperience: WorkExperience | null = null;
+        if (this.#props.work_experiences && this.#props.work_experiences.id !== 0)
+            lastExperience = this.#props.work_experiences;
 
         // Форматируем период работы
         let workPeriod = '';
         if (lastExperience) {
-            workPeriod = lastExperience.until_now 
-                ? `${lastExperience.start_date} — по настоящее время`
-                : `${lastExperience.start_date} — ${lastExperience.end_date}`;
+            const start_date = new Date(lastExperience.start_date);
+            if (lastExperience.until_now) {
+                workPeriod = `${start_date.toLocaleDateString('ru-RU')} — по настоящее время`;
+            } else {
+                const end_date = new Date(lastExperience.end_date);
+                workPeriod = `${start_date.toLocaleDateString('ru-RU')} — ${end_date.toLocaleDateString('ru-RU')}`;
+            }
         }
 
         this.#parent.insertAdjacentHTML(

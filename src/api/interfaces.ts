@@ -92,7 +92,7 @@ export interface Vacancy {
     id: number;
     title: string;
     is_active: boolean;
-    employer_id : number;
+    employer_id: number;
     employer: Employer;
     specialization: string;
     city: string;
@@ -118,7 +118,7 @@ export interface VacancyShort {
     resume: boolean;
     id: number;
     title: string;
-    employer_id : number;
+    employer_id: number;
     employer: EmployerShort;
     specialization: string;
     city: string;
@@ -253,21 +253,21 @@ export interface ReviewResponse {
     name: string;
 }
 
-  /**
-   * Интерфейс для статистики по одному рейтингу (звезды)
-   */
-  export interface RatingStatistic {
-    stars: number
-    percentage: number
-    votes: number
-  }
-  
-  /**
-   * Интерфейс для статистики по одному опросу
-   */
-  export interface PollStatistic {
-    id: number
-    question: string
-    rating: number
-    stars: RatingStatistic[]
-  }
+/**
+ * Интерфейс для статистики по одному рейтингу (звезды)
+ */
+export interface RatingStatistic {
+    stars: number;
+    percentage: number;
+    votes: number;
+}
+
+/**
+ * Интерфейс для статистики по одному опросу
+ */
+export interface PollStatistic {
+    id: number;
+    question: string;
+    rating: number;
+    stars: RatingStatistic[];
+}

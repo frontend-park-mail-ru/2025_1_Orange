@@ -1,4 +1,4 @@
-import { logger } from "./utils/logger";
+import { logger } from './utils/logger';
 
 export function customMessage(
     field: HTMLInputElement | HTMLSelectElement,
@@ -11,10 +11,16 @@ export function customMessage(
     if (validity.patternMismatch) {
         return field.title || `${inputTranslation[field.name] || ''}: Неверный формат данных`;
     }
-    if (validity.tooLong && (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) {
+    if (
+        validity.tooLong &&
+        (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)
+    ) {
         return `${inputTranslation[field.name] || ''}: Слишком много данных (максимум ${field.maxLength})`;
     }
-    if (validity.tooShort && (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) {
+    if (
+        validity.tooShort &&
+        (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)
+    ) {
         return `${inputTranslation[field.name] || ''}: Слишком мало данных (минимум ${field.minLength})`;
     }
     if (validity.rangeOverflow && field instanceof HTMLInputElement) {
@@ -25,9 +31,12 @@ export function customMessage(
     }
     // Для почты и сайта
     if (validity.typeMismatch) {
-        if (field.type === 'date') return `${inputTranslation[field.name] || ''}: Введите корректную дату`;
-        if (field.type === 'mail') return `${inputTranslation[field.name] || ''}: Введите корректную почту`;
-        if (field.type === 'url') return `${inputTranslation[field.name] || ''}: Введите адрес начиная с http://`;
+        if (field.type === 'date')
+            return `${inputTranslation[field.name] || ''}: Введите корректную дату`;
+        if (field.type === 'mail')
+            return `${inputTranslation[field.name] || ''}: Введите корректную почту`;
+        if (field.type === 'url')
+            return `${inputTranslation[field.name] || ''}: Введите адрес начиная с http://`;
         return `${inputTranslation[field.name] || ''}: Неверный тип данных`;
     }
     return `${inputTranslation[field.name] || ''}: ${field.validationMessage}`;
@@ -38,7 +47,7 @@ export function fieldValidate(
     inputTranslation: Record<string, string>,
 ): boolean {
     const error = field.closest('fieldset')?.querySelector('[class$="__error"]') as HTMLElement;
-    logger.info(error)
+    logger.info(error);
     field.classList.remove('error');
     field.classList.remove('valid');
     if (field.type !== 'file') field.value = field.value.trimStart();
