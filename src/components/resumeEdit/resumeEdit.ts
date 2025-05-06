@@ -7,7 +7,7 @@ import { api } from '../../api/api';
 import { store } from '../../store';
 import { router } from '../../router';
 import { WorkingExperience } from '../workingExperience/workingExperience';
-import { fieldValidate } from '../../forms';
+import { fieldValidate, formValidate } from '../../forms';
 
 export class ResumeEdit {
     readonly #parent: HTMLElement;
@@ -282,7 +282,7 @@ export class ResumeEdit {
                     if (element.tagName === 'FORM') {
                         logger.info('TRUE', element);
                         const form = element as HTMLFormElement;
-                        if (form.checkValidity()) {
+                        if (fieldValidate(form.elements[1] as HTMLInputElement, this.#inputTranslation)) {
                             this.#data.work_experiences.push(
                                 this.#get(form) as WorkExperienceCreate,
                             );
