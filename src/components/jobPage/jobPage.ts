@@ -64,7 +64,11 @@ export class JobPage {
     readonly #addEventListeners = () => {
         if (this.#resumeButton) {
             const handleResumeClick = async () => {
-                logger.info('resume');
+                const error = this.self.querySelector('.job__error') as HTMLElement;
+                if (error) {
+                    error.hidden = true;
+                    error.textContent = '';
+                }
                 try {
                     await api.vacancy.response(this.#props.id);
                     const buttonsContainer = this.self.querySelector('.vacancy__buttons');
@@ -73,7 +77,10 @@ export class JobPage {
                         buttonsContainer.insertAdjacentHTML('beforeend', templateButton({}));
                     }
                 } catch {
-                    logger.info('Ошибка при отправки отклика');
+                    if (error) {
+                        error.hidden = false;
+                        error.textContent = 'Ошибка при отправке отклика';
+                    }
                 }
             };
             this.#resumeButton.addEventListener('click', handleResumeClick);

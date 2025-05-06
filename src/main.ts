@@ -26,7 +26,7 @@ api.auth
     });
 
 navigator.serviceWorker
-    .register('/sw.js', { scope: '/' })
+    .register('./sw.js', { scope: '/' })
     .then(function (registration) {
         // Registration was successful
         logger.info('SW registration OK:', registration);
