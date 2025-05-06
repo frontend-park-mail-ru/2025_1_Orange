@@ -51,6 +51,7 @@ export function fieldValidate(
     field.classList.remove('error');
     field.classList.remove('valid');
     if (field.type !== 'file') field.value = field.value.trimStart();
+    if (field.type === 'date' && field.required === false) return true
     if (!field.validity.valid) {
         logger.info(field);
         if (document.activeElement === field && field.value !== '' && field.value !== '0')

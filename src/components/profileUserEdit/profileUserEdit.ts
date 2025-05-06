@@ -243,7 +243,7 @@ export class ProfileUserEdit {
         }
 
         if (this.#sex) {
-            this.#sex.value = this.#data?.sex ?? 'M';
+            this.#sex.value = this.#defaultData?.sex ?? 'M';
         }
 
         this.#avatar = document.querySelectorAll('.profile__avatar-img');

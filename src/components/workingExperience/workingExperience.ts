@@ -2,11 +2,14 @@ import template from './workingExperience.handlebars'; // Шаблон Handlebar
 import { logger } from '../../utils/logger';
 import { WorkExperience } from '../../api/interfaces';
 import { emptyWorkExperience } from '../../api/empty';
-import { customMessage } from '../../forms';
+import { fieldValidate } from '../../forms';
+import { toInputDate } from '../../utils/date';
+
 
 export class WorkingExperience {
     readonly #parent: HTMLElement;
     readonly #defaultData: WorkExperience;
+    readonly #birth_date: string;
     #form: HTMLFormElement | null = null;
 
     #newExperience: HTMLButtonElement | null = null;
@@ -18,12 +21,14 @@ export class WorkingExperience {
         parent: HTMLElement,
         id: number,
         default_data: WorkExperience = emptyWorkExperience,
+        birth_date: string = '0001-01-01T00:00:00Z'
     ) {
         this.#parent = parent;
         this.#defaultData = default_data;
         if (default_data === emptyWorkExperience) {
             this.#defaultData.id = id;
         }
+        this.#birth_date = birth_date
     }
 
     readonly #inputTranslation: Record<string, string> = {
@@ -33,23 +38,6 @@ export class WorkingExperience {
         start_date: 'Начало работы',
         end_date: 'Окончание работы',
     };
-
-    #fieldValidate(
-        field: HTMLInputElement | HTMLSelectElement,
-        errorElement: HTMLElement,
-    ): boolean {
-        field.classList.remove('error');
-        field.classList.remove('valid');
-        if (!field.validity.valid) {
-            if (document.activeElement === field && field.value !== '' && field.value !== '0')
-                field.classList.add('error');
-            errorElement.textContent = customMessage(field, this.#inputTranslation);
-            errorElement.style.display = 'block';
-            return false;
-        }
-        if (field.validity.valid) field.classList.add('valid');
-        return true;
-    }
 
     #formValidate(element: HTMLElement): boolean {
         const fieldset = element.closest('form') as HTMLFormElement;
@@ -61,7 +49,7 @@ export class WorkingExperience {
                 errorElement.style.display = 'none';
 
                 if (['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName)) {
-                    if (!this.#fieldValidate(element as HTMLInputElement, errorElement)) {
+                    if (!fieldValidate(element as HTMLInputElement, this.#inputTranslation)) {
                         return false;
                     }
                 }
@@ -73,7 +61,7 @@ export class WorkingExperience {
                 let valid = true;
 
                 fields.forEach((field) => {
-                    if (valid && !this.#fieldValidate(field, errorElement)) {
+                    if (valid && !fieldValidate(field, this.#inputTranslation)) {
                         valid = false;
                     }
                 });
@@ -171,11 +159,19 @@ export class WorkingExperience {
      */
     render = () => {
         logger.info('ResumeEdit render method called');
+        const minWorkDate = new Date(Date.now())
+        minWorkDate.setFullYear(minWorkDate.getFullYear() - 10)
+        if (this.#defaultData && this.#birth_date !== '0001-01-01T00:00:00Z') {
+            const birth_date = new Date(this.#birth_date);
+            minWorkDate.setFullYear(birth_date.getFullYear() + 14);
+        }
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
                 ...this.#defaultData,
                 isNew: this.#defaultData === emptyWorkExperience,
+                maxDate: toInputDate(new Date(Date.now())),
+                minDate: toInputDate(minWorkDate)
             }),
         );
         this.#form = this.self as HTMLFormElement;

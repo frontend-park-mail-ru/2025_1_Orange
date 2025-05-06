@@ -322,7 +322,9 @@ export class ResumeEdit {
     render = () => {
         logger.info('ResumeEdit render method called');
         const minGraduatingDate = new Date();
-        minGraduatingDate.setFullYear(minGraduatingDate.getFullYear() - 3);
+        const maxGraduatingDate = new Date();
+        minGraduatingDate.setFullYear(minGraduatingDate.getFullYear() - 50);
+        maxGraduatingDate.setFullYear(maxGraduatingDate.getFullYear() + 5);
 
         if (
             this.#defaultData &&
@@ -348,6 +350,7 @@ export class ResumeEdit {
                 graduation_year: this.#defaultData.graduation_year.split('-')[0],
                 min_year: this.#defaultData.applicant.birth_date,
                 minGraduatingDate: minGraduatingDate.getFullYear(),
+                maxGraduatingDate: maxGraduatingDate.getFullYear(),
             }),
         );
         this.#form = document.forms.namedItem('resume_edit') as HTMLFormElement;
