@@ -5,6 +5,7 @@ import { store } from '../../store';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { formValidate } from '../../forms';
+import notification from '../notificationContainer/notificationContainer';
 
 export class ProfileCompanyEdit {
     readonly #parent: HTMLElement;
@@ -55,6 +56,7 @@ export class ProfileCompanyEdit {
             const data = await api.employer.get(this.#id);
             this.#defaultData = data;
         } catch {
+            notification.add('FAIL', `Не удалось загрузить страницу`);
             logger.info('Не удалось загрузить страницу');
             router.back();
         }
@@ -156,7 +158,9 @@ export class ProfileCompanyEdit {
                         logger.info(this.#data);
                         if (this.#data) await api.employer.update(this.#data);
                         router.go(`/profileCompany/${store.data.user.user_id}`);
+                        notification.add('OK', `Успешно обновилась информация в профиле`);
                     } catch {
+                        notification.add('FAIL', `Ошибка при обновлении профиля`);
                         if (error) {
                             error.textContent += 'Ошибка при обновлении информации\n';
                         }
@@ -171,7 +175,9 @@ export class ProfileCompanyEdit {
                         try {
                             await api.employer.logo(formData);
                             router.go(`/profileCompany/${store.data.user.user_id}`);
+                            notification.add('OK', `Логотип успешно обновлён`);
                         } catch {
+                            notification.add('FAIL', `Ошибка при загрузки логотипа`);
                             if (error) {
                                 error.textContent += 'Ошибка при загрузке картинки';
                             }

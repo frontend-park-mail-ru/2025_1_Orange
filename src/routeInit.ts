@@ -30,7 +30,7 @@ const PollLogic = (parent: ParentNode) => {
     frame.hidden = true;
     parent.appendChild(frame);
     SuperTimer.start(async () => {
-        const frame = document.getElementById('review_frame') as HTMLIFrameElement;
+        /*const frame = document.getElementById('review_frame') as HTMLIFrameElement;
         if (frame) {
             if (!store.data.authorized) frame.hidden = true;
             if (store.data.review.poll_id === 0 && store.data.authorized) {
@@ -42,7 +42,7 @@ const PollLogic = (parent: ParentNode) => {
                     logger.info(error);
                 }
             }
-        }
+        }*/
     }, 10);
     window.addEventListener('message', async (event) => {
         if (event.data === 'CLOSE') {

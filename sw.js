@@ -1,11 +1,9 @@
-import logger from './src/utils/logger';
-
-const URLS = ['./index.html', './assets'];
+const URLS = ['./index.html'];
 // index.html - html в бандлере
 // assets - папка где хранится js и css
 
-this.addEventListener('install', (event) => {
-    logger.info('SW: INSTALLED!');
+self.addEventListener('install', (event) => {
+    console.log('SW: INSTALLED!');
 
     event.waitUntil(
         caches
@@ -14,14 +12,14 @@ this.addEventListener('install', (event) => {
                 return cache.addAll(URLS);
             })
             .catch((err) => {
-                logger.info(err);
+                console.log(err);
                 throw err;
             }),
     );
 });
 
-this.addEventListener('fetch', (event) => {
-    event.waitUntil(async () => {
+self.addEventListener('fetch', (event) => {
+    event.respondWith(async () => {
         const request = new URL(event.request.url);
         // Проверяем, есть ли запрашиваемый ресурс в кэше
         const cachedResponse = await caches.match(request);
@@ -40,10 +38,11 @@ this.addEventListener('fetch', (event) => {
                 cache.put(request, response);
                 return response;
             } catch {
-                logger.info('SW ERROR');
+                console.log('SW ERROR');
             }
         } catch {
-            logger.info('NETWORK ERROR');
+            console.log('NETWORK ERROR');
         }
+        return new Response();
     });
 });

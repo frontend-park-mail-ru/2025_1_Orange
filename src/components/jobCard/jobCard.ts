@@ -7,6 +7,9 @@ import { router } from '../../router';
 import { employmentTranslations, workFormatTranslations } from '../../api/translations';
 import { api } from '../../api/api';
 import { store } from '../../store';
+import { DialogContainer } from '../dialog/dialog';
+import { NoResumeDialog } from '../noResumeDialog/noResumeDialog';
+import notification from '../notificationContainer/notificationContainer';
 
 export class JobCard {
     readonly #parent: HTMLElement;
@@ -35,6 +38,9 @@ export class JobCard {
      * Навешивание обработчиков
      */
     readonly #addEventListeners = () => {
+        this.#resumeButton = document.getElementById(
+            `vacancy_${this.#props.id}_resume`,
+        ) as HTMLElement;
         this.self.addEventListener('click', (e: Event) => {
             const target = e.target as HTMLElement;
             // Если клик не на кнопке
@@ -63,11 +69,14 @@ export class JobCard {
                         // Убираем обработчик события после успешного действия
                         this.#resumeButton.removeEventListener('click', handleResumeClick);
                     }
+                    notification.add(
+                        'OK',
+                        `Успешный отклик на вакансию`,
+                        `Вы откликнулсь на вакансию ${this.#props.title}`,
+                    );
                 } catch {
-                    if (error) {
-                        error.hidden = false;
-                        error.textContent = 'Ошибка при отправке отклика';
-                    }
+                    const dialog = new DialogContainer(this.#parent, 'НетРезюме', NoResumeDialog);
+                    dialog.render();
                 }
             };
             this.#resumeButton.addEventListener('click', handleResumeClick);
@@ -100,13 +109,9 @@ export class JobCard {
                 ...this.#props,
                 workFormatTranslations,
                 employmentTranslations,
+                isApplicant: store.data.authorized && store.data.user.role === 'applicant',
             }),
         );
-
-        this.#resumeButton = document.getElementById(
-            `vacancy_${this.#props.id}_resume`,
-        ) as HTMLElement;
-
         this.#addEventListeners();
     };
 }

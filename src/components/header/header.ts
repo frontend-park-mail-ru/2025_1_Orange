@@ -4,6 +4,7 @@ import { router } from '../../router';
 import { logger } from '../../utils/logger';
 import template from './header.handlebars';
 import { api } from '../../api/api';
+import notification from '../notificationContainer/notificationContainer';
 
 export class Header {
     readonly #parent: HTMLElement;
@@ -111,12 +112,14 @@ export class Header {
             try {
                 await api.auth.logout();
                 logger.info('LOGOUT SUCCESFULLY');
+                notification.add('OK', `Успешно вышли из аккаунта`);
                 store.reset();
                 const frame = document.getElementById('review_frame');
                 if (frame) frame.hidden = true;
                 router.go('/catalog');
             } catch {
                 logger.info('ERROR LOGOUT');
+                notification.add('FAIL', `Ошибка при выходе из аккаунта`);
                 router.go('/catalog');
             }
         });

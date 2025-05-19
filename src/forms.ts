@@ -6,7 +6,7 @@ export function customMessage(
 ): string {
     const validity = field.validity;
     if (validity.valueMissing) {
-        return `Заполните поле ${inputTranslation[field.name] || ''}`;
+        return `Заполните поле ${inputTranslation[field.name] || field.name}`;
     }
     if (validity.patternMismatch) {
         return field.title || `${inputTranslation[field.name] || ''}: Неверный формат данных`;
@@ -18,8 +18,8 @@ export function customMessage(
         return `${inputTranslation[field.name] || ''}: Слишком много данных (максимум ${field.maxLength})`;
     }
     if (
-        validity.tooShort &&
-        (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)
+        (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) &&
+        field.value.trim().length < field.minLength
     ) {
         return `${inputTranslation[field.name] || ''}: Слишком мало данных (минимум ${field.minLength})`;
     }
@@ -51,7 +51,7 @@ export function fieldValidate(
     field.classList.remove('error');
     field.classList.remove('valid');
     if (field.type !== 'file') field.value = field.value.trimStart();
-    if (field.type === 'date' && field.required === false) return true
+    if (field.type === 'date' && field.required === false) return true;
     if (!field.validity.valid) {
         logger.info(field);
         if (document.activeElement === field && field.value !== '' && field.value !== '0')

@@ -7,7 +7,8 @@ import { api } from '../../api/api';
 import { store } from '../../store';
 import { router } from '../../router';
 import { WorkingExperience } from '../workingExperience/workingExperience';
-import { fieldValidate, formValidate } from '../../forms';
+import { fieldValidate } from '../../forms';
+import notification from '../notificationContainer/notificationContainer';
 
 export class ResumeEdit {
     readonly #parent: HTMLElement;
@@ -54,6 +55,7 @@ export class ResumeEdit {
         educational_institution: 'Учебное заведение',
         graduation_year: 'Год выпуска',
         about_me: 'Обо мне',
+        profession: 'Профессия',
     };
 
     /**
@@ -282,7 +284,12 @@ export class ResumeEdit {
                     if (element.tagName === 'FORM') {
                         logger.info('TRUE', element);
                         const form = element as HTMLFormElement;
-                        if (fieldValidate(form.elements[1] as HTMLInputElement, this.#inputTranslation)) {
+                        if (
+                            fieldValidate(
+                                form.elements[1] as HTMLInputElement,
+                                this.#inputTranslation,
+                            )
+                        ) {
                             this.#data.work_experiences.push(
                                 this.#get(form) as WorkExperienceCreate,
                             );
@@ -302,9 +309,11 @@ export class ResumeEdit {
                     logger.info(this.#data);
                     if (this.#id !== 0) {
                         const data = await api.resume.update(this.#id, this.#data);
+                        notification.add('OK', `Резюме успешно обновлено`);
                         router.go(`/resume/${data.id}`);
                     } else {
                         const data = await api.resume.create(this.#data);
+                        notification.add('OK', `Резюме успешно создано`);
                         router.go(`/resume/${data.id}`);
                     }
                 } catch {

@@ -1,9 +1,10 @@
-const URLS = ['./index.html', './assets/'];
+const URLS = ['./index.html'];
 // index.html - html в бандлере
 // assets - папка где хранится js и css
 
-this.addEventListener('install', (event) => {
+self.addEventListener('install', (event) => {
     console.log('SW: INSTALLED!');
+
     event.waitUntil(
         caches
             .open('MY-CACHE')
@@ -11,14 +12,14 @@ this.addEventListener('install', (event) => {
                 return cache.addAll(URLS);
             })
             .catch((err) => {
-                console.log(err)
+                console.log(err);
                 throw err;
             }),
     );
 });
 
-this.addEventListener('fetch', (event) => {
-    event.waitUntil(async () => {
+self.addEventListener('fetch', (event) => {
+    event.respondWith()(async () => {
         const request = new URL(event.request.url);
         // Проверяем, есть ли запрашиваемый ресурс в кэше
         const cachedResponse = await caches.match(request);
@@ -37,10 +38,11 @@ this.addEventListener('fetch', (event) => {
                 cache.put(request, response);
                 return response;
             } catch {
-                console.log('SW ERROR');
+                console.info('SW ERROR');
             }
         } catch {
-            console.log('NETWORK ERROR');
+            console.info('NETWORK ERROR');
         }
+        return new Response();
     });
 });

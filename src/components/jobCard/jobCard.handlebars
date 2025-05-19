@@ -42,7 +42,9 @@
                 {{#if responded}}
                 {{> partials/jobCardResponded }}
                 {{else}}
+                    {{#if isApplicant}}
                     <div class="job__button" id="vacancy_{{id}}_resume">Откликнуться</div>
+                    {{/if}}
                 {{/if}}
             </div>
             <div class="job__statistics">

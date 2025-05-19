@@ -91,7 +91,11 @@ export class ProfileUserEdit {
             switch (key) {
                 case 'birth_date': {
                     const date = new Date(value as string);
-                    json[key] = date.toISOString();
+                    try {
+                        json[key] = date.toISOString();
+                    } catch {
+                        json[key] = '';
+                    }
                     break;
                 }
                 case 'file_input':

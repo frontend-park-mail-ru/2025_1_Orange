@@ -9,12 +9,16 @@ import { DeleteButton } from '../deleteButton/deleteButton';
 import { router } from '../../router';
 import { store } from '../../store';
 import { emptyResume } from '../../api/empty';
+import { DialogContainer } from '../dialog/dialog';
+import { DeleteDialog } from '../deleteDialog/deleteDialog';
 
 export class ResumePage {
     readonly #parent: HTMLElement;
     #data: Resume = emptyResume;
     #id: number = 0;
     #editButton: NodeListOf<HTMLElement> = [];
+    #deleteContainer: HTMLElement | null = null;
+    #deleteButton: HTMLElement | null = null;
 
     constructor(parent: HTMLElement) {
         this.#parent = parent;
@@ -71,12 +75,30 @@ export class ResumePage {
      * Навешивание событий на кнопки
      */
     readonly #addEventListeners = () => {
-        this.#editButton = this.self.querySelectorAll('.job__button_second');
+        this.#deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
+        this.#deleteButton = this.self.querySelector('.job__button--delete');
+        this.#editButton = this.self.querySelectorAll('.resume_info__edit');
         this.#editButton.forEach((element) => {
             element.addEventListener('click', () => {
                 router.go(`/resumeEdit/${this.#id}`);
             });
         });
+        if (this.#deleteButton)
+            this.#deleteButton.addEventListener('click', () => {
+                if (this.#deleteContainer) {
+                    const dialog = new DialogContainer(
+                        this.#deleteContainer,
+                        'Резюме',
+                        DeleteDialog,
+                        {
+                            title: 'Удалить резюме?',
+                            message: 'Резюме удалится навсегда без возможности его восстановления',
+                            delete: this.#delete,
+                        },
+                    );
+                    dialog.render();
+                }
+            });
     };
 
     /**
@@ -110,17 +132,6 @@ export class ResumePage {
                     this.#data.applicant.telegram !== '',
             }),
         );
-
-        if (
-            store.data.user.role === 'applicant' &&
-            this.#data.applicant.id === store.data.user.user_id
-        ) {
-            const deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
-            if (deleteContainer) {
-                const deleteButton = new DeleteButton(deleteContainer, 'Резюме', this.#delete);
-                deleteButton.render();
-            }
-        }
 
         const experienceContainer = this.self.querySelector(
             '.resume_info__experience',

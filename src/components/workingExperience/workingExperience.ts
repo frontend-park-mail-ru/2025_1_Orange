@@ -5,7 +5,6 @@ import { emptyWorkExperience } from '../../api/empty';
 import { fieldValidate } from '../../forms';
 import { toInputDate } from '../../utils/date';
 
-
 export class WorkingExperience {
     readonly #parent: HTMLElement;
     readonly #defaultData: WorkExperience;
@@ -21,14 +20,14 @@ export class WorkingExperience {
         parent: HTMLElement,
         id: number,
         default_data: WorkExperience = emptyWorkExperience,
-        birth_date: string = '0001-01-01T00:00:00Z'
+        birth_date: string = '0001-01-01T00:00:00Z',
     ) {
         this.#parent = parent;
         this.#defaultData = default_data;
         if (default_data === emptyWorkExperience) {
             this.#defaultData.id = id;
         }
-        this.#birth_date = birth_date
+        this.#birth_date = birth_date;
     }
 
     readonly #inputTranslation: Record<string, string> = {
@@ -159,8 +158,8 @@ export class WorkingExperience {
      */
     render = () => {
         logger.info('ResumeEdit render method called');
-        const minWorkDate = new Date(Date.now())
-        minWorkDate.setFullYear(minWorkDate.getFullYear() - 10)
+        const minWorkDate = new Date(Date.now());
+        minWorkDate.setFullYear(minWorkDate.getFullYear() - 10);
         if (this.#defaultData && this.#birth_date !== '0001-01-01T00:00:00Z') {
             const birth_date = new Date(this.#birth_date);
             minWorkDate.setFullYear(birth_date.getFullYear() + 14);
@@ -171,7 +170,7 @@ export class WorkingExperience {
                 ...this.#defaultData,
                 isNew: this.#defaultData === emptyWorkExperience,
                 maxDate: toInputDate(new Date(Date.now())),
-                minDate: toInputDate(minWorkDate)
+                minDate: toInputDate(minWorkDate),
             }),
         );
         this.#form = this.self as HTMLFormElement;

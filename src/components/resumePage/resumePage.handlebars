@@ -13,7 +13,7 @@
 
     <div class="resume_sidebar__actions-mobile">
       {{#if owner}}
-      <div class="job__button_second">
+      <div class="job__button_second resume_info__edit">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
           viewBox="0 0 16 16">
           <path
@@ -24,7 +24,7 @@
         <span>Редактировать</span>
       </div>
       {{/if}}
-      <div class="job__button">
+      <div class="job__button resume_info__pdf">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
           class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
           <path
@@ -61,11 +61,12 @@
       <div class="resume_info__experience">
       </div>
     </div>
-
+    {{#if owner}}
     <!-- Кнопка удаления резюме -->
     <div id="delete_button">
-
+      <div class="job__button job__button--delete">Удалить резюме</div>
     </div>
+    {{/if}}
 
   </div>
 
@@ -74,7 +75,7 @@
     <!-- Кнопки действий -->
     <div class="resume_sidebar__actions">
       {{#if owner}}
-      <div class="job__button_second">
+      <div class="job__button_second resume_info__edit">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
           viewBox="0 0 16 16">
           <path
@@ -85,7 +86,7 @@
         <span>Редактировать</span>
       </div>
       {{/if}}
-      <div class="job__button">
+      <div class="job__button resume_info__pdf">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
           class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
           <path

@@ -14,6 +14,9 @@ import { emptyEmployer, emptyVacancy } from '../../api/empty';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { DeleteButton } from '../deleteButton/deleteButton';
+import { DialogContainer } from '../dialog/dialog';
+import { NoResumeDialog } from '../noResumeDialog/noResumeDialog';
+import notification from '../notificationContainer/notificationContainer';
 
 export class JobPage {
     readonly #parent: HTMLElement;
@@ -76,11 +79,14 @@ export class JobPage {
                         buttonsContainer.innerHTML = '';
                         buttonsContainer.insertAdjacentHTML('beforeend', templateButton({}));
                     }
+                    notification.add(
+                        'OK',
+                        `Успешный отклик на вакансию`,
+                        `Вы откликнулсь на вакансию ${this.#props.title}`,
+                    );
                 } catch {
-                    if (error) {
-                        error.hidden = false;
-                        error.textContent = 'Ошибка при отправке отклика';
-                    }
+                    const dialog = new DialogContainer(this.#parent, 'НетРезюме', NoResumeDialog);
+                    dialog.render();
                 }
             };
             this.#resumeButton.addEventListener('click', handleResumeClick);
@@ -100,7 +106,9 @@ export class JobPage {
         try {
             await api.vacancy.delete(this.#id);
             router.back();
+            notification.add('OK', `Успешно удалили вакансию ${this.#props.title}`);
         } catch {
+            notification.add('FAIL', `Ошибка при удалении вакансии ${this.#props.title}`);
             logger.info('Что-то пошло не так');
         }
     };
