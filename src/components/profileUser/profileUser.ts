@@ -7,6 +7,7 @@ import { store } from '../../store';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { JobCard } from '../jobCard/jobCard';
+import notification from '../notificationContainer/notificationContainer';
 
 export class ProfileUser {
     readonly #parent: HTMLElement;
@@ -50,6 +51,7 @@ export class ProfileUser {
             const data = await api.applicant.get(this.#id);
             this.#data = data;
         } catch {
+            notification.add('FAIL', 'Не удалось загрузить профиль соискателя')
             logger.info('Не удалось загрузить страницу');
             router.back();
         }
@@ -155,8 +157,10 @@ export class ProfileUser {
                 response.render();
             });
         } catch {
-            if (this.#vacancyContainer)
+            if (this.#vacancyContainer) {
+                notification.add('FAIL', 'При загрузке откликов произошла ошибка')
                 this.#vacancyContainer.textContent = 'При загрузке откликов произошла ошибка';
+            }
         }
     };
 
@@ -183,6 +187,7 @@ export class ProfileUser {
         try {
             this.#resumes = await api.resume.all(0, 10);
         } catch {
+            notification.add('FAIL', 'Не удалось загрузить резюме соискателя')
             logger.info('Не удалось загрузить');
             return;
         }

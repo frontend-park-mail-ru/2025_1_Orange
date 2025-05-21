@@ -50,6 +50,7 @@ export class JobPage {
             const data = await api.vacancy.get(this.#id);
             this.#props = data;
         } catch {
+            notification.add('FAIL', 'Не удалось загрузить вакансию')
             logger.info('Не удалось загрузить страницу');
             router.back();
         }
@@ -85,8 +86,13 @@ export class JobPage {
                         `Вы откликнулсь на вакансию ${this.#props.title}`,
                     );
                 } catch {
-                    const dialog = new DialogContainer(this.#parent, 'НетРезюме', NoResumeDialog);
-                    dialog.render();
+                    if (!store.data.authorized) {
+                        const dialog = new DialogContainer(this.#parent, 'НеАвторизован', RegisterDialog);
+                        dialog.render();
+                    } else {
+                        const dialog = new DialogContainer(this.#parent, 'НетРезюме', NoResumeDialog);
+                        dialog.render();
+                    }
                 }
             };
             this.#resumeButton.addEventListener('click', handleResumeClick);

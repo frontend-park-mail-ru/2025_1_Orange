@@ -8,6 +8,7 @@ import { api } from '../../api/api';
 import { router } from '../../router';
 import { store } from '../../store';
 import { BurgerMenu } from '../burgerMenu/burgerMenu';
+import notification from '../notificationContainer/notificationContainer';
 
 export class JobCatalog {
     readonly #parent: HTMLElement;
@@ -66,6 +67,7 @@ export class JobCatalog {
                     );
             }
         } catch (error) {
+            notification.add('FAIL', 'Ошибка при загрузке вакансий')
             logger.error('Ошибка при загрузке вакансий:', error);
             this.#jobs = [];
         }

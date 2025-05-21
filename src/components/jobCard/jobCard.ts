@@ -10,6 +10,7 @@ import { store } from '../../store';
 import { DialogContainer } from '../dialog/dialog';
 import { NoResumeDialog } from '../noResumeDialog/noResumeDialog';
 import notification from '../notificationContainer/notificationContainer';
+import { RegisterDialog } from '../registerDialog/registerDialog';
 
 export class JobCard {
     readonly #parent: HTMLElement;
@@ -75,8 +76,13 @@ export class JobCard {
                         `Вы откликнулсь на вакансию ${this.#props.title}`,
                     );
                 } catch {
-                    const dialog = new DialogContainer(this.#parent, 'НетРезюме', NoResumeDialog);
-                    dialog.render();
+                    if (!store.data.authorized) {
+                        const dialog = new DialogContainer(this.#parent, 'НеАвторизован', RegisterDialog);
+                        dialog.render();
+                    } else {
+                        const dialog = new DialogContainer(this.#parent, 'НетРезюме', NoResumeDialog);
+                        dialog.render();
+                    }
                 }
             };
             this.#resumeButton.addEventListener('click', handleResumeClick);

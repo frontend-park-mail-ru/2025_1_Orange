@@ -8,6 +8,7 @@ import { api } from '../../api/api';
 import { store } from '../../store';
 import { router } from '../../router';
 import { BurgerMenu } from '../burgerMenu/burgerMenu';
+import notification from '../notificationContainer/notificationContainer';
 
 export class ResumeCatalog {
     readonly #parent: HTMLElement;
@@ -67,6 +68,7 @@ export class ResumeCatalog {
                     store.data.resumeLimit,
                 );
         } catch (error) {
+            notification.add('FAIL', 'Ошибка при загрузке резюме')
             logger.error('Ошибка при загрузке резюме:', error);
             this.#resumes = [];
         }

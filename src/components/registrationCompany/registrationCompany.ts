@@ -3,6 +3,7 @@ import { customMessage } from '../../forms';
 import { router } from '../../router';
 import { store } from '../../store';
 import { logger } from '../../utils/logger';
+import notification from '../notificationContainer/notificationContainer';
 import template from './registrationCompany.handlebars';
 
 export class RegistrationCompany {
@@ -107,8 +108,10 @@ export class RegistrationCompany {
                     const user = await api.employer.register(store.data.auth.request);
                     store.data.authorized = true;
                     store.data.user = user;
+                    notification.add('OK', 'Компания успешно зарегестрирована')
                     router.go('/catalog');
                 } catch {
+                    notification.add('FAIL', 'Ошибка при регистрации компании')
                     const error = document.querySelector('.form__error') as HTMLElement;
                     if (error) {
                         error.hidden = false;

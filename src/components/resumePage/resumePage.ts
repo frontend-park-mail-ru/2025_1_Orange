@@ -11,6 +11,7 @@ import { store } from '../../store';
 import { emptyResume } from '../../api/empty';
 import { DialogContainer } from '../dialog/dialog';
 import { DeleteDialog } from '../deleteDialog/deleteDialog';
+import notification from '../notificationContainer/notificationContainer';
 
 export class ResumePage {
     readonly #parent: HTMLElement;
@@ -40,12 +41,9 @@ export class ResumePage {
         try {
             const data = await api.resume.get(this.#id);
             this.#data = data;
-            try {
-                this.#data.applicant = await api.applicant.get(this.#data.applicant_id);
-            } catch {
-                router.back();
-            }
+            this.#data.applicant = await api.applicant.get(this.#data.applicant_id);
         } catch {
+            notification.add('FAIL', 'Не удалось загрузить резюме')
             logger.info('Не удалось загрузить страницу');
             router.back();
         }
@@ -65,8 +63,10 @@ export class ResumePage {
     readonly #delete = async () => {
         try {
             await api.resume.delete(this.#id);
+            notification.add('OK', 'Резюме успешно удалено')
             router.go('/catalog');
         } catch {
+            notification.add('FAIL', 'Не удалось удалить резюме')
             logger.info('Что-то пошло не так');
         }
     };

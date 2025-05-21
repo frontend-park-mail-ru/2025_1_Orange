@@ -114,15 +114,18 @@ export class ResumeEdit {
                 try {
                     this.#defaultData.applicant = await api.applicant.get(store.data.user.user_id);
                 } catch {
+                    notification.add('FAIL', 'Не удалось загрузить информацию о соискателе')
                     router.back();
                 }
             } catch {
+                notification.add('FAIL', 'Не удалось загрузить резюме')
                 logger.info('Не удалось загрузить резюме');
                 this.#id = 0;
                 this.#defaultData = emptyResume;
                 try {
                     this.#defaultData.applicant = await api.applicant.get(store.data.user.user_id);
                 } catch {
+                    notification.add('FAIL', 'Не удалось загрузить информацию о соискателе')
                     router.back();
                 }
             }
@@ -131,6 +134,7 @@ export class ResumeEdit {
             try {
                 this.#defaultData.applicant = await api.applicant.get(store.data.user.user_id);
             } catch {
+                notification.add('FAIL', 'Не удалось загрузить информацию о соискателе')
                 router.back();
             }
         }
@@ -317,9 +321,13 @@ export class ResumeEdit {
                         router.go(`/resume/${data.id}`);
                     }
                 } catch {
-                    if (this.#id !== 0 && error)
+                    if (this.#id !== 0 && error) {
+                        notification.add('FAIL', 'Ошибка при обновлении вакансии')
                         error.textContent = 'Ошибка при обновлении вакансии';
-                    else if (error) error.textContent = 'Ошибка при создании вакансии';
+                    } else if (error) {
+                        notification.add('FAIL', 'Ошибка при создании вакансии')
+                        error.textContent = 'Ошибка при создании вакансии';
+                    }
                 }
             });
         }

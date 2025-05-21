@@ -73,7 +73,7 @@ export class NotificationCard {
                 id: this.#id,
             }),
         );
-        setTimeout(() => this.remove(), 1000 * 10);
+        setTimeout(() => this.remove(), 1000 * 5);
         this.#addEventListeners();
     };
 }

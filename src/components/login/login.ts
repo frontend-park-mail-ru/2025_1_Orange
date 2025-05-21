@@ -2,6 +2,7 @@ import { api } from '../../api/api';
 import { router } from '../../router';
 import { store } from '../../store';
 import { logger } from '../../utils/logger';
+import notification from '../notificationContainer/notificationContainer';
 import template from './login.handlebars';
 
 /**
@@ -145,12 +146,14 @@ export class Login {
                             password: store.data.auth.request.password,
                         });
                     store.data.authorized = true;
+                    notification.add('OK', 'Вы успешно зашли в аккаунт')
                     router.go('/catalog');
                 } catch {
                     const error = document.querySelector('.form__error') as HTMLElement;
                     if (error) {
                         error.hidden = false;
                         error.textContent = 'Ошибка при авторизации';
+                        notification.add('FAIL', 'Ошибка при авторизации')
                     }
                 }
             }

@@ -5,6 +5,7 @@ import { store } from '../../store';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { formValidate } from '../../forms';
+import notification from '../notificationContainer/notificationContainer';
 
 export class ProfileUserEdit {
     readonly #parent: HTMLElement;
@@ -56,6 +57,7 @@ export class ProfileUserEdit {
             const data = await api.applicant.get(this.#id);
             this.#defaultData = data;
         } catch {
+            notification.add('FAIL', 'Не удалось загрузить информацию о профиле соискателя')
             logger.info('Не удалось загрузить страницу');
             router.back();
         }
@@ -168,6 +170,7 @@ export class ProfileUserEdit {
                             }
                         }
                     } catch {
+                        notification.add('FAIL', 'Ошибка при обновлении информации профиля')
                         if (error) {
                             error.textContent += 'Ошибка при обновлении информации\n';
                         }
@@ -181,8 +184,10 @@ export class ProfileUserEdit {
                         formData.append('avatar', image);
                         try {
                             await api.applicant.avatar(formData);
+                            notification.add('OK', 'Аватарка успешна обновлена')
                             router.go(`/profileUser/${store.data.user.user_id}`);
                         } catch {
+                            notification.add('FAIL', 'Ошибка при загрузке аватарки профиля')
                             if (error) {
                                 error.textContent += 'Ошибка при загрузке картинки';
                             }
