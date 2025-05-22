@@ -11,3 +11,10 @@ services:
       - /etc/letsencrypt/live/resumatch.tech/fullchain.pem:/etc/nginx/fullchain.pem:ro
       - /etc/letsencrypt/live/resumatch.tech/privkey.pem:/etc/nginx/privkey.pem:ro
     restart: unless-stopped
+    networks:
+      - resumatch-network
+
+networks:
+  resumatch-network:
+    external: true
+    name: 2025_1_orange_resumatch-network
