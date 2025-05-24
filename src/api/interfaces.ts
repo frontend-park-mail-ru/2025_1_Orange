@@ -289,3 +289,27 @@ export interface SalarySpecialization {
 export interface SalarySpecializationsResponse {
   specializations: SalarySpecialization[]
 }
+
+/**
+ * Интерфейс для уведомления
+ */
+export interface NotificationWS {
+  id: number
+  type: "apply" | "download_resume"
+  sender_id: number
+  receiver_id: number
+  object_id: number
+  resume_id: number
+  applicant_name: string
+  employer_name: string
+  title: string
+  is_viewed: boolean
+  created_at: string
+}
+
+/**
+ * Интерфейс для ответа API с уведомлениями
+ */
+export interface NotificationsResponse {
+  notifications: NotificationWS[]
+}

@@ -5,10 +5,13 @@ import { logger } from '../../utils/logger';
 import template from './header.handlebars';
 import { api } from '../../api/api';
 import notification from '../notificationContainer/notificationContainer';
+import { NotificationContainerWS } from '../notificationContainerWS/notificationContainerWS';
+import { notificationMocks } from '../../api/notificationMocks';
 
 export class Header {
     readonly #parent: HTMLElement;
-    #dropdownVisible: boolean = false;
+    #dropdownVisible = false;
+    #notificationsVisible = false;
     #loginButton: HTMLElement | null = null;
     #logoutButton: HTMLElement | null = null;
     #profileIcon: HTMLElement | null = null;
@@ -21,6 +24,9 @@ export class Header {
     #mobileVacancy: HTMLElement | null = null;
     #mobileResume: HTMLElement | null = null;
     #mobileCreate: HTMLElement | null = null;
+    #notificationsBell: HTMLElement | null = null;
+    #notificationsBadge: HTMLElement | null = null;
+    #notificationsContainer: NotificationContainerWS | null = null;
 
     #vacancyCatalogLink: HTMLElement | null = null;
     #resumeCatalogLink: HTMLElement | null = null;
@@ -42,10 +48,18 @@ export class Header {
     }
 
     /**
+     * Получение количества непрочитанных уведомлений
+     */
+    get unreadNotificationsCount(): number {
+        return notificationMocks.filter((n) => !n.is_viewed).length;
+    }
+
+    /**
      * Очистка
      */
     remove = () => {
         logger.info('Header remove method called');
+        document.removeEventListener('click', this.handleDocumentClick);
         this.self.remove();
     };
 
@@ -54,8 +68,14 @@ export class Header {
      */
     handleDocumentClick = (e: Event) => {
         const profileElement = this.self.querySelector('.header__profile');
+        const notificationsElement = this.self.querySelector('.header__notifications');
+
         if (profileElement && !profileElement.contains(e.target as Node) && this.#dropdownVisible) {
             this.toggleDropdown(false);
+        }
+
+        if (notificationsElement && !notificationsElement.contains(e.target as Node) && this.#notificationsVisible) {
+            this.toggleNotifications(false);
         }
     };
 
@@ -77,6 +97,50 @@ export class Header {
     };
 
     /**
+     * Переключение видимости уведомлений
+     * @param {boolean|undefined} state - принудительное состояние (true - показать, false - скрыть)
+     */
+    toggleNotifications = (state: boolean | undefined) => {
+        if (state !== undefined) {
+            this.#notificationsVisible = state;
+        } else {
+            this.#notificationsVisible = !this.#notificationsVisible;
+        }
+
+        if (this.#notificationsVisible) {
+            // Закрываем дропдаун профиля если открыт
+            this.toggleDropdown(false);
+
+            // Создаем контейнер уведомлений
+            const notificationsElement = this.self.querySelector('.header__notifications') as HTMLElement;
+            this.#notificationsContainer = new NotificationContainerWS(
+                notificationsElement,
+                notificationMocks,
+                () => this.toggleNotifications(false),
+                () => this.updateNotificationsBadge(), // Передаем колбэк для обновления бейджа
+            );
+            this.#notificationsContainer.render();
+        } else {
+            // Удаляем контейнер уведомлений
+            this.#notificationsContainer?.remove();
+            this.#notificationsContainer = null;
+        }
+    };
+
+    /**
+     * Обновление бейджа уведомлений
+     */
+    updateNotificationsBadge = () => {
+        if (this.#notificationsBadge) {
+            const count = this.unreadNotificationsCount;
+            this.#notificationsBadge.textContent = count.toString();
+            this.#notificationsBadge.classList.toggle('hidden', count === 0);
+
+            logger.info('Notifications badge updated', count);
+        }
+    };
+
+    /**
      * Обработчики кнопок
      */
     addEventListeners = () => {
@@ -92,6 +156,8 @@ export class Header {
         this.#mobileVacancy = document.getElementById('mobile_vacancy');
         this.#mobileResume = document.getElementById('mobile_resume');
         this.#mobileCreate = document.getElementById('mobile_create');
+        this.#notificationsBell = document.getElementById('notifications-bell');
+        this.#notificationsBadge = document.getElementById('notifications-badge');
 
         this.#vacancyCatalogLink = document.getElementById('vacancy_catalog_link');
         this.#resumeCatalogLink = document.getElementById('resume_catalog_link');
@@ -129,6 +195,11 @@ export class Header {
             this.toggleDropdown(undefined);
         });
 
+        this.#notificationsBell?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleNotifications(undefined);
+        });
+
         this.#createButton?.addEventListener('click', () => {
             if (store.data.authorized === false) {
                 router.go('/auth');
@@ -148,16 +219,14 @@ export class Header {
 
         if (this.#profileLink) {
             this.#profileLink.addEventListener('click', () => {
-                if (store.data.user.role === 'applicant')
-                    router.go(`/profileUser/${store.data.user.user_id}`);
+                if (store.data.user.role === 'applicant') router.go(`/profileUser/${store.data.user.user_id}`);
                 else router.go(`/profileCompany/${store.data.user.user_id}`);
             });
         }
 
         if (this.#editProfileLink) {
             this.#editProfileLink.addEventListener('click', () => {
-                if (store.data.user.role === 'applicant')
-                    router.go(`/profileUserEdit/${store.data.user.user_id}`);
+                if (store.data.user.role === 'applicant') router.go(`/profileUserEdit/${store.data.user.user_id}`);
                 else router.go(`/profileCompanyEdit/${store.data.user.user_id}`);
             });
         }
@@ -195,6 +264,9 @@ export class Header {
                 }
             });
         }
+
+        // Добавляем обработчик клика на документ
+        document.addEventListener('click', this.handleDocumentClick);
     };
 
     /**
@@ -203,13 +275,17 @@ export class Header {
     render = () => {
         logger.info('Header render method called');
 
+        const unreadCount = this.unreadNotificationsCount;
+
         this.#parent.insertAdjacentHTML(
             'beforeend',
             template({
                 ...store.data,
                 isEmployer: store.data.user.role === 'employer',
+                unreadCount: unreadCount > 0 ? unreadCount : null,
             }),
         );
         this.addEventListeners();
+        this.updateNotificationsBadge();
     };
 }
