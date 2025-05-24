@@ -271,3 +271,21 @@ export interface PollStatistic {
     rating: number;
     stars: RatingStatistic[];
 }
+
+/**
+ * Интерфейс для специализации с зарплатными вилками
+ */
+export interface SalarySpecialization {
+  id: number
+  name: string
+  minSalary: number
+  maxSalary: number
+  avgSalary: number
+}
+
+/**
+ * Интерфейс для ответа API с зарплатными вилками
+ */
+export interface SalarySpecializationsResponse {
+  specializations: SalarySpecialization[]
+}

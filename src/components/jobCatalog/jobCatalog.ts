@@ -9,6 +9,8 @@ import { router } from '../../router';
 import { store } from '../../store';
 import { BurgerMenu } from '../burgerMenu/burgerMenu';
 import notification from '../notificationContainer/notificationContainer';
+import { SalaryCarousel } from "../salaryCarousel/salaryCarousel";
+import { salarySpecializationsMock } from "../../api/salaryMocks";
 
 export class JobCatalog {
     readonly #parent: HTMLElement;
@@ -18,6 +20,7 @@ export class JobCatalog {
     #categories: NodeListOf<HTMLElement> = [];
     #searchForm: HTMLFormElement | null = null;
     #paginationButton: HTMLElement | null = null;
+    #salaryCarousel: SalaryCarousel | null = null
 
     /**
      * Конструктор класса
@@ -139,6 +142,18 @@ export class JobCatalog {
     };
 
     /**
+   * Инициализация карусели зарплат
+   */
+    readonly #initSalaryCarousel = () => {
+        const salaryCarouselContainer = this.self.querySelector(".salary_carousel_container") as HTMLElement
+        if (salaryCarouselContainer) {
+        this.#salaryCarousel = new SalaryCarousel(salaryCarouselContainer)
+        this.#salaryCarousel.setSpecializations(salarySpecializationsMock)
+        this.#salaryCarousel.render()
+        }
+    }
+
+    /**
      * Навешивание обработчиков
      */
     readonly #addEventListeners = () => {
@@ -207,6 +222,9 @@ export class JobCatalog {
         );
         const filter = new JobCatalogFilter(this.self.querySelector('.jobs_filter') as HTMLElement);
         filter.render();
+        // Инициализация карусели зарплат
+        this.#initSalaryCarousel()
+        
         this.#createResumeLink = this.self.querySelector('.info__link') as HTMLLinkElement;
         this.#jobContainer = this.self.querySelector('.jobs_list') as HTMLElement;
         this.#renderVacancy();
