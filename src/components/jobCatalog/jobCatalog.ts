@@ -144,12 +144,16 @@ export class JobCatalog {
     /**
    * Инициализация карусели зарплат
    */
-    readonly #initSalaryCarousel = () => {
+    readonly #initSalaryCarousel = async () => {
         const salaryCarouselContainer = this.self.querySelector(".salary_carousel_container") as HTMLElement
         if (salaryCarouselContainer) {
         this.#salaryCarousel = new SalaryCarousel(salaryCarouselContainer)
-        this.#salaryCarousel.setSpecializations(salarySpecializationsMock)
-        this.#salaryCarousel.render()
+        try {
+            await this.#salaryCarousel.init()
+            this.#salaryCarousel.render()
+        } catch {
+            notification.add('FAIL', 'Ошибка при поиске статистики')
+        }
         }
     }
 
@@ -223,7 +227,11 @@ export class JobCatalog {
         const filter = new JobCatalogFilter(this.self.querySelector('.jobs_filter') as HTMLElement);
         filter.render();
         // Инициализация карусели зарплат
-        this.#initSalaryCarousel()
+        try {
+            await this.#initSalaryCarousel()
+        } catch {
+            logger.info('Ошибка при рендеринге карусели')
+        }
         
         this.#createResumeLink = this.self.querySelector('.info__link') as HTMLLinkElement;
         this.#jobContainer = this.self.querySelector('.jobs_list') as HTMLElement;

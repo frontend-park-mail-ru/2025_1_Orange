@@ -6,7 +6,6 @@ import template from './header.handlebars';
 import { api } from '../../api/api';
 import notification from '../notificationContainer/notificationContainer';
 import { NotificationContainerWS } from '../notificationContainerWS/notificationContainerWS';
-import { notificationMocks } from '../../api/notificationMocks';
 
 export class Header {
     readonly #parent: HTMLElement;
@@ -51,7 +50,7 @@ export class Header {
      * Получение количества непрочитанных уведомлений
      */
     get unreadNotificationsCount(): number {
-        return notificationMocks.filter((n) => !n.is_viewed).length;
+        return store.data.notifications.filter((n) => !n.is_viewed).length;
     }
 
     /**

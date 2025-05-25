@@ -43,7 +43,9 @@ self.addEventListener('fetch', (event) => {
                     console.info('SW ERROR');
                 }
             } catch {
+                // При ошибке сети возвращаем 500
                 console.info('NETWORK ERROR');
+                return new Response('HELLO55', { status: 500 });
             }
         })(),
     );

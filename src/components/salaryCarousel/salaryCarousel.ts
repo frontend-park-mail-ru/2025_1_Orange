@@ -46,6 +46,7 @@ export class SalaryCarousel {
    * Рендеринг карточек специализаций
    */
   readonly #renderCards = () => {
+    this.#slidesContainer = document.getElementById("salary_carousel_slides") as HTMLElement
     if (!this.#slidesContainer) return
 
     this.#specializations.forEach((specialization) => {
