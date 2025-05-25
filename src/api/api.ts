@@ -5,6 +5,7 @@ import { AuthService } from './auth';
 import { EmployerService } from './employer';
 import { PollService } from './poll';
 import { ResumeService } from './resumes';
+import { SpecializationService } from './specialization';
 import { VacancyService } from './vacansies';
 
 export class Api {
@@ -15,6 +16,7 @@ export class Api {
     readonly employer: EmployerService;
     readonly resume: ResumeService;
     readonly poll: PollService;
+    readonly specialization: SpecializationService;
 
     /**
      * Конструктор класса api - взаимодействие с бекендом
@@ -28,6 +30,7 @@ export class Api {
         this.employer = new EmployerService(this);
         this.resume = new ResumeService(this);
         this.poll = new PollService(this);
+        this.specialization = new SpecializationService(this);
     }
 
     /**

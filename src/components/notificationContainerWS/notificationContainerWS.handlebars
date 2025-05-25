@@ -1,0 +1,44 @@
+<div class="notifications-container" id="notifications-container">
+    <div class="notifications-container__header">
+        <h1>Уведомления</h1>
+        <svg class="close-btn icon-close" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <rect width="12" height="12" fill="url(#pattern0_1483_8063)"/>
+            <defs>
+                <pattern id="pattern0_1483_8063" patternContentUnits="objectBoundingBox" width="1" height="1">
+                    <use xlink:href="#image0_1483_8063" transform="scale(0.0104167)"/>
+                </pattern>
+                <image id="image0_1483_8063" width="96" height="96" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAACp0lEQVR4nO2czY7TMBRGzcCTgGaAFQgGDW+X96lafzcp7XXLorwQUGkE5WcR5E6LQPOXlBmu7XxH6q6L+JzYaZPIzhFCCCGEEEIIIYQQQgghedG27QNXMG2q4wMWL2sfgkA3NcJ3gU6bcXjmCsH75XNBkBq63o7RhzCdhBcuGfnQ8xqh/evj9bPI4sxljsjiLI7l0vig50lEiGfD5YP7fZDrnCNIlA9dXzc+garpAVZVdbRbdtrSIsgt8ncBNubXhRrh680B8osgHeRvA/jwxfpY3cXF6bYA+USQjvIvZkCYWB+v837+5OqLVH4RpIf8OOZ34/ePXQo0E31VQz92jVBP5m9dYgCL1+LDp2xPpJwjIHf5OUdAKfJzjIDS5OcUAaXKzyECSpefcgQMRX6KETA0+SlFwFDlpxABQ5dvGQGUbxcBlG8XAZRvFwGUbxcBlG8XAZRvFwGUbxcBlG8XAZRv+FwW8Xvdv1vsP1zbmRAoP+0IyjPfLoJSvt1MUMq3i6CUf5eg10/N7rctyL3IZ4QE5AfOBHv5gRHs5QdG6IvwVoQdOODGWgqvvBQB/uGuJiMYyt/DCAeCO7yfzwiG8vcwQkfu80lWwwuznfw9jHAN//MZbsOZYCd/DyPssHx7oRn6TEjh1ZFmqBFSkD/YCCnJH1yEFOUPJkLK8ouPkIP8YiPkJL+4CDnKLyZCzvKzjyCiT4e6ZZn3s5MU9g2dlSD/sE37dOosGY1GD+NWxaXI77sciQ/fogNnxWq1eiRef5Ykv18E/WEaICIIH0qT33k58mHlrGkm8zdXbl9c+ObdAt2ILE9dCsQI8WyIy1FcF2uvzXS8PHaF4P3sJF5w49i2S24cayry/ySuh3FDb1coVVUdma/5hBBCCCGEEEIIIYQQQojrzS/wj11/SXpckgAAAABJRU5ErkJggg=="/>
+            </defs>
+        </svg>
+    </div>
+
+    <div class="empty-state hidden" id="emptyState">
+        <div class="notification-indicator">
+            <div class="unread-dot"></div>
+        </div>
+        <div class="empty-state-message">
+            У вас нет новых уведомлений
+        </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="actions" id="actions">
+        <button class="action-btn read-all">
+            <svg class="action-icon" width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.3335 3.94467L4.48283 7L10.6668 1" stroke="#0071FE" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Прочитать все
+        </button>
+        <button class="action-btn delete-all">
+            <svg class="action-icon icon-trash" width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.3335 3.66667H10.6668M4.66683 5.66667V11M7.3335 5.66667V11M4.66683 1H7.3335C7.51031 1 7.67988 1.07024 7.8049 1.19526C7.92992 1.32029 8.00016 1.48986 8.00016 1.66667V3.66667H4.00016V1.66667C4.00016 1.48986 4.0704 1.32029 4.19542 1.19526C4.32045 1.07024 4.49002 1 4.66683 1ZM2.00016 3.66667H10.0002V12.3333C10.0002 12.5101 9.92992 12.6797 9.8049 12.8047C9.67988 12.9298 9.51031 13 9.3335 13H2.66683C2.49002 13 2.32045 12.9298 2.19542 12.8047C2.0704 12.6797 2.00016 12.5101 2.00016 12.3333V3.66667Z" stroke="#DC2626" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Удалить все
+        </button>
+    </div>
+
+    <!-- Notifications list -->
+    <div class="notifications-list" id="notificationsList">
+        <!-- Уведомления будут добавлены через JavaScript -->
+    </div>
+</div>

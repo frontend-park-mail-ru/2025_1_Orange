@@ -21,6 +21,7 @@
                         {{> partials/jobCardNoResponded id=id}}
                         {{/if}}
                     {{/if}}
+                    {{#if isOwner}}
                     <div class="job__button_second" id="vacancy_edit_button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-gear" viewBox="0 0 16 16">
@@ -31,6 +32,7 @@
                         </svg>
                         <span>Настройки</span>
                     </div>
+                    {{/if}}
                 </div>
                 <div class="job__statistics">опубликовано {{created_at}}</div>
             </div>

@@ -1,0 +1,66 @@
+<div class="salary-card" id="salaryCard-{{id}}">
+    <div class="salary-card__header">{{name}}</div>
+    <div class="salary-card__separator"></div>
+    <div class="salary-card__content">
+        <div class="salary-card__range">
+            <div class="salary-card__scale">
+                <svg width="20" height="142" viewBox="0 0 20 142" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="4" height="142" transform="translate(8)" fill="url(#paint0_linear_{{id}})"/>
+                    <mask id="path-1-inside-1_{{id}}" fill="white">
+                        <path d="M4 11C4 7.68629 6.68629 5 10 5C13.3137 5 16 7.68629 16 11C16 14.3137 13.3137 17 10 17C6.68629 17 4 14.3137 4 11Z"/>
+                    </mask>
+                    <path d="M4 11C4 7.68629 6.68629 5 10 5C13.3137 5 16 7.68629 16 11C16 14.3137 13.3137 17 10 17C6.68629 17 4 14.3137 4 11Z" fill="white"/>
+                    <path d="M10 17V15C7.79086 15 6 13.2091 6 11H4H2C2 15.4183 5.58172 19 10 19V17ZM16 11H14C14 13.2091 12.2091 15 10 15V17V19C14.4183 19 18 15.4183 18 11H16ZM10 5V7C12.2091 7 14 8.79086 14 11H16H18C18 6.58172 14.4183 3 10 3V5ZM10 5V3C5.58172 3 2 6.58172 2 11H4H6C6 8.79086 7.79086 7 10 7V5Z" fill="#FF7E75" mask="url(#path-1-inside-1_{{id}})"/>
+                    <g clip-path="url(#clip0_{{id}})">
+                        <path d="M20 71C20 65.4772 15.5228 61 10 61C4.47715 61 0 65.4772 0 71C0 76.5228 4.47715 81 10 81C15.5228 81 20 76.5228 20 71Z" fill="#1877F2"/>
+                        <g filter="url(#filter0_i_{{id}})">
+                            <path d="M18 71C18 66.5817 14.4183 63 10 63C5.58172 63 2 66.5817 2 71C2 75.4183 5.58172 79 10 79C14.4183 79 18 75.4183 18 71Z" fill="white"/>
+                        </g>
+                        <path d="M16 71C16 67.6863 13.3137 65 10 65C6.68629 65 4 67.6863 4 71C4 74.3137 6.68629 77 10 77C13.3137 77 16 74.3137 16 71Z" fill="#1877F2"/>
+                    </g>
+                    <mask id="path-6-inside-2_{{id}}" fill="white">
+                        <path d="M4 131C4 127.686 6.68629 125 10 125C13.3137 125 16 127.686 16 131C16 134.314 13.3137 137 10 137C6.68629 137 4 134.314 4 131Z"/>
+                    </mask>
+                    <path d="M4 131C4 127.686 6.68629 125 10 125C13.3137 125 16 127.686 16 131C16 134.314 13.3137 137 10 137C6.68629 137 4 134.314 4 131Z" fill="white"/>
+                    <path d="M10 137V135C7.79086 135 6 133.209 6 131H4H2C2 135.418 5.58172 139 10 139V137ZM16 131H14C14 133.209 12.2091 135 10 135V137V139C14.4183 139 18 135.418 18 131H16ZM10 125V127C12.2091 127 14 128.791 14 131H16H18C18 126.582 14.4183 123 10 123V125ZM10 125V123C5.58172 123 2 126.582 2 131H4H6C6 128.791 7.79086 127 10 127V125Z" fill="#5677FC" mask="url(#path-6-inside-2_{{id}})"/>
+                    <defs>
+                        <filter id="filter0_i_{{id}}" x="2" y="63" width="16" height="16" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                            <feOffset/>
+                            <feGaussianBlur stdDeviation="2"/>
+                            <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+                            <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+                            <feBlend mode="normal" in2="shape" result="effect1_innerShadow_1518_4764"/>
+                        </filter>
+                        <linearGradient id="paint0_linear_{{id}}" x1="2" y1="0" x2="2" y2="142" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#FF7E75"/>
+                            <stop offset="1" stop-color="#5677FC"/>
+                        </linearGradient>
+                        <clipPath id="clip0_{{id}}">
+                            <rect width="20" height="20" fill="white" transform="translate(0 61)"/>
+                        </clipPath>
+                    </defs>
+                </svg>
+            </div>
+            
+            <div class="salary-card__items">
+                <div class="salary-card__item">
+                    <div class="salary-card__amount">{{maxSalary}} ₽</div>
+                    <div class="salary-card__label">максимум</div>
+                </div>
+                
+                <div class="salary-card__item">
+                    <div class="salary-card__amount">{{avgSalary}} ₽</div>
+                    <div class="salary-card__label">cредняя</div>
+                </div>
+                
+                <div class="salary-card__item">
+                    <div class="salary-card__amount">{{minSalary}} ₽</div>
+                    <div class="salary-card__label">минимум</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

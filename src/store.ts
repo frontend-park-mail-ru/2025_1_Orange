@@ -11,6 +11,7 @@ import {
     SignupRequest,
     AuthResponse,
     ReviewResponse,
+    NotificationWS,
 } from './api/interfaces';
 
 interface StoreData {
@@ -32,6 +33,7 @@ interface StoreData {
     vacancy: VacancyCreate;
     resume: ResumeCreate;
     review: ReviewResponse;
+    notifications: NotificationWS[]
 }
 
 const emptyData: StoreData = {
@@ -53,6 +55,7 @@ const emptyData: StoreData = {
     resumeSearch: '',
     resumeLimit: 10,
     resumeOffset: 0,
+    notifications: []
 };
 
 class Store {
