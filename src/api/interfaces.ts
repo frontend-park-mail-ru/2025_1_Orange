@@ -272,6 +272,7 @@ export interface PollStatistic {
     stars: RatingStatistic[];
 }
 
+
 /**
  * Интерфейс для специализации с зарплатными вилками
  */
@@ -312,4 +313,3 @@ export interface NotificationWS {
  */
 export interface NotificationsResponse {
   notifications: NotificationWS[]
-}

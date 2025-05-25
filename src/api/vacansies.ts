@@ -113,4 +113,13 @@ export class VacancyService {
     async response(id: number): Promise<void> {
         await this.#api.request(`/vacancy/vacancy/${id}/response`, 'POST');
     }
+
+    /**
+     * Добавить вакансию в избранное
+     * @param {number} id - идентификатор вакансии
+     * @return {Promise<void>}
+     */
+    async favorite(id: number): Promise<void> {
+        await this.#api.request(`/vacancy/vacancy/${id}/like`, 'POST');
+    }
 }

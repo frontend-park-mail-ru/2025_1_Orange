@@ -57,7 +57,7 @@ export class ProfileUserEdit {
             const data = await api.applicant.get(this.#id);
             this.#defaultData = data;
         } catch {
-            notification.add('FAIL', 'Не удалось загрузить информацию о профиле соискателя')
+            notification.add('FAIL', 'Не удалось загрузить информацию о профиле соискателя');
             logger.info('Не удалось загрузить страницу');
             router.back();
         }
@@ -170,7 +170,7 @@ export class ProfileUserEdit {
                             }
                         }
                     } catch {
-                        notification.add('FAIL', 'Ошибка при обновлении информации профиля')
+                        notification.add('FAIL', 'Ошибка при обновлении информации профиля');
                         if (error) {
                             error.textContent += 'Ошибка при обновлении информации\n';
                         }
@@ -184,10 +184,10 @@ export class ProfileUserEdit {
                         formData.append('avatar', image);
                         try {
                             await api.applicant.avatar(formData);
-                            notification.add('OK', 'Аватарка успешна обновлена')
+                            notification.add('OK', 'Аватарка успешна обновлена');
                             router.go(`/profileUser/${store.data.user.user_id}`);
                         } catch {
-                            notification.add('FAIL', 'Ошибка при загрузке аватарки профиля')
+                            notification.add('FAIL', 'Ошибка при загрузке аватарки профиля');
                             if (error) {
                                 error.textContent += 'Ошибка при загрузке картинки';
                             }

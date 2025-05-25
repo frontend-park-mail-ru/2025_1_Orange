@@ -36,7 +36,7 @@ export class RegisterDialog {
         }
         if (this.#loginButton) {
             this.#loginButton.addEventListener('click', () => {
-                router.go('/login');
+                router.go('/auth');
             });
         }
     };

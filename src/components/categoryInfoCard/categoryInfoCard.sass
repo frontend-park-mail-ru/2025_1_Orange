@@ -1,0 +1,47 @@
+.category_info
+    border: 1px solid #cfcfcf
+    position: relative
+    border-radius: 15px
+    box-sizing: border-box
+    display: flex
+    flex-direction: column
+    overflow: hidden
+    padding: 15px
+
+    &__name
+        font-size: 18px
+        font-weight: bold
+    
+    &__divider
+        height: 1px
+        background-color: #e8e8e8
+        margin: 8px 0
+    
+    &__average
+        font-size: 24px
+        font-weight: bold
+    
+    &__paragraph
+        font-size: 14px
+    
+    &__bullet
+        display: flex
+        flex-direction: row
+        gap: 10px
+        align-items: center
+    
+    &__status
+        border-radius: 50%
+        width: 16px
+        height: 16px
+
+        &--max
+            background-color: #f77676
+
+        &--min
+            background-color: #a376f7
+        
+        &--median
+            width: 24px
+            height: 24px
+            background-color: #76c4f7
