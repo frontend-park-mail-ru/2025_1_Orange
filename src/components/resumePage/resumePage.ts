@@ -5,7 +5,6 @@ import { Resume } from '../../api/interfaces';
 import './resumePage.sass';
 import { api } from '../../api/api';
 import { educationTranslations, statusTranslations } from '../../api/translations';
-import { DeleteButton } from '../deleteButton/deleteButton';
 import { router } from '../../router';
 import { store } from '../../store';
 import { emptyResume } from '../../api/empty';
@@ -18,6 +17,7 @@ export class ResumePage {
     #data: Resume = emptyResume;
     #id: number = 0;
     #editButton: NodeListOf<HTMLElement> = [];
+    #pdfButton: NodeListOf<HTMLElement> = [];
     #deleteContainer: HTMLElement | null = null;
     #deleteButton: HTMLElement | null = null;
 
@@ -43,7 +43,7 @@ export class ResumePage {
             this.#data = data;
             this.#data.applicant = await api.applicant.get(this.#data.applicant_id);
         } catch {
-            notification.add('FAIL', 'Не удалось загрузить резюме')
+            notification.add('FAIL', 'Не удалось загрузить резюме');
             logger.info('Не удалось загрузить страницу');
             router.back();
         }
@@ -63,10 +63,10 @@ export class ResumePage {
     readonly #delete = async () => {
         try {
             await api.resume.delete(this.#id);
-            notification.add('OK', 'Резюме успешно удалено')
+            notification.add('OK', 'Резюме успешно удалено');
             router.go('/catalog');
         } catch {
-            notification.add('FAIL', 'Не удалось удалить резюме')
+            notification.add('FAIL', 'Не удалось удалить резюме');
             logger.info('Что-то пошло не так');
         }
     };
@@ -78,9 +78,21 @@ export class ResumePage {
         this.#deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
         this.#deleteButton = this.self.querySelector('.job__button--delete');
         this.#editButton = this.self.querySelectorAll('.resume_info__edit');
+        this.#pdfButton = this.self.querySelectorAll('.resume_info__pdf');
         this.#editButton.forEach((element) => {
             element.addEventListener('click', () => {
                 router.go(`/resumeEdit/${this.#id}`);
+            });
+        });
+        this.#pdfButton.forEach((element) => {
+            element.addEventListener('click', async () => {
+                try {
+                    const blob = await api.resume.pdf(this.#data.id);
+                    const url = window.URL.createObjectURL(blob);
+                    window.open(url);
+                } catch {
+                    notification.add('FAIL', 'Ошибка при получении pdf');
+                }
             });
         });
         if (this.#deleteButton)

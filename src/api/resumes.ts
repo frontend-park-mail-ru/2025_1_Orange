@@ -68,4 +68,14 @@ export class ResumeService {
             'GET',
         );
     }
+
+    async pdf(id: number): Promise<Blob> {
+        return this.#api.request(
+            `/resume/pdf/${id}`,
+            'GET',
+            null,
+            'application/json',
+            'applicaion/pdf',
+        );
+    }
 }

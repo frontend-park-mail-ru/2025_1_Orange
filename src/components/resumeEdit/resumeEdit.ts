@@ -114,18 +114,18 @@ export class ResumeEdit {
                 try {
                     this.#defaultData.applicant = await api.applicant.get(store.data.user.user_id);
                 } catch {
-                    notification.add('FAIL', 'Не удалось загрузить информацию о соискателе')
+                    notification.add('FAIL', 'Не удалось загрузить информацию о соискателе');
                     router.back();
                 }
             } catch {
-                notification.add('FAIL', 'Не удалось загрузить резюме')
+                notification.add('FAIL', 'Не удалось загрузить резюме');
                 logger.info('Не удалось загрузить резюме');
                 this.#id = 0;
                 this.#defaultData = emptyResume;
                 try {
                     this.#defaultData.applicant = await api.applicant.get(store.data.user.user_id);
                 } catch {
-                    notification.add('FAIL', 'Не удалось загрузить информацию о соискателе')
+                    notification.add('FAIL', 'Не удалось загрузить информацию о соискателе');
                     router.back();
                 }
             }
@@ -134,7 +134,7 @@ export class ResumeEdit {
             try {
                 this.#defaultData.applicant = await api.applicant.get(store.data.user.user_id);
             } catch {
-                notification.add('FAIL', 'Не удалось загрузить информацию о соискателе')
+                notification.add('FAIL', 'Не удалось загрузить информацию о соискателе');
                 router.back();
             }
         }
@@ -322,10 +322,10 @@ export class ResumeEdit {
                     }
                 } catch {
                     if (this.#id !== 0 && error) {
-                        notification.add('FAIL', 'Ошибка при обновлении вакансии')
+                        notification.add('FAIL', 'Ошибка при обновлении вакансии');
                         error.textContent = 'Ошибка при обновлении вакансии';
                     } else if (error) {
-                        notification.add('FAIL', 'Ошибка при создании вакансии')
+                        notification.add('FAIL', 'Ошибка при создании вакансии');
                         error.textContent = 'Ошибка при создании вакансии';
                     }
                 }

@@ -271,3 +271,15 @@ export interface PollStatistic {
     rating: number;
     stars: RatingStatistic[];
 }
+
+export interface CategoryInfoResponse {
+    specializations: CategoryInfo[];
+}
+
+export interface CategoryInfo {
+    id: number;
+    name: string;
+    minSalary: number;
+    maxSalary: number;
+    avgSalary: number;
+}

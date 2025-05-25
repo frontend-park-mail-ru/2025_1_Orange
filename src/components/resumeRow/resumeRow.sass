@@ -45,8 +45,11 @@
         &--profession
             display: flex
             align-items: center
-            min-width: 400px
             gap: 25px
+
+            @media screen and ( min-width: 768px )
+                min-width: 400px
+                
 
     &__avatar
         img

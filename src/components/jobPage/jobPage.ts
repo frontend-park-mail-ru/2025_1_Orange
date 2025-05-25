@@ -1,6 +1,7 @@
 import { logger } from '../../utils/logger';
 import template from './jobPage.handlebars';
-import templateButton from '../../partials/jobCardResponded.handlebars';
+import templateResponded from '../../partials/jobCardResponded.handlebars';
+import templateNoResponded from '../../partials/jobCardNoResponded.handlebars';
 import { Vacancy } from '../../api/interfaces';
 import { JobCompanyCard } from '../jobCompanyCard/jobCompanyCard';
 import './jobPage.sass';
@@ -15,14 +16,14 @@ import { api } from '../../api/api';
 import { router } from '../../router';
 import { DeleteButton } from '../deleteButton/deleteButton';
 import { DialogContainer } from '../dialog/dialog';
-import { NoResumeDialog } from '../noResumeDialog/noResumeDialog';
 import notification from '../notificationContainer/notificationContainer';
 
 export class JobPage {
     readonly #parent: HTMLElement;
     #props: Vacancy = emptyVacancy;
     #editButton: HTMLElement | null = null;
-    #resumeButton: HTMLElement | null = null;
+    #buttonsContainer: HTMLElement | null = null;
+    #favoriteButton: HTMLElement | null = null;
     #id: number = 0;
 
     /**
@@ -50,7 +51,7 @@ export class JobPage {
             const data = await api.vacancy.get(this.#id);
             this.#props = data;
         } catch {
-            notification.add('FAIL', 'Не удалось загрузить вакансию')
+            notification.add('FAIL', 'Не удалось загрузить вакансию');
             logger.info('Не удалось загрузить страницу');
             router.back();
         }
@@ -66,42 +67,93 @@ export class JobPage {
      * Навешивание обработчиков
      */
     readonly #addEventListeners = () => {
-        if (this.#resumeButton) {
-            const handleResumeClick = async () => {
-                const error = this.self.querySelector('.job__error') as HTMLElement;
-                if (error) {
-                    error.hidden = true;
-                    error.textContent = '';
+        this.#editButton = document.getElementById('vacancy_edit_button');
+
+        this.#buttonsContainer = this.self.querySelector('.job__buttons');
+        this.#favoriteButton = this.self.querySelector('.job__favorite');
+        if (this.#buttonsContainer) {
+            this.#buttonsContainer.addEventListener('click', (e: Event) => {
+                e.preventDefault();
+                const element = (e.target as HTMLElement).closest(
+                    '.job__button, .job__button_second',
+                );
+                if (element && element.id === `vacancy_${this.#props.id}_resume`) {
+                    const dialog = new DialogContainer(this.#parent, 'Отклик', ResponseDialog, {
+                        click: this.#handleResumeClick,
+                        target: this.self,
+                    });
+                    dialog.render();
+                } else if (element && element.id === `vacancy_${this.#props.id}_unresume`) {
+                    this.#handleUnresumeClick();
                 }
-                try {
-                    await api.vacancy.response(this.#props.id);
-                    const buttonsContainer = this.self.querySelector('.vacancy__buttons');
-                    if (buttonsContainer) {
-                        buttonsContainer.innerHTML = '';
-                        buttonsContainer.insertAdjacentHTML('beforeend', templateButton({}));
-                    }
-                    notification.add(
-                        'OK',
-                        `Успешный отклик на вакансию`,
-                        `Вы откликнулсь на вакансию ${this.#props.title}`,
-                    );
-                } catch {
-                    if (!store.data.authorized) {
-                        const dialog = new DialogContainer(this.#parent, 'НеАвторизован', RegisterDialog);
-                        dialog.render();
-                    } else {
-                        const dialog = new DialogContainer(this.#parent, 'НетРезюме', NoResumeDialog);
-                        dialog.render();
+            });
+        }
+        if (this.#favoriteButton) {
+            this.#favoriteButton.addEventListener('click', async () => {
+                if (this.#favoriteButton) {
+                    const favoriteIcon = this.#favoriteButton.querySelector('img');
+                    try {
+                        await api.vacancy.favorite(this.#props.id);
+                        if (favoriteIcon && favoriteIcon.src.endsWith('/heart-fill.svg')) {
+                            favoriteIcon.src = '/heart-empty.svg';
+                            notification.add('OK', 'Вы успешно удалили вакансию из избранного');
+                        } else if (favoriteIcon) {
+                            favoriteIcon.src = '/heart-fill.svg';
+                            notification.add('OK', 'Вы успешно добавили вакансию в избранное');
+                        }
+                    } catch {
+                        if (favoriteIcon && favoriteIcon.src.endsWith('/heart-fill.svg')) {
+                            notification.add('FAIL', 'Не удалось убрать лайк с вакансии');
+                        } else if (favoriteIcon) {
+                            notification.add('FAIL', 'Не удалось лайкнуть вакансию');
+                        }
                     }
                 }
-            };
-            this.#resumeButton.addEventListener('click', handleResumeClick);
+            });
         }
 
         if (this.#editButton) {
             this.#editButton.addEventListener('click', () => {
                 router.go(`/vacancyEdit/${this.#props.id}`);
             });
+        }
+    };
+
+    /**
+     * Отмена отклика вакансии
+     */
+    readonly #handleUnresumeClick = async () => {
+        logger.info('resume');
+        try {
+            await api.vacancy.response(this.#props.id);
+            const buttonsContainer = this.self.querySelector('.job__buttons');
+            if (buttonsContainer) {
+                buttonsContainer.innerHTML = templateNoResponded({ id: this.#props.id });
+            }
+            notification.add('OK', `Успешный отмена отклика`);
+        } catch {
+            notification.add('FAIL', `Ошибка отмене отклика на вакансию`);
+        }
+    };
+
+    /**
+     * Отклик на вакансию
+     */
+    readonly #handleResumeClick = async () => {
+        logger.info('resume');
+        try {
+            await api.vacancy.response(this.#props.id);
+            const buttonsContainer = this.self.querySelector('.job__buttons');
+            if (buttonsContainer) {
+                buttonsContainer.innerHTML = templateResponded({ id: this.#props.id });
+            }
+            notification.add(
+                'OK',
+                `Успешный отклик на вакансию`,
+                `Вы откликнулсь на вакансию ${this.#props.title}`,
+            );
+        } catch {
+            notification.add('FAIL', `Ошибка при отклике на вакансию`);
         }
     };
 
@@ -148,7 +200,9 @@ export class JobPage {
                 experienceTranslations,
                 workFormatTranslations,
                 employmentTranslations,
-                isApplicant: store.data.authorized && store.data.user.role === 'applicant',
+                isApplicant:
+                    (store.data.authorized && store.data.user.role === 'applicant') ||
+                    store.data.authorized === false,
                 isOwner:
                     store.data.authorized &&
                     store.data.user.role === 'employer' &&
@@ -161,16 +215,7 @@ export class JobPage {
         );
         companyCard.render();
 
-        this.#resumeButton = document.getElementById('vacancy_resume_button');
-        this.#editButton = document.getElementById('vacancy_edit_button');
-
         logger.info(store.data);
-
-        if (this.#resumeButton) {
-            this.#resumeButton.hidden = true;
-            if (store.data.user.role === 'applicant' && store.data.authorized)
-                this.#resumeButton.hidden = false;
-        }
 
         if (this.#editButton) {
             this.#editButton.hidden = true;

@@ -108,10 +108,10 @@ export class RegistrationCompany {
                     const user = await api.employer.register(store.data.auth.request);
                     store.data.authorized = true;
                     store.data.user = user;
-                    notification.add('OK', 'Компания успешно зарегестрирована')
+                    notification.add('OK', 'Компания успешно зарегестрирована');
                     router.go('/catalog');
                 } catch {
-                    notification.add('FAIL', 'Ошибка при регистрации компании')
+                    notification.add('FAIL', 'Ошибка при регистрации компании');
                     const error = document.querySelector('.form__error') as HTMLElement;
                     if (error) {
                         error.hidden = false;

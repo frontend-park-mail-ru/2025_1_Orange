@@ -42,6 +42,7 @@ export class Api {
         method: string = 'GET',
         body: string | FormData | null = null,
         content_type: string = 'application/json',
+        response_type: string = 'application/json',
     ) {
         const url = this.#baseUrl + endpoint;
         const headers = new Headers();
@@ -74,7 +75,8 @@ export class Api {
                 throw new Error(error.message || 'Ошибка при выполнении запроса');
             }
             try {
-                return await response.json();
+                if (response_type === 'application/json') return await response.json();
+                if (response_type === 'application/pdf') return await response.blob();
             } catch {
                 return '';
             }
