@@ -115,7 +115,6 @@ export class Header {
             const notificationsElement = this.self.querySelector('.header__notifications') as HTMLElement;
             this.#notificationsContainer = new NotificationContainerWS(
                 notificationsElement,
-                notificationMocks,
                 () => this.toggleNotifications(false),
                 () => this.updateNotificationsBadge(), // Передаем колбэк для обновления бейджа
             );
@@ -264,9 +263,6 @@ export class Header {
                 }
             });
         }
-
-        // Добавляем обработчик клика на документ
-        document.addEventListener('click', this.handleDocumentClick);
     };
 
     /**

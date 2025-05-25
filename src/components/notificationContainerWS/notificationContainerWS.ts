@@ -3,10 +3,10 @@ import { logger } from '../../utils/logger';
 import template from './notificationContainerWS.handlebars';
 import type { NotificationWS } from '../../api/interfaces';
 import { NotificationCardWS } from '../notificationCardWS/notificationCardWS';
+import { store } from '../../store';
 
 export class NotificationContainerWS {
     readonly #parent: HTMLElement;
-    #notifications: NotificationWS[] = [];
     #notificationCards: NotificationCardWS[] = [];
     #element: HTMLElement | null = null;
     #closeButton: HTMLElement | null = null;
@@ -27,12 +27,10 @@ export class NotificationContainerWS {
      */
     constructor(
         parent: HTMLElement,
-        notifications: NotificationWS[] = [],
         onClose?: () => void,
         onBadgeUpdate?: () => void,
     ) {
         this.#parent = parent;
-        this.#notifications = notifications;
         this.#onClose = onClose;
         this.#onBadgeUpdate = onBadgeUpdate;
     }
@@ -52,7 +50,7 @@ export class NotificationContainerWS {
      * Получение количества непрочитанных уведомлений
      */
     get unreadCount(): number {
-        return this.#notifications.filter((n) => !n.is_viewed).length;
+        return store.data.notifications.filter((n) => !n.is_viewed).length;
     }
 
     /**
@@ -94,14 +92,12 @@ export class NotificationContainerWS {
             card.markAsRead();
         });
 
-        this.#notifications.forEach((notification) => {
+        store.data.notifications.forEach((notification) => {
             notification.is_viewed = true;
         });
 
         // Обновляем бейдж
         this.#onBadgeUpdate?.();
-
-        // Здесь можно добавить API вызов для отметки всех уведомлений как прочитанных
     };
 
     /**
@@ -114,8 +110,6 @@ export class NotificationContainerWS {
             this.#clearNotifications();
             this.#updateEmptyState();
             this.#onBadgeUpdate?.(); // Обновляем бейдж
-
-            // Здесь можно добавить API вызов для удаления всех уведомлений
         }
     };
 
@@ -125,9 +119,8 @@ export class NotificationContainerWS {
     readonly #clearNotifications = () => {
         this.#notificationCards.forEach((card) => card.remove());
         this.#notificationCards = [];
-        this.#notifications = [];
+        store.data.notifications = [];
 
-        // Очищаем DOM
         if (this.#notificationsList) {
             this.#notificationsList.innerHTML = '';
         }
@@ -137,7 +130,7 @@ export class NotificationContainerWS {
      * Обновление состояния пустого списка
      */
     readonly #updateEmptyState = () => {
-        const hasNotifications = this.#notifications.length > 0;
+        const hasNotifications = store.data.notifications.length > 0;
 
         if (this.#notificationsList) {
             this.#notificationsList.classList.toggle('hidden', !hasNotifications);
@@ -153,7 +146,7 @@ export class NotificationContainerWS {
 
         logger.info(
             `Notifications state updated: ${hasNotifications ? 'has notifications' : 'empty'}`,
-            this.#notifications.length,
+            store.data.notifications.length,
         );
     };
 
@@ -161,7 +154,7 @@ export class NotificationContainerWS {
      * Добавление нового уведомления
      */
     addNotification = (notification: NotificationWS) => {
-        this.#notifications.unshift(notification);
+        store.data.notifications.unshift(notification);
 
         if (this.#notificationsList) {
             const card = new NotificationCardWS(this.#notificationsList, notification, this.#onBadgeUpdate);
@@ -178,7 +171,7 @@ export class NotificationContainerWS {
     readonly #renderNotifications = () => {
         if (!this.#notificationsList) return;
 
-        this.#notifications.forEach((notification) => {
+        store.data.notifications.forEach((notification) => {
             const card = new NotificationCardWS(this.#notificationsList!, notification, this.#onBadgeUpdate);
             card.render();
             this.#notificationCards.push(card);
