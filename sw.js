@@ -19,30 +19,34 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    event.respondWith(async () => {
-        const request = new URL(event.request.url);
-        // Проверяем, есть ли запрашиваемый ресурс в кэше
-        const cachedResponse = await caches.match(request);
-        if (cachedResponse) {
-            return cachedResponse;
-        }
+    event.respondWith(
+        (async () => {
+            const request = new URL(event.request.url);
 
-        // Если запрос не найден в кэше, выполняем его и сохраняем результат в кэш
-        try {
-            const response = await fetch(request);
-            if (response.status !== 200) {
-                return response; // Если не 200 не сохраняем
+            // Сначала ищем в кэше
+            const cachedResponse = await caches.match(request);
+            if (cachedResponse) {
+                return cachedResponse;
             }
+
+            // Если нет — делаем fetch
             try {
-                const cache = await caches.open('MY-CACHE');
-                cache.put(request, response);
-                return response;
+                const response = await fetch(request);
+                if (response.status !== 200) {
+                    return response; // не сохраняем неудачные ответы
+                }
+                try {
+                    const cache = await caches.open('MY-CACHE');
+                    cache.put(request, response);
+                    return response;
+                } catch {
+                    console.info('SW ERROR');
+                }
             } catch {
-                console.log('SW ERROR');
+                // При ошибке сети возвращаем 500
+                console.info('NETWORK ERROR');
+                return new Response('HELLO55', { status: 500 });
             }
-        } catch {
-            console.log('NETWORK ERROR');
-        }
-        return new Response();
-    });
+        })(),
+    );
 });

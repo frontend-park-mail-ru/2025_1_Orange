@@ -68,7 +68,7 @@ export class ResumeCatalog {
                     store.data.resumeLimit,
                 );
         } catch (error) {
-            notification.add('FAIL', 'Ошибка при загрузке резюме')
+            notification.add('FAIL', 'Ошибка при загрузке резюме');
             logger.error('Ошибка при загрузке резюме:', error);
             this.#resumes = [];
         }

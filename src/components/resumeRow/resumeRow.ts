@@ -2,15 +2,16 @@ import template from './resumeRow.handlebars'; // Шаблон Handlebars
 import { logger } from '../../utils/logger';
 import { Resume } from '../../api/interfaces';
 import './resumeRow.sass';
-import { router } from '../../router';
 
 export class ResumeRow {
     readonly #parent: HTMLElement;
     #data: Resume;
+    #click: () => void;
 
-    constructor(parent: HTMLElement, data: Resume) {
+    constructor(parent: HTMLElement, data: Resume, click: () => void) {
         this.#parent = parent;
         this.#data = data;
+        this.#click = click;
     }
 
     /**
@@ -35,7 +36,7 @@ export class ResumeRow {
     readonly #addEventListeners = () => {
         if (this.self) {
             this.self.addEventListener('click', () => {
-                router.go(`/resume/${this.#data.id}`);
+                this.#click();
             });
         }
     };

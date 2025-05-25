@@ -74,7 +74,7 @@ export class DialogContainer {
     /**
      * Рендеринг компонента
      */
-    render = () => {
+    render = async () => {
         logger.info('Dailog render method called');
         this.#parent.insertAdjacentHTML(
             'beforeend',
@@ -85,10 +85,24 @@ export class DialogContainer {
         this.#content = this.self?.querySelector('.dialog__content');
         if (this.#content && this.self && this.#data) {
             const component = new this.#component(this.#content, this.#data);
+            if (component.init) {
+                try {
+                    await component.init();
+                } catch {
+                    return;
+                }
+            }
             if (component.render) component.render();
             if (component.addEventListener) component.addEventListener();
         } else if (this.#content && this.self) {
             const component = new this.#component(this.#content);
+            if (component.init) {
+                try {
+                    await component.init();
+                } catch {
+                    return;
+                }
+            }
             if (component.render) component.render();
             if (component.addEventListener) component.addEventListener();
         }

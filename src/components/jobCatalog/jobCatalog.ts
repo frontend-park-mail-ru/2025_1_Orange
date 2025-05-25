@@ -70,7 +70,7 @@ export class JobCatalog {
                     );
             }
         } catch (error) {
-            notification.add('FAIL', 'Ошибка при загрузке вакансий')
+            notification.add('FAIL', 'Ошибка при загрузке вакансий');
             logger.error('Ошибка при загрузке вакансий:', error);
             this.#jobs = [];
         }
