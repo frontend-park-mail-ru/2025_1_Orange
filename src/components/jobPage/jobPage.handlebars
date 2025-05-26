@@ -78,6 +78,7 @@
             </div>
         </div>
         {{#if isOwner}}
+        <div class="vacancy__header">Отклики</div>
         <div class="resume-table">
             <div class="resume-table__header">
                 <div class="resume-table__header-cell">Профессия</div>
@@ -87,10 +88,12 @@
 
             </div>
         </div>
-        {{/if}}
+        <!-- Кнопка удаления резюме -->
         <div id="delete_button">
-
+            <div class="job__button job__button--delete">Удалить вакансию</div>
         </div>
+        {{/if}}
+
     </div>
     <!-- Правая колонка -->
     <div class="vacancy__sidebar">

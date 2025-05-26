@@ -14,17 +14,19 @@ import { store } from '../../store';
 import { emptyEmployer, emptyVacancy } from '../../api/empty';
 import { api } from '../../api/api';
 import { router } from '../../router';
-import { DeleteButton } from '../deleteButton/deleteButton';
 import { DialogContainer } from '../dialog/dialog';
 import notification from '../notificationContainer/notificationContainer';
 import { ResumeRow } from '../resumeRow/resumeRow';
 import emptyTemplate from './../../partials/emptyState.handlebars';
+import { DeleteDialog } from '../deleteDialog/deleteDialog';
 
 export class JobPage {
     readonly #parent: HTMLElement;
     #props: Vacancy = emptyVacancy;
     #editButton: HTMLElement | null = null;
     #buttonsContainer: HTMLElement | null = null;
+    #deleteButton: HTMLElement | null = null;
+    #deleteContainer: HTMLElement | null = null;
     #favoriteButton: HTMLElement | null = null;
     #id: number = 0;
     #responses: Resume[] = [];
@@ -71,7 +73,8 @@ export class JobPage {
      */
     readonly #addEventListeners = () => {
         this.#editButton = document.getElementById('vacancy_edit_button');
-
+        this.#deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
+        this.#deleteButton = this.self.querySelector('.job__button--delete');
         this.#buttonsContainer = this.self.querySelector('.vacancy__buttons');
         this.#favoriteButton = this.self.querySelector('.job__favorite');
         if (this.#buttonsContainer) {
@@ -120,6 +123,23 @@ export class JobPage {
                 router.go(`/vacancyEdit/${this.#props.id}`);
             });
         }
+
+        if (this.#deleteButton)
+            this.#deleteButton.addEventListener('click', () => {
+                if (this.#deleteContainer) {
+                    const dialog = new DialogContainer(
+                        this.#deleteContainer,
+                        'Резюме',
+                        DeleteDialog,
+                        {
+                            title: 'Удалить резюме?',
+                            message: 'Резюме удалится навсегда без возможности его восстановления',
+                            delete: this.#delete,
+                        },
+                    );
+                    dialog.render();
+                }
+            });
     };
 
     /**
@@ -231,18 +251,6 @@ export class JobPage {
         }
 
         this.#addEventListeners();
-
-        if (
-            store.data.user.role === 'employer' &&
-            store.data.authorized &&
-            store.data.user.user_id === this.#props.employer.id
-        ) {
-            const deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
-            if (deleteContainer) {
-                const deleteButton = new DeleteButton(deleteContainer, 'Вакансию', this.#delete);
-                deleteButton.render();
-            }
-        }
 
         const resumeContainer = document.getElementById('resume-content');
         if (resumeContainer) {

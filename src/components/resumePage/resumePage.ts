@@ -130,6 +130,7 @@ export class ResumePage {
                     this.#data.applicant.vk !== '' ||
                     this.#data.applicant.telegram !== '',
                 pdfLink: `http://localhost/api/v1/resume/pdf/${this.#data.id}`,
+                hasExp: this.#data.work_experiences.length !== 0 
             }),
         );
 
