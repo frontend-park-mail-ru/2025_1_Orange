@@ -122,7 +122,7 @@ export class JobCard {
     readonly #handleUnresumeClick = async () => {
         logger.info('resume');
         try {
-            await api.vacancy.response(this.#props.id);
+            await api.vacancy.response(this.#props.id, store.data.responseResumeId);
             const buttonsContainer = this.self.querySelector('.job__buttons');
             if (buttonsContainer) {
                 buttonsContainer.innerHTML = templateNoResponded({ id: this.#props.id });
@@ -139,7 +139,9 @@ export class JobCard {
     readonly #handleResumeClick = async () => {
         logger.info('resume');
         try {
-            await api.vacancy.response(this.#props.id);
+            if (store.data.responseResumeId)
+                await api.vacancy.response(this.#props.id, store.data.responseResumeId);
+            else throw new Error('NO RESUME');
             const buttonsContainer = this.self.querySelector('.job__buttons');
             if (buttonsContainer) {
                 buttonsContainer.innerHTML = templateResponded({ id: this.#props.id });

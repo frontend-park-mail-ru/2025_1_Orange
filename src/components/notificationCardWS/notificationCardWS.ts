@@ -2,6 +2,7 @@ import './notificationCardWS.sass';
 import { logger } from '../../utils/logger';
 import template from './notificationCardWS.handlebars';
 import type { NotificationWS } from '../../api/interfaces';
+import { api } from '../../api/api';
 
 export class NotificationCardWS {
     readonly #parent: HTMLElement;
@@ -51,13 +52,17 @@ export class NotificationCardWS {
     /**
      * Обработчик клика по уведомлению
      */
-    readonly #handleClick = (event: Event) => {
+    readonly #handleClick = async (event: Event) => {
         event.stopPropagation(); // Предотвращаем всплытие события
         logger.info('NotificationCardWS click', this.#notification.id);
 
         // Если уведомление непрочитанное, отмечаем как прочитанное
         if (!this.#notification.is_viewed) {
-            this.markAsRead();
+            try {
+                await this.markAsRead();
+            } catch {
+                console.log('Ошибка при чтении уведомления');
+            }
             this.#onStatusChange?.(); // Вызываем колбэк для обновления бейджа
         }
 
@@ -68,8 +73,15 @@ export class NotificationCardWS {
     /**
      * Отметить уведомление как прочитанное
      */
-    markAsRead = () => {
+    markAsRead = async () => {
         if (this.#notification.is_viewed) return;
+
+        try {
+            await api.notification.read(this.#notification.id);
+        } catch {
+            console.log('Ошибка при чтении уведомления');
+            return;
+        }
 
         this.#notification.is_viewed = true;
 
@@ -84,7 +96,6 @@ export class NotificationCardWS {
 
         this.self.setAttribute('data-viewed', 'true');
 
-        // Здесь можно добавить API вызов для отметки уведомления как прочитанного
         logger.info('Notification marked as read', this.#notification.id);
     };
 
@@ -127,7 +138,6 @@ export class NotificationCardWS {
         this.self.remove();
     };
 
-
     /**
      * Рендеринг компонента
      */
@@ -137,6 +147,7 @@ export class NotificationCardWS {
         // Подготавливаем данные для шаблона
         const templateData = {
             ...this.#notification,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             eq: (a: any, b: any) => a === b,
         };
 

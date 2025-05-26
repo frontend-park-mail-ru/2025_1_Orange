@@ -1,75 +1,75 @@
-import "./salaryCarousel.sass"
-import { logger } from "../../utils/logger"
-import template from "./salaryCarousel.handlebars"
-import { SalaryCard } from "../salaryCard/salaryCard"
-import type { SalarySpecialization } from "../../api/interfaces"
-import { api } from "../../api/api"
-import notification from "../notificationContainer/notificationContainer"
+import './salaryCarousel.sass';
+import { logger } from '../../utils/logger';
+import template from './salaryCarousel.handlebars';
+import { SalaryCard } from '../salaryCard/salaryCard';
+import type { SalarySpecialization } from '../../api/interfaces';
+import { api } from '../../api/api';
+import notification from '../notificationContainer/notificationContainer';
 
 export class SalaryCarousel {
-  readonly #parent: HTMLElement
-  #slidesContainer: HTMLElement | null = null
-  #category: string | null = null
-  #specializations: SalarySpecialization[] = []
+    readonly #parent: HTMLElement;
+    #slidesContainer: HTMLElement | null = null;
+    #category: string | null = null;
+    #specializations: SalarySpecialization[] = [];
 
-  /**
-   * Конструктор класса
-   * @param {HTMLElement} parent - родительский элемент
-   */
-  constructor(parent: HTMLElement, category: string | null = null) {
-    this.#parent = parent
-    this.#category = category
-  }
-
-  init = async () => {
-    logger.info('salaryCarousel init method called');
-    logger.info('resumePage');
-    try {
-      if (this.#category === null) {
-        this.#specializations = (await api.specialization.all()).specializations
-      }
-    } catch {
-      notification.add('FAIL', 'Не удалось загрузить статистику по категориям')
-      logger.info('Не удалось загрузить страницу');
+    /**
+     * Конструктор класса
+     * @param {HTMLElement} parent - родительский элемент
+     */
+    constructor(parent: HTMLElement, category: string | null = null) {
+        this.#parent = parent;
+        this.#category = category;
     }
-  };
 
-  /**
-   * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
-   * @returns {HTMLElement}
-   */
-  get self(): HTMLElement {
-    return document.getElementById("salary_carousel") as HTMLElement
-  }
+    init = async () => {
+        logger.info('salaryCarousel init method called');
+        logger.info('resumePage');
+        try {
+            if (this.#category === null) {
+                this.#specializations = (await api.specialization.all()).specializations;
+            }
+        } catch {
+            notification.add('FAIL', 'Не удалось загрузить статистику по категориям');
+            logger.info('Не удалось загрузить страницу');
+        }
+    };
 
-  /**
-   * Рендеринг карточек специализаций
-   */
-  readonly #renderCards = () => {
-    this.#slidesContainer = document.getElementById("salary_carousel_slides") as HTMLElement
-    if (!this.#slidesContainer) return
+    /**
+     * Получение объекта. Это ленивая переменная - значение вычисляется при вызове
+     * @returns {HTMLElement}
+     */
+    get self(): HTMLElement {
+        return document.getElementById('salary_carousel') as HTMLElement;
+    }
 
-    this.#specializations.forEach((specialization) => {
-      const card = new SalaryCard(this.#slidesContainer as HTMLElement, specialization)
-      card.render()
-    })
-  }
+    /**
+     * Рендеринг карточек специализаций
+     */
+    readonly #renderCards = () => {
+        this.#slidesContainer = document.getElementById('salary_carousel_slides') as HTMLElement;
+        if (!this.#slidesContainer) return;
 
-  /**
-   * Очистка
-   */
-  remove = () => {
-    logger.info("SalaryCarousel remove method called")
-    this.self.remove()
-  }
+        this.#specializations.forEach((specialization) => {
+            const card = new SalaryCard(this.#slidesContainer as HTMLElement, specialization);
+            card.render();
+        });
+    };
 
-  /**
-   * Рендеринг компонента
-   */
-  render = () => {
-    logger.info("SalaryCarousel render method called")
+    /**
+     * Очистка
+     */
+    remove = () => {
+        logger.info('SalaryCarousel remove method called');
+        this.self.remove();
+    };
 
-    this.#parent.insertAdjacentHTML("beforeend", template({}))
-    this.#renderCards()
-  }
+    /**
+     * Рендеринг компонента
+     */
+    render = () => {
+        logger.info('SalaryCarousel render method called');
+
+        this.#parent.insertAdjacentHTML('beforeend', template({}));
+        this.#renderCards();
+    };
 }

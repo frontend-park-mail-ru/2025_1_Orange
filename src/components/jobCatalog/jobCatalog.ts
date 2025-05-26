@@ -9,8 +9,7 @@ import { router } from '../../router';
 import { store } from '../../store';
 import { BurgerMenu } from '../burgerMenu/burgerMenu';
 import notification from '../notificationContainer/notificationContainer';
-import { SalaryCarousel } from "../salaryCarousel/salaryCarousel";
-import { salarySpecializationsMock } from "../../api/salaryMocks";
+import { SalaryCarousel } from '../salaryCarousel/salaryCarousel';
 
 export class JobCatalog {
     readonly #parent: HTMLElement;
@@ -20,7 +19,7 @@ export class JobCatalog {
     #categories: NodeListOf<HTMLElement> = [];
     #searchForm: HTMLFormElement | null = null;
     #paginationButton: HTMLElement | null = null;
-    #salaryCarousel: SalaryCarousel | null = null
+    #salaryCarousel: SalaryCarousel | null = null;
 
     /**
      * Конструктор класса
@@ -142,20 +141,22 @@ export class JobCatalog {
     };
 
     /**
-   * Инициализация карусели зарплат
-   */
+     * Инициализация карусели зарплат
+     */
     readonly #initSalaryCarousel = async () => {
-        const salaryCarouselContainer = this.self.querySelector(".salary_carousel_container") as HTMLElement
+        const salaryCarouselContainer = this.self.querySelector(
+            '.salary_carousel_container',
+        ) as HTMLElement;
         if (salaryCarouselContainer) {
-        this.#salaryCarousel = new SalaryCarousel(salaryCarouselContainer)
-        try {
-            await this.#salaryCarousel.init()
-            this.#salaryCarousel.render()
-        } catch {
-            notification.add('FAIL', 'Ошибка при поиске статистики')
+            this.#salaryCarousel = new SalaryCarousel(salaryCarouselContainer);
+            try {
+                await this.#salaryCarousel.init();
+                this.#salaryCarousel.render();
+            } catch {
+                notification.add('FAIL', 'Ошибка при поиске статистики');
+            }
         }
-        }
-    }
+    };
 
     /**
      * Навешивание обработчиков
@@ -224,15 +225,14 @@ export class JobCatalog {
                 search: store.data.vacancySearch,
             }),
         );
-        const filter = new JobCatalogFilter(this.self.querySelector('.jobs_filter') as HTMLElement);
-        filter.render();
+
         // Инициализация карусели зарплат
         try {
-            await this.#initSalaryCarousel()
+            await this.#initSalaryCarousel();
         } catch {
-            logger.info('Ошибка при рендеринге карусели')
+            logger.info('Ошибка при рендеринге карусели');
         }
-        
+
         this.#createResumeLink = this.self.querySelector('.info__link') as HTMLLinkElement;
         this.#jobContainer = this.self.querySelector('.jobs_list') as HTMLElement;
         this.#renderVacancy();

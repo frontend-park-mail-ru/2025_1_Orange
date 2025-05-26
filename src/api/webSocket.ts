@@ -1,6 +1,7 @@
-import notification from "../components/notificationContainer/notificationContainer";
-import { store } from "../store";
-import { NotificationWS } from "./interfaces";
+import notification from '../components/notificationContainer/notificationContainer';
+import { store } from '../store';
+import { api } from './api';
+import { NotificationWS } from './interfaces';
 
 class WebSocketApi {
     readonly #url: string;
@@ -21,7 +22,7 @@ class WebSocketApi {
      */
     public create() {
         if (this.#ws) {
-            notification.add('FAIL','Соединение уже установлено');
+            notification.add('FAIL', 'Соединение уже установлено');
             return;
         }
 
@@ -35,10 +36,9 @@ class WebSocketApi {
             try {
                 const message = JSON.parse(event.data);
 
-                if (message && message.type && message.data) {
-
+                if (message && message.type && message.payload) {
                     if (this.#events[message.type] !== null) {
-                        this.#events[message.type](message.data);
+                        this.#events[message.type](message.payload);
                     } else {
                         console.log(`WS: не найдено событие type=${message.type}`);
                     }
@@ -75,7 +75,7 @@ class WebSocketApi {
      * @param {Function} handler - что делать при сообщении
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public add(type: string, handler: (data:any) => void) {
+    public add(type: string, handler: (data: any) => void) {
         this.#events[type] = handler;
     }
 
@@ -88,22 +88,31 @@ class WebSocketApi {
     }
 }
 
-export const ws = new WebSocketApi('ws://localhost:8000/api/v1/notification/ws');
+export const ws = new WebSocketApi('ws://localhost:8000/api/v1/ws/connect');
 
-const addNotification = (notification: NotificationWS) => {
+const addNotification = (data: NotificationWS) => {
+    notification.add('OK', 'NOTIFICATION');
     if (store.data.authorized) {
-        store.data.notifications.push(notification)
+        store.data.notifications.push(data);
     }
-}
+    const nContainer = document.getElementById('notifications-container');
+    const nHeader = document.querySelector('.header');
+    const event = new CustomEvent('notification', { detail: data });
+    if (nContainer) nContainer.dispatchEvent(event);
+    if (nHeader) nHeader.dispatchEvent(event);
+};
 
 const addMessage = () => {
     if (store.data.authorized && store.data.page === 'chat') {
-        console.log('TODO ADD')
+        console.log('TODO ADD');
     }
-}
+};
 
-export const activate = () => {
-    ws.create()
-    ws.add('notification', addNotification)
-    ws.add('message', addMessage)
-}
+export const activate = async () => {
+    const data = await api.notification.all();
+    if (data) store.data.notifications = data;
+
+    ws.create();
+    ws.add('notification', addNotification);
+    ws.add('message', addMessage);
+};

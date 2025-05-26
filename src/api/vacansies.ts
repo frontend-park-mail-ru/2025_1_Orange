@@ -108,10 +108,11 @@ export class VacancyService {
     /**
      * Откклик на вакансию
      * @param {number} id - идентификатор вакансии
+     * @param {number} resumeID - идентификатор резюме
      * @return {Promise<void>}
      */
-    async response(id: number): Promise<void> {
-        await this.#api.request(`/vacancy/vacancy/${id}/response`, 'POST');
+    async response(id: number, resumeID: number): Promise<void> {
+        await this.#api.request(`/vacancy/vacancy/${id}/response/${resumeID}`, 'POST');
     }
 
     /**

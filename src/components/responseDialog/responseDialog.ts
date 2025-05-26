@@ -81,6 +81,7 @@ export class ResponseDialog {
         const resumeContainer = this.self.querySelector('.response_dialog__resumes') as HTMLElement;
         this.#resumes.forEach(async (resume) => {
             const resumeRow = new ResumeRow(resumeContainer, resume, () => {
+                store.data.responseResumeId = resume.id;
                 this.#click();
                 this.self.close();
             });

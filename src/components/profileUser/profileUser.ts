@@ -166,12 +166,31 @@ export class ProfileUser {
         }
     };
 
-    // TODO реализовать обработчик
     /**
      * Рендеринг списка лайкнутых вакансий
      */
-    readonly #renderFavorites = () => {
-        logger.info('Favorite tab clicked - add logic later');
+    readonly #renderFavorites = async () => {
+        if (this.#resumeTable) this.#resumeTable.hidden = true;
+        if (!this.#vacancyContainer) return;
+        if (this.#vacancyContainer) this.#vacancyContainer.textContent = '';
+        if (this.#resumeContainer) this.#resumeContainer.textContent = '';
+        try {
+            if (this.#data) this.#vacancies = await api.applicant.liked(this.#data.id, 0, 10);
+            if (!this.#vacancies) {
+                this.#vacancyContainer.textContent = 'Ничего нету';
+                return;
+            }
+            this.#vacancies.forEach(async (vacancy) => {
+                const response = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
+                response.render();
+            });
+            if (this.#vacancies.length === 0) this.#vacancyContainer.innerHTML = emptyTemplate({});
+        } catch {
+            if (this.#vacancyContainer) {
+                notification.add('FAIL', 'При загрузке избранного произошла ошибка');
+                this.#vacancyContainer.textContent = 'При загрузке избранного произошла ошибка';
+            }
+        }
     };
 
     /**

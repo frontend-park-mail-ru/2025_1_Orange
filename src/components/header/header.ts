@@ -6,6 +6,7 @@ import template from './header.handlebars';
 import { api } from '../../api/api';
 import notification from '../notificationContainer/notificationContainer';
 import { NotificationContainerWS } from '../notificationContainerWS/notificationContainerWS';
+import { ws } from '../../api/webSocket';
 
 export class Header {
     readonly #parent: HTMLElement;
@@ -73,7 +74,11 @@ export class Header {
             this.toggleDropdown(false);
         }
 
-        if (notificationsElement && !notificationsElement.contains(e.target as Node) && this.#notificationsVisible) {
+        if (
+            notificationsElement &&
+            !notificationsElement.contains(e.target as Node) &&
+            this.#notificationsVisible
+        ) {
             this.toggleNotifications(false);
         }
     };
@@ -111,7 +116,9 @@ export class Header {
             this.toggleDropdown(false);
 
             // Создаем контейнер уведомлений
-            const notificationsElement = this.self.querySelector('.header__notifications') as HTMLElement;
+            const notificationsElement = this.self.querySelector(
+                '.header__notifications',
+            ) as HTMLElement;
             this.#notificationsContainer = new NotificationContainerWS(
                 notificationsElement,
                 () => this.toggleNotifications(false),
@@ -160,6 +167,10 @@ export class Header {
         this.#vacancyCatalogLink = document.getElementById('vacancy_catalog_link');
         this.#resumeCatalogLink = document.getElementById('resume_catalog_link');
 
+        this.self.addEventListener('notification', () => {
+            this.updateNotificationsBadge();
+        });
+
         this.#logoLink?.addEventListener('click', () => {
             router.go('/catalog');
         });
@@ -178,6 +189,7 @@ export class Header {
                 logger.info('LOGOUT SUCCESFULLY');
                 notification.add('OK', `Успешно вышли из аккаунта`);
                 store.reset();
+                ws.close();
                 const frame = document.getElementById('review_frame');
                 if (frame) frame.hidden = true;
                 router.go('/catalog');
@@ -193,8 +205,10 @@ export class Header {
             this.toggleDropdown(undefined);
         });
 
-        this.#notificationsBell?.addEventListener('click', (e) => {
+        this.#notificationsBell?.addEventListener('click', async (e) => {
             e.stopPropagation();
+            const data = await api.notification.all();
+            if (data) store.data.notifications = data;
             this.toggleNotifications(undefined);
         });
 
@@ -217,14 +231,16 @@ export class Header {
 
         if (this.#profileLink) {
             this.#profileLink.addEventListener('click', () => {
-                if (store.data.user.role === 'applicant') router.go(`/profileUser/${store.data.user.user_id}`);
+                if (store.data.user.role === 'applicant')
+                    router.go(`/profileUser/${store.data.user.user_id}`);
                 else router.go(`/profileCompany/${store.data.user.user_id}`);
             });
         }
 
         if (this.#editProfileLink) {
             this.#editProfileLink.addEventListener('click', () => {
-                if (store.data.user.role === 'applicant') router.go(`/profileUserEdit/${store.data.user.user_id}`);
+                if (store.data.user.role === 'applicant')
+                    router.go(`/profileUserEdit/${store.data.user.user_id}`);
                 else router.go(`/profileCompanyEdit/${store.data.user.user_id}`);
             });
         }

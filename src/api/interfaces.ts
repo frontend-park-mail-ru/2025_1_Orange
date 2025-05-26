@@ -272,44 +272,44 @@ export interface PollStatistic {
     stars: RatingStatistic[];
 }
 
-
 /**
  * Интерфейс для специализации с зарплатными вилками
  */
 export interface SalarySpecialization {
-  id: number
-  name: string
-  minSalary: number
-  maxSalary: number
-  avgSalary: number
+    id: number;
+    name: string;
+    minSalary: number;
+    maxSalary: number;
+    avgSalary: number;
 }
 
 /**
  * Интерфейс для ответа API с зарплатными вилками
  */
 export interface SalarySpecializationsResponse {
-  specializations: SalarySpecialization[]
+    specializations: SalarySpecialization[];
 }
 
 /**
  * Интерфейс для уведомления
  */
 export interface NotificationWS {
-  id: number
-  type: "apply" | "download_resume"
-  sender_id: number
-  receiver_id: number
-  object_id: number
-  resume_id: number
-  applicant_name: string
-  employer_name: string
-  title: string
-  is_viewed: boolean
-  created_at: string
+    id: number;
+    type: 'apply' | 'download_resume';
+    sender_id: number;
+    receiver_id: number;
+    object_id: number;
+    resume_id: number;
+    applicant_name: string;
+    employer_name: string;
+    title: string;
+    is_viewed: boolean;
+    created_at: string;
 }
 
 /**
  * Интерфейс для ответа API с уведомлениями
  */
 export interface NotificationsResponse {
-  notifications: NotificationWS[]
+    notifications: NotificationWS[];
+}

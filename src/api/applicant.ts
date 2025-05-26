@@ -73,4 +73,18 @@ export class ApplicantService {
             'GET',
         );
     }
+
+    /**
+     * Получение списка откликов соискателя
+     * @param {number} id - id профиля
+     * @param {number} offset - с какого отклика выводить
+     * @param {number} limit - сколько откликов выводить
+     * @returns {VacancyShort}
+     */
+    async liked(id: number, offset: number, limit: number): Promise<VacancyShort[]> {
+        return this.#api.request(
+            `/vacancy/applicant/${id}/liked?offset=${offset}&limit=${limit}`,
+            'GET',
+        );
+    }
 }

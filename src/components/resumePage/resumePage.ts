@@ -17,7 +17,6 @@ export class ResumePage {
     #data: Resume = emptyResume;
     #id: number = 0;
     #editButton: NodeListOf<HTMLElement> = [];
-    #pdfButton: NodeListOf<HTMLElement> = [];
     #deleteContainer: HTMLElement | null = null;
     #deleteButton: HTMLElement | null = null;
 
@@ -78,21 +77,9 @@ export class ResumePage {
         this.#deleteContainer = this.self.querySelector('#delete_button') as HTMLElement;
         this.#deleteButton = this.self.querySelector('.job__button--delete');
         this.#editButton = this.self.querySelectorAll('.resume_info__edit');
-        this.#pdfButton = this.self.querySelectorAll('.resume_info__pdf');
         this.#editButton.forEach((element) => {
             element.addEventListener('click', () => {
                 router.go(`/resumeEdit/${this.#id}`);
-            });
-        });
-        this.#pdfButton.forEach((element) => {
-            element.addEventListener('click', async () => {
-                try {
-                    const blob = await api.resume.pdf(this.#data.id);
-                    const url = window.URL.createObjectURL(blob);
-                    window.open(url);
-                } catch {
-                    notification.add('FAIL', 'Ошибка при получении pdf');
-                }
             });
         });
         if (this.#deleteButton)
@@ -142,6 +129,7 @@ export class ResumePage {
                     this.#data.applicant.facebook !== '' ||
                     this.#data.applicant.vk !== '' ||
                     this.#data.applicant.telegram !== '',
+                pdfLink: `http://localhost/api/v1/resume/pdf/${this.#data.id}`,
             }),
         );
 

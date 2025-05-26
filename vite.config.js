@@ -46,6 +46,7 @@ export default defineConfig({
             },
         },
         cssMinify: true,
+        assetsDir: 'static',
     },
     optimizeDeps: {
         include: ['handlebars/runtime'],

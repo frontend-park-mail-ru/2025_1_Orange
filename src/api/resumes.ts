@@ -12,9 +12,9 @@ export class ResumeService {
      * Получение списка всех резюме
      * @param {number} offset - с какого резюме выводить
      * @param {number} limit - сколько резюме выводить
-     * @returns {Promise<ResumeShort[]>}
+     * @returns {Promise<Resume[]>}
      */
-    async all(offset: number, limit: number): Promise<ResumeShort[]> {
+    async all(offset: number, limit: number): Promise<Resume[]> {
         return this.#api.request(`/resume/all?offset=${offset}&limit=${limit}`, 'GET');
     }
 

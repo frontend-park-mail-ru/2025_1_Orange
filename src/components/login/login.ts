@@ -1,4 +1,5 @@
 import { api } from '../../api/api';
+import { activate } from '../../api/webSocket';
 import { router } from '../../router';
 import { store } from '../../store';
 import { logger } from '../../utils/logger';
@@ -147,6 +148,7 @@ export class Login {
                         });
                     store.data.authorized = true;
                     notification.add('OK', 'Вы успешно зашли в аккаунт');
+                    await activate();
                     router.go('/catalog');
                 } catch {
                     const error = document.querySelector('.form__error') as HTMLElement;

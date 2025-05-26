@@ -69,7 +69,7 @@ export class JobPage {
     readonly #addEventListeners = () => {
         this.#editButton = document.getElementById('vacancy_edit_button');
 
-        this.#buttonsContainer = this.self.querySelector('.job__buttons');
+        this.#buttonsContainer = this.self.querySelector('.vacancy__buttons');
         this.#favoriteButton = this.self.querySelector('.job__favorite');
         if (this.#buttonsContainer) {
             this.#buttonsContainer.addEventListener('click', (e: Event) => {
@@ -125,7 +125,7 @@ export class JobPage {
     readonly #handleUnresumeClick = async () => {
         logger.info('resume');
         try {
-            await api.vacancy.response(this.#props.id);
+            await api.vacancy.response(this.#props.id, store.data.responseResumeId);
             const buttonsContainer = this.self.querySelector('.job__buttons');
             if (buttonsContainer) {
                 buttonsContainer.innerHTML = templateNoResponded({ id: this.#props.id });
@@ -142,7 +142,7 @@ export class JobPage {
     readonly #handleResumeClick = async () => {
         logger.info('resume');
         try {
-            await api.vacancy.response(this.#props.id);
+            await api.vacancy.response(this.#props.id, store.data.responseResumeId);
             const buttonsContainer = this.self.querySelector('.job__buttons');
             if (buttonsContainer) {
                 buttonsContainer.innerHTML = templateResponded({ id: this.#props.id });

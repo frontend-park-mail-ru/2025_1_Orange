@@ -33,7 +33,8 @@ interface StoreData {
     vacancy: VacancyCreate;
     resume: ResumeCreate;
     review: ReviewResponse;
-    notifications: NotificationWS[]
+    notifications: NotificationWS[];
+    responseResumeId: number;
 }
 
 const emptyData: StoreData = {
@@ -55,7 +56,8 @@ const emptyData: StoreData = {
     resumeSearch: '',
     resumeLimit: 10,
     resumeOffset: 0,
-    notifications: []
+    notifications: [],
+    responseResumeId: 1,
 };
 
 class Store {

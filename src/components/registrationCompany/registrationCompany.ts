@@ -1,4 +1,5 @@
 import { api } from '../../api/api';
+import { activate } from '../../api/webSocket';
 import { customMessage } from '../../forms';
 import { router } from '../../router';
 import { store } from '../../store';
@@ -109,6 +110,7 @@ export class RegistrationCompany {
                     store.data.authorized = true;
                     store.data.user = user;
                     notification.add('OK', 'Компания успешно зарегестрирована');
+                    await activate();
                     router.go('/catalog');
                 } catch {
                     notification.add('FAIL', 'Ошибка при регистрации компании');

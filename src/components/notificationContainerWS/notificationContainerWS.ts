@@ -4,6 +4,7 @@ import template from './notificationContainerWS.handlebars';
 import type { NotificationWS } from '../../api/interfaces';
 import { NotificationCardWS } from '../notificationCardWS/notificationCardWS';
 import { store } from '../../store';
+import { api } from '../../api/api';
 
 export class NotificationContainerWS {
     readonly #parent: HTMLElement;
@@ -25,11 +26,7 @@ export class NotificationContainerWS {
      * @param onClose {() => void} - колбэк для закрытия контейнера
      * @param onBadgeUpdate {() => void} - колбэк для обновления бейджа
      */
-    constructor(
-        parent: HTMLElement,
-        onClose?: () => void,
-        onBadgeUpdate?: () => void,
-    ) {
+    constructor(parent: HTMLElement, onClose?: () => void, onBadgeUpdate?: () => void) {
         this.#parent = parent;
         this.#onClose = onClose;
         this.#onBadgeUpdate = onBadgeUpdate;
@@ -72,6 +69,11 @@ export class NotificationContainerWS {
         this.self.addEventListener('click', (event) => {
             event.stopPropagation();
         });
+
+        this.self.addEventListener('notification', (e) => {
+            const event = e as CustomEvent<NotificationWS>;
+            if (event.detail) this.addNotification(event.detail);
+        });
     };
 
     /**
@@ -85,8 +87,15 @@ export class NotificationContainerWS {
     /**
      * Обработчик "Прочитать все"
      */
-    readonly #handleReadAll = () => {
+    readonly #handleReadAll = async () => {
         logger.info('NotificationContainerWS read all');
+
+        try {
+            await api.notification.readAll();
+        } catch {
+            console.log('ОШибка при прочитывании уведомлений');
+            return;
+        }
 
         this.#notificationCards.forEach((card) => {
             card.markAsRead();
@@ -103,14 +112,18 @@ export class NotificationContainerWS {
     /**
      * Обработчик "Удалить все"
      */
-    readonly #handleDeleteAll = () => {
+    readonly #handleDeleteAll = async () => {
         logger.info('NotificationContainerWS delete all');
 
-        if (confirm('Удалить все уведомления?')) {
-            this.#clearNotifications();
-            this.#updateEmptyState();
-            this.#onBadgeUpdate?.(); // Обновляем бейдж
+        try {
+            await api.notification.clear();
+        } catch {
+            console.log('Ошибка при удалении уведомлений');
+            return;
         }
+        this.#clearNotifications();
+        this.#updateEmptyState();
+        this.#onBadgeUpdate?.();
     };
 
     /**
@@ -157,7 +170,11 @@ export class NotificationContainerWS {
         store.data.notifications.unshift(notification);
 
         if (this.#notificationsList) {
-            const card = new NotificationCardWS(this.#notificationsList, notification, this.#onBadgeUpdate);
+            const card = new NotificationCardWS(
+                this.#notificationsList,
+                notification,
+                this.#onBadgeUpdate,
+            );
             card.render();
             this.#notificationCards.unshift(card);
         }
@@ -172,7 +189,11 @@ export class NotificationContainerWS {
         if (!this.#notificationsList) return;
 
         store.data.notifications.forEach((notification) => {
-            const card = new NotificationCardWS(this.#notificationsList!, notification, this.#onBadgeUpdate);
+            const card = new NotificationCardWS(
+                this.#notificationsList!,
+                notification,
+                this.#onBadgeUpdate,
+            );
             card.render();
             this.#notificationCards.push(card);
         });

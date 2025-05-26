@@ -3,6 +3,7 @@ import { logger } from '../utils/logger';
 import { ApplicantService } from './applicant';
 import { AuthService } from './auth';
 import { EmployerService } from './employer';
+import { NotificationService } from './notification';
 import { PollService } from './poll';
 import { ResumeService } from './resumes';
 import { SpecializationService } from './specialization';
@@ -17,12 +18,13 @@ export class Api {
     readonly resume: ResumeService;
     readonly poll: PollService;
     readonly specialization: SpecializationService;
+    readonly notification: NotificationService;
 
     /**
      * Конструктор класса api - взаимодействие с бекендом
      * @param {string} baseUrl - url бекенда
      */
-    constructor(baseUrl: string = 'http://localhost:8000/api/v1') {
+    constructor(baseUrl: string = 'http://localhost/api/v1') {
         this.#baseUrl = baseUrl;
         this.auth = new AuthService(this);
         this.vacancy = new VacancyService(this);
@@ -31,6 +33,7 @@ export class Api {
         this.resume = new ResumeService(this);
         this.poll = new PollService(this);
         this.specialization = new SpecializationService(this);
+        this.notification = new NotificationService(this);
     }
 
     /**
