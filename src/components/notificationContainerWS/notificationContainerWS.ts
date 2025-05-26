@@ -167,7 +167,6 @@ export class NotificationContainerWS {
      * Добавление нового уведомления
      */
     addNotification = (notification: NotificationWS) => {
-        store.data.notifications.unshift(notification);
 
         if (this.#notificationsList) {
             const card = new NotificationCardWS(

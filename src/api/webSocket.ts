@@ -92,6 +92,7 @@ class WebSocketApi {
 export const ws = new WebSocketApi('ws://localhost:8000/api/v1/ws/connect');
 
 const addNotification = (data: NotificationWS) => {
+    store.data.notifications.unshift(data);
     const nContainer = document.getElementById('notifications-container');
     const nHeader = document.querySelector('.header');
     const event = new CustomEvent('notification', { detail: data });
