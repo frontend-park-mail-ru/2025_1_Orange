@@ -19,6 +19,8 @@ import notification from '../notificationContainer/notificationContainer';
 import { ResumeRow } from '../resumeRow/resumeRow';
 import emptyTemplate from './../../partials/emptyState.handlebars';
 import { DeleteDialog } from '../deleteDialog/deleteDialog';
+import { ResponseDialog } from '../responseDialog/responseDialog';
+import { RegisterDialog } from '../registerDialog/registerDialog';
 
 export class JobPage {
     readonly #parent: HTMLElement;
@@ -83,6 +85,15 @@ export class JobPage {
                 const element = (e.target as HTMLElement).closest(
                     '.job__button, .job__button_second',
                 );
+                if (store.data.authorized === false) {
+                    const dialog = new DialogContainer(
+                        this.#parent,
+                        'НеАвторизован',
+                        RegisterDialog,
+                    );
+                    dialog.render();
+                    return;
+                }
                 if (element && element.id === `vacancy_${this.#props.id}_resume`) {
                     const dialog = new DialogContainer(this.#parent, 'Отклик', ResponseDialog, {
                         click: this.#handleResumeClick,
@@ -96,6 +107,15 @@ export class JobPage {
         }
         if (this.#favoriteButton) {
             this.#favoriteButton.addEventListener('click', async () => {
+                if (store.data.authorized === false) {
+                    const dialog = new DialogContainer(
+                        this.#parent,
+                        'НеАвторизован',
+                        RegisterDialog,
+                    );
+                    dialog.render();
+                    return;
+                }
                 if (this.#favoriteButton) {
                     const favoriteIcon = this.#favoriteButton.querySelector('img');
                     try {
@@ -107,12 +127,12 @@ export class JobPage {
                             favoriteIcon.src = '/heart-fill.svg';
                             notification.add('OK', 'Вы успешно добавили вакансию в избранное');
                         }
-                    } catch {
+                    } catch { 
                         if (favoriteIcon && favoriteIcon.src.endsWith('/heart-fill.svg')) {
-                            notification.add('FAIL', 'Не удалось убрать лайк с вакансии');
-                        } else if (favoriteIcon) {
-                            notification.add('FAIL', 'Не удалось лайкнуть вакансию');
-                        }
+                                notification.add('FAIL', 'Не удалось убрать лайк с вакансии');
+                            } else if (favoriteIcon) {
+                                notification.add('FAIL', 'Не удалось лайкнуть вакансию');
+                            }
                     }
                 }
             });

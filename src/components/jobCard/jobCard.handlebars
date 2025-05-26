@@ -1,9 +1,11 @@
 <div class="job" id="jobCard-{{id}}">
     <div class="job__favorite">
         {{#if liked}}
-        <img src="/heart-fill.svg">
+            <img src="/heart-fill.svg">
         {{else}}
-        <img src="/heart-empty.svg">
+            {{#if isApplicant}}
+                <img src="/heart-empty.svg">
+            {{/if}}
         {{/if}}
     </div>
     <div class="job__avatar">

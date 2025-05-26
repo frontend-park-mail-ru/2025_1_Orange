@@ -74,6 +74,15 @@ export class JobCard {
 
         if (this.#favoriteButton) {
             this.#favoriteButton.addEventListener('click', async () => {
+                if (store.data.authorized === false) {
+                    const dialog = new DialogContainer(
+                        this.#parent,
+                        'НеАвторизован',
+                        RegisterDialog,
+                    );
+                    dialog.render();
+                    return;
+                }
                 if (this.#favoriteButton) {
                     const favoriteIcon = this.#favoriteButton.querySelector('img');
                     try {
