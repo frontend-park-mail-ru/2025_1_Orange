@@ -1,5 +1,5 @@
 import { Api } from './api';
-import { Resume, ResumeCreate, ResumeShort } from './interfaces';
+import { Resume, ResumeCreate } from './interfaces';
 
 export class ResumeService {
     readonly #api: Api;
@@ -60,9 +60,9 @@ export class ResumeService {
      * @param {string} query - строка которую будем искать в резюме
      * @param {number} offset - с какого резюме выводить
      * @param {number} limit - сколько резюме выводить
-     * @returns {Promise<ResumeShort[]>}
+     * @returns {Promise<Resume[]>}
      */
-    async search(query: string, offset: number, limit: number): Promise<ResumeShort[]> {
+    async search(query: string, offset: number, limit: number): Promise<Resume[]> {
         return this.#api.request(
             `/resume/search?profession=${query}&offset=${offset}&limit=${limit}`,
             'GET',

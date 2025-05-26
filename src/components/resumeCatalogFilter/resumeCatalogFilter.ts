@@ -1,9 +1,11 @@
 import './resumeCatalogFilter.sass';
 import { logger } from '../../utils/logger';
 import template from './resumeCatalogFilter.handlebars';
+import { store } from '../../store';
 
 export class ResumeCatalogFilter {
     readonly #parent: HTMLElement;
+    #pagination: NodeListOf<HTMLInputElement> = [];
 
     /**
      * Конструктор класса
@@ -22,6 +24,19 @@ export class ResumeCatalogFilter {
     }
 
     /**
+     * Обработчики событий
+     */
+    readonly #addEventListeners = () => {
+        this.#pagination.forEach((radio) => {
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    store.data.resumeLimit = Number.parseInt(radio.value);
+                }
+            });
+        });
+    };
+
+    /**
      * Очистка
      */
     remove = () => {
@@ -36,5 +51,12 @@ export class ResumeCatalogFilter {
         logger.info('ResumeCatalogFilter render method called');
 
         this.#parent.insertAdjacentHTML('beforeend', template());
+
+        this.#pagination = document.querySelectorAll('input[name="pagination"]');
+
+        this.#pagination.forEach((radio) => {
+            if (radio.value === '' + store.data.resumeLimit) radio.checked = true;
+        });
+        this.#addEventListeners();
     };
 }

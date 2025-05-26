@@ -64,6 +64,7 @@ class WebSocketApi {
         if (this.#ws) {
             this.#ws.close();
             this.#events = {};
+            this.#ws = null;
         } else {
             console.log('Нет активного соединения');
         }
@@ -91,7 +92,6 @@ class WebSocketApi {
 export const ws = new WebSocketApi('ws://localhost:8000/api/v1/ws/connect');
 
 const addNotification = (data: NotificationWS) => {
-    notification.add('OK', 'NOTIFICATION');
     if (store.data.authorized) {
         store.data.notifications.push(data);
     }

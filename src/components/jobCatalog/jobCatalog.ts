@@ -35,8 +35,8 @@ export class JobCatalog {
      */
     init = async () => {
         store.data.vacancyOffset = 0;
-        store.data.vacancyLimit = 2;
         await this.#getVacancy();
+        store.data.vacancyOffset += store.data.vacancyLimit;
     };
 
     readonly #getVacancy = async () => {
@@ -203,9 +203,9 @@ export class JobCatalog {
         this.#paginationButton = document.getElementById('pagination_button') as HTMLElement;
         if (this.#paginationButton) {
             this.#paginationButton.addEventListener('click', async () => {
-                store.data.vacancyOffset += store.data.vacancyLimit;
                 try {
                     await this.#getVacancy();
+                    store.data.vacancyOffset += store.data.vacancyLimit;
                 } catch {
                     this.#paginationButton?.remove();
                 }
@@ -225,6 +225,12 @@ export class JobCatalog {
                 search: store.data.vacancySearch,
             }),
         );
+
+        const filterContainer = this.self.querySelector('.jobs_filter');
+        if (filterContainer) {
+            const filter = new JobCatalogFilter(filterContainer as HTMLElement);
+            filter.render();
+        }
 
         // Инициализация карусели зарплат
         try {

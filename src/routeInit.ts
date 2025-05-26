@@ -22,6 +22,7 @@ import { SuperTimer } from './iframeTimer';
 import { emptyReview } from './api/empty';
 import { PollStatistics } from './components/pollStatistics/pollStatistics';
 import { api } from './api/api';
+import { LandingPage } from './components/landingPage/landingPage';
 
 const PollLogic = (parent: ParentNode) => {
     const frame = document.createElement('iframe');
@@ -138,7 +139,7 @@ export const routerInit = () => {
     );
     router.add('login', async () => renderPage('Логин', Login));
     router.add('catalog', async () => renderPage('Вакансии', JobCatalog));
-    router.add('', async () => renderPage('Каталог вакансий', JobCatalog));
+    router.add('', async () => renderPage('Главная', LandingPage));
     router.add('vacancy', async () => renderPage('Страница вакансии', JobPage));
     router.add('createVacancy', async () => renderPage('Создание вакансии', VacancyEdit));
     router.add('vacancyEdit', async () => renderPage('Редактирование вакансии', VacancyEdit));

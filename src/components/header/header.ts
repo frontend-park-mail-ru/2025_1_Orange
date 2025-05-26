@@ -172,7 +172,7 @@ export class Header {
         });
 
         this.#logoLink?.addEventListener('click', () => {
-            router.go('/catalog');
+            router.go('/');
         });
 
         this.#pollStatisticsLink?.addEventListener('click', () => {

@@ -29,9 +29,9 @@ export class ResumeCatalog {
      * Получение первоначальных данных для страницы
      */
     init = async () => {
-        store.data.vacancyOffset = 0;
-        store.data.vacancyLimit = 10;
+        store.data.resumeOffset = 0;
         await this.#getResume();
+        store.data.resumeOffset += store.data.resumeLimit;
     };
 
     /**
@@ -124,9 +124,9 @@ export class ResumeCatalog {
         this.#paginationButton = document.getElementById('pagination_button') as HTMLElement;
         if (this.#paginationButton) {
             this.#paginationButton.addEventListener('click', async () => {
-                store.data.resumeOffset += store.data.resumeLimit;
                 try {
                     await this.#getResume();
+                    store.data.resumeOffset += store.data.resumeLimit;
                 } catch {
                     this.#paginationButton?.remove();
                 }

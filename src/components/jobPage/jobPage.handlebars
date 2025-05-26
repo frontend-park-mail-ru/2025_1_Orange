@@ -15,11 +15,11 @@
             <div class="vacancy__actions">
                 <div class="vacancy__buttons">
                     {{#if responded}}
-                        {{> partials/jobCardResponded id=id}}
+                    {{> partials/jobCardResponded id=id}}
                     {{else}}
-                        {{#if isApplicant}}
-                        {{> partials/jobCardNoResponded id=id}}
-                        {{/if}}
+                    {{#if isApplicant}}
+                    {{> partials/jobCardNoResponded id=id}}
+                    {{/if}}
                     {{/if}}
                     {{#if isOwner}}
                     <div class="job__button_second" id="vacancy_edit_button">
@@ -77,6 +77,17 @@
                 </div>
             </div>
         </div>
+        {{#if isOwner}}
+        <div class="resume-table">
+            <div class="resume-table__header">
+                <div class="resume-table__header-cell">Профессия</div>
+                <div class="resume-table__header-cell">Профессиональные навыки</div>
+            </div>
+            <div class="resume-table__body" id="resume-content">
+
+            </div>
+        </div>
+        {{/if}}
         <div id="delete_button">
 
         </div>

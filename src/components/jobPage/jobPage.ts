@@ -2,7 +2,7 @@ import { logger } from '../../utils/logger';
 import template from './jobPage.handlebars';
 import templateResponded from '../../partials/jobCardResponded.handlebars';
 import templateNoResponded from '../../partials/jobCardNoResponded.handlebars';
-import { Vacancy } from '../../api/interfaces';
+import { Resume, Vacancy } from '../../api/interfaces';
 import { JobCompanyCard } from '../jobCompanyCard/jobCompanyCard';
 import './jobPage.sass';
 import {
@@ -17,6 +17,8 @@ import { router } from '../../router';
 import { DeleteButton } from '../deleteButton/deleteButton';
 import { DialogContainer } from '../dialog/dialog';
 import notification from '../notificationContainer/notificationContainer';
+import { ResumeRow } from '../resumeRow/resumeRow';
+import emptyTemplate from './../../partials/emptyState.handlebars';
 
 export class JobPage {
     readonly #parent: HTMLElement;
@@ -25,6 +27,7 @@ export class JobPage {
     #buttonsContainer: HTMLElement | null = null;
     #favoriteButton: HTMLElement | null = null;
     #id: number = 0;
+    #responses: Resume[] = [];
 
     /**
      * Конструктор класса
@@ -182,7 +185,7 @@ export class JobPage {
     /**
      * Рендеринг компонента
      */
-    render = () => {
+    render = async () => {
         logger.info('JobPage render method called');
         const created_date = new Date(this.#props.created_at);
         this.#props.created_at = created_date.toLocaleDateString('ru-RU');
@@ -239,6 +242,22 @@ export class JobPage {
                 const deleteButton = new DeleteButton(deleteContainer, 'Вакансию', this.#delete);
                 deleteButton.render();
             }
+        }
+
+        const resumeContainer = document.getElementById('resume-content');
+        if (resumeContainer) {
+            try {
+                this.#responses = await api.vacancy.responses(this.#props.id);
+            } catch {
+                notification.add('FAIL', 'Ошибка при загрузке откликов');
+            }
+            this.#responses.forEach((data) => {
+                const resume = new ResumeRow(resumeContainer, data, () =>
+                    router.go(`/resume/${data.id}`),
+                );
+                resume.render();
+            });
+            if (this.#responses.length === 0) resumeContainer.innerHTML = emptyTemplate({});
         }
     };
 }

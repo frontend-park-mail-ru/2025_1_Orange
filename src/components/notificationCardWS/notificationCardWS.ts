@@ -3,12 +3,17 @@ import { logger } from '../../utils/logger';
 import template from './notificationCardWS.handlebars';
 import type { NotificationWS } from '../../api/interfaces';
 import { api } from '../../api/api';
+import { router } from '../../router';
 
 export class NotificationCardWS {
     readonly #parent: HTMLElement;
     readonly #notification: NotificationWS;
     #element: HTMLElement | null = null;
     #onStatusChange?: () => void;
+    #employerLink: HTMLElement | null = null;
+    #vacancyLink: HTMLElement | null = null;
+    #resumeLink: HTMLElement | null = null;
+    #applicantLink: HTMLElement | null = null;
 
     /**
      * Конструктор класса
@@ -47,6 +52,26 @@ export class NotificationCardWS {
      */
     readonly #addEventListeners = () => {
         this.self.addEventListener('click', this.#handleClick);
+        this.#employerLink = this.self.querySelector('.notification-employer');
+        this.#vacancyLink = this.self.querySelector('.notification-vacancy');
+        this.#resumeLink = this.self.querySelector('.notification-resume');
+        this.#applicantLink = this.self.querySelector('.notification-applicant');
+        if (this.#employerLink)
+            this.#employerLink.addEventListener('click', () => {
+                router.go(`/profileCompany/${this.#notification.sender_id}`);
+            });
+        if (this.#vacancyLink)
+            this.#vacancyLink.addEventListener('click', () => {
+                router.go(`/vacancy/${this.#notification.object_id}`);
+            });
+        if (this.#resumeLink)
+            this.#resumeLink.addEventListener('click', () => {
+                router.go(`/resume/${this.#notification.resume_id}`);
+            });
+        if (this.#applicantLink)
+            this.#applicantLink.addEventListener('click', () => {
+                router.go(`/resume/${this.#notification.resume_id}`);
+            });
     };
 
     /**

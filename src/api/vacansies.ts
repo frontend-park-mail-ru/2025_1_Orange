@@ -1,5 +1,5 @@
 import { Api } from './api';
-import { Vacancy, VacancyCreate } from './interfaces';
+import { Resume, Vacancy, VacancyCreate } from './interfaces';
 
 export class VacancyService {
     readonly #api: Api;
@@ -122,5 +122,14 @@ export class VacancyService {
      */
     async favorite(id: number): Promise<void> {
         await this.#api.request(`/vacancy/vacancy/${id}/like`, 'POST');
+    }
+
+    /**
+     * Все отклики на вакансию
+     * @param {number} id - идентификатор вакансии
+     * @return {Promise<Resume[]>}
+     */
+    async responses(id: number): Promise<Resume[]> {
+        return this.#api.request(`/vacancy/vacancy/${id}/response/list`, 'GET');
     }
 }

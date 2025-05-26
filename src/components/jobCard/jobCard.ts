@@ -122,7 +122,8 @@ export class JobCard {
     readonly #handleUnresumeClick = async () => {
         logger.info('resume');
         try {
-            await api.vacancy.response(this.#props.id, store.data.responseResumeId);
+            const resume = await api.resume.all(0, 10);
+            await api.vacancy.response(this.#props.id, resume[0].id);
             const buttonsContainer = this.self.querySelector('.job__buttons');
             if (buttonsContainer) {
                 buttonsContainer.innerHTML = templateNoResponded({ id: this.#props.id });
