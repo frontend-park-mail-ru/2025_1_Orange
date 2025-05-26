@@ -97,8 +97,12 @@ export class NotificationContainerWS {
             return;
         }
 
-        this.#notificationCards.forEach((card) => {
-            card.markAsRead();
+        this.#notificationCards.forEach(async (card) => {
+            try {
+                await card.markAsRead();
+            } catch {
+                console.log('Ошибка сервера')
+            }
         });
 
         store.data.notifications.forEach((notification) => {
