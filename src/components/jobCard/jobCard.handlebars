@@ -1,10 +1,12 @@
 <div class="job" id="jobCard-{{id}}">
     <div class="job__favorite">
-        <svg width="28" height="25" viewBox="0 0 28 25" fill="none"
-             xmlns="http://www.w3.org/2000/svg">
-            <path d="M14.0162 4.00171C5.75012 -3.08324 -2.49987 6.83343 4.67171 13.9176L14.0162 23.8334L23.3606 13.9176C30.5001 6.83342 22.2501 -3.08324 14.0162 4.00171Z"
-                  stroke="#111928" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        {{#if liked}}
+            <img src="/heart-fill.svg">
+        {{else}}
+            {{#if isApplicant}}
+                <img src="/heart-empty.svg">
+            {{/if}}
+        {{/if}}
     </div>
     <div class="job__avatar">
         {{> partials/logo logo=employer.logo_path }}
@@ -40,9 +42,11 @@
         <div class="job__footer">
             <div class="job__buttons">
                 {{#if responded}}
-                {{> partials/jobCardResponded }}
+                {{> partials/jobCardResponded id=id}}
                 {{else}}
-                    <div class="job__button" id="vacancy_{{id}}_resume">Откликнуться</div>
+                    {{#if isApplicant}}
+                    {{> partials/jobCardNoResponded id=id}}
+                    {{/if}}
                 {{/if}}
             </div>
             <div class="job__statistics">

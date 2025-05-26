@@ -6,15 +6,17 @@ import './variables.sass';
 import { logger } from './utils/logger';
 import { routerInit } from './routeInit';
 import { emptyAuthResponse } from './api/empty';
+import { activate } from './api/webSocket';
 
 routerInit();
 
 api.auth
     .auth()
-    .then((user) => {
+    .then(async (user) => {
         logger.info(user);
         store.data.authorized = true;
         store.data.user = user;
+        await activate();
         logger.info(store.data.user);
     })
     .catch(() => {
@@ -23,15 +25,4 @@ api.auth
     })
     .finally(() => {
         router.go(window.location.pathname);
-    });
-
-navigator.serviceWorker
-    .register('/sw.js', { scope: '/' })
-    .then(function (registration) {
-        // Registration was successful
-        logger.info('SW registration OK:', registration);
-    })
-    .catch(function (err) {
-        // registration failed :(
-        logger.info('SW registration FAIL:', err);
     });

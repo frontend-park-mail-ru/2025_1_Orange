@@ -5,6 +5,7 @@ import { store } from '../../store';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { formValidate } from '../../forms';
+import notification from '../notificationContainer/notificationContainer';
 
 export class ProfileUserEdit {
     readonly #parent: HTMLElement;
@@ -56,6 +57,7 @@ export class ProfileUserEdit {
             const data = await api.applicant.get(this.#id);
             this.#defaultData = data;
         } catch {
+            notification.add('FAIL', 'Не удалось загрузить информацию о профиле соискателя');
             logger.info('Не удалось загрузить страницу');
             router.back();
         }
@@ -91,7 +93,11 @@ export class ProfileUserEdit {
             switch (key) {
                 case 'birth_date': {
                     const date = new Date(value as string);
-                    json[key] = date.toISOString();
+                    try {
+                        json[key] = date.toISOString();
+                    } catch {
+                        json[key] = '';
+                    }
                     break;
                 }
                 case 'file_input':
@@ -164,6 +170,7 @@ export class ProfileUserEdit {
                             }
                         }
                     } catch {
+                        notification.add('FAIL', 'Ошибка при обновлении информации профиля');
                         if (error) {
                             error.textContent += 'Ошибка при обновлении информации\n';
                         }
@@ -177,8 +184,10 @@ export class ProfileUserEdit {
                         formData.append('avatar', image);
                         try {
                             await api.applicant.avatar(formData);
+                            notification.add('OK', 'Аватарка успешна обновлена');
                             router.go(`/profileUser/${store.data.user.user_id}`);
                         } catch {
+                            notification.add('FAIL', 'Ошибка при загрузке аватарки профиля');
                             if (error) {
                                 error.textContent += 'Ошибка при загрузке картинки';
                             }
@@ -243,7 +252,7 @@ export class ProfileUserEdit {
         }
 
         if (this.#sex) {
-            this.#sex.value = this.#data?.sex ?? 'M';
+            this.#sex.value = this.#defaultData?.sex ?? 'M';
         }
 
         this.#avatar = document.querySelectorAll('.profile__avatar-img');

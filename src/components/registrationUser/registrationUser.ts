@@ -1,8 +1,10 @@
 import { api } from '../../api/api';
+import { activate } from '../../api/webSocket';
 import { customMessage } from '../../forms';
 import { router } from '../../router';
 import { store } from '../../store';
 import { logger } from '../../utils/logger';
+import notification from '../notificationContainer/notificationContainer';
 import template from './registrationUser.handlebars';
 
 export class RegistrationUser {
@@ -107,8 +109,11 @@ export class RegistrationUser {
                     const user = await api.applicant.register(store.data.auth.request);
                     store.data.authorized = true;
                     store.data.user = user;
+                    notification.add('OK', 'Соискатель успешно зарегестрирован');
+                    await activate();
                     router.go('/catalog');
                 } catch {
+                    notification.add('FAIL', 'Ошибка при регистрации соискателя');
                     const error = document.querySelector('.form__error') as HTMLElement;
                     if (error) {
                         error.hidden = false;

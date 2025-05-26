@@ -1,5 +1,5 @@
 import { Api } from './api';
-import { Resume, ResumeCreate, ResumeShort } from './interfaces';
+import { Resume, ResumeCreate } from './interfaces';
 
 export class ResumeService {
     readonly #api: Api;
@@ -12,9 +12,9 @@ export class ResumeService {
      * Получение списка всех резюме
      * @param {number} offset - с какого резюме выводить
      * @param {number} limit - сколько резюме выводить
-     * @returns {Promise<ResumeShort[]>}
+     * @returns {Promise<Resume[]>}
      */
-    async all(offset: number, limit: number): Promise<ResumeShort[]> {
+    async all(offset: number, limit: number): Promise<Resume[]> {
         return this.#api.request(`/resume/all?offset=${offset}&limit=${limit}`, 'GET');
     }
 
@@ -60,12 +60,22 @@ export class ResumeService {
      * @param {string} query - строка которую будем искать в резюме
      * @param {number} offset - с какого резюме выводить
      * @param {number} limit - сколько резюме выводить
-     * @returns {Promise<ResumeShort[]>}
+     * @returns {Promise<Resume[]>}
      */
-    async search(query: string, offset: number, limit: number): Promise<ResumeShort[]> {
+    async search(query: string, offset: number, limit: number): Promise<Resume[]> {
         return this.#api.request(
             `/resume/search?profession=${query}&offset=${offset}&limit=${limit}`,
             'GET',
+        );
+    }
+
+    async pdf(id: number): Promise<Blob> {
+        return this.#api.request(
+            `/resume/pdf/${id}`,
+            'GET',
+            null,
+            'application/json',
+            'applicaion/pdf',
         );
     }
 }

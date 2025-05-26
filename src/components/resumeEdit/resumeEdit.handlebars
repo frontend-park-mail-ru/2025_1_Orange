@@ -49,7 +49,7 @@
                         <button class="job__button_second" id="profile_change">Изменить профиль</button>
                     </div>
                     <div>
-                        <button class="job__button" id="basic_next">Далее</button>
+                        <button class="job__button" id="basic_next" type="submit">Далее</button>
                     </div>
                 </div>
             </fieldset>
@@ -63,7 +63,7 @@
                         minlength="3" maxlength="30" pattern="^[а-яА-Яa-zA-Z0-9\s\.,#+\-]+$"
                         title="Можно вводить только буквы, пробел и спец символы" required value="{{profession}}">
                     <input type="text" name="skills" placeholder="Навыки" class="resumeEdit__input" minlength="3"
-                        maxlength="200" pattern="^[а-яА-Яa-zA-Z0-9\s\.,!@#$*()_+\-]+$"
+                        maxlength="200" pattern="^[а-яА-Яa-zA-Z0-9\s.,!\-$@*+_\-]+$"
                         title="Можно вводить только буквы, знаки препинания, пробел и спецсимволы" required value="{{skillsString}}">
                     <div>
                         <div class="resumeEdit__error"></div>
@@ -92,7 +92,7 @@
                         pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
                         title="Можно вводить только буквы, знаки препинания и пробел" required>
                     <input type="number" name="graduation_year" placeholder="Год окончания" class="resumeEdit__input"
-                        min="{{minGraduatingDate}}" max="2050" value="{{graduation_year}}" required>
+                        min="{{minGraduatingDate}}" max="{{maxGraduatingDate}}" value="{{graduation_year}}" required>
                     <div>
                         <div class="resumeEdit__error"></div>
                         <button class="job__button" id="education_next">Далее</button>

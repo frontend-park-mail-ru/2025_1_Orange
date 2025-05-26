@@ -1,36 +1,42 @@
-<div class="page"id="job_page">
+<div class="page" id="job_page">
     <!-- Левая колонка -->
     <div class="vacancy-wrapper">
         <div class="vacancy">
             <div class="vacancy__header">
                 <div class="vacancy__name">{{title}}</div>
                 <div class="job__favorite">
-                    <svg width="28" height="25" viewBox="0 0 28 25" fill="none"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path d="M14.0162 4.00171C5.75012 -3.08324 -2.49987 6.83343 4.67171 13.9176L14.0162 23.8334L23.3606 13.9176C30.5001 6.83342 22.2501 -3.08324 14.0162 4.00171Z"
-                              stroke="#111928" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    {{#if liked}}
+                    <img src="/heart-fill.svg">
+                    {{else}}
+                    <img src="/heart-empty.svg">
+                    {{/if}}
                 </div>
             </div>
             <div class="vacancy__actions">
                 <div class="vacancy__buttons">
                     {{#if responded}}
-                    {{> partials/jobCardResponded }}
+                    {{> partials/jobCardResponded id=id}}
                     {{else}}
-                    <div class="job__button" id="vacancy_resume_button">
-                        <span>Откликнуться</span>
-                    </div>
+                    {{#if isApplicant}}
+                    {{> partials/jobCardNoResponded id=id}}
                     {{/if}}
+                    {{/if}}
+                    {{#if isOwner}}
                     <div class="job__button_second" id="vacancy_edit_button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
-                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-gear" viewBox="0 0 16 16">
+                            <path
+                                d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+                            <path
+                                d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
                         </svg>
                         <span>Настройки</span>
                     </div>
+                    {{/if}}
                 </div>
                 <div class="job__statistics">опубликовано {{created_at}}</div>
             </div>
+            <div class="job__error" hidden></div>
             <div class="vacancy__description">
                 <div class="vacancy__description__item">
                     <div class="vacancy__header">Описание</div>
@@ -40,21 +46,21 @@
                 <div class="vacancy__description__item">
                     {{#if tasks}}
                     <div class="vacancy__header">Задачи</div>
-                        <ul>
+                    <ul>
                         {{#each tasks}}
                         <li>{{this}}</li>
                         {{/each}}
-                        </ul>
+                    </ul>
                     {{/if}}
                 </div>
 
                 <div class="vacancy__description__item">
-                {{#if requirements}}
+                    {{#if requirements}}
                     <div class="vacancy__header">Требования</div>
                     <ul>
-                    {{#each requirements}}
-                    <li>{{this}}</li>
-                    {{/each}}
+                        {{#each requirements}}
+                        <li>{{this}}</li>
+                        {{/each}}
                     </ul>
                     {{/if}}
                 </div>
@@ -63,17 +69,31 @@
                     {{#if optional_requirements}}
                     <div class="vacancy__header">Будет плюсом</div>
                     <ul>
-                    {{#each optional_requirements}}
-                    <li>{{this}}</li>
-                    {{/each}}
+                        {{#each optional_requirements}}
+                        <li>{{this}}</li>
+                        {{/each}}
                     </ul>
                     {{/if}}
                 </div>
             </div>
         </div>
-        <div id="delete_button">
+        {{#if isOwner}}
+        <div class="vacancy__header">Отклики</div>
+        <div class="resume-table">
+            <div class="resume-table__header">
+                <div class="resume-table__header-cell">Профессия</div>
+                <div class="resume-table__header-cell">Профессиональные навыки</div>
+            </div>
+            <div class="resume-table__body" id="resume-content">
 
+            </div>
         </div>
+        <!-- Кнопка удаления резюме -->
+        <div id="delete_button">
+            <div class="job__button job__button--delete">Удалить вакансию</div>
+        </div>
+        {{/if}}
+
     </div>
     <!-- Правая колонка -->
     <div class="vacancy__sidebar">

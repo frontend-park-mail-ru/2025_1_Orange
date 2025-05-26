@@ -1,0 +1,54 @@
+.notification
+    display: flex
+    gap: 20px
+    padding: 10px
+    border: 1px solid #CFCFCF
+    border-left: 3px solid #0070ff
+    border-radius: 5px
+    position: relative
+    max-width: 500px
+    padding-right: 30px
+    margin-bottom: 10px
+    margin-right: 10px
+    background: #ffffff
+    align-items: center
+
+    &--ok
+        border-left: 3px solid #2bff00
+    &--fail
+        border-left: 3px solid #F32526
+
+    &__close
+        position: absolute
+        right: 0px
+        top: 0px
+        font-size: 20px
+        cursor: pointer
+        color: #B1AFB8
+
+        svg
+            width: 32px
+            height: 32px
+
+    &__icon
+        svg
+            width: 32px
+            height: 32px
+        
+        &--fail
+            color: #F32526
+        
+        &--ok
+            color: #2bff00
+    
+    &__info
+        display: flex
+        flex-direction: column
+        gap: 10px
+    
+    &__header
+        font-size: 16px
+        font-weight: 500
+    
+    &__message
+        font-size: 14px

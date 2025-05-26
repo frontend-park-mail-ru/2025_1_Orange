@@ -1,4 +1,5 @@
 <form class="resumeEdit__experience" name="experience_{{id}}">
+    <fieldset class="resumeEdit__group">
     <legend class="resumeEdit__name">Опыт работы</legend>
     <div class="resumeEdit__options">
         <input type="text" name="employer_name" placeholder="Компания" class="resumeEdit__input"
@@ -10,13 +11,13 @@
 
         <div class="resumeEdit__split">
             <input type="date" name="start_date" placeholder="Начало работы" class="resumeEdit__input"
-                value="{{start_date}}" min="1950-01-01" max="2025-11-31" required>
+                value="{{start_date}}" min="{{minDate}}" max="{{maxDate}}" required>
             {{#if until_now}}
             <input type="date" name="end_date" placeholder="Окончание работы" class="resumeEdit__input"
-                value="{{end_date}}" min="2000-01-01" max="2025-11-31">
+                value="{{end_date}}" min="{{minDate}}" max="{{maxDate}}">
             {{else}}
             <input type="date" name="end_date" placeholder="Окончание работы" class="resumeEdit__input"
-                value="{{end_date}}" min="2000-01-01" max="2025-11-31" required>
+                value="{{end_date}}" min="{{minDate}}" max="{{maxDate}}" required>
             {{/if}}
         </div>
 
@@ -25,8 +26,8 @@
             <span>По настоящее время</span>
         </label>
         <input type="text" name="achievements" value="" hidden>
+        <div class="resumeEdit__error"></div>
     </div>
-    <div class="resumeEdit__error"></div>
     {{#if isNew}}
     <div>
     <button class="job__button_second" name="new_experience">
@@ -38,4 +39,5 @@
     </button>
     </div>
     {{/if}}
+    </fieldset>
 </form>

@@ -1,5 +1,5 @@
 <form class="filter" aria-label="Фильтры вакансий" name="job_catalog_filter">
-    <fieldset class="filter__group">
+    {{!-- <fieldset class="filter__group">
         <legend class="filter__name">Режим работы</legend>
         <div class="filter__options">
             <label class="filter__checkbox">
@@ -55,22 +55,22 @@
                 <span>Более 6 лет</span>
             </label>
         </div>
-    </fieldset>
+    </fieldset> --}}
 
     <fieldset class="filter__group">
-        <legend class="filter__name">Сортировка</legend>
+        <legend class="filter__name">Показывать на странице</legend>
         <div class="filter__options">
             <label class="filter__radio">
-                <input type="radio" name="sort" value="date" checked>
-                <span>По дате изменения</span>
+                <input type="radio" name="pagination" value="10" checked>
+                <span>10 вакансии</span>
             </label>
             <label class="filter__radio">
-                <input type="radio" name="sort" value="salary_desc">
-                <span>По убыванию зарплаты</span>
+                <input type="radio" name="pagination" value="20">
+                <span>20 вакансий</span>
             </label>
             <label class="filter__radio">
-                <input type="radio" name="sort" value="relevance">
-                <span>По соответствию</span>
+                <input type="radio" name="pagination" value="30">
+                <span>30 вакансий</span>
             </label>
         </div>
     </fieldset>

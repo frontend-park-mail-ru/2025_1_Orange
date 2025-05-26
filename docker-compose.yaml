@@ -4,7 +4,17 @@ services:
     container_name: orange-nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./dist:/usr/share/nginx/html
       - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt/live/resumatch.tech/fullchain.pem:/etc/nginx/fullchain.pem:ro
+      - /etc/letsencrypt/live/resumatch.tech/privkey.pem:/etc/nginx/privkey.pem:ro
     restart: unless-stopped
+    networks:
+      - resumatch-network
+
+networks:
+  resumatch-network:
+    external: true
+    name: 2025_1_orange_resumatch-network

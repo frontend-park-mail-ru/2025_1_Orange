@@ -3,8 +3,10 @@ import { logger } from '../utils/logger';
 import { ApplicantService } from './applicant';
 import { AuthService } from './auth';
 import { EmployerService } from './employer';
+import { NotificationService } from './notification';
 import { PollService } from './poll';
 import { ResumeService } from './resumes';
+import { SpecializationService } from './specialization';
 import { VacancyService } from './vacansies';
 
 export class Api {
@@ -15,12 +17,14 @@ export class Api {
     readonly employer: EmployerService;
     readonly resume: ResumeService;
     readonly poll: PollService;
+    readonly specialization: SpecializationService;
+    readonly notification: NotificationService;
 
     /**
      * Конструктор класса api - взаимодействие с бекендом
      * @param {string} baseUrl - url бекенда
      */
-    constructor(baseUrl: string = 'http://localhost:8000/api/v1') {
+    constructor(baseUrl: string = 'http://localhost/api/v1') {
         this.#baseUrl = baseUrl;
         this.auth = new AuthService(this);
         this.vacancy = new VacancyService(this);
@@ -28,6 +32,8 @@ export class Api {
         this.employer = new EmployerService(this);
         this.resume = new ResumeService(this);
         this.poll = new PollService(this);
+        this.specialization = new SpecializationService(this);
+        this.notification = new NotificationService(this);
     }
 
     /**
@@ -42,6 +48,7 @@ export class Api {
         method: string = 'GET',
         body: string | FormData | null = null,
         content_type: string = 'application/json',
+        response_type: string = 'application/json',
     ) {
         const url = this.#baseUrl + endpoint;
         const headers = new Headers();
@@ -74,7 +81,8 @@ export class Api {
                 throw new Error(error.message || 'Ошибка при выполнении запроса');
             }
             try {
-                return await response.json();
+                if (response_type === 'application/json') return await response.json();
+                if (response_type === 'application/pdf') return await response.blob();
             } catch {
                 return '';
             }

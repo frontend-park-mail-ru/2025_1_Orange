@@ -13,7 +13,7 @@
 
     <div class="resume_sidebar__actions-mobile">
       {{#if owner}}
-      <div class="job__button_second">
+      <div class="job__button_second resume_info__edit">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
           viewBox="0 0 16 16">
           <path
@@ -24,7 +24,8 @@
         <span>Редактировать</span>
       </div>
       {{/if}}
-      <div class="job__button">
+      <a style="text-decoration:none;" href="{{pdfLink}}" target="_blank">
+      <div class="job__button resume_info__pdf">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
           class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
           <path
@@ -34,6 +35,7 @@
         </svg>
         <span>Сохранить PDF</span>
       </div>
+      </a>
     </div>
 
     <!-- Должность -->
@@ -56,16 +58,19 @@
     </div>
 
     <!-- Опыт работы -->
+    {{#if hasExp}}
     <div class="resume_info__section">
       <h3 class="resume_info__title">Опыт работы</h3>
       <div class="resume_info__experience">
       </div>
     </div>
-
+    {{/if}}
+    {{#if owner}}
     <!-- Кнопка удаления резюме -->
     <div id="delete_button">
-
+      <div class="job__button job__button--delete">Удалить резюме</div>
     </div>
+    {{/if}}
 
   </div>
 
@@ -74,7 +79,7 @@
     <!-- Кнопки действий -->
     <div class="resume_sidebar__actions">
       {{#if owner}}
-      <div class="job__button_second">
+      <div class="job__button_second resume_info__edit">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
           viewBox="0 0 16 16">
           <path
@@ -85,7 +90,8 @@
         <span>Редактировать</span>
       </div>
       {{/if}}
-      <div class="job__button">
+      <a style="text-decoration:none;" href="{{pdfLink}}" target="_blank">
+      <div class="job__button resume_info__pdf">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
           class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
           <path
@@ -95,6 +101,7 @@
         </svg>
         <span>Сохранить PDF</span>
       </div>
+      </a>
     </div>
 
     <!-- Местоположение -->
@@ -126,6 +133,7 @@
     {{/if}}
 
     <!-- Контакты -->
+    {{#if hasSocialLinks}}
     <div class="resume_sidebar__section">
       <div class="resume_sidebar__title">Контакты</div>
       <div class="resume_sidebar__contacts">
@@ -165,6 +173,7 @@
         {{/if}}
       </div>
     </div>
+    {{/if}}
 
     <!-- Статус -->
     {{#if applicant.status}}

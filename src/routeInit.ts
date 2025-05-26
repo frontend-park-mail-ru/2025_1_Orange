@@ -22,6 +22,7 @@ import { SuperTimer } from './iframeTimer';
 import { emptyReview } from './api/empty';
 import { PollStatistics } from './components/pollStatistics/pollStatistics';
 import { api } from './api/api';
+import { LandingPage } from './components/landingPage/landingPage';
 
 const PollLogic = (parent: ParentNode) => {
     const frame = document.createElement('iframe');
@@ -30,7 +31,7 @@ const PollLogic = (parent: ParentNode) => {
     frame.hidden = true;
     parent.appendChild(frame);
     SuperTimer.start(async () => {
-        const frame = document.getElementById('review_frame') as HTMLIFrameElement;
+        /*const frame = document.getElementById('review_frame') as HTMLIFrameElement;
         if (frame) {
             if (!store.data.authorized) frame.hidden = true;
             if (store.data.review.poll_id === 0 && store.data.authorized) {
@@ -42,7 +43,7 @@ const PollLogic = (parent: ParentNode) => {
                     logger.info(error);
                 }
             }
-        }
+        }*/
     }, 10);
     window.addEventListener('message', async (event) => {
         if (event.data === 'CLOSE') {
@@ -138,7 +139,7 @@ export const routerInit = () => {
     );
     router.add('login', async () => renderPage('Логин', Login));
     router.add('catalog', async () => renderPage('Вакансии', JobCatalog));
-    router.add('', async () => renderPage('Каталог вакансий', JobCatalog));
+    router.add('', async () => renderPage('Главная', LandingPage));
     router.add('vacancy', async () => renderPage('Страница вакансии', JobPage));
     router.add('createVacancy', async () => renderPage('Создание вакансии', VacancyEdit));
     router.add('vacancyEdit', async () => renderPage('Редактирование вакансии', VacancyEdit));

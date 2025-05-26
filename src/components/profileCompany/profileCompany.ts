@@ -6,6 +6,8 @@ import { JobCard } from '../jobCard/jobCard';
 import { router } from '../../router';
 import { store } from '../../store';
 import { api } from '../../api/api';
+import notification from '../notificationContainer/notificationContainer';
+import emptyTemplate from './../../partials/emptyState.handlebars';
 
 export class ProfileCompany {
     readonly #parent: HTMLElement;
@@ -54,6 +56,7 @@ export class ProfileCompany {
             this.#data = data;
         } catch {
             logger.info('Не удалось загрузить страницу');
+            notification.add('FAIL', 'Не удалось загрузить профиль компании');
             router.back();
         }
 
@@ -126,7 +129,7 @@ export class ProfileCompany {
                 vacancyCard.render();
             });
             if (this.#vacancies.length === 0) {
-                this.#vacancyContainer.textContent = 'Нет вакансий';
+                this.#vacancyContainer.innerHTML = emptyTemplate();
             }
         } else {
             this.#vacancyContainer.textContent = 'Ошибка при загрузке';

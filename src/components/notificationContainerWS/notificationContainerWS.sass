@@ -1,0 +1,124 @@
+:root
+    --primary-blue: #0071fe
+    --danger-red: #dc2626
+    --text-black: #000000
+    --bg-light: #f9fafb
+    --bg-blue-light: #eff6ff
+    --bg-red-light: #fef2f2
+    --border-gray: #cfcfcf
+    --hover-blue: #DFEDFF
+    --hover-red: #FFDBDB
+
+.notifications-container
+    position: absolute
+    top: 100%
+    right: 0
+    width: 320px
+    background: white
+    border-radius: 15px
+    overflow: hidden
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
+    z-index: 1000
+    margin-top: 8px
+
+    &__header
+        display: flex
+        justify-content: space-between
+        align-items: center
+        padding: 16px
+        border-bottom: 1px solid var(--bg-light)
+        background: white
+
+        h1
+            font-size: 16px
+            font-weight: 700
+            color: var(--text-black)
+
+close-btn
+    width: 18px
+    height: 18px
+    cursor: pointer
+    opacity: 0.6
+    transition: opacity 0.2s
+
+    &:hover
+        opacity: 1
+
+.actions
+    display: flex
+    gap: 12px
+    padding: 16px
+    background: var(--bg-light)
+    border-top: 0.5px solid var(--border-gray)
+
+.action-btn
+    display: flex
+    align-items: center
+    gap: 6px
+    padding: 8px 12px
+    border-radius: 8px
+    font-size: 12px
+    font-weight: 500
+    cursor: pointer
+    transition: background-color 0.2s
+    border: none
+    text-decoration: none
+
+    &.read-all
+        background: var(--bg-blue-light)
+        color: var(--primary-blue)
+
+        &:hover
+            background: var(--hover-blue)
+
+    &.delete-all
+        background: var(--bg-red-light)
+        color: var(--danger-red)
+
+        &:hover
+            background: var(--hover-red)
+
+.action-icon
+    width: 14px
+    height: 14px
+
+/* Notifications list */
+.notifications-list
+    background: var(--bg-light)
+
+.empty-state
+    display: flex
+    align-items: center
+    gap: 16px
+    padding: 16px
+    background: white
+    border-top: 0.5px solid var(--border-gray)
+
+    .notification-indicator
+        flex-shrink: 0
+
+        .unread-dot
+            width: 8px
+            height: 8px
+            margin-right: 8px
+            background: var(--text-black)
+            border-radius: 50%
+
+.empty-state-message
+    font-size: 14px
+    font-weight: 500
+    color: var(--text-black)
+
+.hidden
+    display: none
+
+/* Адаптивность */
+@media (max-width: 768px)
+    .notifications-container
+        width: 280px
+        right: -20px
+
+@media (max-width: 480px)
+    .notifications-container
+        width: 260px
+        right: -40px

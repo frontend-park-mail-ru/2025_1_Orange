@@ -7,6 +7,7 @@ import { store } from '../../store';
 import './vacancyEdit.sass';
 import { router } from '../../router';
 import { fieldValidate } from '../../forms';
+import notification from '../notificationContainer/notificationContainer';
 
 export class VacancyEdit {
     readonly #parent: HTMLElement;
@@ -70,12 +71,14 @@ export class VacancyEdit {
                 const data = await api.vacancy.get(this.#id);
                 this.#defaultData = data;
             } catch {
+                notification.add('FAIL', 'Не удалось загрузить вакансию');
                 logger.info('Не удалось загрузить вакансию');
                 this.#id = 0;
                 this.#defaultData = emptyVacancy;
                 try {
                     this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
                 } catch {
+                    notification.add('FAIL', 'Не удалось загрузить информацию о компании');
                     router.back();
                 }
             }
@@ -84,6 +87,7 @@ export class VacancyEdit {
             try {
                 this.#defaultData.employer = await api.employer.get(store.data.user.user_id);
             } catch {
+                notification.add('FAIL', 'Не удалось загрузить информацию о компании');
                 router.back();
             }
         }
@@ -340,9 +344,13 @@ export class VacancyEdit {
                         router.go(`/vacancy/${data.id}`);
                     }
                 } catch {
-                    if (this.#id !== 0 && error)
+                    if (this.#id !== 0 && error) {
+                        notification.add('FAIL', 'Ошибка при обновлении вакансии');
                         error.textContent = 'Ошибка при обновлении вакансии';
-                    else if (error) error.textContent = 'Ошибка при создании вакансии';
+                    } else if (error) {
+                        notification.add('FAIL', 'Ошибка при создании вакансии');
+                        error.textContent = 'Ошибка при создании вакансии';
+                    }
                 }
             });
         }

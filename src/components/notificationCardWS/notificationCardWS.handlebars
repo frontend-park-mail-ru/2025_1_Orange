@@ -1,0 +1,18 @@
+<div class="notification-item" data-id="{{id}}" data-viewed="{{is_viewed}}">
+    <div class="notification-indicator">
+        {{#unless is_viewed}}
+            <div class="unread-dot"></div>
+        {{else}}
+            <svg class="read-check" viewBox="0 0 24 24">
+                <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        {{/unless}}
+    </div>
+    <div class="notification-text">
+        {{#if (eq type "apply")}}
+            На вашу вакансию <span class="highlight notification-vacancy">{{title}}</span> откликнулся соискатель <span class="highlight notification-applicant">{{applicant_name}}</span>
+        {{else}}
+            Ваше резюме <span class="highlight notification-resume">{{title}}</span> скачал работодатель <span class="highlight notification-employer">{{employer_name}}</span>
+        {{/if}}
+    </div>
+</div>

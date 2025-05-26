@@ -8,6 +8,8 @@ import { api } from '../../api/api';
 import { router } from '../../router';
 import { store } from '../../store';
 import { BurgerMenu } from '../burgerMenu/burgerMenu';
+import notification from '../notificationContainer/notificationContainer';
+import { SalaryCarousel } from '../salaryCarousel/salaryCarousel';
 
 export class JobCatalog {
     readonly #parent: HTMLElement;
@@ -17,6 +19,7 @@ export class JobCatalog {
     #categories: NodeListOf<HTMLElement> = [];
     #searchForm: HTMLFormElement | null = null;
     #paginationButton: HTMLElement | null = null;
+    #salaryCarousel: SalaryCarousel | null = null;
 
     /**
      * Конструктор класса
@@ -32,8 +35,8 @@ export class JobCatalog {
      */
     init = async () => {
         store.data.vacancyOffset = 0;
-        store.data.vacancyLimit = 2;
         await this.#getVacancy();
+        store.data.vacancyOffset += store.data.vacancyLimit;
     };
 
     readonly #getVacancy = async () => {
@@ -66,6 +69,7 @@ export class JobCatalog {
                     );
             }
         } catch (error) {
+            notification.add('FAIL', 'Ошибка при загрузке вакансий');
             logger.error('Ошибка при загрузке вакансий:', error);
             this.#jobs = [];
         }
@@ -137,6 +141,24 @@ export class JobCatalog {
     };
 
     /**
+     * Инициализация карусели зарплат
+     */
+    readonly #initSalaryCarousel = async () => {
+        const salaryCarouselContainer = this.self.querySelector(
+            '.salary_carousel_container',
+        ) as HTMLElement;
+        if (salaryCarouselContainer) {
+            this.#salaryCarousel = new SalaryCarousel(salaryCarouselContainer);
+            try {
+                await this.#salaryCarousel.init();
+                this.#salaryCarousel.render();
+            } catch {
+                notification.add('FAIL', 'Ошибка при поиске статистики');
+            }
+        }
+    };
+
+    /**
      * Навешивание обработчиков
      */
     readonly #addEventListeners = () => {
@@ -181,9 +203,9 @@ export class JobCatalog {
         this.#paginationButton = document.getElementById('pagination_button') as HTMLElement;
         if (this.#paginationButton) {
             this.#paginationButton.addEventListener('click', async () => {
-                store.data.vacancyOffset += store.data.vacancyLimit;
                 try {
                     await this.#getVacancy();
+                    store.data.vacancyOffset += store.data.vacancyLimit;
                 } catch {
                     this.#paginationButton?.remove();
                 }
@@ -203,8 +225,20 @@ export class JobCatalog {
                 search: store.data.vacancySearch,
             }),
         );
-        const filter = new JobCatalogFilter(this.self.querySelector('.jobs_filter') as HTMLElement);
-        filter.render();
+
+        const filterContainer = this.self.querySelector('.jobs_filter');
+        if (filterContainer) {
+            const filter = new JobCatalogFilter(filterContainer as HTMLElement);
+            filter.render();
+        }
+
+        // Инициализация карусели зарплат
+        try {
+            await this.#initSalaryCarousel();
+        } catch {
+            logger.info('Ошибка при рендеринге карусели');
+        }
+
         this.#createResumeLink = this.self.querySelector('.info__link') as HTMLLinkElement;
         this.#jobContainer = this.self.querySelector('.jobs_list') as HTMLElement;
         this.#renderVacancy();

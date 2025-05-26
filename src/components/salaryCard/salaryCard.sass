@@ -1,0 +1,92 @@
+.salary-card
+    flex: 0 0 320px
+    background: white
+    border-radius: 16px
+    padding: 24px
+    border: 1px solid #cfcfcf
+    display: grid
+    grid-template-rows: auto 1px 1fr auto
+    min-height: 280px
+
+    &__header
+        font-size: 18px
+        font-weight: 700
+        color: #333333
+        display: flex
+        align-items: center
+        justify-content: center
+        text-align: center
+        min-height: 60px
+
+    &__separator
+        height: 1px
+        background-color: rgba(146, 156, 165, 0.4)
+        margin: 0
+
+    &__content
+        display: flex
+        flex-direction: column
+        justify-content: center
+
+    &__range
+        display: flex
+        align-items: flex-start
+        gap: 16px
+
+    &__scale
+        flex-shrink: 0
+        margin-top: 2px
+
+    &__items
+        flex: 1
+        display: flex
+        flex-direction: column
+
+    &__item
+        margin-bottom: 14px
+        display: flex
+        flex-direction: column
+        height: 46px
+        justify-content: center
+
+        &:last-child
+            margin-bottom: 0
+
+    &__amount
+        font-size: 16px
+        font-weight: 700
+        color: #333333
+        line-height: 24px
+        margin-bottom: 2px
+
+    &__label
+        font-size: 12px
+        font-weight: 400
+        color: #666666
+        line-height: 16px
+
+    @media screen and ( max-width: 1200px )
+        flex: 0 0 300px
+
+    @media screen and ( max-width: 768px )
+        flex: 0 0 280px
+        
+        &__header
+            font-size: 16px
+            min-height: 50px
+
+        &__amount
+            font-size: 15px
+
+    @media screen and ( max-width: 480px )
+        flex: 0 0 250px
+        padding: 16px
+
+        &__header
+            font-size: 15px
+
+        &__amount
+            font-size: 14px
+
+    @media screen and ( min-width: 1400px )
+        flex: 0 0 280px

@@ -7,10 +7,12 @@ import { store } from '../../store';
 import { api } from '../../api/api';
 import { router } from '../../router';
 import { JobCard } from '../jobCard/jobCard';
+import notification from '../notificationContainer/notificationContainer';
+import emptyTemplate from './../../partials/emptyState.handlebars';
 
 export class ProfileUser {
     readonly #parent: HTMLElement;
-    #resumes: Resume[] | null = null;
+    #resumes: Resume[] = [];
     #id: number = 0;
     #data: Applicant | null = null;
     #vacancies: VacancyShort[] | null = null;
@@ -50,6 +52,7 @@ export class ProfileUser {
             const data = await api.applicant.get(this.#id);
             this.#data = data;
         } catch {
+            notification.add('FAIL', 'Не удалось загрузить профиль соискателя');
             logger.info('Не удалось загрузить страницу');
             router.back();
         }
@@ -154,18 +157,40 @@ export class ProfileUser {
                 const response = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
                 response.render();
             });
+            if (this.#vacancies.length === 0) this.#vacancyContainer.innerHTML = emptyTemplate({});
         } catch {
-            if (this.#vacancyContainer)
+            if (this.#vacancyContainer) {
+                notification.add('FAIL', 'При загрузке откликов произошла ошибка');
                 this.#vacancyContainer.textContent = 'При загрузке откликов произошла ошибка';
+            }
         }
     };
 
-    // TODO реализовать обработчик
     /**
      * Рендеринг списка лайкнутых вакансий
      */
-    readonly #renderFavorites = () => {
-        logger.info('Favorite tab clicked - add logic later');
+    readonly #renderFavorites = async () => {
+        if (this.#resumeTable) this.#resumeTable.hidden = true;
+        if (!this.#vacancyContainer) return;
+        if (this.#vacancyContainer) this.#vacancyContainer.textContent = '';
+        if (this.#resumeContainer) this.#resumeContainer.textContent = '';
+        try {
+            if (this.#data) this.#vacancies = await api.applicant.liked(this.#data.id, 0, 10);
+            if (!this.#vacancies) {
+                this.#vacancyContainer.textContent = 'Ничего нету';
+                return;
+            }
+            this.#vacancies.forEach(async (vacancy) => {
+                const response = new JobCard(this.#vacancyContainer as HTMLElement, vacancy);
+                response.render();
+            });
+            if (this.#vacancies.length === 0) this.#vacancyContainer.innerHTML = emptyTemplate({});
+        } catch {
+            if (this.#vacancyContainer) {
+                notification.add('FAIL', 'При загрузке избранного произошла ошибка');
+                this.#vacancyContainer.textContent = 'При загрузке избранного произошла ошибка';
+            }
+        }
     };
 
     /**
@@ -183,14 +208,18 @@ export class ProfileUser {
         try {
             this.#resumes = await api.resume.all(0, 10);
         } catch {
+            notification.add('FAIL', 'Не удалось загрузить резюме соискателя');
             logger.info('Не удалось загрузить');
             return;
         }
 
         this.#resumes.forEach(async (resume) => {
-            const resumeRow = new ResumeRow(this.#resumeContainer as HTMLElement, resume);
+            const resumeRow = new ResumeRow(this.#resumeContainer as HTMLElement, resume, () =>
+                router.go(`/resume/${resume.id}`),
+            );
             resumeRow.render();
         });
+        if (this.#resumes?.length === 0) this.#resumeContainer.innerHTML = emptyTemplate({});
     };
 
     /**

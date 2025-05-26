@@ -8,6 +8,7 @@ import { store } from '../../store';
 import { router } from '../../router';
 import { WorkingExperience } from '../workingExperience/workingExperience';
 import { fieldValidate } from '../../forms';
+import notification from '../notificationContainer/notificationContainer';
 
 export class ResumeEdit {
     readonly #parent: HTMLElement;
@@ -54,6 +55,7 @@ export class ResumeEdit {
         educational_institution: 'Учебное заведение',
         graduation_year: 'Год выпуска',
         about_me: 'Обо мне',
+        profession: 'Профессия',
     };
 
     /**
@@ -112,15 +114,18 @@ export class ResumeEdit {
                 try {
                     this.#defaultData.applicant = await api.applicant.get(store.data.user.user_id);
                 } catch {
+                    notification.add('FAIL', 'Не удалось загрузить информацию о соискателе');
                     router.back();
                 }
             } catch {
+                notification.add('FAIL', 'Не удалось загрузить резюме');
                 logger.info('Не удалось загрузить резюме');
                 this.#id = 0;
                 this.#defaultData = emptyResume;
                 try {
                     this.#defaultData.applicant = await api.applicant.get(store.data.user.user_id);
                 } catch {
+                    notification.add('FAIL', 'Не удалось загрузить информацию о соискателе');
                     router.back();
                 }
             }
@@ -129,6 +134,7 @@ export class ResumeEdit {
             try {
                 this.#defaultData.applicant = await api.applicant.get(store.data.user.user_id);
             } catch {
+                notification.add('FAIL', 'Не удалось загрузить информацию о соискателе');
                 router.back();
             }
         }
@@ -282,7 +288,12 @@ export class ResumeEdit {
                     if (element.tagName === 'FORM') {
                         logger.info('TRUE', element);
                         const form = element as HTMLFormElement;
-                        if (form.checkValidity()) {
+                        if (
+                            fieldValidate(
+                                form.elements[1] as HTMLInputElement,
+                                this.#inputTranslation,
+                            )
+                        ) {
                             this.#data.work_experiences.push(
                                 this.#get(form) as WorkExperienceCreate,
                             );
@@ -302,15 +313,21 @@ export class ResumeEdit {
                     logger.info(this.#data);
                     if (this.#id !== 0) {
                         const data = await api.resume.update(this.#id, this.#data);
+                        notification.add('OK', `Резюме успешно обновлено`);
                         router.go(`/resume/${data.id}`);
                     } else {
                         const data = await api.resume.create(this.#data);
+                        notification.add('OK', `Резюме успешно создано`);
                         router.go(`/resume/${data.id}`);
                     }
                 } catch {
-                    if (this.#id !== 0 && error)
+                    if (this.#id !== 0 && error) {
+                        notification.add('FAIL', 'Ошибка при обновлении вакансии');
                         error.textContent = 'Ошибка при обновлении вакансии';
-                    else if (error) error.textContent = 'Ошибка при создании вакансии';
+                    } else if (error) {
+                        notification.add('FAIL', 'Ошибка при создании вакансии');
+                        error.textContent = 'Ошибка при создании вакансии';
+                    }
                 }
             });
         }
@@ -322,7 +339,9 @@ export class ResumeEdit {
     render = () => {
         logger.info('ResumeEdit render method called');
         const minGraduatingDate = new Date();
-        minGraduatingDate.setFullYear(minGraduatingDate.getFullYear() - 3);
+        const maxGraduatingDate = new Date();
+        minGraduatingDate.setFullYear(minGraduatingDate.getFullYear() - 50);
+        maxGraduatingDate.setFullYear(maxGraduatingDate.getFullYear() + 5);
 
         if (
             this.#defaultData &&
@@ -348,6 +367,7 @@ export class ResumeEdit {
                 graduation_year: this.#defaultData.graduation_year.split('-')[0],
                 min_year: this.#defaultData.applicant.birth_date,
                 minGraduatingDate: minGraduatingDate.getFullYear(),
+                maxGraduatingDate: maxGraduatingDate.getFullYear(),
             }),
         );
         this.#form = document.forms.namedItem('resume_edit') as HTMLFormElement;
