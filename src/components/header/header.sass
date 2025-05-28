@@ -11,23 +11,21 @@
     top: 0
     width: 100%
     z-index: 1000
+    justify-content: space-between
 
     &__name
         font-size: 28px
         cursor: pointer
         user-select: none
+        flex-grow: 1
 
     &__links
         display: flex
         justify-content: center
         align-items: center
         gap: 100px
-        position: absolute
-        left: 0
-        right: 0
-        margin: 0 auto
-        width: fit-content
         pointer-events: auto
+        flex-grow: 1
 
         @media screen and ( max-width: 800px )
             display: none
@@ -40,10 +38,9 @@
 
     &__auth
         display: flex
-        justify-content: flex-end
+        justify-content: space-between
         align-items: center
-        gap: 50px
-        margin-left: auto
+        flex-grow: 1
 
     &__button
         cursor: pointer
@@ -92,6 +89,9 @@
             align-items: center
             justify-content: center
             min-width: 18px
+    
+    &__chat
+        @extend .header__notifications
 
     &__profile
         height: 34px

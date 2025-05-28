@@ -127,12 +127,12 @@ export class JobPage {
                             favoriteIcon.src = '/heart-fill.svg';
                             notification.add('OK', 'Вы успешно добавили вакансию в избранное');
                         }
-                    } catch { 
+                    } catch {
                         if (favoriteIcon && favoriteIcon.src.endsWith('/heart-fill.svg')) {
-                                notification.add('FAIL', 'Не удалось убрать лайк с вакансии');
-                            } else if (favoriteIcon) {
-                                notification.add('FAIL', 'Не удалось лайкнуть вакансию');
-                            }
+                            notification.add('FAIL', 'Не удалось убрать лайк с вакансии');
+                        } else if (favoriteIcon) {
+                            notification.add('FAIL', 'Не удалось лайкнуть вакансию');
+                        }
                     }
                 }
             });
@@ -149,11 +149,11 @@ export class JobPage {
                 if (this.#deleteContainer) {
                     const dialog = new DialogContainer(
                         this.#deleteContainer,
-                        'Резюме',
+                        'УдалениеВакансии',
                         DeleteDialog,
                         {
-                            title: 'Удалить резюме?',
-                            message: 'Резюме удалится навсегда без возможности его восстановления',
+                            title: 'Удалить вакансию?',
+                            message: 'Ваканси удалится навсегда без возможности его восстановления',
                             delete: this.#delete,
                         },
                     );

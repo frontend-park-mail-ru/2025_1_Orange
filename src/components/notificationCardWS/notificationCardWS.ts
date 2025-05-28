@@ -99,17 +99,6 @@ export class NotificationCardWS {
      * Отметить уведомление как прочитанное
      */
     markAsRead = async () => {
-        if (this.#notification.is_viewed) return;
-
-        try {
-            await api.notification.read(this.#notification.id);
-        } catch {
-            console.log('Ошибка при чтении уведомления');
-            return;
-        }
-
-        this.#notification.is_viewed = true;
-
         const indicator = this.self.querySelector('.notification-indicator');
         if (indicator) {
             indicator.innerHTML = `
@@ -120,6 +109,17 @@ export class NotificationCardWS {
         }
 
         this.self.setAttribute('data-viewed', 'true');
+
+        if (this.#notification.is_viewed) return;
+
+        try {
+            await api.notification.read(this.#notification.id);
+        } catch {
+            console.log('Ошибка при чтении уведомления');
+            return;
+        }
+
+        this.#notification.is_viewed = true;
 
         logger.info('Notification marked as read', this.#notification.id);
     };

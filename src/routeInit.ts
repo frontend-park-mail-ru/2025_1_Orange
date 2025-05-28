@@ -23,6 +23,7 @@ import { emptyReview } from './api/empty';
 import { PollStatistics } from './components/pollStatistics/pollStatistics';
 import { api } from './api/api';
 import { LandingPage } from './components/landingPage/landingPage';
+import { ChatPage } from './components/chatPage/chatPage';
 
 const PollLogic = (parent: ParentNode) => {
     const frame = document.createElement('iframe');
@@ -157,4 +158,5 @@ export const routerInit = () => {
     );
     router.add('review', async () => renderReview('Оценка сайта', PollForm));
     router.add('pollStatistics', async () => renderPage('Статистика опросов', PollStatistics));
+    router.add('chat', async () => renderPage('Чат', ChatPage));
 };

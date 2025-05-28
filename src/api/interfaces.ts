@@ -313,3 +313,48 @@ export interface NotificationWS {
 export interface NotificationsResponse {
     notifications: NotificationWS[];
 }
+
+export interface ChatMessage {
+    id: number;
+    chat_id: number;
+    sender_id: number;
+    receiver_id: number;
+    avatar: string;
+    from_applicant: boolean;
+    payload: string;
+    sent_at: string;
+}
+
+export interface ChatInfo {
+    id: number;
+    vacancy: {
+        id: number;
+        employer_id: number;
+        logo_path: string;
+        title: string;
+    };
+    resume: {
+        id: number;
+        applicant_id: number;
+        avatar_path: string;
+        profession: string;
+    };
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ChatInfoShort {
+    id: number;
+    vacancy_title: string;
+    user: {
+        id: number;
+        name: string;
+        avatar_path: string;
+    };
+}
+
+export interface ChatMessageSend {
+    type: 'message';
+    chat_id: number;
+    payload: string;
+}

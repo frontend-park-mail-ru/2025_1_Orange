@@ -1,5 +1,70 @@
-<div class="chat">
-    {{#each message}}
-    {{> partials/message logo=image }}
-    {{/each}}
+{{#if empty}}
+<div class="chat__empty">
+    <img src="/chatEmpty.svg">
+    <div>Начните общаться с работодателями</div>
 </div>
+{{else}}
+<div class="chat__company">
+    <div class="chat__logo">
+        {{> partials/logo logo=data.vacancy.logo_path}}
+    </div>
+    <div class="chat__header">{{employer.company_name}}</div>
+</div>
+<div class="chat__links">
+    <div class="chat_link chat_link--vacancy">
+        <div class="chat_link__info">
+            <div class="chat_link__name">
+                Вакансия
+            </div>
+            <div class="chat_link__value">
+                {{data.vacancy.title}}
+            </div>
+        </div>
+        <div class="chat_link__link">
+            <div class="chat_link__text">Перейти</div>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-up-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div class="chat_link chat_link--resume">
+        <div class="chat_link__info">
+            <div class="chat_link__name">
+                Резюме
+            </div>
+            <div class="chat_link__value">
+                {{data.resume.profession}}
+            </div>
+        </div>
+        <div class="chat_link__link">
+            <div class="chat_link__text">Перейти</div>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-up-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="chat__container">
+
+</div>
+<div class="chat__send">
+    <form class="info__search__container info__search__container--noimg" name="chat-send">
+        <input type="text" placeholder="Напишите сообщение" name="message" value="">
+        <button type="submit" class="info__search__button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+            </svg>
+        </button>
+    </form>
+</div>
+{{/if}}

@@ -1,0 +1,167 @@
+#chat_page
+    display: flex
+    flex-direction: row
+    gap: 0px
+    height: calc(100vh - 110px)
+    margin: 10px 0px
+    max-width: 100%
+    padding: 0px
+
+
+.chat
+    &__empty
+        max-width: 450px
+        padding: 20px
+        font-size: 24px
+        display: flex
+        flex-direction: column
+        margin: auto
+        text-align: center
+
+        img, svg
+            width: 100%
+            height: 100%
+
+    &__items
+        display: flex
+        flex-direction: column
+        border-right: 1px solid #CFCFCF
+        width: 400px
+
+        @media screen and ( max-width: 800px )
+            display: none
+    
+    &__header
+        font-size: 24px
+        font-weight: bold
+        padding-left: 10px
+    
+    &__page
+        display: flex
+        flex-direction: column
+        gap: 10px
+        height: 100%
+        padding: 0 20px
+        flex-grow: 1
+
+        @media screen and ( max-width: 800px )
+            padding: 0 10px
+    
+    &__company
+        display: flex
+        flex-direction: row
+        align-items: center
+    
+    &__logo
+        height: 60px
+        width: 60px
+
+        img
+            width: 100%
+            height: 100%
+            object-fit: cover
+    
+    &__links
+        display: flex
+        flex-direction: row
+        gap: 20px
+
+        @media screen and ( max-width: 800px )
+            gap: 10px
+    
+    &__container
+        display: flex
+        flex-direction: column
+        flex-grow: 1
+        gap: 10px
+        overflow-y: auto
+    
+    &__send
+        margin-top: 30px
+        flex-shrink: 0 
+
+        @media screen and ( max-width: 800px )
+            margin: 0px
+
+.chat_link
+    display: flex
+    flex-direction: row
+    padding: 10px 20px
+    border: 1px solid #CFCFCF
+    border-radius: 10px
+    align-items: center
+    justify-content: space-between
+    flex-grow: 1
+    cursor: pointer
+
+    &__info
+        display: flex
+        flex-direction: column
+    
+    &__name
+        color: #768695
+        font-size: 16px
+    
+    &__value
+        font-size: 20px
+        color: #000
+        font-weight: bold
+
+        @media screen and ( max-width: 800px )
+            display: none
+    
+    &__link
+        display: flex
+        flex-direction: row
+        gap: 10px
+        color: #0071FE
+        align-items: center
+
+        img, svg
+            width: 10px
+            height: 10px
+            object-fit: cover
+    
+    &__text
+        @media screen and ( max-width: 800px )
+            display: none
+
+
+.message
+    display: flex
+    flex-direction: row
+    gap: 10px
+
+    &__avatar
+        width: 40px
+        height: 40px
+        border-radius: 50%
+        align-self: flex-end
+        flex-shrink: 0
+
+        img, svg
+            width: 100%
+            height: 100%
+            object-fit: cover
+
+    &__bubble
+        max-width: 500px
+        border-radius: 20px
+        padding: 10px
+        background-color: #F8F8F8
+        color: #000
+        display: flex
+        flex-direction: row
+        justify-content: space-between
+        gap: 10px
+
+        &--my
+            color: #fff
+            background-color: #0071FE
+    
+    &__text
+        font-size: 16px
+    
+    &__time
+        font-size: 16px
+        align-self: flex-end

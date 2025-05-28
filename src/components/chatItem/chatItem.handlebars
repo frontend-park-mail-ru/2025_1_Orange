@@ -1,13 +1,13 @@
-<div class="chat-item">
+<div class="chat-item" id="chat-{{id}}">
     <div class="chat-item__avatar">
-        {{> partials/logo logo=image }}
+        {{> partials/logo logo=user.avatar_path }}
     </div>
     <div class="chat-item__info">
-        <div class="chat-itme__name">
-            {{name}}
+        <div class="chat-item__name">
+            {{vacancy_title}}
         </div>
         <div class="chat-item__addition">
-            {{addition}}
+            {{user.name}}
         </div>
     </div>
 </div>

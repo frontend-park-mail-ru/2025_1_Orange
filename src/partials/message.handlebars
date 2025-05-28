@@ -1,13 +1,24 @@
 <div class="message">
     <div class="message__avatar">
-        {{avatar}}
+        {{> partials/logo logo=data.vacancy.logo_path}}
     </div>
+    {{#if isYou}}
+    <div class="message__bubble message__bubble--my">
+        <div class="message__text">
+            {{message.payload}}
+        </div>
+        <div class="message__time">
+            {{sent_at}}
+        </div>
+    </div>
+    {{else}}
     <div class="message__bubble">
         <div class="message__text">
-            {{text}}
+            {{message.payload}}
         </div>
-        <div class="message_time">
-            {{time}}
+        <div class="message__time">
+            {{sent_at}}
         </div>
     </div>
+    {{/if}}
 </div>

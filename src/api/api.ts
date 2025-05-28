@@ -2,6 +2,7 @@ import { store } from '../store';
 import { logger } from '../utils/logger';
 import { ApplicantService } from './applicant';
 import { AuthService } from './auth';
+import { ChatService } from './chat';
 import { EmployerService } from './employer';
 import { NotificationService } from './notification';
 import { PollService } from './poll';
@@ -19,6 +20,7 @@ export class Api {
     readonly poll: PollService;
     readonly specialization: SpecializationService;
     readonly notification: NotificationService;
+    readonly chat: ChatService;
 
     /**
      * Конструктор класса api - взаимодействие с бекендом
@@ -34,6 +36,7 @@ export class Api {
         this.poll = new PollService(this);
         this.specialization = new SpecializationService(this);
         this.notification = new NotificationService(this);
+        this.chat = new ChatService(this);
     }
 
     /**

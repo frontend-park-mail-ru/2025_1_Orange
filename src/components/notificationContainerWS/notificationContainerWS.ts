@@ -97,16 +97,16 @@ export class NotificationContainerWS {
             return;
         }
 
+        store.data.notifications.forEach((notification) => {
+            notification.is_viewed = true;
+        });
+
         this.#notificationCards.forEach(async (card) => {
             try {
                 await card.markAsRead();
             } catch {
-                console.log('Ошибка сервера')
+                console.log('Ошибка сервера');
             }
-        });
-
-        store.data.notifications.forEach((notification) => {
-            notification.is_viewed = true;
         });
 
         // Обновляем бейдж
@@ -171,7 +171,6 @@ export class NotificationContainerWS {
      * Добавление нового уведомления
      */
     addNotification = (notification: NotificationWS) => {
-
         if (this.#notificationsList) {
             const card = new NotificationCardWS(
                 this.#notificationsList,

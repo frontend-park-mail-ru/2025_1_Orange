@@ -79,7 +79,7 @@ export class VacancyService {
      */
     async search(query: string, offset: number, limit: number): Promise<Vacancy[]> {
         return this.#api.request(
-            `/vacancy/search?query=${query}&offset=${offset}&limit=${limit}`,
+            `/vacancy/search/combined?query=${query}&offset=${offset}&limit=${limit}`,
             'GET',
         );
     }
@@ -99,9 +99,8 @@ export class VacancyService {
         limit: number,
     ): Promise<Vacancy[]> {
         return this.#api.request(
-            `/vacancy/search/combined?query=${query}&offset=${offset}&limit=${limit}`,
-            'POST',
-            JSON.stringify({ specializations: categories }),
+            `/vacancy/search/combined?query=${query}&offset=${offset}&limit=${limit}&specializations=${categories[0]}`,
+            'GET',
         );
     }
 

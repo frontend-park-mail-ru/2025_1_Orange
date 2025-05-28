@@ -27,6 +27,7 @@ export class Header {
     #notificationsBell: HTMLElement | null = null;
     #notificationsBadge: HTMLElement | null = null;
     #notificationsContainer: NotificationContainerWS | null = null;
+    #chatButton: HTMLElement | null = null;
 
     #vacancyCatalogLink: HTMLElement | null = null;
     #resumeCatalogLink: HTMLElement | null = null;
@@ -166,6 +167,7 @@ export class Header {
 
         this.#vacancyCatalogLink = document.getElementById('vacancy_catalog_link');
         this.#resumeCatalogLink = document.getElementById('resume_catalog_link');
+        this.#chatButton = document.querySelector('.header__chat');
 
         this.self.addEventListener('notification', () => {
             this.updateNotificationsBadge();
@@ -227,6 +229,10 @@ export class Header {
                 logger.info(`Clicked profile dropdown item: ${item.textContent}`);
                 this.toggleDropdown(false);
             });
+        });
+
+        this.#chatButton?.addEventListener('click', () => {
+            router.go('/chat');
         });
 
         if (this.#profileLink) {

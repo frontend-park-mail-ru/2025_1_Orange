@@ -1,7 +1,7 @@
 import notification from '../components/notificationContainer/notificationContainer';
 import { store } from '../store';
 import { api } from './api';
-import { NotificationWS } from './interfaces';
+import { ChatMessage, NotificationWS } from './interfaces';
 
 class WebSocketApi {
     readonly #url: string;
@@ -58,6 +58,24 @@ class WebSocketApi {
     }
 
     /**
+     * Отправка сообщения
+     * @param {any} payload - объект на отправку
+     * @returns {void}
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public send(payload: any) {
+        if (this.#ws === null) {
+            return;
+        }
+        try {
+            const message = JSON.stringify(payload);
+            this.#ws.send(message);
+        } catch (err) {
+            console.log('WS:', `Ошибка ${err}`);
+        }
+    }
+
+    /**
      * Закрытие WS
      */
     public close(): void {
@@ -100,9 +118,12 @@ const addNotification = (data: NotificationWS) => {
     if (nHeader) nHeader.dispatchEvent(event);
 };
 
-const addMessage = () => {
-    if (store.data.authorized && store.data.page === 'chat') {
-        console.log('TODO ADD');
+const addMessage = (data: ChatMessage) => {
+    const messageContainer = document.querySelector('.chat__container') as HTMLElement;
+    if (messageContainer) {
+        notification.add('OK', 'WS принято');
+        const event = new CustomEvent('new-message', { detail: data });
+        messageContainer.dispatchEvent(event);
     }
 };
 
