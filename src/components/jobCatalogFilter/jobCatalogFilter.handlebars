@@ -1,61 +1,61 @@
 <form class="filter" aria-label="Фильтры вакансий" name="job_catalog_filter">
-    {{!-- <fieldset class="filter__group">
+    <fieldset class="filter__group">
         <legend class="filter__name">Режим работы</legend>
         <div class="filter__options">
             <label class="filter__checkbox">
-                <input type="checkbox" name="work_mode" value="full_time">
+                <input type="checkbox" name="employment" value="full_time">
                 <span>Полный день</span>
             </label>
             <label class="filter__checkbox">
-                <input type="checkbox" name="work_mode" value="hybrid">
-                <span>Смешанный формат</span>
+                <input type="checkbox" name="employment" value="part_time">
+                <span>Частичная занятость</span>
             </label>
             <label class="filter__checkbox">
-                <input type="checkbox" name="work_mode" value="remote">
-                <span>Удаленная работа</span>
+                <input type="checkbox" name="employment" value="contract">
+                <span>По контракту</span>
             </label>
             <label class="filter__checkbox">
-                <input type="checkbox" name="work_mode" value="flexible">
-                <span>Гибкий график</span>
+                <input type="checkbox" name="employment" value="internship">
+                <span>Стажировка</span>
             </label>
             <label class="filter__checkbox">
-                <input type="checkbox" name="work_mode" value="shift">
-                <span>Сменный график</span>
+                <input type="checkbox" name="employment" value="freelance">
+                <span>Фриланс</span>
+            </label>
+            <label class="filter__checkbox">
+                <input type="checkbox" name="employment" value="watch">
+                <span>Временная</span>
             </label>
         </div>
     </fieldset>
 
     <fieldset class="filter__group">
-        <legend class="filter__name">Зарплата</legend>
-        <input type="number" id="salary_from" name="salary_from" min="0" step="1000" placeholder="Зарплата от, руб"
-            class="filter__input">
+        <legend class="filter__name">Зарплата от</legend>
+        <input type="number" id="salary_from" name="min_salary" min="0" step="1000" placeholder="Зарплата от, руб"
+            class="filter__input" value="{{minSalary}}">
     </fieldset>
 
     <fieldset class="filter__group">
         <legend class="filter__name">Опыт работы</legend>
         <div class="filter__options">
             <label class="filter__checkbox">
-                <input type="checkbox" name="experience" value="no_matter">
-                <span>Не имеет значения</span>
-            </label>
-            <label class="filter__checkbox">
                 <input type="checkbox" name="experience" value="no_experience">
                 <span>Нет опыта</span>
             </label>
             <label class="filter__checkbox">
-                <input type="checkbox" name="experience" value="1_to_3_years">
+                <input type="checkbox" name="experience" value="1_3_years">
                 <span>От 1 года до 3 лет</span>
             </label>
             <label class="filter__checkbox">
-                <input type="checkbox" name="experience" value="4_to_6_years">
-                <span>От 4 до 6 лет</span>
+                <input type="checkbox" name="experience" value="3_6_years">
+                <span>От 3 до 6 лет</span>
             </label>
             <label class="filter__checkbox">
-                <input type="checkbox" name="experience" value="more_than_6_years">
+                <input type="checkbox" name="experience" value="6_plus_years">
                 <span>Более 6 лет</span>
             </label>
         </div>
-    </fieldset> --}}
+    </fieldset>
 
     <fieldset class="filter__group">
         <legend class="filter__name">Показывать на странице</legend>
@@ -74,6 +74,9 @@
             </label>
         </div>
     </fieldset>
+    <div class="filter__group">
+        <div class="job__button">Очистить фильтры</div>
+    </div>
     <div class="filter__group">
 <iframe class="slot" style="border: none;" title="Slot preview" width="300" height="300" src="https://test.re-target.ru/api/v1/adv/iframe/0595df03-514f-49a6-85c2-a1a534de1f87"></iframe>
     </div>

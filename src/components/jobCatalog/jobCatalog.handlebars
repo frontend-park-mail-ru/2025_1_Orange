@@ -61,7 +61,10 @@
         </div>
         <div class="job_catalog__wrapper">
             {{#if search}}
-            <div class="job_catalog__search">Вакансии по запросу: {{search}}</div>
+                {{#if empty}}
+                {{else}}
+                <div class="job_catalog__search">Вакансии по запросу: {{search}}</div>
+                {{/if}}
             {{/if}}
             <div class="jobs_list">
 

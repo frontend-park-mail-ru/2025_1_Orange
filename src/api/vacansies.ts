@@ -90,6 +90,9 @@ export class VacancyService {
      * @param {string} query - выражение которое будем искать в вакансиях
      * @param {number} offset - с какой вакансии по счёту выводить
      * @param {number} limit - сколько выводить вакансий
+     * @param {string[]} employer - фильтр графика работы
+     * @param {string[]} experience - фильтр опыта работы
+     * @param {string} minSalary - фильтр минимальной оплаты
      * @returns {Promise<Vacancy[]>}
      */
     async combined(
@@ -97,9 +100,24 @@ export class VacancyService {
         query: string,
         offset: number,
         limit: number,
+        employer: string[],
+        experience: string[],
+        minSalary: string
     ): Promise<Vacancy[]> {
+        let url = `/vacancy/search/combined?offset=${offset}&limit=${limit}`
+        if (query !== '')
+            url += `&query=${query}`
+        if (categories.length !== 0)
+            url += `&specializations=${categories.join(',')}`
+        if (employer.length !== 0)
+            url += `&employment=${employer.join(',')}`
+        if (experience.length !== 0)
+            url += `&experience=${experience.join(',')}`
+        const paresedInt = Number.parseInt(minSalary)
+        if (!isNaN(paresedInt))
+            url += `&min_salary=${paresedInt}`
         return this.#api.request(
-            `/vacancy/search/combined?query=${query}&offset=${offset}&limit=${limit}&specializations=${categories[0]}`,
+            url,
             'GET',
         );
     }

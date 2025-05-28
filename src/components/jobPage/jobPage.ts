@@ -176,11 +176,11 @@ export class JobPage {
         logger.info('resume');
         try {
             await api.vacancy.response(this.#props.id, store.data.responseResumeId);
-            const buttonsContainer = this.self.querySelector('.job__buttons');
+            const buttonsContainer = this.self.querySelector('.vacancy__buttons');
             if (buttonsContainer) {
                 buttonsContainer.innerHTML = templateNoResponded({ id: this.#props.id });
             }
-            notification.add('OK', `Успешный отмена отклика`);
+            notification.add('OK', `Успешная отмена отклика`);
         } catch {
             notification.add('FAIL', `Ошибка отмене отклика на вакансию`);
         }
@@ -193,7 +193,7 @@ export class JobPage {
         logger.info('resume');
         try {
             await api.vacancy.response(this.#props.id, store.data.responseResumeId);
-            const buttonsContainer = this.self.querySelector('.job__buttons');
+            const buttonsContainer = this.self.querySelector('.vacancy__buttons');
             if (buttonsContainer) {
                 buttonsContainer.innerHTML = templateResponded({ id: this.#props.id });
             }

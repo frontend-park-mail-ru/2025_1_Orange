@@ -2,6 +2,7 @@ import { JobCard } from '../jobCard/jobCard';
 import './jobCatalog.sass';
 import { logger } from '../../utils/logger';
 import template from './jobCatalog.handlebars';
+import noVacancy from '../../partials/noVacancy.handlebars';
 import { JobCatalogFilter } from '../jobCatalogFilter/jobCatalogFilter';
 import { VacancyShort } from '../../api/interfaces';
 import { api } from '../../api/api';
@@ -20,6 +21,7 @@ export class JobCatalog {
     #searchForm: HTMLFormElement | null = null;
     #paginationButton: HTMLElement | null = null;
     #salaryCarousel: SalaryCarousel | null = null;
+    #noVacancy: boolean = true;
 
     /**
      * Конструктор класса
@@ -37,37 +39,16 @@ export class JobCatalog {
         store.data.vacancyOffset = 0;
         await this.#getVacancy();
         store.data.vacancyOffset += store.data.vacancyLimit;
+        if (this.#jobs.length === 0) this.#noVacancy = true
+        else this.#noVacancy = false
     };
 
     readonly #getVacancy = async () => {
         try {
-            if (store.data.vacancySearch === '') {
-                if (store.data.vacancyCategory !== '')
-                    this.#jobs = await api.vacancy.category(
-                        [store.data.vacancyCategory],
-                        store.data.vacancyOffset,
-                        store.data.vacancyLimit,
-                    );
-                else
-                    this.#jobs = await api.vacancy.all(
-                        store.data.vacancyOffset,
-                        store.data.vacancyLimit,
-                    );
-            } else {
-                if (store.data.vacancyCategory !== '')
-                    this.#jobs = await api.vacancy.combined(
-                        [store.data.vacancyCategory],
-                        store.data.vacancySearch,
-                        store.data.vacancyOffset,
-                        store.data.vacancyLimit,
-                    );
-                else
-                    this.#jobs = await api.vacancy.search(
-                        store.data.vacancySearch,
-                        store.data.vacancyOffset,
-                        store.data.vacancyLimit,
-                    );
-            }
+            if (store.data.vacancyCategory !== '')
+                this.#jobs = await api.vacancy.combined([store.data.vacancyCategory], store.data.vacancySearch, store.data.vacancyOffset, store.data.vacancyLimit, store.data.vacancyFilter.employment, store.data.vacancyFilter.experience,store.data.vacancyFilter.min_salary)
+            else 
+                this.#jobs = await api.vacancy.combined([], store.data.vacancySearch, store.data.vacancyOffset, store.data.vacancyLimit, store.data.vacancyFilter.employment, store.data.vacancyFilter.experience,store.data.vacancyFilter.min_salary)
         } catch (error) {
             notification.add('FAIL', 'Ошибка при загрузке вакансий');
             logger.error('Ошибка при загрузке вакансий:', error);
@@ -132,8 +113,13 @@ export class JobCatalog {
                 const card = new JobCard(this.#jobContainer as HTMLElement, element);
                 card.render();
             });
-            if (this.#jobs.length === 0 && store.data.vacancyOffset === 0) {
-                this.#jobContainer.textContent = 'Нет вакансий';
+            if (this.#noVacancy) {
+                this.#jobContainer.insertAdjacentHTML(
+            'beforeend',
+            noVacancy({
+                search: store.data.vacancySearch,
+            }),
+        );
             }
             this.#paginationButton = document.getElementById('pagination_button') as HTMLElement;
             if (this.#jobs.length < store.data.vacancyLimit) this.#paginationButton?.remove();
@@ -162,6 +148,15 @@ export class JobCatalog {
      * Навешивание обработчиков
      */
     readonly #addEventListeners = () => {
+        if (this.#jobContainer) {
+            this.#jobContainer.addEventListener('new-filters', async () => {
+                await this.init().then(() => {
+                    if (this.#jobContainer) this.#jobContainer.innerHTML = ''
+                    this.#renderVacancy()
+                })
+
+            })
+        }
         if (this.#createResumeLink) {
             this.#createResumeLink.addEventListener('click', (e: Event) => {
                 e.preventDefault();
@@ -223,6 +218,7 @@ export class JobCatalog {
             'beforeend',
             template({
                 search: store.data.vacancySearch,
+                empty: this.#noVacancy
             }),
         );
 

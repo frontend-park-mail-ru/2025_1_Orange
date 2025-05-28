@@ -35,6 +35,11 @@ interface StoreData {
     review: ReviewResponse;
     notifications: NotificationWS[];
     responseResumeId: number;
+    vacancyFilter: {
+        employment: string[];
+        experience: string[];
+        min_salary: string;
+    }
 }
 
 const emptyData: StoreData = {
@@ -58,6 +63,11 @@ const emptyData: StoreData = {
     resumeOffset: 0,
     notifications: [],
     responseResumeId: 1,
+    vacancyFilter: {
+        employment: [],
+        experience: [],
+        min_salary: ""
+    }
 };
 
 class Store {

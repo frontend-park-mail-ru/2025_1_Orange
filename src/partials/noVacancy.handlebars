@@ -1,0 +1,19 @@
+{{#if search}}
+<div class="job_catalog__empty">
+    <div class="job_catalog__header">
+        Вакансий по запросу «{{search}}» не найдено
+    </div>
+    <div class="job_catalog__additional">
+        Попробуйте другие варианты поискового запроса или уберите фильтры
+    </div>
+</div>
+{{else}}
+<div class="job_catalog__empty">
+    <div class="job_catalog__header">
+        Вакансии не найдены
+    </div>
+    <div class="job_catalog__additional">
+        Попробуйте другие варианты поискового запроса или уберите фильтры
+    </div>
+</div>
+{{/if}}
