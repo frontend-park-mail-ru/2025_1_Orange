@@ -70,8 +70,8 @@ export class JobCard {
                     this.#handleUnresumeClick();
                 } else if (element.id === `vacancy_${this.#props.id}_chat`) {
                     try {
-                        await api.chat.create(this.#props.id);
-                        router.go(`/chat/${this.#props.id}`);
+                        const chatData = await api.chat.create(this.#props.id);
+                        router.go(`/chat/${chatData.id}`);
                     } catch {
                         notification.add('FAIL', 'Неудалось создать чат с работадателем');
                     }

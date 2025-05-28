@@ -1,6 +1,6 @@
 import { ChatInfo, ChatMessage, ChatMessageSend, Employer } from '../../api/interfaces';
 import { logger } from '../../utils/logger';
-import template from './ChatContainer.handlebars';
+import template from './chatContainer.handlebars';
 import messageTemplate from '../../partials/message.handlebars';
 import { store } from '../../store';
 import { api } from '../../api/api';

@@ -40,7 +40,11 @@
         display: flex
         justify-content: space-between
         align-items: center
-        flex-grow: 1
+        gap: 20px
+
+        @media screen and ( max-width: 800px )
+            gap: 0px
+            flex-grow: 1
 
     &__button
         cursor: pointer
