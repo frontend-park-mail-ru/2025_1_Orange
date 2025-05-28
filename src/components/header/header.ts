@@ -174,7 +174,7 @@ export class Header {
         });
 
         this.#logoLink?.addEventListener('click', () => {
-            router.go('/');
+            router.go('/catalog');
         });
 
         this.#pollStatisticsLink?.addEventListener('click', () => {
