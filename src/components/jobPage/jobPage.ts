@@ -80,7 +80,7 @@ export class JobPage {
         this.#buttonsContainer = this.self.querySelector('.vacancy__buttons');
         this.#favoriteButton = this.self.querySelector('.job__favorite');
         if (this.#buttonsContainer) {
-            this.#buttonsContainer.addEventListener('click', (e: Event) => {
+            this.#buttonsContainer.addEventListener('click', async (e: Event) => {
                 e.preventDefault();
                 const element = (e.target as HTMLElement).closest(
                     '.job__button, .job__button_second',
@@ -102,6 +102,13 @@ export class JobPage {
                     dialog.render();
                 } else if (element && element.id === `vacancy_${this.#props.id}_unresume`) {
                     this.#handleUnresumeClick();
+                } else if (element && element.id === `vacancy_${this.#props.id}_chat`) {
+                    try {
+                        const chatData = await api.chat.create(this.#props.id);
+                        router.go(`/chat/${chatData.id}`);
+                    } catch {
+                        notification.add('FAIL', 'Неудалось создать чат с работадателем');
+                    }
                 }
             });
         }
