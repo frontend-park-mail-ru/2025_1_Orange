@@ -225,6 +225,7 @@ export class JobCatalog {
         const filterContainer = this.self.querySelector('.jobs_filter');
         if (filterContainer) {
             const filter = new JobCatalogFilter(filterContainer as HTMLElement);
+            filter.mobile = false;
             filter.render();
         }
 

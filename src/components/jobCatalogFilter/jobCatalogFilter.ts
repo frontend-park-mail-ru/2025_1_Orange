@@ -8,7 +8,8 @@ export class JobCatalogFilter {
     #pagination: NodeListOf<HTMLInputElement> = [];
     #employment: NodeListOf<HTMLInputElement> = [];
     #experience: NodeListOf<HTMLInputElement> = [];
-    #minSallary: NodeListOf<HTMLInputElement> = [];
+    #minSallary: HTMLInputElement | null = null;
+    mobile: boolean = true;
     // Какой ужас а не тип >:(
     // Такой тип был написан в гайде в интернете
     #inputTimer: ReturnType<typeof setTimeout> | null = null;
@@ -26,7 +27,9 @@ export class JobCatalogFilter {
      * @returns {HTMLElement}
      */
     get self(): HTMLFormElement {
-        return document.forms.namedItem('job_catalog_filter') as HTMLFormElement;
+        if (this.mobile)
+            return document.forms.namedItem(`job_catalog_filter--mobile`) as HTMLFormElement
+        return document.forms.namedItem(`job_catalog_filter`) as HTMLFormElement
     }
 
     /**
@@ -41,7 +44,7 @@ export class JobCatalogFilter {
      * Обработчики событий
      */
     readonly #addEventListeners = () => {
-        this.#minSallary = document.querySelectorAll('input[name="min_salary"]');
+        this.#minSallary = this.self.querySelector('input[name="min_salary"]') as HTMLInputElement;
         this.#pagination.forEach((radio) => {
             radio.addEventListener('change', () => {
                 if (radio.checked) {
@@ -61,10 +64,9 @@ export class JobCatalogFilter {
                 this.#newFilters()
             })
         });
-        this.#minSallary.forEach((input) => {
-            input.addEventListener('input', () => {
-                if (!input) return
-                store.data.vacancyFilter.min_salary = input.value
+        this.#minSallary.addEventListener('input', () => {
+                if (!this.#minSallary) return
+                store.data.vacancyFilter.min_salary = this.#minSallary.value
                 // Debouncing (Смайлик с солнечными очками)
                 // Умное слово сказано в лекции а реализации не было :(
                 // Тут проверка на null - первый запуск
@@ -75,7 +77,6 @@ export class JobCatalogFilter {
                     this.#newFilters();
                 }, 2000);
             })
-        })
 
         this.self.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -127,7 +128,8 @@ export class JobCatalogFilter {
         logger.info('JobCatalogFilter render method called');
 
         this.#parent.insertAdjacentHTML('beforeend', template({
-            minSalary: store.data.vacancyFilter.min_salary
+            minSalary: store.data.vacancyFilter.min_salary,
+            mobile: this.mobile
         }));
 
         this.#pagination = this.self.querySelectorAll('input[name="pagination"]');
@@ -136,8 +138,8 @@ export class JobCatalogFilter {
             if (radio.value === '' + store.data.vacancyLimit) radio.checked = true;
         });
 
-        this.#employment = document.querySelectorAll('input[name="employment"]');
-        this.#experience = document.querySelectorAll('input[name="experience"]');
+        this.#employment = this.self.querySelectorAll('input[name="employment"]');
+        this.#experience = this.self.querySelectorAll('input[name="experience"]');
         this.#setCheckbox(this.#employment, store.data.vacancyFilter.employment)
         this.#setCheckbox(this.#experience, store.data.vacancyFilter.experience)
         this.#addEventListeners();
