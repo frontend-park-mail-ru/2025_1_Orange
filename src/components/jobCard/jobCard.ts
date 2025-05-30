@@ -96,10 +96,8 @@ export class JobCard {
                         await api.vacancy.favorite(this.#props.id);
                         if (favoriteIcon && favoriteIcon.src.endsWith('/heart-fill.svg')) {
                             favoriteIcon.src = '/heart-empty.svg';
-                            notification.add('OK', 'Вы успешно удалили вакансию из избранного');
                         } else if (favoriteIcon) {
                             favoriteIcon.src = '/heart-fill.svg';
-                            notification.add('OK', 'Вы успешно добавили вакансию в избранное');
                         }
                     } catch {
                         if (favoriteIcon && favoriteIcon.src.endsWith('/heart-fill.svg')) {

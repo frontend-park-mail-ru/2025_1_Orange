@@ -8,8 +8,6 @@ class WebSocketApi {
     #ws: WebSocket | null = null;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     #events: Record<string, (data: any) => void> = {};
-    #hardClose: boolean = false
-    #retry: number = 3
 
     /**
      * Конструктор класса
@@ -31,7 +29,6 @@ class WebSocketApi {
         this.#ws = new WebSocket(this.#url);
 
         this.#ws.addEventListener('open', () => {
-            this.#retry = 3
             console.log('WS: соединение установлено');
         });
 
@@ -52,11 +49,6 @@ class WebSocketApi {
         });
 
         this.#ws.addEventListener('close', () => {
-            if (this.#hardClose === false && this.#retry > 0) {
-                this.#ws = null;
-                this.#retry -= 1;
-                this.create()
-            }
             console.log('WS: Закрыто');
         });
 
@@ -88,7 +80,6 @@ class WebSocketApi {
      */
     public close(): void {
         if (this.#ws) {
-            this.#hardClose = true;
             this.#ws.close();
             this.#events = {};
             this.#ws = null;

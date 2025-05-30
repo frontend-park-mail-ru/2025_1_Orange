@@ -17,7 +17,9 @@
         font-size: 28px
         cursor: pointer
         user-select: none
-        flex-grow: 1
+        
+        @media screen and ( max-width: 800px )
+            flex-grow: 1
 
     &__links
         display: flex
@@ -41,10 +43,6 @@
         justify-content: space-between
         align-items: center
         gap: 20px
-
-        @media screen and ( max-width: 800px )
-            gap: 0px
-            flex-grow: 1
 
     &__button
         cursor: pointer

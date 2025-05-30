@@ -21,6 +21,7 @@ import emptyTemplate from './../../partials/emptyState.handlebars';
 import { DeleteDialog } from '../deleteDialog/deleteDialog';
 import { ResponseDialog } from '../responseDialog/responseDialog';
 import { RegisterDialog } from '../registerDialog/registerDialog';
+import { NoResumeDialog } from '../noResumeDialog/noResumeDialog';
 
 export class JobPage {
     readonly #parent: HTMLElement;
@@ -129,10 +130,8 @@ export class JobPage {
                         await api.vacancy.favorite(this.#props.id);
                         if (favoriteIcon && favoriteIcon.src.endsWith('/heart-fill.svg')) {
                             favoriteIcon.src = '/heart-empty.svg';
-                            notification.add('OK', 'Вы успешно удалили вакансию из избранного');
                         } else if (favoriteIcon) {
                             favoriteIcon.src = '/heart-fill.svg';
-                            notification.add('OK', 'Вы успешно добавили вакансию в избранное');
                         }
                     } catch {
                         if (favoriteIcon && favoriteIcon.src.endsWith('/heart-fill.svg')) {
@@ -167,6 +166,18 @@ export class JobPage {
                     dialog.render();
                 }
             });
+
+        this.self.addEventListener('no-resumes', () => {
+            if (!store.data.authorized) {
+                const dialog = new DialogContainer(this.#parent, 'НеАвторизован', RegisterDialog);
+                dialog.render();
+            } else {
+                const dialog = new DialogContainer(this.#parent, 'НетРезюме', NoResumeDialog, {
+                    click: this.#handleResumeClick,
+                });
+                dialog.render();
+            }
+        });
     };
 
     /**

@@ -41,8 +41,6 @@
 
                     <input type="date" name="birth_date" placeholder="Год рождения" class="resumeEdit__input"
                         value="{{applicant.birth_date}}" disabled>
-                    <input type="text" name="phone" placeholder="Номер телефона" class="resumeEdit__input"
-                        value="{{applicant.phone}}" disabled>
                     <input type="text" name="city" placeholder="Город" class="resumeEdit__input"
                         value="{{applicant.city}}" disabled>
                     <div>
@@ -89,7 +87,7 @@
                     </div>
                     <input type="text" name="educational_institution" placeholder="Название учебного заведения"
                         minlength="3" maxlength="50" class="resumeEdit__input" value="{{educational_institution}}"
-                        pattern="^[а-яА-Яa-zA-Z0-9\s\.,]+$"
+                        pattern="^[а-яА-Яa-zA-Z\s\.,\-]+$"
                         title="Можно вводить только буквы, знаки препинания и пробел" required>
                     <input type="number" name="graduation_year" placeholder="Год окончания" class="resumeEdit__input"
                         min="{{minGraduatingDate}}" max="{{maxGraduatingDate}}" value="{{graduation_year}}" required>
