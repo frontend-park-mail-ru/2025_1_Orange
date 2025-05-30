@@ -84,7 +84,7 @@ export class JobPage {
             this.#buttonsContainer.addEventListener('click', async (e: Event) => {
                 e.preventDefault();
                 const element = (e.target as HTMLElement).closest(
-                    '.job__button, .job__button_second',
+                    '.job__button, .job__button_second, .job__button-chat',
                 );
                 if (store.data.authorized === false) {
                     const dialog = new DialogContainer(

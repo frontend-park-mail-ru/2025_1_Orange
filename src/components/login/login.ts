@@ -150,18 +150,12 @@ export class Login {
                     notification.add('OK', 'Вы успешно зашли в аккаунт');
                     await activate();
                     router.go('/catalog');
-                } catch (status) {
+                } catch {
                     const error = document.querySelector('.form__error') as HTMLElement;
-                    notification.add('FAIL', `status: ${status}`)
                     if (error) {
                         error.hidden = false;
-                        if (status === '403') {
-                            error.textContent = 'Неверный пароль';
+                        error.textContent = 'Неверный пароль';
                         notification.add('FAIL', 'Неверный пароль');
-                        } else {
-                            error.textContent = 'Ошибка при авторизации';
-                        notification.add('FAIL', 'Ошибка при авторизации');
-                        }
                     }
                 }
             }

@@ -108,11 +108,11 @@ export class VacancyService {
         if (query !== '')
             url += `&query=${query}`
         if (categories.length !== 0)
-            url += `&specializations=${categories.join(',')}`
+            url += `&specializations=${categories.join(';')}`
         if (employer.length !== 0)
-            url += `&employment=${employer.join(',')}`
+            url += `&employment=${employer.join(';')}`
         if (experience.length !== 0)
-            url += `&experience=${experience.join(',')}`
+            url += `&experience=${experience.join(';')}`
         const paresedInt = Number.parseInt(minSalary)
         if (!isNaN(paresedInt))
             url += `&min_salary=${paresedInt}`

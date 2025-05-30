@@ -44,6 +44,11 @@ export class VacancyEdit {
     #salaryFrom: HTMLInputElement | null = null;
     #salaryTo: HTMLInputElement | null = null;
 
+    #description: HTMLTextAreaElement | null = null;
+    #tasks: HTMLTextAreaElement | null = null;
+    #requirements: HTMLTextAreaElement | null = null;
+    #optional_requirements: HTMLTextAreaElement | null = null;
+
     constructor(parent: HTMLElement) {
         this.#parent = parent;
     }
@@ -193,6 +198,15 @@ export class VacancyEdit {
             this.#form.addEventListener('input', (e: Event) => {
                 this.#formValidate(e.target as HTMLElement);
             });
+            this.#form.querySelectorAll('textarea').forEach((input) => {
+                input.addEventListener('input', () => {
+                    input.style.height = 'auto';
+                    input.style.height = (input.scrollHeight) + 'px';
+                });
+
+                input.dispatchEvent(new Event('input'));
+            })
+
         }
 
         // Проверяем и настраиваем каждую кнопку "Далее"
@@ -360,12 +374,12 @@ export class VacancyEdit {
                 if (!this.#salaryFrom || !this.#salaryTo) return;
                 if (
                     Number.parseInt(this.#salaryTo.value) -
-                        Number.parseInt(this.#salaryFrom.value) <
+                    Number.parseInt(this.#salaryFrom.value) <
                     0
                 ) {
                     logger.info(
                         Number.parseInt(this.#salaryTo.value) -
-                            Number.parseInt(this.#salaryFrom.value),
+                        Number.parseInt(this.#salaryFrom.value),
                     );
                     this.#salaryFrom.setCustomValidity('Неправильно задан диапазон зарплаты');
                 } else {
@@ -377,12 +391,12 @@ export class VacancyEdit {
                 if (!this.#salaryFrom || !this.#salaryTo) return;
                 if (
                     Number.parseInt(this.#salaryTo.value) -
-                        Number.parseInt(this.#salaryFrom.value) <
+                    Number.parseInt(this.#salaryFrom.value) <
                     0
                 ) {
                     logger.info(
                         Number.parseInt(this.#salaryTo.value) -
-                            Number.parseInt(this.#salaryFrom.value),
+                        Number.parseInt(this.#salaryFrom.value),
                     );
                     this.#salaryTo.setCustomValidity('Неправильно задан диапазон зарплаты');
                 } else {
