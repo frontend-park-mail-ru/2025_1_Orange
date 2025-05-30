@@ -2,9 +2,11 @@
     display: flex
     flex-direction: row
     gap: 0px
-    height: calc(100vh - 110px)
-    margin: 10px 0px
+    height: calc(100vh - 120px)
+    margin: 10px
     max-width: 100%
+    border: 1px solid #CFCFCF
+    border-radius: 20px
     padding: 0px
 
 
@@ -27,6 +29,8 @@
         flex-direction: column
         border-right: 1px solid #CFCFCF
         width: 400px
+        flex-shrink: 0
+        padding-top: 10px
 
         @media screen and ( max-width: 800px )
             display: none
@@ -35,6 +39,7 @@
         font-size: 24px
         font-weight: bold
         padding-left: 10px
+        margin-bottom: 10px
     
     &__page
         display: flex
@@ -43,6 +48,9 @@
         height: 100%
         padding: 0 20px
         flex-grow: 1
+        padding-bottom: 20px
+        box-sizing: border-box
+        padding-top: 10px
 
         @media screen and ( max-width: 800px )
             padding: 0 10px
@@ -51,6 +59,7 @@
         display: flex
         flex-direction: row
         align-items: center
+        margin: 5px 0
     
     &__logo
         height: 60px
@@ -93,7 +102,7 @@
     border-radius: 10px
     align-items: center
     justify-content: space-between
-    flex-grow: 1
+    width: 50%
     cursor: pointer
 
     &__info
@@ -108,6 +117,10 @@
         font-size: 20px
         color: #000
         font-weight: bold
+        display: -webkit-box
+        -webkit-line-clamp: 1
+        -webkit-box-orient: vertical
+        overflow: hidden
 
         @media screen and ( max-width: 800px )
             display: none

@@ -81,7 +81,7 @@ export class Api {
             if (!response.ok) {
                 const error = await response.json();
                 logger.error(`error: ${error.message}`);
-                throw new Error(error.message || 'Ошибка при выполнении запроса');
+                throw `${response.status}`;
             }
             try {
                 if (response_type === 'application/json') return await response.json();

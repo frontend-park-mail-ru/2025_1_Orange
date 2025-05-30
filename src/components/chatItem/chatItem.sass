@@ -4,7 +4,6 @@
     gap: 20px
     align-items: center
     height: 100px
-    padding: 10px
     cursor: pointer
 
     &--selected
@@ -16,6 +15,7 @@
         height: 60px
         border-radius: 50%
         flex-shrink: 0
+        padding-left: 10px
 
         img
             width: 100%
@@ -26,10 +26,20 @@
     &__info
         display: flex
         flex-direction: column
+        padding: 10px 10px 10px 0px
+        border-top: 0.5px solid #CFCFCF
+        height: 100%
+        box-sizing: border-box
+        width: 100%
+        justify-content: center
     
     &__name
         font-size: 24px
         font-weight: bold
+        display: -webkit-box
+        -webkit-line-clamp: 1
+        -webkit-box-orient: vertical
+        overflow: hidden
     
     &__addition
         font-size: 20px

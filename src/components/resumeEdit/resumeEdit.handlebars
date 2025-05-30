@@ -44,7 +44,7 @@
                     <input type="text" name="city" placeholder="Город" class="resumeEdit__input"
                         value="{{applicant.city}}" disabled>
                     <div>
-                        <button class="job__button_second" id="profile_change">Изменить профиль</button>
+                        <button class="job__button_second" id="profile_change" type="button">Изменить профиль</button>
                     </div>
                     <div>
                         <button class="job__button" id="basic_next" type="submit">Далее</button>
@@ -65,7 +65,7 @@
                         title="Можно вводить только буквы, знаки препинания, пробел и спецсимволы" required value="{{skillsString}}">
                     <div>
                         <div class="resumeEdit__error"></div>
-                        <button class="job__button" id="skills_next">Далее</button>
+                        <button class="job__button" id="skills_next" type="submit">Далее</button>
                     </div>
                 </div>
             </fieldset>
@@ -93,7 +93,7 @@
                         min="{{minGraduatingDate}}" max="{{maxGraduatingDate}}" value="{{graduation_year}}" required>
                     <div>
                         <div class="resumeEdit__error"></div>
-                        <button class="job__button" id="education_next">Далее</button>
+                        <button class="job__button" id="education_next" type="submit">Далее</button>
                     </div>
                 </div>
             </fieldset>
@@ -107,7 +107,7 @@
                         title="Можно вводить только буквы, знаки препинания и пробел" required>{{about_me}}</textarea>
                     <div>
                         <div class="resumeEdit__error"></div>
-                        <button class="job__button" id="aboutme_next">Далее</button>
+                        <button class="job__button" id="aboutme_next" type="submit">Далее</button>
                     </div>
                 </div>
             </fieldset>
@@ -119,7 +119,7 @@
         <!-- Кнопка отправки -->
         <div class="resumeEdit__confirm">
             <div class="resumeEdit__error"></div>
-            <button class="job__button" id="resume_submit">Создать резюме</button>
+            <button class="job__button" id="resume_submit" type="submit">Создать резюме</button>
         </div>
     </div>
 </div>
