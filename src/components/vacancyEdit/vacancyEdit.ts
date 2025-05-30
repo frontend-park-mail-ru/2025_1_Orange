@@ -108,7 +108,7 @@ export class VacancyEdit {
         skills: 'Навыки',
     };
 
-    #formValidate(element: HTMLElement): boolean {
+    #formValidate = (element: HTMLElement): boolean => {
         const fieldset = element.closest('fieldset') as HTMLFieldSetElement;
         if (fieldset) {
             const errorElement = fieldset.querySelector('.vacancyEdit__error') as HTMLElement;

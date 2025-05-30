@@ -63,7 +63,7 @@ export class ResumeEdit {
      * @param {HTMLElement} element - элемент
      * @returns {boolean} - валидна ли форма?
      */
-    #formValidate(element: HTMLElement): boolean {
+    #formValidate = (element: HTMLElement): boolean => {
         const fieldset = element.closest('fieldset') as HTMLFieldSetElement;
         if (fieldset) {
             logger.info(element);

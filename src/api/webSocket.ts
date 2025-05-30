@@ -121,7 +121,6 @@ const addNotification = (data: NotificationWS) => {
 const addMessage = (data: ChatMessage) => {
     const messageContainer = document.querySelector('.chat__container') as HTMLElement;
     if (messageContainer) {
-        notification.add('OK', 'WS принято');
         const event = new CustomEvent('new-message', { detail: data });
         messageContainer.dispatchEvent(event);
     }

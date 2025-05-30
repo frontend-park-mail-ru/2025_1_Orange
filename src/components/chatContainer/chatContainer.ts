@@ -89,7 +89,6 @@ export class ChatContainer {
         if (this.#messagesContainer) {
             this.#messagesContainer.addEventListener('new-message', (e) => {
                 if (!this.#messagesContainer) return;
-                notification.add('OK', 'Пришло сообщение');
                 const event = e as CustomEvent<ChatMessage>;
                 if (event.detail.chat_id !== this.#chat_id) return;
                 this.#addMessage(event.detail);

@@ -9,7 +9,7 @@ export function customMessage(
         return `Заполните поле ${inputTranslation[field.name] || field.name}`;
     }
     if (validity.patternMismatch) {
-        return field.title || `${inputTranslation[field.name] || ''}: Неверный формат данных`;
+        return `${inputTranslation[field.name] || ''}: ${field.title || 'Неверный формат данных'}`;
     }
     if (
         validity.tooLong &&
