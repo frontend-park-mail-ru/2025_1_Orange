@@ -152,6 +152,7 @@ export class ChatContainer {
                 data: this.#data,
                 empty: this.#chat_id === null,
                 employer: this.#employer,
+                isApplicant: store.data.user.role === 'applicant'
             }),
         );
         this.#messagesContainer = document.querySelector('.chat__container');

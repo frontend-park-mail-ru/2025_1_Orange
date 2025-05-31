@@ -91,6 +91,14 @@ export class WorkingExperience {
             this.#form.addEventListener('input', (e: Event) => {
                 this.#formValidate(e.target as HTMLElement);
             });
+            this.#form.querySelectorAll('textarea').forEach((input) => {
+                input.addEventListener('input', () => {
+                    input.style.height = 'auto';
+                    input.style.height = (input.scrollHeight) + 'px';
+                });
+
+                input.dispatchEvent(new Event('input'));
+            })
         }
 
         if (this.#newExperience) {

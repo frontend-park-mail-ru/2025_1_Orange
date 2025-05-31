@@ -1,7 +1,7 @@
 {{#if empty}}
 <div class="chat__empty">
     <img src="/chatEmpty.svg">
-    <div>Начните общаться с работодателями</div>
+    <div>Начните общаться с {{#if isApplicant}}работодателями{{else}}соискателями{{/if}}</div>
 </div>
 {{else}}
 <div class="chat__company">
